@@ -1,0 +1,32 @@
+(defcfg
+  process-unmapped-keys yes
+)
+
+(defsrc
+  caps q w e a s d   h j k l ; '   ralt
+)
+
+(defalias
+  ;; Nhấn nhả Caps = Backspace | Đè Caps = Nav Layer
+  cap (tap-hold-press 150 150 bspc (layer-toggle nav))
+  ;; Đè Alt phải = Nav Layer
+  ral (layer-toggle nav)
+)
+
+(deflayer default
+  @cap _ _ _ _ _ _   _ _ _ _ _ _   @ral
+)
+
+(deflayer nav
+  ;; --- TAY TRÁI ---
+  ;; Q=Home | W=Lên | E=End
+  ;; A=Trái | S=Xuống | D=Phải
+  _    home up   end  left down rght 
+
+  ;; --- TAY PHẢI ---
+  ;; H=Home | J=Trái | K=Lên | L=Xuống | ;=Phải | '=End
+  home left down   up rght end
+
+  ;; Alt phải khi đang ở trong layer nav
+  _
+)
