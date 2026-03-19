@@ -1,0 +1,11 @@
+[Unit]
+Description=Kanata Keyboard Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/home/phuong/dotfiles/bin/kanata --cfg /home/phuong/dotfiles/kanata/.config/kanata/config.kbd
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
