@@ -1,0 +1,29 @@
+# --- BẢO MẬT (TUYỆT ĐỐI KHÔNG PUSH) ---
+.ssh/
+*.pem
+*.key
+.bash_history
+.zsh_history
+.python_history
+.node_repl_history
+
+# --- RÁC HỆ THỐNG & TRÌNH DUYỆT ---
+.cache/
+.thumbnails/
+.local/share/Trash/
+.mozilla/
+.config/google-chrome/
+.config/microsoft-edge/
+
+# --- FILE TẠM CỦA TRÌNH SOẠN THẢO ---
+*.swp
+*~
+.nfs*
+
+# --- FILE RÁC CỦA WINDOWS/MAC (Nếu có cắm USB) ---
+[Dd]esktop.ini
+Thumbs.db
+.DS_Store
+
+# --- LOGS ---
+*.log
