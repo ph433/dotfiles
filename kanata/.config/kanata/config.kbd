@@ -3,40 +3,53 @@
 )
 
 (defsrc
-  a s d f e
+  q a s d f e
   j k l i
-  spc ralt
+  ralt
 )
 
 (defalias
-  ;; Chuyển sang layer Shift-Navigation
-  shft_on (layer-switch nav-shift)
-  ;; Quay lại layer Navigation thường
-  shft_off (layer-switch default)
-  
-  ;; Chuyển đổi chế độ gõ văn bản
+  ;; --- Chuyển đổi Mode ---
   to-typ (layer-switch typing)
   to-def (layer-switch default)
+
+  ;; --- Logic cho phím A (Shift) ---
+  ;; Khi ở default, nhấn A sẽ nhảy sang layer có Shift và giữ nguyên ở đó
+  shft_on (layer-switch nav-shift)
+  ;; Khi ở nav-shift, nhấn A sẽ nhảy ngược về default (nhả Shift)
+  shft_off (layer-switch default)
+
+  ;; --- Logic cho phím Q (Ctrl) ---
+  ;; Khi ở default, nhấn Q sẽ nhảy sang layer có Ctrl
+  ctl_on (layer-switch nav-ctrl)
+  ;; Khi ở nav-ctrl, nhấn Q sẽ nhảy ngược về default (nhả Ctrl)
+  ctl_off (layer-switch default)
 )
 
-;; --- LAYER 1: ĐIỀU HƯỚNG MẶC ĐỊNH (Shift OFF) ---
+;; --- LAYER 1: ĐIỀU HƯỚNG MẶC ĐỊNH ---
 (deflayer default
-  @shft_on  left    down    right   up
-  home      pgdn    end     pgup
-  lctl      @to-typ
+  @ctl_on   @shft_on  left    down    right   up
+  home      pgdn      end     pgup
+  @to-typ
 )
 
-;; --- LAYER 2: ĐIỀU HƯỚNG CÓ SHIFT (Shift ON) ---
-;; Tất cả các phím di chuyển ở đây đều được bọc trong S- (Shift)
+;; --- LAYER 2: ĐIỀU HƯỚNG CÓ SHIFT (Đang "đè" Shift) ---
 (deflayer nav-shift
-  @shft_off S-left  S-down  S-right S-up
-  S-home    S-pgdn  S-end   S-pgup
-  lctl      @to-typ
+  S-q       @shft_off S-left  S-down  S-right S-up
+  S-home    S-pgdn    S-end   S-pgup
+  @to-typ
 )
 
-;; --- LAYER 3: CHẾ ĐỘ GÕ VĂN BẢN ---
+;; --- LAYER 3: ĐIỀU HƯỚNG CÓ CTRL (Đang "đè" Ctrl) ---
+(deflayer nav-ctrl
+  @ctl_off  C-a       C-left  C-down  C-right C-up
+  C-home    C-pgdn    C-end   C-pgup
+  @to-typ
+)
+
+;; --- LAYER 4: CHẾ ĐỘ GÕ VĂN BẢN ---
 (deflayer typing
-  a         s       d       f       e
-  j         k       l       i
-  spc       @to-def
+  q         a         s       d       f       e
+  j         k         l       i
+  @to-def
 )
