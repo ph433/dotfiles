@@ -7,5 +7,6 @@
     "files.autoSave": "afterDelay",
     "files.autoSaveDelay": 500,
     "editor.minimap.enabled": false,
-    "workbench.activityBar.location": "top"
+    "workbench.activityBar.location": "top",
+    "git.confirmSync": false
 }
