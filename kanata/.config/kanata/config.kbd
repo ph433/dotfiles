@@ -1,32 +1,33 @@
 (defcfg
-  process-unmapped-keys yes
-)
+  process-unmapped-keys yes)
+
 
 (defsrc
-  caps q w e a s d   h j k l ; '   ralt
-)
+  caps q w e r a s d f  h j k l) ; '  spc  tab  lctl
+
 
 (defalias
-  ;; Nhấn nhả Caps = Backspace | Đè Caps = Nav Layer
-  cap (tap-hold-press 150 150 bspc (layer-toggle nav))
-  ;; Đè Alt phải = Nav Layer
-  ral (layer-toggle nav)
-)
+  ;; CapsLock = Backspace
+  cap bspc
+
+  ;; Đè Space = Nav Layer | Nhấn nhả Space = Dấu cách
+  spc-nav (tap-hold-press 200 200 spc (layer-toggle nav))
+  
+  ;; Nhấn 1 lần: Ctrl trái bình thường
+  ;; Nhấp đúp (Double tap): Ctrl + C (Copy)
+  ctl-copy (tap-dance 200 (lctl (multi lctl c))))
+
 
 (deflayer default
-  @cap _ _ _ _ _ _   _ _ _ _ _ _   @ral
-)
+  @cap _ _ _ _ _ _ _ _  _ _ _ _ _ _  @spc-nav  _  @ctl-copy)
+
 
 (deflayer nav
-  ;; --- TAY TRÁI ---
-  ;; Q=Home | W=Lên | E=End
-  ;; A=Trái | S=Xuống | D=Phải
-  _    home up   end  left down rght 
+  ;; --- TAY TRÁI (QWE ASD) ---
+  _  home up  end _  left down rght _
 
-  ;; --- TAY PHẢI ---
-  ;; H=Home | J=Trái | K=Lên | L=Xuống | ;=Phải | '=End
-  home left down   up rght end
+  ;; --- TAY PHẢI (HJKL) ---
+  home left down up rght end
 
-  ;; Alt phải khi đang ở trong layer nav
-  _
-)
+  ;; Giữ Space và Tab, Ctrl ở layer này (Tổng 18 phím)
+  _  _  _)

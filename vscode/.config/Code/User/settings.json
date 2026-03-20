@@ -1,0 +1,11 @@
+{
+    "geminicodeassist.project": "direct-venture-c5bll",
+    "files.associations": {
+        "*.kbd": "lisp"
+    },
+    "editor.bracketPairColorization.enabled": true,
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 500,
+    "editor.minimap.enabled": false,
+    "workbench.activityBar.location": "top"
+}
