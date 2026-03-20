@@ -1,34 +1,42 @@
 (defcfg
-  process-unmapped-keys yes)
-
+  process-unmapped-keys yes
+)
 
 (defsrc
-  caps q w e r a s d f  h j k l) ; '  spc  tab  lctl
-
+  a s d f e
+  j k l i
+  spc ralt
+)
 
 (defalias
-  ;; CapsLock = Backspace
-  cap bspc
-
-  ;; Đè Space = Nav Layer | Nhấn nhả Space = Dấu cách
-  spc-nav (tap-hold-press 200 200 spc (layer-toggle nav))
+  ;; Chuyển sang layer Shift-Navigation
+  shft_on (layer-switch nav-shift)
+  ;; Quay lại layer Navigation thường
+  shft_off (layer-switch default)
   
-  ;; Nhấn 1 lần: Ctrl trái bình thường
-  ;; Nhấp đúp (Double tap): Ctrl + C (Copy)
-  ctl-copy (tap-dance 200 (lctl (multi lctl c))))
+  ;; Chuyển đổi chế độ gõ văn bản
+  to-typ (layer-switch typing)
+  to-def (layer-switch default)
+)
 
-
+;; --- LAYER 1: ĐIỀU HƯỚNG MẶC ĐỊNH (Shift OFF) ---
 (deflayer default
-  @cap _ _ _ _ _ _ _ _  _ _ _ _ _ _  @spc-nav  _  @ctl-copy)
+  @shft_on  left    down    right   up
+  home      pgdn    end     pgup
+  lctl      @to-typ
+)
 
+;; --- LAYER 2: ĐIỀU HƯỚNG CÓ SHIFT (Shift ON) ---
+;; Tất cả các phím di chuyển ở đây đều được bọc trong S- (Shift)
+(deflayer nav-shift
+  @shft_off S-left  S-down  S-right S-up
+  S-home    S-pgdn  S-end   S-pgup
+  lctl      @to-typ
+)
 
-(deflayer nav
-  ;; --- TAY TRÁI (QWE ASD) ---
-  _  home up  end _  left down rght _
-
-  ;; --- TAY PHẢI (HJKL) ---
-  home left down up rght end
-  ;; test
-  ;; test2
-  ;; Giữ Space và Tab, Ctrl ở layer này (Tổng 18 phím)
-  _  _  _)
+;; --- LAYER 3: CHẾ ĐỘ GÕ VĂN BẢN ---
+(deflayer typing
+  a         s       d       f       e
+  j         k       l       i
+  spc       @to-def
+)
