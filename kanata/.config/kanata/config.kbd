@@ -29,5 +29,6 @@
   ;; --- TAY PHẢI (HJKL) ---
   home left down up rght end
   ;; test
+  ;; test2
   ;; Giữ Space và Tab, Ctrl ở layer này (Tổng 18 phím)
   _  _  _)
