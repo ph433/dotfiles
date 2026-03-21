@@ -1,0 +1,11 @@
+[Unit]
+Description=Kanata Keyboard Service (User Mode)
+Documentation=https://github.com/jtroo/kanata
+
+[Service]
+Type=simple
+ExecStart=%h/dotfiles/bin/kanata --cfg %h/.config/kanata/config.kbd
+Restart=no
+
+[Install]
+WantedBy=default.target

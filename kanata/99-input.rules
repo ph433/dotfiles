@@ -1,0 +1,2 @@
+KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"
+KERNEL=="event*", NAME="input/%k", MODE="0660", GROUP="input"
