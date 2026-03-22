@@ -10,7 +10,16 @@ sudo usermod -aG uinput "$USER"
 
 # Quan trọng: Cần udev rules để User có quyền đọc/ghi vào phím mà không cần sudo
 # Giả sử file này bạn để ở: ~/dotfiles/kanata/99-input.rules
-sudo ln -sf "$HOME/dotfiles/kanata/99-input.rules" /etc/udev/rules.d/99-input.rules
+
+rm ~/.bashrc
+rm ~/.bash_aliases
+
+stow fzf
+
+sudo rm -f /etc/udev/rules.d/99-input.rules
+sudo cp "$HOME/dotfiles/kanata/99-input.rules" /etc/udev/rules.d/
+sudo udevadm control --reload-rules
+sudo udevadm trigger /dev/uinput
 
 # --- 2. TẠO CẤU TRÚC THƯ MỤC "VỎ" (Để Stow không link nguyên khối) ---
 echo "2. Đang tạo các thư mục cấu hình..."
@@ -20,8 +29,7 @@ mkdir -p ~/.config/systemd/user
 # --- 3. LIÊN KẾT (STOW) ---
 echo "3. Đang liên kết cấu hình bằng Stow..."
 chmod +x "$HOME/dotfiles/bin/kanata"
-cd "$HOME/dotfiles"
-stow -R kanata  # Dùng -R (Restow) để làm mới các link cũ nếu có
+cd "$HOME/dotfiles" && stow -Rv kanata
 
 # --- 4. KÍCH HOẠT DỊCH VỤ (USER MODE - KHÔNG SUDO) ---
 echo "4. Đang thiết lập Systemd User Service..."

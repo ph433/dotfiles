@@ -1,0 +1,10 @@
+# Không link thư mục chứa file gốc của fzf ra Home
+vendor/
+
+# Không link file cấu hình chi tiết (vì ta nạp nội bộ qua .fzf.bash rồi)
+fzf.config.bash
+
+# Nếu bạn có các file rác hoặc ghi chú, hãy thêm vào đây
+README.md
+LICENSE
+.git/
