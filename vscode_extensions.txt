@@ -1,0 +1,16 @@
+betterthantomorrow.calva
+betterthantomorrow.calva-spritz
+formulahendry.code-runner
+github.copilot-chat
+mark-wiemer.vscode-autohotkey-plus-plus
+mattn.lisp
+ms-python.debugpy
+ms-python.python
+ms-python.vscode-pylance
+ms-python.vscode-python-envs
+ms-vscode.cmake-tools
+ms-vscode.cpp-devtools
+ms-vscode.cpptools
+ms-vscode.cpptools-extension-pack
+ms-vscode.cpptools-themes
+yzhang.markdown-all-in-one

@@ -1,0 +1,3 @@
+- [ ] Config kanata
+- [ ] Cài máy ảo
+- [ ] 

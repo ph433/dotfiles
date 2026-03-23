@@ -295,7 +295,7 @@ __fzf_generic_path_completion() {
   fi
   cmd="${cmd//[^A-Za-z0-9_=]/_}"
   COMPREPLY=()
-  trigger=${FZF_COMPLETION_TRIGGER-'**'}
+  trigger=${FZF_COMPLETION_TRIGGER-','}
   cur="${COMP_WORDS[COMP_CWORD]}"
   if [[ "$cur" == *"$trigger" ]] && [[ $cur != *'$('* ]] && [[ $cur != *':='* ]] && [[ $cur != *'`'* ]]; then
     base=${cur:0:${#cur}-${#trigger}}
