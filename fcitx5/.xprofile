@@ -1,6 +1,28 @@
+# 1. Khai báo môi trường nhập liệu
 export GTK_IM_MODULE=fcitx
 export QT_IM_MODULE=fcitx
 export XMODIFIERS=@im=fcitx
 export SDL_IM_MODULE=fcitx
-export GLFW_IM_MODULE=ibus
+export GLFW_IM_MODULE=fcitx  # Đổi sang fcitx cho đồng bộ
+
+# 2. Khởi động Fcitx5 (nếu chưa chạy)
 fcitx5 -d &
+
+# 3. Chờ đợi "phục kích" (Quan trọng!)
+# Phải đợi Fcitx5 và Cinnamon nạp xong cái layout 'ghi cứng' của tụi nó
+(
+  sleep 5 
+  
+  # Xóa sạch layout trong 'não' Cinnamon để nó không tự chèn thêm ,us
+  gsettings set org.gnome.libgnomekbd.keyboard layouts "[]"
+  gsettings set org.cinnamon.desktop.peripherals.keyboard keyboard-layouts "[]"
+
+  # Nạp layout từ file Nano (/etc/default/keyboard)
+  if [ -f /etc/default/keyboard ]; then
+    source /etc/default/keyboard
+    setxkbmap -layout "$XKBLAYOUT" -variant "$XKBVARIANT" -option "$XKBOPTIONS"
+  fi
+  
+  # Ép Fcitx5 nhận diện lại layout vừa nạp (tránh việc nó tự nhảy về US chuẩn)
+  fcitx5-remote -r > /dev/null 2>&1
+) &
