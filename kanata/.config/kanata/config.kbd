@@ -1,43 +1,34 @@
 (defsrc
-  ralt
-  a s d f
-  j k l ;
-  spc
+  q         w         e         r         t         y         u         i         o         p
+  a         s         d         f         g         h         j         k         l         ;
+  z         x         c         v         b         n         m         ,         .         /
+  lalt      spc       caps      ralt
 )
 
-;; Layer mặc định: Gõ bình thường, Alt phải để bật Mod
+;; LAYER 1: COLEMAK-DH ANSI
 (deflayer default
-  @tog_mod
-  a s d f
-  j k l ;
-  spc
+  q         w         f         p         b         j         l         u         y         ;
+  a         r         s         t         g         m         n         e         i         o
+  x         c         d         v         z         k         h         ,         .         /
+  @to_mod2         spc       bspc      @to_mod1
 )
 
-;; Layer Mod (Khi Alt phải đã bật):
-;; - a s d f BIẾN THÀNH phím chức năng 100%, không còn là chữ.
-;; - j k l ; biến thành mũi tên.
-;; - Space CHỈ dùng để đè kết hợp (layer-toggle).
-(deflayer mod_active
-  @tog_default
-  lctl lsft lmet lalt     ;; a=Ctrl, s=Shift, d=Win, f=Alt (theo thứ tự bạn muốn)
-  left down up   rght     ;; j k l ; thành phím điều hướng
-  @spc_mod                ;; Space chỉ để đè kết hợp, không ra dấu cách
+(deflayer mod_active1
+  esc       home      up        end       C-A-t         _         _         _         _         _
+  tab       left      down      rght      prtsc       _         lctl      lshft     lmet      lalt
+  _         _         _         _         _         _         _         _         _         _
+  _         ent       _         _
 )
 
-;; Layer phụ khi đè Space (Chỉ dùng khi đang ở trong mod_active)
-(deflayer space_fn
-  _
-  _ _ _ _                 ;; Giữ nguyên modifier
-  home pgdn pgup end      ;; j k l ; biến thành Home/End...
-  _
+(deflayer mod_active2
+  [         7         8         9         ]         grv       /         \         '         _
+  S-9       4         5         6         S-0       =         lctl      @sksh     lmet      lalt
+  ,         1         2         3         .         -         _         _         _         _
+  _         0         _         _
 )
 
 (defalias
-  ;; Chuyển đổi qua lại giữa 2 chế độ
-  tog_mod (layer-switch mod_active)
-  tog_default (layer-switch default)
-
-  ;; Space ở chế độ Mod: Đè thì kích hoạt layer space_fn, 
-  ;; Buông ra không làm gì cả (triệt tiêu phím trắng).
-  spc_mod (layer-toggle space_fn)
+  to_mod1 (layer-toggle mod_active1)
+  to_mod2 (layer-toggle mod_active2)
+  sksh (one-shot 2000 lsft)
 )
