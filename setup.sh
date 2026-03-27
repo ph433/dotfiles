@@ -96,6 +96,7 @@ echo "Step 4: Kích hoạt dịch vụ và ứng dụng khởi động..."
 # Kanata service
 systemctl --user daemon-reload
 systemctl --user enable --now kanata.service
+systemctl --user enable --now reset-kb.service
 
 echo "--------------------------------------------------"
 echo "✅ HOÀN TẤT! Mọi thứ đã sẵn sàng."

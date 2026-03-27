@@ -5,6 +5,8 @@ alias kk='sudo udevadm trigger --subsystem-match=input --action=change'
 # knt: Kanata Restart (giữ nguyên của bạn nhưng thêm sudo nếu cần)
 alias knt='systemctl --user daemon-reload ; systemctl --user restart kanata ; sleep 1 ; clear ; knts'
 alias knts='watch -n 0.5 --color "SYSTEMD_COLORS=1 systemctl --user status kanata --no-pager"'
+alias lay='systemctl --user restart reset-kb.service'
+alias layw='watch -n 0.5 --color "SYSTEMD_COLORS=1 systemctl --user status reset-kb.service"'
 alias kana='knt && knts'
 alias e='exit'
 alias s='sleep 30 && systemctl poweroff'
@@ -13,7 +15,7 @@ alias klog='journalctl --user -u kanata -f'
 
 # --- Tiện ích Hệ thống ---
 # w: Nâng cấp watch để highlight những chỗ thay đổi (rất phê khi soi layout)
-alias w='watch -d -n 0.5'
+alias w='watch -d -n 0.5 '
 
 # up: Thêm dọn dẹp rác tự động sau khi nâng cấp
 alias up='sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y'

@@ -1,0 +1,11 @@
+[Unit]
+Description=Kanata Keyboard Service (User Mode)
+# Link từ điển mã phím để tra cứu nhanh khi gõ status
+Documentation=https://github.com/jtroo/kanata/blob/main/parser/src/keys/mod.rs
+
+[Service]
+ExecStart=%h/dotfiles/bin/kanata --cfg %h/.config/kanata/config.kbd --no-wait
+Restart=on-failure
+RestartSec=3
+[Install]
+WantedBy=default.target
