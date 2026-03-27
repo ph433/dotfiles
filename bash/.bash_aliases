@@ -3,8 +3,8 @@
 alias k='source /etc/default/keyboard && setxkbmap -layout "$XKBLAYOUT" -variant "$XKBVARIANT" -option "$XKBOPTIONS"'
 alias kk='sudo udevadm trigger --subsystem-match=input --action=change'
 # knt: Kanata Restart (giữ nguyên của bạn nhưng thêm sudo nếu cần)
-alias knt='systemctl --user restart kanata'
-
+alias knt='systemctl --user daemon-reload && systemctl --user restart kanata && sleep 3 && source /etc/default/keyboard && setxkbmap -layout "$XKBLAYOUT" -variant "$XKBVARIANT" -option "$XKBOPTIONS"'
+alias knts='watch -n 0.5 systemctl --user status kanata'
 # klog: Xem log của Kanata ngay lập tức (Để debug xem tại sao Caps thành Backspace)
 alias klog='journalctl --user -u kanata -f'
 

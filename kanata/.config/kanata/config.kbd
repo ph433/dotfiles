@@ -1,34 +1,60 @@
+(defcfg
+  process-unmapped-keys yes
+)
+
 (defsrc
-  q         w         e         r         t         y         u         i         o         p
-  a         s         d         f         g         h         j         k         l         ;
-  z         x         c         v         b         n         m         ,         .         /
-  lalt      spc       caps      ralt
+  esc     f1      f2      f3      f4      f5      f6      f7      f8      f9      f10     f11     f12     ins     prtsc   del     home    end     pgup    pgdn
+  grv     1       2       3       4       5       6       7       8       9       0       -       =       bspc            nlck    kp/     kp*     kp-
+  tab     q       w       e       r       t       y       u       i       o       p       [       ]       \               kp7     kp8     kp9     kp+
+  caps    a       s       d       f       g       h       j       k       l       ;       '       ret                     kp4     kp5     kp6     kprt
+  lsft    z       x       c       v       b       n       m       ,       .       /       rsft            up              kp1     kp2     kp3 
+  lctl    lmet    lalt    spc                                     ralt    f23                     left    down    rght    kp0             kp.
 )
 
-;; LAYER 1: COLEMAK-DH ANSI
-(deflayer default
-  q         w         f         p         b         j         l         u         y         ;
-  a         r         s         t         g         m         n         e         i         o
-  x         c         d         v         z         k         h         ,         .         /
-  @to_mod2         spc       bspc      @to_mod1
+(deflayer colemak-dh
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
+  bks     a       r       s       t       g       m       n       e       i       o       _       _                       _       _       _       _
+  _       x       c       d       v       z       k       h       ,       .       /       _               _               _       _       _
+  _       _       _       _                                       _       (unmod a)                       _       _       _       _               _
 )
 
-(deflayer mod_active1
-  esc       home      up        end       C-A-t         _         _         _         _         _
-  tab       left      down      rght      prtsc       _         lctl      lshft     lmet      lalt
-  _         _         _         _         _         _         _         _         _         _
-  _         ent       _         _
-)
+;; (deflayer mod_active1
+;;   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+;;   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+;;   _       esc     home    up      end     C-A-t   _       _       _       _       _       _       _       _               _       _       _       _
+;;   _       tab     left    down    rght    prtsc   _       lctl    lsft    lmet    lalt    _       _                       _       _       _
+;;   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+;;   _       _       _                       _                               _       _               _       _       _       _               _
+;; )
 
-(deflayer mod_active2
-  [         7         8         9         ]         grv       /         \         '         _
-  S-9       4         5         6         S-0       =         lctl      @sksh     lmet      lalt
-  ,         1         2         3         .         -         _         _         _         _
-  _         0         _         _
-)
 
-(defalias
-  to_mod1 (layer-toggle mod_active1)
-  to_mod2 (layer-toggle mod_active2)
-  sksh (one-shot 2000 lsft)
-)
+
+;; (deflayer mod_active2
+;;   [         7         8         9         ]         grv       /         \         '         _
+;;   S-9       4         5         6         S-0       =         lctl      @sksh     lmet      lalt
+;;   ,         1         2         3         .         -         _         _         _         _
+;;   _         _         0         _         _
+;; )
+
+;; (deflayer mod_ctrl
+;;   _         _         _         _         _         _         _         _         _         _
+;;   C-y       C-o       C-s       C-f       _         _         _         _         _         _
+;;   C-z       C-x       C-c       C-v       _         _         _         _         _         _
+;;   _         _         _         _         _
+;; )
+
+;; (deflayer _
+;;   _         _         _         _         _         _         _         _         _         _
+;;   _         _         _         _         _         _         _         _         _         _
+;;   _         _         _         _         _         _         _         _         _         _
+;;   _         _         _         _         _
+;; )
+
+;; (defalias
+;;   to_mod1 (layer-toggle mod_active1)
+;;   to_mod2 (layer-toggle mod_active2)
+;;   sksh (one-shot 2000 lsft)
+;;   to_modctrl (layer-toggle mod_ctrl)
+;; )

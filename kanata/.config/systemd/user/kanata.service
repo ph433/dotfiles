@@ -1,11 +1,17 @@
 [Unit]
 Description=Kanata Keyboard Service (User Mode)
-Documentation=https://github.com/jtroo/kanata
+# Link từ điển mã phím để tra cứu nhanh khi gõ status
+Documentation=https://github.com/jtroo/kanata/blob/main/parser/src/keys/mod.rs
 
 [Service]
 Type=simple
-ExecStart=%h/dotfiles/bin/kanata --cfg %h/.config/kanata/config.kbd
-Restart=no
+# Thêm --no-wait để service khởi động mượt hơn trong background
+ExecStart=%h/dotfiles/bin/kanata --cfg %h/.config/kanata/config.kbd --no-wait
+# Tự động bật lại nếu Kanata bị crash (ví dụ khi rút phím hoặc sleep máy)
+Restart=on-failure
+# Đợi 3 giây trước khi hồi sinh để tránh làm treo CPU nếu file .kbd bị lỗi
+RestartSec=3
 
 [Install]
+# Chạy ngay khi bạn đăng nhập vào Linux
 WantedBy=default.target
