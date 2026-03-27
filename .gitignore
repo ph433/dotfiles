@@ -27,3 +27,11 @@ Thumbs.db
 
 # --- LOGS ---
 *.log
+
+# Thêm vào cuối file .gitignore nếu cần
+.vscode/
+.idea/
+*.bak
+
+*.md
+!README.md
