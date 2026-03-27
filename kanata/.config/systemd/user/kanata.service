@@ -4,14 +4,9 @@ Description=Kanata Keyboard Service (User Mode)
 Documentation=https://github.com/jtroo/kanata/blob/main/parser/src/keys/mod.rs
 
 [Service]
-Type=simple
-# Thêm --no-wait để service khởi động mượt hơn trong background
 ExecStart=%h/dotfiles/bin/kanata --cfg %h/.config/kanata/config.kbd --no-wait
-# Tự động bật lại nếu Kanata bị crash (ví dụ khi rút phím hoặc sleep máy)
 Restart=on-failure
-# Đợi 3 giây trước khi hồi sinh để tránh làm treo CPU nếu file .kbd bị lỗi
 RestartSec=3
-
+ExecStartPost=/usr/bin/sh -c 'sleep 1 && . /etc/default/keyboard && /usr/bin/setxkbmap -layout "$XKBLAYOUT" -variant "$XKBVARIANT" -option "$XKBOPTIONS"'
 [Install]
-# Chạy ngay khi bạn đăng nhập vào Linux
 WantedBy=default.target
