@@ -1,4 +1,0 @@
-- [ ] Config kanata
-- [x] Cài máy ảo
-- [ ] Thêm config copyq, flameshot vào dotfiles
-- [ ] 
