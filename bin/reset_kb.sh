@@ -1,20 +1,26 @@
 #!/bin/bash
 
-# Vòng lặp vô tận để canh chừng
-while true; do
-    # Lấy layout hiện tại đang chạy trong GUI
-    CURRENT_LAYOUT=$(setxkbmap -query | grep layout | awk '{print $2}')
+# Khai báo để Robot nhìn thấy màn hình
+export DISPLAY=:0
+export XAUTHORITY=$HOME/.Xauthority
 
-    # Nếu layout KHÔNG PHẢI là "us" (bao gồm cả trường hợp bị dính "et,us")
-    if [ "$CURRENT_LAYOUT" != "us" ]; then
-        # Chạy lệnh reset thần thánh của bạn
-        . /etc/default/keyboard
-        setxkbmap -layout "$XKBLAYOUT" -variant "$XKBVARIANT" -option "$XKBOPTIONS"
-        
-        # Ghi log nhẹ để mình biết nó vừa hoạt động (có thể xóa dòng này)
-        # echo "Đã phát hiện layout lạ ($CURRENT_LAYOUT), đã reset về us."
+reset_to_us() {
+    # Kiểm tra thực tế bằng xkb
+    layout=$(setxkbmap -query | grep layout | awk '{print $2}')
+    
+    if [ "$layout" != "us" ]; then
+        echo "--- [$(date +%H:%M:%S)] PHÁT HIỆN LAYOUT $layout! Đang vả về US ---"
+        setxkbmap us
+        # Thêm các lệnh reset phím khác của bạn vào đây
     fi
+}
 
-    # Nghỉ 3 giây rồi kiểm tra tiếp (tránh tốn CPU)
-    sleep 3
+# Chạy lần đầu khi vừa mở Robot
+reset_to_us
+
+# Dùng chính cái lệnh đang chạy ngon ở Terminal bên phải của bạn
+xinput test-xi2 --root | grep --line-buffered -E "HierarchyChanged|DeviceChanged" | while read -r line; do
+    # Đợi 0.5s cho hệ thống nạp xong phím rồi mới check
+    sleep 0.5
+    reset_to_us
 done

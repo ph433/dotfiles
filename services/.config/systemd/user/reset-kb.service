@@ -1,12 +1,13 @@
 [Unit]
-Description=Robot canh layout US cho Phuong
+Description=Robot thong minh canh layout US cho Phuong
 After=graphical-session.target
 
 [Service]
-# Trỏ thẳng vào thư mục dotfiles của bạn
+Type=simple
+# Trỏ đúng đường dẫn đến file script bạn vừa sửa ở trên
 ExecStart=/usr/bin/bash %h/dotfiles/bin/reset_kb.sh
 Restart=always
 RestartSec=3
 
 [Install]
-WantedBy=default.target
+WantedBy=graphical-session.target
