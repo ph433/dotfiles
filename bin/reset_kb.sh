@@ -1,26 +1,38 @@
 #!/bin/bash
 
-# Khai báo để Robot nhìn thấy màn hình
+# 0. Khai báo môi trường để Robot thấy phím
 export DISPLAY=:0
 export XAUTHORITY=$HOME/.Xauthority
 
 reset_to_us() {
-    # Kiểm tra thực tế bằng xkb
-    layout=$(setxkbmap -query | grep layout | awk '{print $2}')
+    # 1. Nạp "Hiến pháp" từ hệ thống
+    if [ -f /etc/default/keyboard ]; then
+        source /etc/default/keyboard
+    fi
+
+    # 2. Lấy layout hiện tại
+    current_layout=$(setxkbmap -query | grep layout | awk '{print $2}')
     
-    if [ "$layout" != "us" ]; then
-        echo "--- [$(date +%H:%M:%S)] PHÁT HIỆN LAYOUT $layout! Đang vả về US ---"
-        setxkbmap us
-        # Thêm các lệnh reset phím khác của bạn vào đây
+    # 3. Kiểm tra và vả
+    if [ "$current_layout" != "$XKBLAYOUT" ]; then
+        echo "--- [$(date +%T)] GNOME VỪA LÀM LOẠN ($current_layout)! ROBOT CHỐT HẠ VỀ $XKBLAYOUT ---"
+        setxkbmap -layout "${XKBLAYOUT:-us}" -variant "${XKBVARIANT:-}" -option "${XKBOPTIONS:-}"
     fi
 }
 
-# Chạy lần đầu khi vừa mở Robot
-reset_to_us
+# --- GIAI ĐOẠN 1: NHẪN NHỊN (Đợi GNOME load xong) ---
+# Mình dùng 10 giây để chắc chắn GNOME và Bộ gõ đã "thức dậy" hoàn toàn
 
-# Dùng chính cái lệnh đang chạy ngon ở Terminal bên phải của bạn
+(
+    echo "--- [$(date +%T)] Robot đang đợi GNOME múa máy... (10s) ---"
+    sleep 15
+    reset_to_us
+    echo "--- [$(date +%T)] Đã chốt hạ layout lần đầu. Chuyển sang canh gác. ---"
+) &
+
+# --- GIAI ĐOẠN 2: CANH GÁC (Lụm kèo mỗi khi cắm rút) ---
+# Dùng xinput để bắt thóp GNOME mỗi khi nó định đổi layout do thiết bị mới
 xinput test-xi2 --root | grep --line-buffered -E "HierarchyChanged|DeviceChanged" | while read -r line; do
-    # Đợi 0.5s cho hệ thống nạp xong phím rồi mới check
-    sleep 0.5
+    sleep 2
     reset_to_us
 done
