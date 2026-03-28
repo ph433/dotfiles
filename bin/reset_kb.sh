@@ -30,9 +30,14 @@ reset_to_us() {
     echo "--- [$(date +%T)] Đã chốt hạ layout lần đầu. Chuyển sang canh gác. ---"
 ) &
 
-# --- GIAI ĐOẠN 2: CANH GÁC (Lụm kèo mỗi khi cắm rút) ---
-# Dùng xinput để bắt thóp GNOME mỗi khi nó định đổi layout do thiết bị mới
+# --- GIAI ĐOẠN 2: BẢN CHỐNG SPAM (LỤM KÈO CHUẨN) ---
 xinput test-xi2 --root | grep --line-buffered -E "HierarchyChanged|DeviceChanged" | while read -r line; do
-    sleep 2
-    reset_to_us
+    # Kiểm tra xem có thằng sleep nào của chính script này đang chạy không
+    # Nếu CHƯA có thì mới cho phép đẻ thằng mới
+    if ! pgrep -f "sleep 2" > /dev/null; then
+        (
+            sleep 2
+            reset_to_us
+        ) &
+    fi
 done
