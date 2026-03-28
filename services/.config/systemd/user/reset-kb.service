@@ -1,13 +1,17 @@
 [Unit]
 Description=Robot thong minh canh layout US cho Phuong
-After=graphical-session.target
+# Bỏ After=graphical-session để tránh bị kẹt, dùng sleep trong script sẽ an toàn hơn
+After=basic.target
 
 [Service]
 Type=simple
-# Trỏ đúng đường dẫn đến file script bạn vừa sửa ở trên
-ExecStart=/usr/bin/bash %h/dotfiles/bin/reset_kb.sh
+# Dùng đường dẫn TUYỆT ĐỐI, không dùng %h hay dấu ~
+ExecStart=/usr/bin/bash /home/phuong/dotfiles/bin/reset_kb.sh
 Restart=always
 RestartSec=3
+# Thêm dòng này để Systemd ghi log chuẩn hơn
+StandardOutput=journal
+StandardError=journal
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=default.target
