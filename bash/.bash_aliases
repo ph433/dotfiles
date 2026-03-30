@@ -7,7 +7,6 @@ alias knt='systemctl --user daemon-reload ; systemctl --user restart kanata ; sl
 alias knts='watch -n 0.5 --color "SYSTEMD_COLORS=1 systemctl --user status kanata --no-pager"'
 alias lay='systemctl --user restart reset-kb.service'
 alias layw='watch -n 0.5 --color "SYSTEMD_COLORS=1 systemctl --user status reset-kb.service"'
-alias kana='knt && knts'
 alias e='exit'
 alias s='sleep 30 && systemctl poweroff'
 # klog: Xem log của Kanata ngay lập tức (Để debug xem tại sao Caps thành Backspace)
