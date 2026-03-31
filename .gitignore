@@ -35,3 +35,14 @@ Thumbs.db
 
 *.md
 !README.md
+
+# --- COPYQ: BỎ QUA LỊCH SỬ, CHỈ GIỮ CẤU HÌNH ---
+# Chặn các file database chứa nội dung copy (rất nặng và bảo mật thấp)
+*.dat
+*.db
+
+# Chặn file tạm và lock
+*.lock
+.copyq_s
+copyq_geometry.ini
+copyq.log

@@ -6,5 +6,13 @@
     "files.autoSave": "afterDelay",
     "files.autoSaveDelay": 500,
     "editor.minimap.enabled": false,
-    "git.confirmSync": false
+    "git.confirmSync": false,
+    "code-runner.runInTerminal": true,
+    "code-runner.saveAllFilesBeforeRun": true,
+    "code-runner.preserveFocus": false,
+    "workbench.panel.defaultLocation": "bottom",
+    "workbench.panel.opensMaximized": "always", 
+    "terminal.integrated.defaultProfile.linux": "bash",
+    "workbench.activityBar.location": "top",
+    "chat.viewSessions.enabled": false
 }

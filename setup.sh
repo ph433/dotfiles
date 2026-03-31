@@ -8,7 +8,7 @@ cd "$DOTFILES"
 
 # --- 0. KHAI BÁO DANH SÁCH PHẦN MỀM ---
 PKGS_SYSTEM=(
-    stow fzf copyq flameshot curl git gettext
+    stow fzf copyq curl git gettext
 )
 
 PKGS_FCITX5=(
@@ -77,6 +77,8 @@ FILES_TO_REMOVE=(
 )
 for item in "${FILES_TO_REMOVE[@]}"; do rm -rf "$item"; done
 
+rm ~/.config/copyq/{copyq.conf,copyq_tabs.ini,copyq-commands.ini}
+
 # Đảm bảo thư mục cha tồn tại
 mkdir -p "$HOME/.config"
 
@@ -88,6 +90,7 @@ stow -Rv fcitx5
 stow -Rv autostart
 stow -Rv vscode
 stow -Rv bash
+stow -Rv copyq
 # stow -Rv vscode (Nếu bạn đã đưa settings.json vào dotfiles)
 
 # --- 4. KÍCH HOẠT DỊCH VỤ & AUTOSTART ---
