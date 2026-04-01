@@ -5,5 +5,9 @@ export XMODIFIERS=@im=fcitx
 export SDL_IM_MODULE=fcitx
 export GLFW_IM_MODULE=fcitx  # Đổi sang fcitx cho đồng bộ
 
-# 2. Khởi động Fcitx5 (nếu chưa chạy)
-fcitx5 -d &
+# 2. Khởi động
+(
+  sleep 3
+  fcitx5 -rd
+  copyq
+) &

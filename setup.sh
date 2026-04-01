@@ -7,101 +7,73 @@ DOTFILES="$HOME/dotfiles"
 cd "$DOTFILES"
 
 # --- 0. KHAI BÁO DANH SÁCH PHẦN MỀM ---
-PKGS_SYSTEM=(
-    stow fzf copyq curl git gettext
-)
-
+PKGS_SYSTEM=(copyq curl fzf gettext)
 PKGS_FCITX5=(
     fcitx5 fcitx5-bamboo fcitx5-frontend-gtk2 fcitx5-frontend-gtk3 
     fcitx5-frontend-qt5 kde-config-fcitx5
 )
 
 echo "--------------------------------------------------"
-echo "🔧 BẮT ĐẦU THIẾT LẬP HỆ THỐNG TỪ DOTFILES"
+echo "🔧 STEP A: THIẾT LẬP HỆ THỐNG CỐT LÕI"
 echo "--------------------------------------------------"
 
-# --- 1. KHU VỰC CÀI ĐẶT (INSTALLATION) ---
-echo "Step 1: Chuẩn bị nguồn và cài đặt phần mềm..."
-
-# Chuẩn bị cho VS Code (Thêm repo trước khi update)
-if ! command -v code >/dev/null 2>&1; then
-    echo "🔵 Đang chuẩn bị nguồn cho VS Code..."
-    wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
-    sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
-    sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
-    rm -f packages.microsoft.gpg
-fi
-
-# Một lần update duy nhất cho tất cả
+# --- 1. CÀI ĐẶT PHẦN MỀM ---
+echo "Step 1: Cài đặt phần mềm hệ thống & bộ gõ..."
 sudo apt update
-sudo apt install -y "${PKGS_SYSTEM[@]}" "${PKGS_FCITX5[@]}" code
+sudo apt install -y "${PKGS_SYSTEM[@]}" "${PKGS_FCITX5[@]}"
 
-# Đồng bộ VS Code Extensions
-EXT_FILE="$DOTFILES/vscode_extensions.txt"
-if [ -f "$EXT_FILE" ]; then
-    echo "📦 Đang cài đặt VS Code extensions..."
-    cat "$EXT_FILE" | xargs -L 1 code --install-extension
-fi
-
-# --- 2. CẤU HÌNH QUYỀN & THIẾT BỊ ---
-echo "Step 2: Cấp quyền thực thi và cấu hình udev..."
-
-# Cấp quyền cho bin trong dotfiles (Để gọi lệnh trực tiếp)
+# --- 2. CẤU HÌNH QUYỀN (KANATA) ---
+echo "Step 2: Cấp quyền uinput cho Kanata..."
 if [ -d "$DOTFILES/bin" ]; then
     chmod +x "$DOTFILES/bin/"*
 fi
 
-# Quyền cho Kanata
 sudo groupadd -f uinput
 sudo usermod -aG input "$USER"
 sudo usermod -aG uinput "$USER"
 
 if [ -f "$DOTFILES/kanata/99-input.rules" ]; then
     sudo cp "$DOTFILES/kanata/99-input.rules" /etc/udev/rules.d/
-    sudo udevadm control --reload-rules
-    sudo udevadm trigger
+    sudo udevadm control --reload-rules && sudo udevadm trigger
 fi
 
-# --- 3. DỌN DẸP & LIÊN KẾT (STOW) ---
-echo "Step 3: Dọn dẹp và chạy GNU Stow..."
-
-# Xóa file/folder cũ để tránh xung đột với Symlink
+# --- 3. DỌN DẸP & STOW ---
+echo "Step 3: Dọn dẹp và liên kết Dotfiles (Stow)..."
 FILES_TO_REMOVE=(
     "$HOME/.bashrc"
     "$HOME/.bash_aliases"
     "$HOME/.xprofile"
-    "$HOME/.config/fcitx5"
-    "$HOME/.config/autostart"
-    "$HOME/.config/Code/User/settings.json"
-    "$HOME/.config/Code/User/keybindings.json"
+
+    "$HOME/.config/fcitx5/profile"
+    "$HOME/.config/copyq"
 )
-for item in "${FILES_TO_REMOVE[@]}"; do rm -rf "$item"; done
 
-rm ~/.config/copyq/{copyq.conf,copyq_tabs.ini,copyq-commands.ini}
+for item in "${FILES_TO_REMOVE[@]}"; do rm -rf "$item" || true; done
 
-# Đảm bảo thư mục cha tồn tại
 mkdir -p "$HOME/.config"
+mkdir -p "$HOME/.config/kanata"
+mkdir -p "$HOME/.config/fcitx5"
+mkdir -p "$HOME/.config/copyq"
 
-# Chạy Stow (Hãy đảm bảo cấu trúc thư mục trong dotfiles đã khớp)
-cd "$DOTFILES"
-stow -Rv fzf
-stow -Rv kanata
-stow -Rv fcitx5
-stow -Rv autostart
-stow -Rv vscode
-stow -Rv bash
-stow -Rv copyq
-# stow -Rv vscode (Nếu bạn đã đưa settings.json vào dotfiles)
+stow -Rv fzf kanata fcitx5 copyq bash
 
-# --- 4. KÍCH HOẠT DỊCH VỤ & AUTOSTART ---
-echo "Step 4: Kích hoạt dịch vụ và ứng dụng khởi động..."
-
-# Kanata service
+# --- 4. KÍCH HOẠT DỊCH VỤ ---
+echo "Step 4: Kích hoạt dịch vụ hệ thống..."
 systemctl --user daemon-reload
 systemctl --user enable --now kanata.service
 systemctl --user enable --now reset-kb.service
 
+# STEP 5: KÍCH HOẠT HỆ THỐNG (LẦN ĐẦU)
+echo "Step 5: Đang kích hoạt Fcitx5 và CopyQ để tự sinh cấu hình..."
+
+(
+    sleep 3
+    fcitx5 -rd
+    copyq
+) &
+
 echo "--------------------------------------------------"
-echo "✅ HOÀN TẤT! Mọi thứ đã sẵn sàng."
-echo "⚠️  LƯU Ý: Bạn CẦN RESTART máy để quyền uinput và bộ gõ có hiệu lực."
+echo "✅ TẤT CẢ ĐÃ HOÀN TẤT!"
+echo "🚀 Mẹo: Bạn có thể bắt đầu gõ tiếng Việt và dùng Clipboard ngay bây giờ."
+echo "⚠️  Lưu ý: Hãy Restart máy một lần để các biến môi trường (.xprofile) có hiệu lực toàn diện."
 echo "--------------------------------------------------"
