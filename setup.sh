@@ -54,7 +54,7 @@ mkdir -p "$HOME/.config"
 mkdir -p "$HOME/.config/kanata"
 mkdir -p "$HOME/.config/fcitx5"
 mkdir -p "$HOME/.config/copyq"
-
+mkdir -p "$HOME/.config/systemd/user"
 stow -Rv fzf kanata fcitx5 copyq bash services
 
 # --- 4. KÍCH HOẠT DỊCH VỤ ---
