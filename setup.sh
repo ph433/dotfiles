@@ -61,7 +61,6 @@ stow -Rv fzf kanata fcitx5 copyq bash services
 echo "Step 4: Kích hoạt dịch vụ hệ thống..."
 systemctl --user daemon-reload
 systemctl --user enable --now kanata.service
-systemctl --user enable --now reset-kb.service
 
 # STEP 5: KÍCH HOẠT HỆ THỐNG (LẦN ĐẦU)
 echo "Step 5: Đang kích hoạt Fcitx5 và CopyQ để tự sinh cấu hình..."
