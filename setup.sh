@@ -7,9 +7,9 @@ DOTFILES="$HOME/dotfiles"
 cd "$DOTFILES"
 
 # --- 0. KHAI BÁO DANH SÁCH PHẦN MỀM ---
-PKGS_SYSTEM=(copyq curl fzf gettext)
+PKGS_SYSTEM=(copyq flameshot curl fzf gettext)
 PKGS_FCITX5=(
-    fcitx5 fcitx5-bamboo fcitx5-frontend-gtk2 fcitx5-frontend-gtk3 
+    fcitx5 fcitx5-bamboo fcitx5-frontend-gtk2 fcitx5-frontend-gtk3
     fcitx5-frontend-qt5 kde-config-fcitx5
 )
 
@@ -46,6 +46,7 @@ FILES_TO_REMOVE=(
 
     "$HOME/.config/fcitx5/profile"
     "$HOME/.config/copyq"
+    "$HOME/.config/flameshot"
 )
 
 for item in "${FILES_TO_REMOVE[@]}"; do rm -rf "$item" || true; done
@@ -54,7 +55,9 @@ mkdir -p "$HOME/.config"
 mkdir -p "$HOME/.config/kanata"
 mkdir -p "$HOME/.config/fcitx5"
 mkdir -p "$HOME/.config/copyq"
+mkdir -p "$HOME/.config/flameshot"
 mkdir -p "$HOME/.config/systemd/user"
+
 stow -Rv fzf kanata fcitx5 copyq bash services
 
 # --- 4. KÍCH HOẠT DỊCH VỤ ---
