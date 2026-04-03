@@ -23,6 +23,8 @@ echo "🔗 Đang liên kết cấu hình (settings.json, keybindings.json)..."
 rm -rf "$HOME/.config/Code/User/settings.json" || true
 rm -rf "$HOME/.config/Code/User/keybindings.json" || true
 
+mkdir -p "$HOME/.config/Code/User"
+
 cd "$DOTFILES"
 stow -Rv vscode
 

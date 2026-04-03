@@ -44,21 +44,23 @@ FILES_TO_REMOVE=(
     "$HOME/.bash_aliases"
     "$HOME/.xprofile"
 
-    "$HOME/.config/fcitx5/profile"
-    "$HOME/.config/copyq"
     "$HOME/.config/flameshot"
+    "$HOME/.config/kanata"
+    "$HOME/.config/fcitx5"
+    "$HOME/.config/copyq"
 )
 
 for item in "${FILES_TO_REMOVE[@]}"; do rm -rf "$item" || true; done
 
 mkdir -p "$HOME/.config"
+mkdir -p "$HOME/.config/flameshot"
 mkdir -p "$HOME/.config/kanata"
 mkdir -p "$HOME/.config/fcitx5"
 mkdir -p "$HOME/.config/copyq"
 mkdir -p "$HOME/.config/flameshot"
 mkdir -p "$HOME/.config/systemd/user"
 
-stow -Rv fzf kanata fcitx5 copyq bash services
+stow -Rv bash flameshot fzf kanata fcitx5 copyq services
 
 # --- 4. KÍCH HOẠT DỊCH VỤ ---
 echo "Step 4: Kích hoạt dịch vụ hệ thống..."
