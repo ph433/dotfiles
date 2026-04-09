@@ -68,6 +68,13 @@ systemctl --user daemon-reload
 systemctl --user enable --now kanata.service
 
 # STEP 5: KÍCH HOẠT HỆ THỐNG (LẦN ĐẦU)
+
+echo "Bắt đầu cài đặt..."
+
+# Gọi các file phụ bằng đường dẫn tương đối
+bash ./scripts/shortcut.sh
+bash ./scripts/setupvscode.sh
+
 echo "Step 5: Đang kích hoạt Fcitx5 và CopyQ để tự sinh cấu hình..."
 
 (
@@ -76,12 +83,6 @@ echo "Step 5: Đang kích hoạt Fcitx5 và CopyQ để tự sinh cấu hình...
     copyq &
     flameshot &
 ) > /dev/null 2>&1 & disown
-
-echo "Bắt đầu cài đặt..."
-
-# Gọi các file phụ bằng đường dẫn tương đối
-bash ./scripts/shortcut.sh
-bash ./scripts/setupvscode.sh
 
 echo "Hoàn thành!"
 
