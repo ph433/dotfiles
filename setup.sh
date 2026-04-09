@@ -7,7 +7,7 @@ DOTFILES="$HOME/dotfiles"
 cd "$DOTFILES"
 
 # --- 0. KHAI BÁO DANH SÁCH PHẦN MỀM ---
-PKGS_SYSTEM=(copyq flameshot curl fzf gettext)
+PKGS_SYSTEM=(copyq flameshot curl fzf tree gettext)
 PKGS_FCITX5=(
     fcitx5 fcitx5-bamboo fcitx5-frontend-gtk2 fcitx5-frontend-gtk3
     fcitx5-frontend-qt5 kde-config-fcitx5
@@ -73,8 +73,17 @@ echo "Step 5: Đang kích hoạt Fcitx5 và CopyQ để tự sinh cấu hình...
 (
     sleep 3
     fcitx5 -rd
-    copyq
-) &
+    copyq &
+    flameshot &
+) > /dev/null 2>&1 & disown
+
+echo "Bắt đầu cài đặt..."
+
+# Gọi các file phụ bằng đường dẫn tương đối
+bash ./scripts/shortcut.sh
+bash ./scripts/autostart.sh
+
+echo "Hoàn thành!"
 
 echo "--------------------------------------------------"
 echo "✅ TẤT CẢ ĐÃ HOÀN TẤT!"

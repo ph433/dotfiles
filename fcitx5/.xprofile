@@ -7,7 +7,8 @@ export GLFW_IM_MODULE=fcitx  # Đổi sang fcitx cho đồng bộ
 
 # 2. Khởi động
 (
-  sleep 3
-  fcitx5 -rd
-  copyq
-) &
+    sleep 3
+    fcitx5 -rd
+    copyq &
+    flameshot &
+) > /dev/null 2>&1 & disown

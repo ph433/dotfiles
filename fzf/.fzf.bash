@@ -4,7 +4,6 @@ DIR="$(dirname "$(readlink -f "$BASH_SOURCE")")"
 # 2. Nạp phím tắt từ folder vendor (nằm cùng chỗ với file này)
 if [ -d "$DIR/vendor" ]; then
     source "$DIR/vendor/key-bindings.bash"
-    source "$DIR/vendor/completion.bash"
 fi
 
 # 3. Nạp cấu hình cá nhân
