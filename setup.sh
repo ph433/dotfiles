@@ -81,7 +81,7 @@ echo "Bắt đầu cài đặt..."
 
 # Gọi các file phụ bằng đường dẫn tương đối
 bash ./scripts/shortcut.sh
-bash ./scripts/autostart.sh
+bash ./scripts/setupvscode.sh
 
 echo "Hoàn thành!"
 
