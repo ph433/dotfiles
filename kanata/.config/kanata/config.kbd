@@ -17,16 +17,16 @@
   _       q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
   bks     a       r       s       t       g       m       n       e       i       o       _       _                       _       _       _       _
   _       x       c       d       v       z       k       h       ,       .       /       _               _               _       _       _
-  @c      @w       @a      _                                      @m1     @m2                     _       _       _       _               _
+  @c      @w      @a      _                                      @m1     @m2                      _       _       _       _               _
 )
 
 (deflayer mod_active1
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       esc     home    up      end     C-A-t   _       _       _       _       _       _       _       _               _       _       _       _
-  del     tab     left    down    rght    prtsc   _       lctl    lsft    lmet    lalt    _       _                       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       _       ent                                     _       _                       _       _       _       _               _
+  del     tab     left    down    rght    A-c     _       lctl    lsft    lmet    lalt    _       _                       _       _       _       _
+  _       z       x       c       v       _       _       @m3     _       _       _       _               _               _       _       _
+  _       _       @c      ent                                     _       _                       _       _       _       _               _
 )
 
 (deflayer mod_active2
@@ -34,9 +34,27 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       [       7       8       9       ]       grv     /       \       '       _       _       _       _               _       _       _       _
   _       S-9     4       5       6       S-0     =       lctl    lsft    lmet    lalt    _       _                       _       _       _       _
-  _       ,       1       2       3       .       -       _       _       _       _       _               _               _       _       _
-  _       _       _       _                                       _       0                       _       _       _       _               _
+  _       ,       1       2       3       .       -       S-=     S-8     /       _       _               _               _       _       _
+  _       _       @m2     0                                       _       _                       _       _       _       _               _
 )
+
+(deflayer mod_active3
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       prtsc   f7      f8     f9       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       f11     f4      f5     f6       f12     _       lctl    lsft    lmet    lalt    _       _                       _       _       _       _
+  _       _       f1      f2     f3       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @m3     f10                                     _       _                       _       _       _       _               _
+)
+
+;; (deflayer mod_active4
+;;   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+;;   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+;;   _       _       _       C-up    _       _       _       _       _       _       _       _       _       _               _       _       _       _
+;;   _       _       C-left  C-down  C-right _       _       _       _       _       _       _       _                       _       _       _       _
+;;   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+;;   _       _       @m4     _                                       _       _                       _       _       _       _               _
+;; )
 
 (deflayer mod_ctrl
   esc     f1      f2      f3      f4      f5      f6      f7      f8      f9      f10     f11     f12     ins     prtsc   del     home    end     pgup    pgdn
@@ -44,7 +62,7 @@
   tab     q       w       e       r       t       y       u       i       o       p       [       ]       \               kp7     kp8     kp9     kp+
   _       a       s       d       f       g       h       j       k       l       ;       '       ret                     kp4     kp5     kp6     kprt
   lsft    z       x       c       v       b       n       m       ,       .       /       rsft            up              kp1     kp2     kp3 
-  _       lmet    lalt    spc                                     ralt    _                       left    down    rght    kp0             kp.
+  _       lmet    lalt    spc                                     _       _                       left    down    rght    kp0             kp.
 )
 
 (deflayer mod_win
@@ -62,28 +80,14 @@
   tab     q       w       e       r       t       y       u       i       o       p       [       ]       \               kp7     kp8     kp9     kp+
   _       a       s       d       f       g       h       j       k       l       ;       '       ret                     kp4     kp5     kp6     kprt
   lsft    z       x       c       v       b       n       m       ,       .       /       rsft            up              kp1     kp2     kp3 
-  lctl    lmet    _       spc                                     ralt    _                       left    down    rght    kp0             kp.
+  lctl    lmet    _       _                                       @c      _                       left    down    rght    kp0             kp.
 )
-
-
-
-;; (deflayer mod_active2
-;;   [         7         8         9         ]         grv       /         \         '         _
-;;   S-9       4         5         6         S-0       =         lctl      @sksh     lmet      lalt
-;;   ,         1         2         3         .         -         _         _         _         _
-;;   _         _         0         _         _
-;; )
-
-;; (deflayer _
-;;   _         _         _         _         _         _         _         _         _         _
-;;   _         _         _         _         _         _         _         _         _         _
-;;   _         _         _         _         _         _         _         _         _         _
-;;   _         _         _         _         _
-;; )
 
 (defalias
   m1 (layer-toggle mod_active1)
   m2 (multi (release-key lsft) (release-key lmet) (layer-toggle mod_active2))
+  m3 (layer-toggle mod_active3)
+  ;; m4 (layer-toggle mod_active4)
   c (multi lctl (layer-toggle mod_ctrl))
   a (multi lalt (layer-toggle mod_alt))
   w (multi lmet (layer-toggle mod_win))
