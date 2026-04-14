@@ -11,21 +11,20 @@ gsettings set org.cinnamon.desktop.keybindings custom-list "['custom0', 'custom1
 # --- CUSTOM 0: Flameshot ---
 P0="/org/cinnamon/desktop/keybindings/custom-keybindings/custom0/"
 gsettings set org.cinnamon.desktop.keybindings.custom-keybinding:$P0 name 'Flameshot'
-gsettings set org.cinnamon.desktop.keybindings.custom-keybinding:$P0 command 'flameshot gui'
+gsettings set org.cinnamon.desktop.keybindings.custom-keybinding:$P0 command 'flameshot gui --accept-on-select --clipboard'
 gsettings set org.cinnamon.desktop.keybindings.custom-keybinding:$P0 binding "['<Alt>c']"
 
-# --- CUSTOM 1: Alacritty Smart ---
-P1="/org/cinnamon/desktop/keybindings/custom-keybindings/custom1/"
-gsettings set org.cinnamon.desktop.keybindings.custom-keybinding:$P1 name 'Alacritty Smart'
-gsettings set org.cinnamon.desktop.keybindings.custom-keybinding:$P1 command "bash -c 'wmctrl -xa Alacritty || alacritty'"
-gsettings set org.cinnamon.desktop.keybindings.custom-keybinding:$P1 binding "['<Primary><Alt>t']"
+P00="/org/cinnamon/desktop/keybindings/custom-keybindings/custom1/"
+gsettings set org.cinnamon.desktop.keybindings.custom-keybinding:$P00 name 'Flameshot'
+gsettings set org.cinnamon.desktop.keybindings.custom-keybinding:$P00 command 'flameshot gui'
+gsettings set org.cinnamon.desktop.keybindings.custom-keybinding:$P00 binding "['<Primary><Alt>c']"
 
 # --- CUSTOM 2: Alacritty New ---
 P2="/org/cinnamon/desktop/keybindings/custom-keybindings/custom2/"
 gsettings set org.cinnamon.desktop.keybindings.custom-keybinding:$P2 name 'Alacritty New'
-FORCE_CMD="bash -c 'alacritty & sleep 0.1 && xdotool windowactivate \$(xdotool search --class Alacritty | tail -1)'"
+FORCE_CMD="bash -c 'alacritty & pid=\$!; xdotool search --sync --pid \$pid windowactivate'"
 gsettings set org.cinnamon.desktop.keybindings.custom-keybinding:$P2 command "$FORCE_CMD"
-gsettings set org.cinnamon.desktop.keybindings.custom-keybinding:$P2 binding "['<Alt>t']"
+gsettings set org.cinnamon.desktop.keybindings.custom-keybinding:$P2 binding "['<Primary><Alt>t']"
 
 # 3. Ép cấu hình hệ thống
 gsettings set org.cinnamon.desktop.wm.preferences focus-new-windows 'smart'
