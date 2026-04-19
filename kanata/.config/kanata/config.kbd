@@ -118,7 +118,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       1       @entnb                                  _       _                       _       _       _       _               _
+  _       _       _       @entnb                                  _       _                       _       _       _       _               _
 )
 
 (deflayer next-back 
@@ -127,7 +127,7 @@
   _       _       _       S-n     _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       S-n     n       n       _       _       _       _       _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       _       _                                       _       _                       _       _       _       _               _
+  _       _       @tabe   _                                       _       _                       _       _       _       _               _
 )
 
 (deflayer mod_active2
@@ -218,7 +218,7 @@
   a (multi lalt (layer-toggle mod_alt))
   search (multi lctl f (layer-switch colemak-dh-search)) 
   sups (multi (one-shot 1000 lsft) (one-shot-press 1000 (layer-toggle pre-next-back)))
-  entnb (multi ent (layer-switch next-back))
+  entnb (multi (unmod ent) (layer-switch next-back))
   sent (multi (one-shot 1000 lsft) (one-shot-press 1000 (layer-toggle shiftent)))
 )
 
