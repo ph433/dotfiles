@@ -25,7 +25,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @colosw esc     home    up      end     ent     _       _       _       _       C-A-t   _       _       _               _       _       _       _
   @osl_d  tab     left    down    rght    @tabii  @osl_sw lctl    @shi    lalt    lmet    del     _               _       _       _       _
-  @sropt C-z     C-y     C-c     C-v     C-S-v   v       A-c     A-v     C-a     C-y     @cmd            _               _       _       _
+  @sropt  C-z     C-y     C-c     C-v     C-S-v   v       A-c     A-v     C-a     C-y     @cmd            _               _       _       _
   @osl_md _       @tabi   ent                             @osl_sw         _                       _       _       _       _               _
 )
 
@@ -107,7 +107,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       _       _       @srchf     _       _       _       _       _       _       _       _                       _       _       _       _
+  _       _       _       _       @srchf  _       _       @cmd    _       _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       _       @entnb                                  _       _                       _       _       _       _               _
 )
@@ -119,6 +119,33 @@
   bks     a       r       s       t       g       m       n       e       i       o       del     _                       _       _       _       _
   @sups   x       c       d       v       z       k       h       ,       .       /       @ss             _               _       _       _
   @c      @w      @tabe   _                                       @nvtg   @m2                     _       _       _       _               _
+)
+
+(deflayer colemak-dh-cmd 
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  @nvsw   q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
+  bks     a       r       s       t       g       m       n       e       i       o       del     _                       _       _       _       _
+  @scmd   x       c       d       v       z       k       h       ,       .       /       @ss             _               _       _       _
+  @c      @w      @tabe   _                                       @nvtg   @m2                     _       _       _       _               _
+)
+
+(deflayer pre-cmd 
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       @cmdf                                   _       _                       _       _       _       _               _
+)
+
+(deflayer cmd-function 
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @tabe   _                                       _       _                       _       _       _       _               _
 )
 
 (deflayer pre-next-back 
@@ -229,12 +256,14 @@
   sups (multi (one-shot 1000 lsft) (one-shot-press 1000 (layer-toggle pre-next-back)))
   entnb (multi (unmod ent) (layer-switch next-back))
   sent (multi (one-shot 1000 lsft) (one-shot-press 1000 (layer-toggle shiftent)))
-  cmd (layer-switch colemak-dh-search)
+  cmd (multi lsft ; (layer-switch colemak-dh-cmd))
+  scmd (multi (one-shot 1000 lsft) (one-shot-press 1000 (layer-toggle pre-cmd)))
+  cmdf (multi (unmod ent) (layer-switch cmd-function))
 
 )
 
 (defalias
-  ss (one-shot 2000 lsft) ;; Sticky Shift
+  ss (one-shot 1000 lsft) ;; Sticky Shift
   ;; sc (one-shot 2000 lctl) ;; Sticky Ctrl
   ;; sa (one-shot 2000 lalt) ;; Sticky Alt
   ;; sw (one-shot 2000 lmet) ;; Sticky Win (Super)
