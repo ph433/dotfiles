@@ -25,11 +25,11 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @colosw esc     home    up      end     ent     _       _       _       _       C-A-t   _       _       _               _       _       _       _
   @osl_d  tab     left    down    rght    @tabii  @osl_sw lctl    @shi    lalt    lmet    del     _               _       _       _       _
-  @search C-z     C-y     C-c     C-v     C-S-v   v       A-c     A-v     C-a     C-f     _               _               _       _       _
+  @sropt C-z     C-y     C-c     C-v     C-S-v   v       A-c     A-v     C-a     C-y     @cmd            _               _       _       _
   @osl_md _       @tabi   ent                             @osl_sw         _                       _       _       _       _               _
 )
 
-(deflayer modifier  
+(deflayer modifier
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
@@ -103,7 +103,16 @@
   _       _       _       ent                                     _       _                       _       _       _       _               _
 )
 
-(deflayer colemak-dh-search
+(deflayer search-opt 
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       @srchf     _       _       _       _       _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       @entnb                                  _       _                       _       _       _       _               _
+)
+
+(deflayer colemak-dh-search 
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @nvsw   q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
@@ -202,7 +211,7 @@
   osl_nu (one-shot-press 1000 (layer-toggle mod_num))
   osl_he (one-shot-press 1000 (layer-toggle homend))
   osl_md (one-shot-press 1000 (layer-toggle modifier))
-  osl_sr (one-shot-press 1000 (layer-toggle colemak-dh-search))
+  sropt (one-shot-press 1000 (layer-toggle search-opt))
 )
 
 (defalias
@@ -216,10 +225,12 @@
   c (multi lctl (layer-toggle mod_ctrl))
   w (multi lmet (layer-toggle mod_win))
   a (multi lalt (layer-toggle mod_alt))
-  search (multi lctl f (layer-switch colemak-dh-search)) 
+  srchf (multi lctl f (layer-switch colemak-dh-search)) 
   sups (multi (one-shot 1000 lsft) (one-shot-press 1000 (layer-toggle pre-next-back)))
   entnb (multi (unmod ent) (layer-switch next-back))
   sent (multi (one-shot 1000 lsft) (one-shot-press 1000 (layer-toggle shiftent)))
+  cmd (layer-switch colemak-dh-search)
+
 )
 
 (defalias
@@ -227,6 +238,10 @@
   ;; sc (one-shot 2000 lctl) ;; Sticky Ctrl
   ;; sa (one-shot 2000 lalt) ;; Sticky Alt
   ;; sw (one-shot 2000 lmet) ;; Sticky Win (Super)
+)
+
+(defalias
+  cf (unmod f)
 )
 
 ;; (defalias
