@@ -25,7 +25,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @colosw esc     home    up      end     ent     _       _       _       _       C-A-t   _       _       _               _       _       _       _
   @osl_d  tab     left    down    rght    @tabii  @osl_sw lctl    @shi    lalt    lmet    del     _               _       _       _       _
-  _       C-z     C-y     C-c     C-v     C-S-v   v       A-c     A-v     C-a     C-f     _               _               _       _       _
+  @search C-z     C-y     C-c     C-v     C-S-v   v       A-c     A-v     C-a     C-f     _               _               _       _       _
   @osl_md _       @tabi   ent                             @osl_sw         _                       _       _       _       _               _
 )
 
@@ -94,6 +94,33 @@
   @c      @w      @tabe   _                                       @nvtg   @m2                     _       _       _       _               _
 )
 
+(deflayer colemak-dh-search
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  @nvsw   q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
+  bks     a       r       s       t       g       m       n       e       i       o       del     _                       _       _       _       _
+  @sups   x       c       d       v       z       k       h       ,       .       /       @ss             _               _       _       _
+  @c      @w      @tabe   _                                       @nvtg   @m2                     _       _       _       _               _
+)
+
+(deflayer pre-next-back 
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       @entsr                                  _       _                       _       _       _       _               _
+)
+
+(deflayer next-back 
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       S-n     _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       S-n     n       n       _       _       _       _       _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @nvsw   _                                       _       _                       _       _       _       _               _
+)
+
 (deflayer mod_active2
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
@@ -151,16 +178,14 @@
 (defalias
   m2 (multi (release-key lsft) (release-key lmet) (layer-toggle mod_active2))
   m3 (layer-toggle mod_active3)
-  mod_shit (layer-toggle mod_shit)
-  c (multi lctl (layer-toggle mod_ctrl))
-  w (multi lmet (layer-toggle mod_win))
-  a (multi lalt (layer-toggle mod_alt))
+  mod_shit (layer-toggle mod_shit) 
   nvtg (layer-toggle mod_nvim)
-  nvsw (layer-switch mod_nvim)
+  nvsw (layer-switch mod_nvim) 
   colosw (layer-switch colemak-dh)
   colotg (layer-toggle colemak-dh)
   num (layer-toggle mod_num)
   switch (layer-toggle mod_switch)
+
 )
 
 (defalias
@@ -168,6 +193,7 @@
   osl_nu (one-shot-press 1000 (layer-toggle mod_num))
   osl_he (one-shot-press 1000 (layer-toggle homend))
   osl_md (one-shot-press 1000 (layer-toggle modifier))
+  osl_sr (one-shot-press 1000 (layer-toggle colemak-dh-search))
 )
 
 (defalias
@@ -178,7 +204,12 @@
   tabi (multi (layer-switch colemak-dh) ins)
   tabii (multi (layer-switch colemak-dh) (macro ins ins))
   shi (multi (one-shot 2000 lsft) (one-shot-press 1000 (layer-toggle mod_shift)))
-
+  c (multi lctl (layer-toggle mod_ctrl))
+  w (multi lmet (layer-toggle mod_win))
+  a (multi lalt (layer-toggle mod_alt))
+  search (multi lctl f (layer-switch colemak-dh-search)) 
+  sups (multi (one-shot 1000 lsft) (one-shot-press 1000 (layer-toggle pre-next-back)))
+  entsr (multi ent (layer-switch next-back))
 )
 
 (defalias
