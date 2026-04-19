@@ -2,6 +2,15 @@
   process-unmapped-keys yes
 )
 
+;; (deflayer ten_layer_cua_ban
+;;   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+;;   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+;;   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+;;   _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
+;;   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+;;   _       _       _       _                                       _       _                       _       _       _       _               _
+;; )
+
 (defsrc
   esc     f1      f2      f3      f4      f5      f6      f7      f8      f9      f10     f11     f12     ins     prtsc   del     home    end     pgup    pgdn
   grv     1       2       3       4       5       6       7       8       9       0       -       =       bspc            nlck    kp/     kp*     kp-
@@ -11,22 +20,78 @@
   lctl    lmet    lalt    spc                                     ralt    f23                     left    down    rght    kp0             kp.
 )
 
+(deflayer mod_nvim
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  @colosw esc     home    up      end     ent     _       _       _       _       C-A-t   _       _       _               _       _       _       _
+  @osl_d  tab     left    down    rght    @tabii  @osl_sw lctl    @shi    lalt    lmet    del     _               _       _       _       _
+  _       C-z     C-y     C-c     C-v     C-S-v   v       A-c     A-v     C-a     C-f     _               _               _       _       _
+  @osl_md _       @tabi   ent                             @osl_sw         _                       _       _       _       _               _
+)
+
+(deflayer modifier  
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       @osl_he _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       @w      @a      @c                                      @ss     _                       _       _       _       _               _
+)
+
+(deflayer mod_shift 
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       @osl_he _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       _                                       _       _                       _       _       _       _               _
+)
+
+(deflayer homend 
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       home    _       end     _       _       _       _       _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       _                                       _       _                       _       _       _       _               _
+)
+
+
+(deflayer mod_switch 
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       @osl_nu _       _       @colosw _       _       @c      _       @a      @w      _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       spc                                     _       _                       _       _       _       _               _
+)
+
+(deflayer mod_num
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       @nvsw   _       _       _       _       _       _       @nvsw   _       _       _       _       _               _       _       _       _
+  _       1       2       3       4       5       6       7       8       9       0       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       lalt    @num                                    lctl    _                       _       _       _       _               _
+)
+
+(deflayer nvim_delete
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       _                                       _       _                       _       _       _       _               _
+)
+
+
 (deflayer colemak-dh
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
-  bks     a       r       s       t       g       m       n       e       i       o       _       _                       _       _       _       _
-  _       x       c       d       v       z       k       h       ,       .       /       _               _               _       _       _
-  @c      @w      @a      _                                      @m1     @m2                      _       _       _       _               _
-)
-
-(deflayer mod_active1
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       esc     home    up      end     C-A-t   _       _       _       _       _       _       _       _               _       _       _       _
-  del     tab     left    down    rght    A-c     _       lctl    lsft    lmet    lalt    _       _                       _       _       _       _
-  _       z       x       c       v       _       _       @m3     _       _       _       _               _               _       _       _
-  _       _       @c      ent                                     _       _                       _       _       _       _               _
+  @nvsw   q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
+  bks     a       r       s       t       g       m       n       e       i       o       del     _                       _       _       _       _
+  @ss     x       c       d       v       z       k       h       ,       .       /       @ss             _               _       _       _
+  @c      @w      @tabe   _                                       @nvtg   @m2                     _       _       _       _               _
 )
 
 (deflayer mod_active2
@@ -35,7 +100,7 @@
   _       [       7       8       9       ]       grv     /       \       '       _       _       _       _               _       _       _       _
   _       S-9     4       5       6       S-0     =       lctl    lsft    lmet    lalt    _       _                       _       _       _       _
   _       ,       1       2       3       .       -       S-=     S-8     /       _       _               _               _       _       _
-  _       _       @m2     0                                       _       _                       _       _       _       _               _
+  _       _       @m2     0                                       @m2     _                       _       _       _       _               _
 )
 
 (deflayer mod_active3
@@ -47,22 +112,13 @@
   _       _       @m3     f10                                     _       _                       _       _       _       _               _
 )
 
-;; (deflayer mod_active4
-;;   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-;;   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-;;   _       _       _       C-up    _       _       _       _       _       _       _       _       _       _               _       _       _       _
-;;   _       _       C-left  C-down  C-right _       _       _       _       _       _       _       _                       _       _       _       _
-;;   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-;;   _       _       @m4     _                                       _       _                       _       _       _       _               _
-;; )
-
 (deflayer mod_ctrl
   esc     f1      f2      f3      f4      f5      f6      f7      f8      f9      f10     f11     f12     ins     prtsc   del     home    end     pgup    pgdn
   grv     1       2       3       4       5       6       7       8       9       0       -       =       bspc            nlck    kp/     kp*     kp-
   tab     q       w       e       r       t       y       u       i       o       p       [       ]       \               kp7     kp8     kp9     kp+
   _       a       s       d       f       g       h       j       k       l       ;       '       ret                     kp4     kp5     kp6     kprt
   lsft    z       x       c       v       b       n       m       ,       .       /       rsft            up              kp1     kp2     kp3 
-  _       lmet    lalt    spc                                     _       _                       left    down    rght    kp0             kp.
+  lctl    lmet    lalt    lsft                                      ralt    _                     left    down    rght    kp0             kp.
 )
 
 (deflayer mod_win
@@ -71,7 +127,7 @@
   tab     q       w       e       r       t       y       u       i       o       p       [       ]       \               kp7     kp8     kp9     kp+
   _       a       s       d       f       g       h       j       k       l       ;       '       ret                     kp4     kp5     kp6     kprt
   lsft    z       x       c       v       b       n       m       ,       .       /       rsft            up              kp1     kp2     kp3 
-  lctl    _       lalt    spc                                     ralt    _                       left    down    rght    kp0             kp.
+  lctl    lmet    lalt    @w                                      ralt    _                     left    down    rght    kp0             kp.
 )
 
 (deflayer mod_alt
@@ -80,15 +136,62 @@
   tab     q       w       e       r       t       y       u       i       o       p       [       ]       \               kp7     kp8     kp9     kp+
   _       a       s       d       f       g       h       j       k       l       ;       '       ret                     kp4     kp5     kp6     kprt
   lsft    z       x       c       v       b       n       m       ,       .       /       rsft            up              kp1     kp2     kp3 
-  lctl    lmet    _       _                                       @c      _                       left    down    rght    kp0             kp.
+  lctl    lmet    @a      lsft                                    @c      _                       left    down    rght    kp0             kp.
+)
+
+(deflayer mod_shit
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       @m3     @m2     _       _       _       _       _       _       _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _ 
+  _       _       _       @a                                      @c      _                       _       _       _       _               _
 )
 
 (defalias
-  m1 (layer-toggle mod_active1)
   m2 (multi (release-key lsft) (release-key lmet) (layer-toggle mod_active2))
   m3 (layer-toggle mod_active3)
-  ;; m4 (layer-toggle mod_active4)
+  mod_shit (layer-toggle mod_shit)
   c (multi lctl (layer-toggle mod_ctrl))
-  a (multi lalt (layer-toggle mod_alt))
   w (multi lmet (layer-toggle mod_win))
+  a (multi lalt (layer-toggle mod_alt))
+  nvtg (layer-toggle mod_nvim)
+  nvsw (layer-switch mod_nvim)
+  colosw (layer-switch colemak-dh)
+  colotg (layer-toggle colemak-dh)
+  num (layer-toggle mod_num)
+  switch (layer-toggle mod_switch)
 )
+
+(defalias
+  osl_sw (one-shot-press 1000 (layer-toggle mod_switch))
+  osl_nu (one-shot-press 1000 (layer-toggle mod_num))
+  osl_he (one-shot-press 1000 (layer-toggle homend))
+  osl_md (one-shot-press 1000 (layer-toggle modifier))
+)
+
+(defalias
+  del_w (macro d w)
+  ins (macro ins ins)
+  osl_d (multi bspc (one-shot 1000 (layer-toggle nvim_delete)))
+  tabe (multi (layer-switch mod_nvim) esc)
+  tabi (multi (layer-switch colemak-dh) ins)
+  tabii (multi (layer-switch colemak-dh) (macro ins ins))
+  shi (multi (one-shot 2000 lsft) (one-shot-press 1000 (layer-toggle mod_shift)))
+
+)
+
+(defalias
+  ss (one-shot 2000 lsft) ;; Sticky Shift
+  ;; sc (one-shot 2000 lctl) ;; Sticky Ctrl
+  ;; sa (one-shot 2000 lalt) ;; Sticky Alt
+  ;; sw (one-shot 2000 lmet) ;; Sticky Win (Super)
+)
+
+;; (defalias
+;;
+;;   ;; Multi giúp Esc thực hiện 2 việc: 
+;;   ;; 1. Gửi phím Esc thực tế đến máy tính
+;;   ;; 2. Ra lệnh cho Kanata nhả hết toàn bộ One-shot đang chờ
+;;   cc (multi esc one-shot-release-all)
+;; )
