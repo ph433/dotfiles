@@ -1,6 +1,4 @@
 -- ==========================================================================
--- 1. CẤU HÌNH HỆ THỐ N   G
---  = = = = = = = = =  =   = ===============================================================
 vim.opt.number = true           -- Hiển thị số dòng
 vim.opt.relativenumber = true   -- Số dòng tương đối (cực tốt cho dân Vim)
 vim.opt.mouse = 'a'             -- Bật chuột
@@ -8,7 +6,6 @@ vim.opt.ignorecase = true       -- Không phân biệt hoa thường khi tìm
 vim.opt.smartcase = true        -- Tự nhận diện hoa thường nếu ta gõ chữ Hoa
 vim.g.mapleader = ","          -- Phím Leader là Space
 vim.opt.clipboard = "unnamedplus" -- Kết nối trực tiếp Clipboard hệ thống
-vim.opt.keymodel = 'startsel,stopsel'
 -- ==========================================================================
 -- 2. ĐỊNH DẠNG FILE & TỰ ĐỘNG HÓA (AUTOCMDS)
 -- ==========================================================================
@@ -31,13 +28,6 @@ local function shift_move(key)
     end
     return key
 end
-
-local opts_expr = { expr = true, noremap = true, silent = true }
-
-vim.keymap.set({'n', 'i', 'v'}, '<S-Right>', function() return shift_move('<Right>') end, opts_expr)
-vim.keymap.set({'n', 'i', 'v'}, '<S-Left>',  function() return shift_move('<Left>')  end, opts_expr)
-vim.keymap.set({'n', 'i', 'v'}, '<S-Up>',    function() return shift_move('<Up>')    end, opts_expr)
-vim.keymap.set({'n', 'i', 'v'}, '<S-Down>',  function() return shift_move('<Down>')  end, opts_expr)
 
 -- ==========================================================================
 -- 3. PHÍM TẮT HỆ THỐNG (WINDOWS-STYLE)
@@ -63,13 +53,14 @@ vim.keymap.set('v', '<C-c>', '"+y', { desc = 'Copy selection' })
 vim.keymap.set('n', '<C-c>', '"+y', { desc = 'Copy operator' })
 
 -- Đặc cách: Nhấn Ctrl-C 2 lần để copy cả dòng (giống yy)
-vim.keymap.set('n', '<C-c><C-c>', '"+yy', { desc = 'Copy line' })
+vim.keymap.set('n', '<C-c><C-c>', '0"+y$', { desc = 'Copy line content only' })
+-- PASTE QUYỀN NĂNG
+vim.keymap.set('n', '<C-v>', '"+P', { desc = 'Paste Normal' })
+vim.keymap.set('v', '<C-v>', '"_d"+P', { desc = 'Paste Visual (No overwrite clipboard)' })
+vim.keymap.set('i', '<C-v>', '<C-r>+', { desc = 'Paste Insert' })
 
--- Dán phía sau con trỏ (giống p)
-vim.keymap.set('n', '<C-v>', '"+p', { desc = 'Paste after' })
-
--- Dán phía trước con trỏ (giống P)
-vim.keymap.set('n', '<C-S-v>', '"+P', { desc = 'Paste before' })
+-- VISUAL BLOCK (Chuyển hẳn sang Ctrl+Shift+V)
+vim.keymap.set('n', '<C-S-v>', '<C-v>', { desc = 'Visual Block Mode' })
 
 -- Thay cả dòng nhưng không làm mất nội dung đã copy
 vim.keymap.set('n', '<C-A-v>', 'V"_d"+P', { noremap = true, desc = 'Thay cả dòng bằng clipboard' })
@@ -91,16 +82,15 @@ vim.keymap.set('n', '<BS>', 'X', { desc = 'Backspace xóa lùi 1 ký tự' })
 
 -- Visual mode: Xóa CHÍNH XÁC vùng chọn (x), không xóa cả dòng
 vim.keymap.set('v', '<BS>', 'x', { desc = 'Backspace xóa chính xác vùng chọn' })
+
+-- Trong Visual mode, nhấn Shift + Backspace để xóa toàn bộ các dòng dính líu
+vim.keymap.set({'n', 'v'}, '<S-BS>', 'Vd', { desc = "Xóa toàn bộ dòng chứa vùng chọn" })
+vim.keymap.set('v', '<Insert>', 'c', { desc = "Xóa vùng chọn và sửa" })
+
 -- ENTER "QUYỀN NĂNG"
--- Enter = o (Xuống dòng dưới + Insert)
-vim.keymap.set('n', '<CR>', 'o', { desc = 'Enter behaves like o' })
+vim.keymap.set('n', '<CR>', 'o<ESC>', { desc = 'Enter behaves like o' })
 
--- Shift + Enter = O (Xuống dòng trên + Insert)
--- Lưu ý: Nếu Terminal không nhận, hãy kiểm tra cài đặt Terminal của bạn
-vim.keymap.set('n', '<S-CR>', 'O', { desc = 'Shift + Enter behaves like O' })
-
--- VISUAL BLOCK (Chuyển sang Ctrl+Shift+V vì Ctrl+V đã làm phím Paste)
-vim.keymap.set({'n', 'v'}, '<C-S-v>', '<C-v>', { desc = 'Visual Block Mode' })
+vim.keymap.set('n', '<S-CR>', 'O<ESC>', { desc = 'Shift + Enter behaves like O' })
 
 -- LƯU FILE NHANH (Bonus cho đủ bộ Windows)
 vim.keymap.set({'n', 'i', 'v'}, '<C-s>', '<Cmd>w<CR>', { desc = 'Save file' })
@@ -114,10 +104,37 @@ vim.keymap.set("v", "<A-Up>", ":m '<-2<cr>gv=gv", { desc = "Đẩy khối lên" 
 vim.keymap.set("v", "<A-Down>", ":m '>+1<cr>gv=gv", { desc = "Đẩy khối xuống" })
 
 -- Shift + Backspace để xóa bôi đậm tìm kiếm (Clear Highlight)
-vim.keymap.set("n", "<S-BS>", "<cmd>noh<cr>", { silent = true, desc = "Clear search highlight" })
-vim.keymap.set('n', '<Space>', 'i <Esc> <Rivght>', { noremap = true, desc = 'Chèn dấu cách tại chỗ' })
 vim.keymap.set({'n', 'v'}, '[', '<cmd>w<cr>', { desc = 'Save file' })
 -- Shift + [ (tức là phím { ) để đóng file không lưu
 vim.keymap.set({'n', 'v'}, '{', '<cmd>q!<cr>', { desc = 'Quit without saving' })
 -- Một cách khác nếu không muốn mất phím ]
 vim.keymap.set('n', ']', '<cmd>source $MYVIMRC<cr>', { desc = 'Reload config' })
+
+-- Về đầu file: Dòng 1, Cột 1 (Dùng 1| để ép về cột đầu tiên)
+vim.keymap.set('n', '<C-Home>', 'gg1|', { desc = 'Start of file' })
+vim.keymap.set('i', '<C-Home>', '<C-O>gg<C-O>1|', { desc = 'Start of file' })
+
+-- Về cuối file: Dòng cuối, Cột cuối
+vim.keymap.set('n', '<C-End>', 'G$', { desc = 'End of file' })
+vim.keymap.set('i', '<C-End>', '<C-O>G<C-O>$', { desc = 'End of file' })
+
+-- vim.keymap.set('n', 'vv', '^vg_', { desc = 'Select line content' })
+
+-- Trong Visual mode: Nhấn '_' để bôi trọn nội dung từ dòng đầu đến dòng cuối
+-- (Bỏ qua khoảng trắng ở cả hai đầu của khối dòng đã chọn)
+vim.keymap.set('v', 'V', function()
+  -- Lấy tọa độ dòng của con trỏ (cursor) và điểm neo (anchor)
+  local cursor_line = vim.fn.line('.')
+  local anchor_line = vim.fn.line('v')
+
+  if cursor_line > anchor_line then
+    -- Đang bôi ĐI XUỐNG: đầu trên (anchor) về 0, đầu dưới (cursor) về $
+    return 'o0o$'
+  elseif cursor_line < anchor_line then
+    -- Đang bôi ĐI LÊN: đầu trên (cursor) về 0, đầu dưới (anchor) về $
+    return '0o$o'
+  else
+    -- Chỉ bôi trên 1 dòng: ép 0 rồi $
+    return '0o$'
+  end
+end, { expr = true, desc = 'Snap to full width (Smart direction)' })

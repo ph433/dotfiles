@@ -23,10 +23,37 @@
 (deflayer mod_nvim
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  @colosw esc     home    up      end     ent     _       _       _       _       C-A-t   _       _       _               _       _       _       _
-  @osl_d  tab     left    down    rght    @tabii  @osl_sw lctl    @shi    lalt    lmet    del     _               _       _       _       _
+  @colosw esc     _       up      _       ent     _       _       _       _       C-A-t   _       _       _               _       _       _       _
+  @osl_d  tab     @larr   down    rght    @tabii  @osl_sw lctl    @shi    lalt    lmet    del     _               _       _       _       _
   @sropt  C-z     C-y     C-c     C-v     C-S-v   v       A-c     A-v     C-a     C-y     @cmd            _               _       _       _
   @osl_md _       @tabi   ent                             @osl_sw         _                       _       _       _       _               _
+)
+
+(deflayer pre-left-arrow 
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       @CHE    _       _       _       @osl_he _       _       _       _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       @larrm                                  _       _                       _       _       _       _               _
+)
+
+(deflayer ctrlhomend 
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       C-home  _       C-end   _       _       _       _       _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       @larrm                                  _       _                       _       _       _       _               _
+)
+
+(deflayer left-arrow 
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       C-up    _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       C-left  C-down  C-rght  _       _       _       _       _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @tabe   _                                       _       _                       _       _       _       _               _
 )
 
 (deflayer modifier
@@ -61,7 +88,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       @osl_nu _       _       @colosw _       _       @c      _       @a      @w      _       _                       _       _       _       _
+  _       @num    _       _       @colosw _       _       @c      _       @a      @w      _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       _       spc                                     _       _                       _       _       _       _               _
 )
@@ -69,10 +96,19 @@
 (deflayer mod_num
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       @nvsw   _       _       _       _       _       _       @nvsw   _       _       _       _       _               _       _       _       _
-  _       1       2       3       4       5       6       7       8       9       0       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       1       2       3       4       5       6       7       8       9       0       @mdfnu  _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       lalt    @num                                    lctl    _                       _       _       _       _               _
+  _       _       @tabe   _                                       _       _                       _       _       _       _               _
+)
+
+(deflayer modifiernum
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       @numc   @nums   @numa   @numw   _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @tabe   _                                       _       _                       _       _       _       _               _
 )
 
 (deflayer nvim_delete
@@ -228,17 +264,18 @@
   nvsw (layer-switch mod_nvim) 
   colosw (layer-switch colemak-dh)
   colotg (layer-toggle colemak-dh)
-  num (layer-toggle mod_num)
+  num (layer-switch mod_num)
   switch (layer-toggle mod_switch)
 
 )
 
 (defalias
   osl_sw (one-shot-press 1000 (layer-toggle mod_switch))
-  osl_nu (one-shot-press 1000 (layer-toggle mod_num))
   osl_he (one-shot-press 1000 (layer-toggle homend))
+  CHE (one-shot-press 1000 (layer-toggle ctrlhomend))
   osl_md (one-shot-press 1000 (layer-toggle modifier))
   sropt (one-shot-press 1000 (layer-toggle search-opt))
+  mdfnu (one-shot-press 1000 (layer-toggle modifiernum))
 )
 
 (defalias
@@ -270,7 +307,12 @@
 )
 
 (defalias
-  cf (unmod f)
+  larr (multi left (one-shot-press 1000 (layer-toggle pre-left-arrow)))
+  larrm (layer-switch left-arrow)
+)
+
+(defalias
+
 )
 
 ;; (defalias
