@@ -97,8 +97,17 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       1       2       3       4       5       6       7       8       9       0       @mdfnu  _                       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       1       2       3       4       5       6       7       8       9       0       _       _                       _       _       _       _
+  @mdfns  _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @tabe   _                                       _       _                       _       _       _       _               _
+)
+
+(deflayer modifiernumshift 
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       1       2       3       4       5       6       7       8       9       0       _       _                       _       _       _       _
+  @mdfnu  _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @tabe   _                                       _       _                       _       _       _       _               _
 )
 
@@ -107,7 +116,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       _       _       _       _       _       @numc   @nums   @numa   @numw   _       _                       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  @num    _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @tabe   _                                       _       _                       _       _       _       _               _
 )
 
@@ -266,7 +275,7 @@
   colotg (layer-toggle colemak-dh)
   num (layer-switch mod_num)
   switch (layer-toggle mod_switch)
-
+  mdfnu (layer-switch modifiernum) 
 )
 
 (defalias
@@ -275,7 +284,8 @@
   CHE (one-shot-press 1000 (layer-toggle ctrlhomend))
   osl_md (one-shot-press 1000 (layer-toggle modifier))
   sropt (one-shot-press 1000 (layer-toggle search-opt))
-  mdfnu (one-shot-press 1000 (layer-toggle modifiernum))
+  mdfns (multi (one-shot 1000 lsft) (one-shot-press 1000 (layer-toggle modifiernumshift)))
+ 
 )
 
 (defalias
@@ -285,7 +295,7 @@
   tabe (multi (layer-switch mod_nvim) esc)
   tabi (multi (layer-switch colemak-dh) ins)
   tabii (multi (layer-switch colemak-dh) (macro ins ins))
-  shi (multi (one-shot 2000 lsft) (one-shot-press 1000 (layer-toggle mod_shift)))
+  shi (multi (one-shot 1000 lsft) (one-shot-press 1000 (layer-toggle mod_shift)))
   c (multi lctl (layer-toggle mod_ctrl))
   w (multi lmet (layer-toggle mod_win))
   a (multi lalt (layer-toggle mod_alt))
@@ -296,7 +306,6 @@
   cmd (multi lsft ; (layer-switch colemak-dh-cmd))
   scmd (multi (one-shot 1000 lsft) (one-shot-press 1000 (layer-toggle pre-cmd)))
   cmdf (multi (unmod ent) (layer-switch cmd-function))
-
 )
 
 (defalias
@@ -312,7 +321,10 @@
 )
 
 (defalias
-
+  numc (multi (release-key lsft) (one-shot 1000 lctl) (one-shot-press 1000 (layer-toggle mod_num))) 
+  nums (multi (release-key lsft) (one-shot 1000 lsft) (one-shot-press 1000 (layer-toggle mod_num)))
+  numa (multi (release-key lsft) (one-shot 1000 lalt) (one-shot-press 1000 (layer-toggle mod_num)))
+  numw (multi (release-key lsft) (one-shot 1000 lmet) (one-shot-press 1000 (layer-toggle mod_num)))
 )
 
 ;; (defalias
