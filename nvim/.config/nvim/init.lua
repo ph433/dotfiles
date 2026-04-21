@@ -128,13 +128,17 @@ vim.keymap.set('v', 'V', function()
   local anchor_line = vim.fn.line('v')
 
   if cursor_line > anchor_line then
-    -- Đang bôi ĐI XUỐNG: đầu trên (anchor) về 0, đầu dưới (cursor) về $
-    return 'o0o$'
+    -- Đang bôi ĐI XUỐNG: đầu trên (anchor) về ^, đầu dưới (cursor) về g_
+    return 'o^og_'
   elseif cursor_line < anchor_line then
-    -- Đang bôi ĐI LÊN: đầu trên (cursor) về 0, đầu dưới (anchor) về $
-    return '0o$o'
+    -- Đang bôi ĐI LÊN: đầu trên (cursor) về ^, đầu dưới (anchor) về g_
+    return '^og_o'
   else
-    -- Chỉ bôi trên 1 dòng: ép 0 rồi $
-    return '0o$'
+    -- Chỉ bôi trên 1 dòng: ép ^ rồi g_
+    return '^og_'
   end
-end, { expr = true, desc = 'Snap to full width (Smart direction)' })
+end, { expr = true, desc = 'Snap to text width (Smart direction)' })
+
+-- Đảm bảo Space hoạt động bình thường, không chạy lệnh lạ
+vim.keymap.set('n', '<Space>', 'i <Space><Esc>l', { noremap = true, desc = 'Space thực thụ' })
+

@@ -292,7 +292,7 @@
   del_w (macro d w)
   ins (macro ins ins)
   osl_d (multi bspc (one-shot 1000 (layer-toggle nvim_delete)))
-  tabe (multi (layer-switch mod_nvim) f24)
+  tabe (multi (layer-switch mod_nvim) esc)
   tabi (multi (layer-switch colemak-dh) ins)
   tabii (multi (layer-switch colemak-dh) (macro ins ins))
   shi (multi (one-shot 1000 lsft) (one-shot-press 1000 (layer-toggle mod_shift)))
