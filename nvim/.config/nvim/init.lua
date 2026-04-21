@@ -120,24 +120,41 @@ vim.keymap.set('i', '<C-End>', '<C-O>G<C-O>$', { desc = 'End of file' })
 
 -- vim.keymap.set('n', 'vv', '^vg_', { desc = 'Select line content' })
 
--- Trong Visual mode: Nhấn '_' để bôi trọn nội dung từ dòng đầu đến dòng cuối
--- (Bỏ qua khoảng trắng ở cả hai đầu của khối dòng đã chọn)
-vim.keymap.set('v', 'V', function()
-  -- Lấy tọa độ dòng của con trỏ (cursor) và điểm neo (anchor)
+-- 1. Shift + V = Chọn toàn bộ file (Ctrl + A style)
+vim.keymap.set({'n', 'x'}, 'V', 'ggVG', { desc = 'Select all file' })
+
+-- 2. Combo v -> vv -> vvv
+vim.keymap.set('x', 'v', function()
+  local curr_mode = vim.fn.mode()
+  if curr_mode ~= 'v' and curr_mode ~= 'V' then return 'v' end
+
   local cursor_line = vim.fn.line('.')
   local anchor_line = vim.fn.line('v')
+  local cur_col = vim.fn.col('.')
+  local anc_col = vim.fn.col('v')
+  
+  -- Lấy thông tin dòng để kiểm tra độ phủ
+  local line_content = vim.fn.getline('.')
+  local line_len = #line_content
+  local first_char_col = line_content:find('%S') or 1 -- Cột của ký tự đầu tiên (^ )
 
-  if cursor_line > anchor_line then
-    -- Đang bôi ĐI XUỐNG: đầu trên (anchor) về ^, đầu dưới (cursor) về g_
-    return 'o^og_'
-  elseif cursor_line < anchor_line then
-    -- Đang bôi ĐI LÊN: đầu trên (cursor) về ^, đầu dưới (anchor) về g_
-    return '^og_o'
+  -- KIỂM TRA CẤP ĐỘ:
+  -- Check xem có đang ở trạng thái "Màu Xanh" (^ đến g_) không
+  local is_blue_style = (cur_col == first_char_col or anc_col == first_char_col) 
+                        and (cur_col >= line_len or anc_col >= line_len)
+
+  if is_blue_style then
+    -- CẤP ĐỘ 3: Sang "Màu Đỏ" (0 đến $)
+    if cursor_line > anchor_line then return 'o0o$'
+    elseif cursor_line < anchor_line then return '0o$o'
+    else return '0o$' end
   else
-    -- Chỉ bôi trên 1 dòng: ép ^ rồi g_
-    return '^og_'
+    -- CẤP ĐỘ 2: Sang "Màu Xanh" (^ đến g_)
+    if cursor_line > anchor_line then return 'o^og_'
+    elseif cursor_line < anchor_line then return '^og_o'
+    else return '^og_' end
   end
-end, { expr = true, desc = 'Snap to text width (Smart direction)' })
+end, { expr = true, desc = 'v (normal) -> vv (blue) -> vvv (red)' })
 
 -- Đảm bảo Space hoạt động bình thường, không chạy lệnh lạ
 vim.keymap.set('n', '<Space>', 'i <Space><Esc>l', { noremap = true, desc = 'Space thực thụ' })
