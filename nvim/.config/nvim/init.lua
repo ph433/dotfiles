@@ -56,7 +56,7 @@ vim.keymap.set('n', '<C-c>', '"+y', { desc = 'Copy operator' })
 vim.keymap.set('n', '<C-c><C-c>', '0"+y$', { desc = 'Copy line content only' })
 -- PASTE QUYỀN NĂNG
 vim.keymap.set('n', '<C-v>', '"+P', { desc = 'Paste Normal' })
-vim.keymap.set('v', '<C-v>', '"_d"+P', { desc = 'Paste Visual (No overwrite clipboard)' })
+vim.keymap.set('v', '<C-v>', '"_c<C-r>+<Esc>', { desc = 'Change and Paste from clipboard' })
 vim.keymap.set('i', '<C-v>', '<C-r>+', { desc = 'Paste Insert' })
 
 -- VISUAL BLOCK (Chuyển hẳn sang Ctrl+Shift+V)
