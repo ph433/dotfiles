@@ -23,10 +23,10 @@
 (deflayer mod_nvim
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  @colosw esc     _       up      _       ent     _       _       _       _       C-A-t   _       _       _               _       _       _       _
-  @osl_d  tab     @larr   down    rght    @tabii  @osl_sw lctl    @shi    lalt    lmet    del     _               _       _       _       _
-  @sropt  C-z     C-y     C-c     C-v     C-S-v   v       A-c     A-v     C-a     C-y     @cmd            _               _       _       _
-  @osl_md _       @tabi   ent                             @osl_sw         _                       _       _       _       _               _
+  @tabi   esc     _       up      _       _       _       _       _       _       C-A-t   _       _       _               _       _       _       _
+  @osl_d  tab     @larr   down    rght    @tabii  @tabi   lctl    @shi    lalt    lmet    del     _               _       _       _       _
+  @sropt  C-z     _       C-c     C-v     _       v       A-c     A-v     C-a     C-y     @cmd            _               _       _       _
+  @osl_md _       @colosw ent                             @num            _                       _       _       _       _               _
 )
 
 (deflayer pre-left-arrow 
@@ -53,7 +53,7 @@
   _       _       _       C-up    _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       C-left  C-down  C-rght  _       _       _       _       _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @tabe   _                                       _       _                       _       _       _       _               _
+  _       _       @nvsw   _                                       _       _                       _       _       _       _               _
 )
 
 (deflayer modifier
@@ -97,9 +97,9 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       1       2       3       4       5       6       7       8       9       0       _       _                       _       _       _       _
+  bks     1       2       3       4       5       6       7       8       9       0       del     _                       _       _       _       _
   @mdfns  _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @tabe   _                                       _       _                       _       _       _       _               _
+  _       _       @nvsw   _                                       _       _                       _       _       _       _               _
 )
 
 (deflayer modifiernumshift 
@@ -108,7 +108,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       1       2       3       4       5       6       7       8       9       0       _       _                       _       _       _       _
   @mdfnu  _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @tabe   _                                       _       _                       _       _       _       _               _
+  _       _       @nvsw   _                                       _       _                       _       _       _       _               _
 )
 
 (deflayer modifiernum
@@ -117,7 +117,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       _       _       _       _       _       @numc   @nums   @numa   @numw   _       _                       _       _       _       _
   @num    _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @tabe   _                                       _       _                       _       _       _       _               _
+  _       _       @nvsw   _                                       _       _                       _       _       _       _               _
 )
 
 (deflayer nvim_delete
@@ -133,10 +133,10 @@
 (deflayer colemak-dh
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  @nvsw   q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
+  @tabe   q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
   bks     a       r       s       t       g       m       n       e       i       o       del     _                       _       _       _       _
   @sent   x       c       d       v       z       k       h       ,       .       /       @ss             _               _       _       _
-  @c      @w      @tabe   _                                       @nvtg   @m2                     _       _       _       _               _
+  @c      @w      @nvsw   _                                       @nvtg   @m2                     _       _       _       _               _
 )
 
 (deflayer shiftent
@@ -160,19 +160,19 @@
 (deflayer colemak-dh-search 
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  @nvsw   q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
+  @tabe   q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
   bks     a       r       s       t       g       m       n       e       i       o       del     _                       _       _       _       _
   @sups   x       c       d       v       z       k       h       ,       .       /       @ss             _               _       _       _
-  @c      @w      @tabe   _                                       @nvtg   @m2                     _       _       _       _               _
+  @c      @w      @nvsw   _                                       @nvtg   @m2                     _       _       _       _               _
 )
 
 (deflayer colemak-dh-cmd 
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  @nvsw   q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
+  @tabe   q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
   bks     a       r       s       t       g       m       n       e       i       o       del     _                       _       _       _       _
   @scmd   x       c       d       v       z       k       h       ,       .       /       @ss             _               _       _       _
-  @c      @w      @tabe   _                                       @nvtg   @m2                     _       _       _       _               _
+  @c      @w      @nvsw   _                                       @nvtg   @m2                     _       _       _       _               _
 )
 
 (deflayer pre-cmd 
@@ -190,7 +190,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @tabe   _                                       _       _                       _       _       _       _               _
+  _       _       @nvsw   _                                       _       _                       _       _       _       _               _
 )
 
 (deflayer pre-next-back 
@@ -208,7 +208,7 @@
   _       _       _       S-n     _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       S-n     n       n       _       _       _       _       _       _       _       _                       _       _       _       _
   @srchf  _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @tabe   _                                       _       _                       _       _       _       _               _
+  _       _       @nvsw   _                                       _       _                       _       _       _       _               _
 )
 
 (deflayer mod_active2
@@ -270,7 +270,7 @@
   m3 (layer-toggle mod_active3)
   mod_shit (layer-toggle mod_shit) 
   nvtg (layer-toggle mod_nvim)
-  nvsw (multi (layer-switch mod_nvim) esc) 
+  nvsw (layer-switch mod_nvim) 
   colosw (layer-switch colemak-dh)
   colotg (layer-toggle colemak-dh)
   num (layer-switch mod_num)
@@ -292,7 +292,7 @@
   del_w (macro d w)
   ins (macro ins ins)
   osl_d (multi bspc (one-shot 1000 (layer-toggle nvim_delete)))
-  tabe (layer-switch mod_nvim)
+  tabe (multi (layer-switch mod_nvim) esc)
   tabi (multi (layer-switch colemak-dh) ins)
   tabii (multi (layer-switch colemak-dh) (macro ins ins))
   shi (multi (one-shot 1000 lsft) (one-shot-press 1000 (layer-toggle mod_shift)))

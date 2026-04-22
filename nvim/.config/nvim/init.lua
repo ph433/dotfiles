@@ -171,3 +171,13 @@ end, { noremap = true, silent = true })
 vim.keymap.set({'n', 'v', 'x'}, '<F13>', '<Esc>', { noremap = true, silent = true })
 
 vim.keymap.set({'n', 'v', 'i', 'x'}, '<D-v>', '<C-v>', { desc = 'Win + V for Visual Block' })
+
+vim.keymap.set('i', '<Esc>', function()
+    local cursor = vim.api.nvim_win_get_cursor(0)
+    vim.cmd('stopinsert')
+    
+    vim.schedule(function()
+        -- Ép con trỏ về đúng vị trí ban đầu sau khi Vim đã "lỡ" lùi 1 bước
+        pcall(vim.api.nvim_win_set_cursor, 0, cursor)
+    end)
+end, { noremap = true, silent = true, desc = 'Esc thực sự đứng im' })
