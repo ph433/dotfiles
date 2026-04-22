@@ -37,23 +37,11 @@ end
 -- Dùng <Cmd> thay cho gõ lệnh trực tiếp để mượt hơn
 vim.keymap.set({'n', 'i', 'v'}, '<C-a>', '<Esc>ggVG', { desc = 'Select All' })
 
--- COPY & PASTE (Sửa lỗi dùng register "+")
--- Copy trong Visual mode
-vim.keymap.set('v', '<C-c>', '"+y', { desc = 'Copy to clipboard' })
-
--- ==========================================================================
--- COPY QUYỀN NĂNG (Ctrl + C y hệt phím y)
--- ==========================================================================
-
--- Trong Visual mode: Copy vùng đang bôi đen
+-- COPY
 vim.keymap.set('v', '<C-c>', '"+y', { desc = 'Copy selection' })
+vim.keymap.set('n', '<C-c>', '"+yy', { desc = 'Copy current line' }) -- Copy dòng nhanh
+vim.keymap.set('n', '<C-c><C-c>', 'gg"+yG', { desc = 'Copy toàn bộ file' }) -- Bonus: Nhấn 2 lần copy cả file
 
--- Trong Normal mode: Biến Ctrl-C thành phím chức năng Copy (Operator)
--- Giờ bạn có thể bấm Ctrl-C Ctrl-C để copy dòng, hoặc Ctrl-C + w để copy từ.
-vim.keymap.set('n', '<C-c>', '"+y', { desc = 'Copy operator' })
-
--- Đặc cách: Nhấn Ctrl-C 2 lần để copy cả dòng (giống yy)
-vim.keymap.set('n', '<C-c><C-c>', '0"+y$', { desc = 'Copy line content only' })
 -- PASTE QUYỀN NĂNG
 vim.keymap.set('n', '<C-v>', '"+P', { desc = 'Paste Normal' })
 vim.keymap.set('v', '<C-v>', '"_c<C-r>+<Esc>', { desc = 'Change and Paste from clipboard' })
