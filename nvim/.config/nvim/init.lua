@@ -123,49 +123,53 @@ vim.keymap.set('x', 'v', function()
   local curr_mode = vim.fn.mode()
   if curr_mode ~= 'v' and curr_mode ~= 'V' then return 'v' end
 
-  local cursor_line = vim.fn.line('.')
-  local anchor_line = vim.fn.line('v')
-  local cur_col = vim.fn.col('.')
-  local anc_col = vim.fn.col('v')
-  
-  -- Lấy thông tin dòng để kiểm tra độ phủ
-  local line_content = vim.fn.getline('.')
-  local line_len = #line_content
-  local first_char_col = line_content:find('%S') or 1 -- Cột của ký tự đầu tiên (^ )
+  -- Lấy thông tin tọa độ (dòng và cột hiển thị)
+  local cur_line = vim.fn.line('.')
+  local anc_line = vim.fn.line('v')
+  local cur_vcol = vim.fn.virtcol('.')
+  local anc_vcol = vim.fn.virtcol('v')
 
-  -- KIỂM TRA CẤP ĐỘ:
-  -- Check xem có đang ở trạng thái "Màu Xanh" (^ đến g_) không
-  local is_blue_style = (cur_col == first_char_col or anc_col == first_char_col) 
-                        and (cur_col >= line_len or anc_col >= line_len)
+  -- Hàm hỗ trợ lấy cột của ^ và g_ của một dòng bất kỳ
+  local get_line_limits = function(lnum)
+    local content = vim.fn.getline(lnum)
+    local first_char_idx = vim.fn.match(content, [[\S]])
+    local first_vcol = (first_char_idx == -1) and 1 or vim.fn.virtcol({lnum, first_char_idx + 1})
+    local last_vcol = vim.fn.strdisplaywidth(content)
+    -- Nếu g_ nhảy tới ký tự cuối, ta lấy max của chiều dài dòng
+    return first_vcol, last_vcol
+  end
 
-  if is_blue_style then
-    -- CẤP ĐỘ 3: Sang "Màu Đỏ" (0 đến $)
-    if cursor_line > anchor_line then return 'o0o$'
-    elseif cursor_line < anchor_line then return '0o$o'
-    else return '0o$' end
+  -- Lấy giới hạn của dòng chứa con trỏ và dòng chứa anchor
+  local cur_first, cur_last = get_line_limits(cur_line)
+  local anc_first, anc_last = get_line_limits(anc_line)
+
+  -- KIỂM TRA TRẠNG THÁI (Đa dòng)
+  -- Cấp độ Đỏ: Cả 2 đầu đều chạm lề 0 hoặc chạm g_ của dòng tương ứng
+  local is_red = (cur_vcol == 1 or anc_vcol == 1) and 
+                 (cur_vcol >= cur_last or anc_vcol >= anc_last)
+
+  -- Cấp độ Xanh: Cả 2 đầu đều chạm ^ hoặc chạm g_ của dòng tương ứng
+  local is_blue = (cur_vcol == cur_first or anc_vcol == anc_first) and 
+                  (cur_vcol >= cur_last or anc_vcol >= anc_last)
+
+  -- LOGIC NHẢY
+  if is_red then
+    return "" -- Khóa tại vvv
+  elseif is_blue then
+    -- Sang Đỏ (0 đến g_)
+    if cur_line > anc_line then return 'o0og_'  -- Bôi xuôi
+    elseif cur_line < anc_line then return '0og_o' -- Bôi ngược
+    else return '0og_' end                      -- 1 dòng
   else
-    -- CẤP ĐỘ 2: Sang "Màu Xanh" (^ đến g_)
-    if cursor_line > anchor_line then return 'o^og_'
-    elseif cursor_line < anchor_line then return '^og_o'
+    -- Sang Xanh (^ đến g_)
+    if cur_line > anc_line then return 'o^og_'
+    elseif cur_line < anc_line then return '^og_o'
     else return '^og_' end
   end
-end, { expr = true, desc = 'v (normal) -> vv (blue) -> vvv (red)' })
+end, { expr = true, silent = true })
 
 -- Đảm bảo Space hoạt động bình thường, không chạy lệnh lạ
 vim.keymap.set('n', '<Space>', 'a<Space><Esc>', { noremap = true, silent = true })
-
--- 1. Định nghĩa chuỗi ^[[2~ là phím <F13>
-vim.cmd([[set <F13>=\<Esc>[2~]])
-
--- 2. Map <F13> cho Insert mode (không lùi con trỏ)
-vim.keymap.set('i', '<F13>', function()
-    local cursor = vim.api.nvim_win_get_cursor(0)
-    vim.cmd('stopinsert')
-    vim.api.nvim_win_set_cursor(0, cursor)
-end, { noremap = true, silent = true })
-
--- 3. Map cho các mode còn lại
-vim.keymap.set({'n', 'v', 'x'}, '<F13>', '<Esc>', { noremap = true, silent = true })
 
 vim.keymap.set({'n', 'v', 'i', 'x'}, '<D-v>', '<C-v>', { desc = 'Win + V for Visual Block' })
 
