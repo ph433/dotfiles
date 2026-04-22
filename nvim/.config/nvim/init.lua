@@ -39,8 +39,9 @@ vim.keymap.set({'n', 'i', 'v'}, '<C-a>', '<Esc>ggVG', { desc = 'Select All' })
 
 -- COPY
 vim.keymap.set('v', '<C-c>', '"+y', { desc = 'Copy selection' })
-vim.keymap.set('n', '<C-c>', '"+yy', { desc = 'Copy current line' }) -- Copy dòng nhanh
-vim.keymap.set('n', '<C-c><C-c>', 'gg"+yG', { desc = 'Copy toàn bộ file' }) -- Bonus: Nhấn 2 lần copy cả file
+vim.keymap.set('n', '<C-c>', '^vg_"+y', { noremap = true, silent = true, desc = 'Copy line content (^ to g_)' })
+-- Win + Ctrl + c: Copy toàn bộ file
+vim.keymap.set({'n', 'v', 'i'}, '<D-C-c>', '<cmd>%y+<cr>', { noremap = true, silent = true, desc = 'Win + Ctrl + C để copy toàn bộ file' })
 
 -- PASTE QUYỀN NĂNG
 vim.keymap.set('n', '<C-v>', '"+P', { desc = 'Paste Normal' })
