@@ -118,10 +118,19 @@ vim.keymap.set('i', '<C-Home>', '<C-O>gg<C-O>1|', { desc = 'Start of file' })
 vim.keymap.set('n', '<C-End>', 'G$', { desc = 'End of file' })
 vim.keymap.set('i', '<C-End>', '<C-O>G<C-O>$', { desc = 'End of file' })
 
--- vim.keymap.set('n', 'vv', '^vg_', { desc = 'Select line content' })
-
--- 1. Shift + V = Chọn toàn bộ file (Ctrl + A style)
-vim.keymap.set({'n', 'x'}, 'V', 'ggVG', { desc = 'Select all file' })
+vim.keymap.set({'n', 'x'}, 'V', function()
+  local mode = vim.fn.mode()
+  
+  -- \22 là mã của Visual Block (<C-v>)
+  if mode == '\22' then 
+    -- LẦN 2: Ép về Normal rồi mới chọn toàn bộ để tránh bị dính mode cũ
+    -- Hoặc dùng lệnh feedkeys để thực thi chuỗi sạch hơn
+    return '<Esc>ggVG'
+  else
+    -- LẦN 1: Vào Visual Block
+    return '<C-v>'
+  end
+end, { expr = true, desc = 'V lần 1: Visual Block, lần 2: Select All' })
 
 -- 2. Combo v -> vv -> vvv
 vim.keymap.set('x', 'v', function()
@@ -157,5 +166,19 @@ vim.keymap.set('x', 'v', function()
 end, { expr = true, desc = 'v (normal) -> vv (blue) -> vvv (red)' })
 
 -- Đảm bảo Space hoạt động bình thường, không chạy lệnh lạ
-vim.keymap.set('n', '<Space>', 'i <Space><Esc>l', { noremap = true, desc = 'Space thực thụ' })
+vim.keymap.set('n', '<Space>', 'a<Space><Esc>', { noremap = true, silent = true })
 
+-- 1. Định nghĩa chuỗi ^[[2~ là phím <F13>
+vim.cmd([[set <F13>=\<Esc>[2~]])
+
+-- 2. Map <F13> cho Insert mode (không lùi con trỏ)
+vim.keymap.set('i', '<F13>', function()
+    local cursor = vim.api.nvim_win_get_cursor(0)
+    vim.cmd('stopinsert')
+    vim.api.nvim_win_set_cursor(0, cursor)
+end, { noremap = true, silent = true })
+
+-- 3. Map cho các mode còn lại
+vim.keymap.set({'n', 'v', 'x'}, '<F13>', '<Esc>', { noremap = true, silent = true })
+
+vim.keymap.set({'n', 'v', 'i', 'x'}, '<D-v>', '<C-v>', { desc = 'Win + V for Visual Block' })
