@@ -48,11 +48,8 @@ vim.keymap.set('n', '<C-v>', '"+P', { desc = 'Paste Normal' })
 vim.keymap.set('v', '<C-v>', '"_c<C-r>+<Esc>', { desc = 'Change and Paste from clipboard' })
 vim.keymap.set('i', '<C-v>', '<C-r>+', { desc = 'Paste Insert' })
 
--- VISUAL BLOCK (Chuyển hẳn sang Ctrl+Shift+V)
-vim.keymap.set('n', '<C-S-v>', '<C-v>', { desc = 'Visual Block Mode' })
-
 -- Thay cả dòng nhưng không làm mất nội dung đã copy
-vim.keymap.set('n', '<C-A-v>', 'V"_d"+P', { noremap = true, desc = 'Thay cả dòng bằng clipboard' })
+vim.keymap.set('n', '<C-A-v>', '^vg_"+P', { noremap = true, silent = true, desc = 'Thay nội dung dòng bằng clipboard' })
 
 -- UNDO & REDO
 vim.keymap.set({'n', 'i', 'v'}, '<C-z>', '<Cmd>undo<CR>', { desc = 'Undo' })
