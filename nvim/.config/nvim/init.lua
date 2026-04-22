@@ -121,47 +121,52 @@ end, { expr = true, desc = 'V lần 1: Visual Block, lần 2: Select All' })
 -- 2. Combo v -> vv -> vvv
 vim.keymap.set('x', 'v', function()
   local curr_mode = vim.fn.mode()
-  if curr_mode ~= 'v' and curr_mode ~= 'V' then return 'v' end
+  
+  if curr_mode == 'V' then
+    vim.api.nvim_feedkeys('v', 'nx', false)
+    return ""
+  end
+  if curr_mode ~= 'v' then return 'v' end
 
-  -- Lấy thông tin tọa độ (dòng và cột hiển thị)
   local cur_line = vim.fn.line('.')
   local anc_line = vim.fn.line('v')
   local cur_vcol = vim.fn.virtcol('.')
   local anc_vcol = vim.fn.virtcol('v')
 
-  -- Hàm hỗ trợ lấy cột của ^ và g_ của một dòng bất kỳ
   local get_line_limits = function(lnum)
     local content = vim.fn.getline(lnum)
+    if content:match("^%s*$") then return 1, 1, true end
+    
     local first_char_idx = vim.fn.match(content, [[\S]])
-    local first_vcol = (first_char_idx == -1) and 1 or vim.fn.virtcol({lnum, first_char_idx + 1})
+    local first_vcol = vim.fn.virtcol({lnum, first_char_idx + 1})
     local last_vcol = vim.fn.strdisplaywidth(content)
-    -- Nếu g_ nhảy tới ký tự cuối, ta lấy max của chiều dài dòng
-    return first_vcol, last_vcol
+    return first_vcol, last_vcol, false
   end
 
-  -- Lấy giới hạn của dòng chứa con trỏ và dòng chứa anchor
-  local cur_first, cur_last = get_line_limits(cur_line)
-  local anc_first, anc_last = get_line_limits(anc_line)
+  local cur_f, cur_l, cur_e = get_line_limits(cur_line)
+  local anc_f, anc_l, anc_e = get_line_limits(anc_line)
 
-  -- KIỂM TRA TRẠNG THÁI (Đa dòng)
-  -- Cấp độ Đỏ: Cả 2 đầu đều chạm lề 0 hoặc chạm g_ của dòng tương ứng
-  local is_red = (cur_vcol == 1 or anc_vcol == 1) and 
-                 (cur_vcol >= cur_last or anc_vcol >= anc_last)
+  -- Xác định xem ai đang ở trên, ai đang ở dưới để tính toán vùng phủ
+  local top_vcol = (cur_line <= anc_line) and cur_vcol or anc_vcol
+  local bot_vcol = (cur_line >= anc_line) and cur_vcol or anc_vcol
+  local top_f, top_l = (cur_line <= anc_line) and cur_f or anc_f, (cur_line <= anc_line) and cur_l or anc_l
+  local bot_f, bot_l = (cur_line >= anc_line) and cur_f or anc_f, (cur_line >= anc_line) and cur_l or anc_l
 
-  -- Cấp độ Xanh: Cả 2 đầu đều chạm ^ hoặc chạm g_ của dòng tương ứng
-  local is_blue = (cur_vcol == cur_first or anc_vcol == anc_first) and 
-                  (cur_vcol >= cur_last or anc_vcol >= anc_last)
+  -- ĐIỀU KIỆN MỚI: Kiểm tra vùng bôi đen có bao phủ được các mốc không
+  -- at_blue: Phủ từ ^ dòng đầu đến g_ dòng cuối (hoặc ngược lại)
+  local at_blue = (top_vcol <= top_f) and (bot_vcol >= bot_l)
+  -- at_red: Phủ từ cột 1 dòng đầu đến g_ dòng cuối
+  local at_red = (top_vcol <= 1) and (bot_vcol >= bot_l)
 
-  -- LOGIC NHẢY
-  if is_red then
-    return "" -- Khóa tại vvv
-  elseif is_blue then
-    -- Sang Đỏ (0 đến g_)
-    if cur_line > anc_line then return 'o0og_'  -- Bôi xuôi
-    elseif cur_line < anc_line then return '0og_o' -- Bôi ngược
-    else return '0og_' end                      -- 1 dòng
+  if at_red then
+    return "" -- Đã kịch trần vvv
+  elseif at_blue then
+    -- Bước 3: Nhảy lên Đỏ (0 -> g_)
+    if cur_line > anc_line then return 'o0og_'
+    elseif cur_line < anc_line then return '0og_o'
+    else return '0og_' end
   else
-    -- Sang Xanh (^ đến g_)
+    -- Bước 2: Nhảy lên Xanh (^ -> g_)
     if cur_line > anc_line then return 'o^og_'
     elseif cur_line < anc_line then return '^og_o'
     else return '^og_' end
