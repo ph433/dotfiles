@@ -67,45 +67,49 @@ vim.keymap.set('i', '<C-End>', '<C-O>G<C-O>$')
 vim.keymap.set('v', 'v', function()
   if vim.fn.mode() ~= 'v' then return "v" end
 
-  local line_cur = vim.fn.line('.')
-  local line_v = vim.fn.line('v')
-  local col_cur = vim.fn.col('.')
-  local col_v = vim.fn.getpos('v')[3]
-  
-  -- 1. Lấy thông tin dòng hiện tại
-  local text = vim.fn.getline('.')
-  local first = vim.fn.match(text, [[\S]]) + 1
-  local last = vim.fn.strwidth((text:gsub("%s+$", "")))
+  local cur_line = vim.fn.line('.')
+  local v_line = vim.fn.line('v')
+  local cur_col = vim.fn.virtcol('.')
+  local v_col = vim.fn.virtcol('v')
 
-  -- 2. Kiểm tra độ bao phủ (Coverage)
-  -- Đối với bôi đen một dòng: col_cur và col_v phải bao trùm first và last
-  -- Đối với bôi đen nhiều dòng: Nếu con trỏ ở dòng trên cùng thì nó phải <= first,
-  -- nếu con trỏ ở dòng dưới cùng thì nó phải >= last.
+  local text = vim.fn.getline('.')
+  local first_idx = vim.fn.match(text, [[\S]])
+  local first_vcol = (first_idx ~= -1) and vim.fn.virtcol({cur_line, first_idx + 1}) or 1
+  local last_vcol = vim.fn.virtcol({cur_line, #text:gsub("%s+$", "")})
+
+  if first_vcol > last_vcol then first_vcol = 1; last_vcol = 1 end
+
+  -- LOGIC MỚI: Kiểm tra độ rộng vùng chọn
+  -- Nếu bạn vừa từ dòng khác nhảy xuống, vùng chọn thường có độ rộng cột bằng 0 
+  -- (vì con trỏ đi thẳng xuống). Chúng ta cấm nấc 3 trong trường hợp này.
+  local selection_width = math.abs(cur_col - v_col)
+  local is_content_empty = (first_vcol == last_vcol)
   
-  local is_smart_covered = false
-  if line_cur == line_v then
-    -- Trường hợp 1 dòng: Gốc và Ngọn phải bao trùm ^ và g_
-    local min_c = math.min(col_cur, col_v)
-    local max_c = math.max(col_cur, col_v)
-    is_smart_covered = (min_c <= first) and (max_c >= last)
+  local is_step2_done = false
+  if cur_line == v_line then
+    is_step2_done = (math.min(cur_col, v_col) <= first_vcol) and (math.max(cur_col, v_col) >= last_vcol) 
+                    and (selection_width > 0 or is_content_empty)
   else
-    -- Trường hợp nhiều dòng (như bạn dùng chuột):
-    -- Phải kiểm tra xem con trỏ hiện tại đã chạm biên tương ứng chưa
-    if line_cur < line_v then
-      -- Đang kéo ngược lên (như hình của bạn): Con trỏ phải ở đầu (<= first)
-      is_smart_covered = (col_cur <= first)
+    -- ĐA DÒNG: 
+    -- Chỉ cho phép nấc 3 nếu vùng chọn ĐÃ có độ rộng (tức là đã thực hiện hít vào ^ hoặc g_ trước đó)
+    -- hoặc nếu con trỏ đang đứng chính xác ở biên và vùng chọn không phải một đường thẳng đứng
+    if cur_line < v_line then
+      is_step2_done = (cur_col == first_vcol) and (selection_width > 0)
     else
-      -- Đang kéo xuôi xuống: Con trỏ phải ở cuối (>= last)
-      is_smart_covered = (col_cur >= last)
+      is_step2_done = (cur_col == last_vcol) and (selection_width > 0)
     end
   end
 
-  if is_smart_covered then
-    -- LẦN 3: Nở ra 0 -> g_
-    if line_cur >= line_v then return "o0og_" else return "og_o0" end
+  if is_step2_done then
+    -- LẦN 3: Bung ra biên 0
+    if cur_line < v_line then return "og_o0"
+    elseif cur_line > v_line then return "o0og_"
+    else return "0og_" end
   else
-    -- LẦN 2: Ép vào ^ -> g_
-    if line_cur >= line_v then return "o^og_" else return "og_o^" end
+    -- LẦN 2: Ép vào nội dung (Trị lỗi nhảy cóc)
+    if cur_line < v_line then return "og_o^"
+    elseif cur_line > v_line then return "o^og_"
+    else return "^og_" end
   end
 end, { expr = true, noremap = true })
 
