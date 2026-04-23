@@ -37,7 +37,7 @@ vim.keymap.set('n', '<C-A-v>', '^vg_"+P', { noremap = true, silent = true })
 vim.keymap.set({'n', 'i', 'v'}, '<C-z>', '<Cmd>undo<CR>', { desc = 'Undo' })
 vim.keymap.set({'n', 'i', 'v'}, '<C-y>', '<Cmd>redo<CR>', { desc = 'Redo' })
 vim.keymap.set({'n', 'i', 'v'}, '<C-f>', '<Esc>/', { desc = 'Search' })
-vim.keymap.set({'n', 'i', 'v'}, '<C-s>', '<Cmd>w<CR>', { desc = 'Save file' })
+-- vim.keymap.set({'n', 'i', 'v'}, '<C-s>', '<Cmd>w<CR>', { desc = 'Save file' })
 
 -- ==========================================================================
 -- 4. DI CHUYỂN & CHỈNH SỬA
@@ -59,59 +59,82 @@ vim.keymap.set({'n', 'v'}, '[', '<cmd>w<cr>')
 vim.keymap.set({'n', 'v'}, '{', '<cmd>q!<cr>')
 vim.keymap.set('n', ']', '<cmd>source $MYVIMRC<cr>')
 
-vim.keymap.set('n', '<C-Home>', 'gg1|')
-vim.keymap.set('i', '<C-Home>', '<C-O>gg<C-O>1|')
-vim.keymap.set('n', '<C-End>', 'G$')
-vim.keymap.set('i', '<C-End>', '<C-O>G<C-O>$')
+-- Cấu hình cho phím v (chọn sát nội dung dùng ^ và g_)
+vim.keymap.set("v", "v", function()
+    local cursor_line = vim.fn.line(".")
+    local anchor_line = vim.fn.line("v")
+    -- Nếu đang ở Visual Line (V), nhấn v để về Visual thường trước khi chạy lệnh
+    local prefix = vim.fn.mode() == "V" and "v" or ""
 
-vim.keymap.set('v', 'v', function()
-  if vim.fn.mode() ~= 'v' then return "v" end
-
-  local cur_line = vim.fn.line('.')
-  local v_line = vim.fn.line('v')
-  local cur_col = vim.fn.virtcol('.')
-  local v_col = vim.fn.virtcol('v')
-
-  local text = vim.fn.getline('.')
-  local first_idx = vim.fn.match(text, [[\S]])
-  local first_vcol = (first_idx ~= -1) and vim.fn.virtcol({cur_line, first_idx + 1}) or 1
-  local last_vcol = vim.fn.virtcol({cur_line, #text:gsub("%s+$", "")})
-
-  if first_vcol > last_vcol then first_vcol = 1; last_vcol = 1 end
-
-  -- LOGIC MỚI: Kiểm tra độ rộng vùng chọn
-  -- Nếu bạn vừa từ dòng khác nhảy xuống, vùng chọn thường có độ rộng cột bằng 0 
-  -- (vì con trỏ đi thẳng xuống). Chúng ta cấm nấc 3 trong trường hợp này.
-  local selection_width = math.abs(cur_col - v_col)
-  local is_content_empty = (first_vcol == last_vcol)
-  
-  local is_step2_done = false
-  if cur_line == v_line then
-    is_step2_done = (math.min(cur_col, v_col) <= first_vcol) and (math.max(cur_col, v_col) >= last_vcol) 
-                    and (selection_width > 0 or is_content_empty)
-  else
-    -- ĐA DÒNG: 
-    -- Chỉ cho phép nấc 3 nếu vùng chọn ĐÃ có độ rộng (tức là đã thực hiện hít vào ^ hoặc g_ trước đó)
-    -- hoặc nếu con trỏ đang đứng chính xác ở biên và vùng chọn không phải một đường thẳng đứng
-    if cur_line < v_line then
-      is_step2_done = (cur_col == first_vcol) and (selection_width > 0)
+    if cursor_line >= anchor_line then
+        return prefix .. "g_o^"
     else
-      is_step2_done = (cur_col == last_vcol) and (selection_width > 0)
+        return prefix .. "^og_"
     end
-  end
-
-  if is_step2_done then
-    -- LẦN 3: Bung ra biên 0
-    if cur_line < v_line then return "og_o0"
-    elseif cur_line > v_line then return "o0og_"
-    else return "0og_" end
-  else
-    -- LẦN 2: Ép vào nội dung (Trị lỗi nhảy cóc)
-    if cur_line < v_line then return "og_o^"
-    elseif cur_line > v_line then return "o^og_"
-    else return "^og_" end
-  end
 end, { expr = true, noremap = true })
+
+-- Cấu hình cho phím V (chọn kịch biên dùng 0 và g_)
+vim.keymap.set("v", "V", function()
+    local cursor_line = vim.fn.line(".")
+    local anchor_line = vim.fn.line("v")
+    -- Ép về Visual thường để 0 và g_ có tác dụng
+    local prefix = vim.fn.mode() == "V" and "v" or ""
+
+    if cursor_line >= anchor_line then
+        return prefix .. "g_o0"
+    else
+        return prefix .. "0og_"
+    end
+end, { expr = true, noremap = true })
+
+-- vim.keymap.set('v', 'v', function()
+--   if vim.fn.mode() ~= 'v' then return "v" end
+--
+--   local cur_line = vim.fn.line('.')
+--   local v_line = vim.fn.line('v')
+--   local cur_col = vim.fn.virtcol('.')
+--   local v_col = vim.fn.virtcol('v')
+--
+--   local text = vim.fn.getline('.')
+--   local first_idx = vim.fn.match(text, [[\S]])
+--   local first_vcol = (first_idx ~= -1) and vim.fn.virtcol({cur_line, first_idx + 1}) or 1
+--   local last_vcol = vim.fn.virtcol({cur_line, #text:gsub("%s+$", "")})
+--
+--   if first_vcol > last_vcol then first_vcol = 1; last_vcol = 1 end
+--
+--   -- LOGIC MỚI: Kiểm tra độ rộng vùng chọn
+--   -- Nếu bạn vừa từ dòng khác nhảy xuống, vùng chọn thường có độ rộng cột bằng 0 
+--   -- (vì con trỏ đi thẳng xuống). Chúng ta cấm nấc 3 trong trường hợp này.
+--   local selection_width = math.abs(cur_col - v_col)
+--   local is_content_empty = (first_vcol == last_vcol)
+--
+--   local is_step2_done = false
+--   if cur_line == v_line then
+--     is_step2_done = (math.min(cur_col, v_col) <= first_vcol) and (math.max(cur_col, v_col) >= last_vcol) 
+--                     and (selection_width > 0 or is_content_empty)
+--   else
+--     -- ĐA DÒNG: 
+--     -- Chỉ cho phép nấc 3 nếu vùng chọn ĐÃ có độ rộng (tức là đã thực hiện hít vào ^ hoặc g_ trước đó)
+--     -- hoặc nếu con trỏ đang đứng chính xác ở biên và vùng chọn không phải một đường thẳng đứng
+--     if cur_line < v_line then
+--       is_step2_done = (cur_col == first_vcol) and (selection_width > 0)
+--     else
+--       is_step2_done = (cur_col == last_vcol) and (selection_width > 0)
+--     end
+--   end
+--
+--   if is_step2_done then
+--     -- LẦN 3: Bung ra biên 0
+--     if cur_line < v_line then return "og_o0"
+--     elseif cur_line > v_line then return "o0og_"
+--     else return "0og_" end
+--   else
+--     -- LẦN 2: Ép vào nội dung (Trị lỗi nhảy cóc)
+--     if cur_line < v_line then return "og_o^"
+--     elseif cur_line > v_line then return "o^og_"
+--     else return "^og_" end
+--   end
+-- end, { expr = true, noremap = true })
 
 -- ==========================================================================
 -- 6. TIỆN ÍCH KHÁC
