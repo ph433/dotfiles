@@ -23,13 +23,40 @@
 (deflayer mod_nvim
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  @tabi   esc     _       up      _       _       _       _       _       _       C-A-t   _       _       _               _       _       _       _
+  @taba   esc     _       up      @viw    A-tab   _       _       _       _       C-A-t   _       _       _               _       _       _       _
   @osl_d  tab     @larr   down    rght    @tabii  @tabi   lctl    @shi    lalt    lmet    del     _               _       _       _       _
   @sropt  C-z     _       C-c     C-v     _       v       A-c     A-v     C-a     C-y     @cmd            _               _       _       _
-  @osl_md _       @colosw ent                             @num            _                       _       _       _       _               _
+  @osl_md _       @colosw ent                             @num            _                       _       caps    _       _               _
+)
+
+(deflayer mod_nvim2
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  @tabi   esc     _       up      @viw    A-tab   _       _       _       _       C-A-t   _       _       _               _       _       _       _
+  @osl_d  tab     @larr   down    rght    @tabii  @tabi   lctl    @shi    lalt    lmet    del     _               _       _       _       _
+  @sropt  C-z     _       C-c     C-v     _       v       A-c     A-v     C-a     C-y     @cmd            _               _       _       _
+  @osl_md _       @colosw ent                             @num            _                       _       caps    _       _               _
+)
+
+(deflayer function
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       _                                       _       _                       _       _       _       _               _
 )
 
 (deflayer pre-left-arrow 
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
+  @pla2   _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       _                                       _       _                       _       _       _       _               _
+)
+
+(deflayer pre-left-arrow2
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
@@ -44,7 +71,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       C-home  _       C-end   _       _       _       _       _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       _       @larrm                                  _       _                       _       _       _       _               _
+  _       _       _       _                                       _       _                       _       _       _       _               _
 )
 
 (deflayer left-arrow 
@@ -96,10 +123,28 @@
 (deflayer mod_num
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       @f1-12  _       @numsh  _       _       _       _       _       _       _       _       _       _               _       _       _       _
   bks     1       2       3       4       5       6       7       8       9       0       del     _                       _       _       _       _
   @mdfns  _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @nvsw   _                                       _       _                       _       _       _       _               _
+  _       _       @nvsw   _                                       @nvtg   _                       _       _       _       _               _
+)
+
+(deflayer modifiernumshiftholder
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       @num    _       _       _       _       _       _       @colosw _       _       _       _       _               _       _       _       _
+  bks     S-1     S-2     S-3     S-4     S-5     S-6     S-7     S-8     S-9     S-0     del     _                       _       _       _       _
+  @mdfns  _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @nvsw   _                                       @nvtg   _                       _       _       _       _               _
+)
+
+(deflayer mod_f1-12
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       @num    _       f11     _       _       _       _       f12     _       _       _       _       _               _       _       _       _
+  bks     f1      f2      f3      f4      f5      f6      f7      f8      f9      f10     del                     _       _       _       _       _ 
+  @mdfns  _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @nvsw   _                                       @num    _                       _       _       _       _               _
 )
 
 (deflayer modifiernumshift 
@@ -144,7 +189,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  @num    _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       _       ent                                     _       _                       _       _       _       _               _
 )
 
@@ -269,13 +314,15 @@
   m2 (multi (release-key lsft) (release-key lmet) (layer-toggle mod_active2))
   m3 (layer-toggle mod_active3)
   mod_shit (layer-toggle mod_shit) 
-  nvtg (layer-toggle mod_nvim)
+  nvtg (one-shot-press 1000 (layer-toggle mod_nvim))
   nvsw (layer-switch mod_nvim) 
   colosw (layer-switch colemak-dh)
   colotg (layer-toggle colemak-dh)
   num (layer-switch mod_num)
   switch (layer-toggle mod_switch)
   mdfnu (layer-switch modifiernum) 
+  numsh (layer-switch modifiernumshiftholder)
+  f1-12 (layer-switch mod_f1-12)
 )
 
 (defalias
@@ -293,8 +340,9 @@
   ins (macro ins ins)
   osl_d (multi bspc (one-shot 1000 (layer-toggle nvim_delete)))
   tabe (multi (layer-switch mod_nvim) esc)
-  tabi (multi (layer-switch colemak-dh) ins)
-  tabii (multi (layer-switch colemak-dh) (macro ins ins))
+  taba (multi (layer-switch colemak-dh) a)
+  tabi (multi (layer-switch colemak-dh) i)
+  tabii (multi (layer-switch colemak-dh) S-r)
   shi (multi (one-shot 1000 lsft) (one-shot-press 1000 (layer-toggle mod_shift)))
   c (multi lctl (layer-toggle mod_ctrl))
   w (multi lmet (layer-toggle mod_win))
@@ -317,6 +365,7 @@
 
 (defalias
   larr (multi left (one-shot-press 1000 (layer-toggle pre-left-arrow)))
+  pla2 (multi left (one-shot-press 1000 (layer-toggle pre-left-arrow2))) 
   larrm (layer-switch left-arrow)
 )
 
@@ -327,10 +376,8 @@
   numw (multi (release-key lsft) (one-shot 1000 lmet) (one-shot-press 1000 (layer-toggle mod_num)))
 )
 
-;; (defalias
-;;
-;;   ;; Multi giúp Esc thực hiện 2 việc: 
-;;   ;; 1. Gửi phím Esc thực tế đến máy tính
-;;   ;; 2. Ra lệnh cho Kanata nhả hết toàn bộ One-shot đang chờ
-;;   cc (multi esc one-shot-release-all)
-;; )
+(defalias
+  viw (macro v i w)
+
+)
+
