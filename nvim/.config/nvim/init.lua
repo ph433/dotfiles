@@ -29,7 +29,7 @@ vim.keymap.set('v', '<C-c>', '"+y', { desc = 'Copy selection' })
 vim.keymap.set('n', '<C-c>', '^vg_"+y', { noremap = true, silent = true })
 vim.keymap.set({'n', 'v', 'i'}, '<D-C-c>', '<cmd>%y+<cr>', { noremap = true, silent = true })
 
-vim.keymap.set('n', '<C-v>', '"+P', { desc = 'Paste Normal' })
+vim.keymap.set('n', '<C-v>', '"+p', { desc = 'Paste Normal' })
 vim.keymap.set('v', '<C-v>', '"_c<C-r>+<Esc>', { desc = 'Paste Visual' })
 vim.keymap.set('i', '<C-v>', '<C-r>+', { desc = 'Paste Insert' })
 vim.keymap.set('n', '<C-A-v>', '^vg_"+P', { noremap = true, silent = true })
@@ -157,3 +157,66 @@ vim.keymap.set({'n', 'v', 'i', 'x'}, '<D-v>', '<C-v>', { desc = 'Visual Block' }
 vim.keymap.set({'n', 'v'}, '<C-Left>', 'b', { noremap = true, silent = true })
 vim.keymap.set({'n', 'v'}, '<C-Right>', 'e', { noremap = true, silent = true })
 
+local opts = { noremap = true, silent = true }
+
+-- Hàm xử lý tìm kiếm thông minh: Không dấu, không hoa thường, tự quay đầu
+local function smart_move(char, forward)
+  if not char or char == "" then return end
+
+  -- Fix lỗi Syntax: Sử dụng dấu ngoặc kép để nối chuỗi pattern
+  -- Kết quả pattern sẽ có dạng: \c[[=a=]]
+  local pattern = "\\c[[=" .. char .. "=]]"
+  
+  -- Lấy vị trí hiện tại của dòng
+  local stop_line = vim.fn.line('.')
+  
+  -- Thử tìm ký tự tiếp theo (W: không tự wrap của Vim để mình tự xử lý biên)
+  local flags = forward and "W" or "bW"
+  local found = vim.fn.search(pattern, flags, stop_line)
+
+  -- Nếu không tìm thấy (đã chạm biên), thực hiện nhảy về biên xa nhất (Wrap thủ công)
+  if found == 0 then
+    if forward then
+      -- Đang đi tới mà hết: Nhảy về đầu dòng (cột 1) rồi tìm tiếp
+      vim.fn.cursor(stop_line, 1)
+    else
+      -- Đang đi lùi mà hết: Nhảy về cuối dòng rồi tìm ngược lại
+      vim.fn.cursor(stop_line, vim.fn.col('$'))
+    end
+    -- Thực hiện tìm kiếm lần nữa từ biên mới
+    vim.fn.search(pattern, flags, stop_line)
+  end
+
+  -- Lưu lại ký tự đã gõ để phím ; và , có thể dùng lại
+  vim.fn.setcharsearch({ char = char, forward = (forward and 1 or 0), type = 'f' })
+end
+
+-- --- MAP PHÍM ---
+
+-- f: Tìm xuôi (không phân biệt hoa thường/dấu)
+vim.keymap.set({'n', 'x', 'o'}, 'f', function()
+  local char = vim.fn.getcharstr()
+  smart_move(char, true)
+end, opts)
+
+-- F: Tìm ngược (không phân biệt hoa thường/dấu)
+vim.keymap.set({'n', 'x', 'o'}, 'F', function()
+  local char = vim.fn.getcharstr()
+  smart_move(char, false)
+end, opts)
+
+-- ; : LUÔN LUÔN nhảy TỚI (Sang phải)
+vim.keymap.set({'n', 'x', 'o'}, ';', function()
+  local res = vim.fn.getcharsearch()
+  if res and res.char and res.char ~= "" then 
+    smart_move(res.char, true) 
+  end
+end, opts)
+
+-- , : LUÔN LUÔN nhảy LUI (Sang trái)
+vim.keymap.set({'n', 'x', 'o'}, ',', function()
+  local res = vim.fn.getcharsearch()
+  if res and res.char and res.char ~= "" then 
+    smart_move(res.char, false) 
+  end
+end, opts)

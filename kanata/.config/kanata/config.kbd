@@ -95,7 +95,7 @@
 (deflayer mod_shift 
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       _       _       @F      _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       _       _       _       _       _       _       @osl_he _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       _       _                                       _       _                       _       _       _       _               _
@@ -214,7 +214,7 @@
 (deflayer search-opt 
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       @fs     _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       _       _       @srchf  _       _       @cmd    _       _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       _       @entnb                                  _       _                       _       _       _       _               _
@@ -362,7 +362,7 @@
   taba (multi (layer-switch colemak-dh) a)
   tabi (multi (layer-switch colemak-dh) i)
   fd (multi f (one-shot-press 1000 (layer-toggle colemak-dh-f)))
-  F (multi f (one-shot-press 1000 (layer-toggle colemak-dh-f)))
+  fs (multi lsft f (one-shot-press 1000 (layer-toggle colemak-dh-f)))
   t1 (multi t (one-shot-press 1000 (layer-toggle colemak-dh-f)))
   tabii (multi (layer-switch colemak-dh) S-r)
   shi (multi (one-shot 1000 lsft) (one-shot-press 1000 (layer-toggle mod_shift)))
