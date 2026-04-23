@@ -61,32 +61,32 @@ vim.keymap.set({'n', 'v'}, '{', '<cmd>q!<cr>')
 vim.keymap.set('n', ']', '<cmd>source $MYVIMRC<cr>')
 
 -- Cấu hình cho phím v (chọn sát nội dung dùng ^ và g_)
--- vim.keymap.set("v", "v", function()
---     local cursor_line = vim.fn.line(".")
---     local anchor_line = vim.fn.line("v")
---     -- Nếu đang ở Visual Line (V), nhấn v để về Visual thường trước khi chạy lệnh
---     local prefix = vim.fn.mode() == "V" and "v" or ""
---
---     if cursor_line >= anchor_line then
---         return prefix .. "g_o^"
---     else
---         return prefix .. "^og_"
---     end
--- end, { expr = true, noremap = true })
---
--- -- Cấu hình cho phím V (chọn kịch biên dùng 0 và g_)
--- vim.keymap.set("v", "V", function()
---     local cursor_line = vim.fn.line(".")
---     local anchor_line = vim.fn.line("v")
---     -- Ép về Visual thường để 0 và g_ có tác dụng
---     local prefix = vim.fn.mode() == "V" and "v" or ""
---
---     if cursor_line >= anchor_line then
---         return prefix .. "g_o0"
---     else
---         return prefix .. "0og_"
---     end
--- end, { expr = true, noremap = true })
+vim.keymap.set("v", "v", function()
+    local cursor_line = vim.fn.line(".")
+    local anchor_line = vim.fn.line("v")
+    -- Nếu đang ở Visual Line (V), nhấn v để về Visual thường trước khi chạy lệnh
+    local prefix = vim.fn.mode() == "V" and "v" or ""
+
+    if cursor_line >= anchor_line then
+        return prefix .. "o^og_"
+    else
+        return prefix .. "og_o^"
+    end
+end, { expr = true, noremap = true })
+
+-- Cấu hình cho phím V (chọn kịch biên dùng 0 và g_)
+vim.keymap.set("v", "V", function()
+    local cursor_line = vim.fn.line(".")
+    local anchor_line = vim.fn.line("v")
+    -- Ép về Visual thường để 0 và g_ có tác dụng
+    local prefix = vim.fn.mode() == "V" and "v" or ""
+
+    if cursor_line >= anchor_line then
+        return prefix .. "o0og_"
+    else
+        return prefix .. "og_o0"
+    end
+end, { expr = true, noremap = true })
 
 -- vim.keymap.set('v', 'v', function()
 --   if vim.fn.mode() ~= 'v' then return "v" end
@@ -143,7 +143,7 @@ vim.keymap.set('n', ']', '<cmd>source $MYVIMRC<cr>')
 vim.keymap.set('n', '<Space>', 'a<Space><Esc>', { noremap = true, silent = true })
 
 vim.keymap.set('v', 'a', 'c', { noremap = true, silent = true })
-vim.keymap.set('v', 'i', 'c', { noremap = true, silent = true })
+-- vim.keymap.set('v', 'i', 'c', { noremap = true, silent = true })
 vim.keymap.set('v', 'R', 'c<C-o>R', { noremap = true, silent = true })
 vim.keymap.set({'n', 'v', 'i', 'x'}, '<D-v>', '<C-v>', { desc = 'Visual Block' })
 
@@ -152,4 +152,8 @@ vim.keymap.set({'n', 'v', 'i', 'x'}, '<D-v>', '<C-v>', { desc = 'Visual Block' }
 --   vim.cmd('stopinsert')
 --   vim.schedule(function() pcall(vim.api.nvim_win_set_cursor, 0, cursor) end)
 -- end, { noremap = true, silent = true, desc = 'Esc đứng im' })
+
+-- Ctrl + Mũi tên trái để nhảy về đầu từ (b)
+vim.keymap.set({'n', 'v'}, '<C-Left>', 'b', { noremap = true, silent = true })
+vim.keymap.set({'n', 'v'}, '<C-Right>', 'e', { noremap = true, silent = true })
 
