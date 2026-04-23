@@ -23,8 +23,8 @@
 (deflayer mod_nvim
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  @taba   esc     @t1     up      @fd     A-tab   _       _       S-5     _       C-A-t   _       _       _               _       _       _       _
-  @osl_d  tab     @larr   down    rght    @tabii  @tabi   lctl    @shi    lalt    lmet    del     _               _       _       _       _
+  @taba   esc     @t1     up      @fd     _       _       _       S-5     .       C-A-t   _       _       _               _       _       _       _
+  @osl_d  tab     @larr   down    @rght   @tabii  @tabi   lctl    @shi    lalt    lmet    del     _               _       _       _       _
   @sropt  C-z     _       C-c     C-v     _       v       A-c     A-v     C-a     C-y     @cmd            _               _       _       _
   @osl_md _       @colosw ent                             @num            _                       _       caps    _       _               _
 )
@@ -50,10 +50,28 @@
 (deflayer pre-left-arrow 
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
+  _       _       _       up      _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       left    down    rght    _       _       _       _       _       _       _       _                       _       _       _       _
   @pla2   _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       _       _                                       _       _                       _       _       _       _               _
+)
+
+(deflayer pre-right-arrow 
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       up      _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       left    down    rght    _       _       _       _       _       _       _       _                       _       _       _       _
+  @pra2   _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       _                                       _       _                       _       _       _       _               _
+)
+
+(deflayer pre-right-arrow2 
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       @wasu   _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       @wasl   @wasd   @wasr   _       _       _       _       _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @nvsw   _                                       _       _                       _       _       _       _               _
 )
 
 (deflayer pre-left-arrow2
@@ -387,8 +405,10 @@
 
 (defalias
   larr (multi left (one-shot-press 1000 (layer-toggle pre-left-arrow)))
+  rght (multi rght (one-shot-press 1000 (layer-toggle pre-right-arrow)))
   s-nav (tap-hold-press 200 200 left (layer-toggle pre-left-arrow))
   pla2 (multi left (one-shot-press 1000 (layer-toggle pre-left-arrow2))) 
+  pra2 (layer-switch pre-right-arrow2)
   larrm (layer-switch left-arrow)
 )
 
@@ -401,9 +421,16 @@
 
 (defalias
   viw (macro v i w)
-
+  cgn (macro c g n)
 )
 
+(defalias
+  ;; Tổ hợp: Win (meta) + Alt + Shift + Mũi tên
+  wasl (multi lmet lalt lsft left)
+  wasr (multi lmet lalt lsft rght)
+  wasu (multi lmet lalt lsft up)
+  wasd (multi lmet lalt lsft down)
+)
 
 (defalias
   a (multi a (layer-switch colemak-dh-ff))

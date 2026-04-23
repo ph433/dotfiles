@@ -220,3 +220,15 @@ vim.keymap.set({'n', 'x', 'o'}, ',', function()
     smart_move(res.char, false) 
   end
 end, opts)
+
+-- -- Chuyển focus bằng Windows + Phím mũi tên
+-- vim.keymap.set("n", "<D-Left>",  "<C-w>h", { desc = "Focus left" })
+-- vim.keymap.set("n", "<D-Down>",  "<C-w>j", { desc = "Focus down" })
+-- vim.keymap.set("n", "<D-Up>",    "<C-w>k", { desc = "Focus up" })
+-- vim.keymap.set("n", "<D-Right>", "<C-w>l", { desc = "Focus right" })
+
+-- Chuyển focus bằng Alt + Shift + Win + Phím mũi tên
+vim.keymap.set("n", "<A-S-D-Left>",  "<C-w>h", { desc = "Focus left" })
+vim.keymap.set("n", "<A-S-D-Down>",  "<C-w>j", { desc = "Focus down" })
+vim.keymap.set("n", "<A-S-D-Up>",    "<C-w>k", { desc = "Focus up" })
+vim.keymap.set("n", "<A-S-D-Right>", "<C-w>l", { desc = "Focus right" })
