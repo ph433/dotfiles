@@ -243,3 +243,15 @@ key("n", "<C-A-S-D-Down>",  "<cmd>rightbelow split<cr>",  { desc = "Open split d
 
 -- Ctrl + Alt + Shift + Win + O: Đóng tất cả trừ cửa sổ hiện tại
 vim.keymap.set("n", "<C-A-S-D-o>", "<cmd>only<cr>", { desc = "Close all but current" })
+
+-- 1. Ctrl-Alt-Shift-Win + '=' : Cân bằng lại tất cả cửa sổ (rất cần sau khi resize lung tung)
+key("n", "<C-A-S-D-=>", "<cmd>wincmd =<cr>", { desc = "Equalize windows" })
+
+-- 2. Ctrl-Alt-Shift-Win + 'x' : Đóng duy nhất cửa sổ đang focus
+key("n", "<C-A-S-D-x>", "<cmd>close<cr>", { desc = "Close current split" })
+
+-- 3. Ctrl-Alt-Shift-Win + 'r' : Xoay vị trí các cửa sổ (Rotate)
+key("n", "<C-A-S-D-r>", "<cmd>wincmd r<cr>", { desc = "Rotate windows" })
+
+-- 4. Tối đa hóa cửa sổ hiện tại (về chiều ngang hoặc dọc)
+key("n", "<C-A-S-D-m>", "<cmd>vertical resize | resize<cr>", { desc = "Maximize current split" })

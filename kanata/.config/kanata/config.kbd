@@ -50,8 +50,8 @@
 (deflayer pre-left-arrow 
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       _       up      _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       left    down    rght    _       _       _       _       _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       @nvsw   _       _                       _       _       _       _
   @pla2   _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       _       _                                       _       _                       _       _       _       _               _
 )
@@ -59,8 +59,8 @@
 (deflayer pre-right-arrow 
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       _       up      _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       left    down    rght    _       _       _       _       _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       @nvsw   _       _                       _       _       _       _
   @pra2   _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       _       _                                       _       _                       _       _       _       _               _
 )
@@ -68,9 +68,18 @@
 (deflayer pre-right-arrow2 
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       @onl    _       @wasu   _       _       _       _       @wwasu  _       _       _       _       _               _       _       _       _
-  _       _       @wasl   @wasd   @wasr   @test   @hold   @wwasl  @wwasd  @wwasr  @hold   _       _                       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       @onl    _       @wasu   _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       @wasl   @wasd   @wasr   @test   @hold   @onl    _       _       _       _       _                       _       _       _       _
+  @swwas  _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @nvsw   _                                       _       _                       _       _       _       _               _
+)
+
+(deflayer createwindows 
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       @onl    _       @wwasu  _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       @wwasl  @wwasd  @wwasr  _       _       @onl    @x1     @=1     @r1     @m1     _                       _       _       _       _
+  @pra2   _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @nvsw   _                                       _       _                       _       _       _       _               _
 )
 
@@ -405,6 +414,7 @@
 
 (defalias
   larr (multi left (one-shot-press 1000 (layer-toggle pre-left-arrow)))
+  larrb (multi left (one-shot-press 1000 (layer-toggle pre-left-arrow)))
   rght (multi rght (one-shot-press 1000 (layer-toggle pre-right-arrow)))
   s-nav (tap-hold-press 200 200 left (layer-toggle pre-left-arrow))
   pla2 (multi left (one-shot-press 1000 (layer-toggle pre-left-arrow2))) 
@@ -432,6 +442,7 @@
   wasd (multi lmet lalt lsft down)
 
   ;; Tổ hợp: Win (meta) + Alt + Shift + Mũi tên
+  swwas (layer-switch createwindows)
   wwasl (multi lctl lmet lalt lsft left)
   wwasr (multi lctl lmet lalt lsft rght)
   wwasu (multi lctl lmet lalt lsft up)
@@ -439,6 +450,13 @@
   onl (multi lctl lmet lalt lsft o)
   hold (multi lctl lmet lalt lsft)
   test (macro left down rght up)
+)
+
+(defalias
+  m1 (multi lctl lmet lalt lsft m) ;; @onl (only)
+  x1 (multi lctl lmet lalt lsft x) ;; @cls (close)
+  =1 (multi lctl lmet lalt lsft =) ;; @equ (equalize)
+  r1 (multi lctl lmet lalt lsft r) ;; @rot (rotate)
 )
 
 (defalias
