@@ -68,8 +68,8 @@
 (deflayer pre-right-arrow2 
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       _       @wasu   _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       @wasl   @wasd   @wasr   _       _       _       _       _       _       _       _                       _       _       _       _
+  _       @onl    _       @wasu   _       _       _       _       @wwasu  _       _       _       _       _               _       _       _       _
+  _       _       @wasl   @wasd   @wasr   @test   @hold   @wwasl  @wwasd  @wwasr  @hold   _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @nvsw   _                                       _       _                       _       _       _       _               _
 )
@@ -430,6 +430,15 @@
   wasr (multi lmet lalt lsft rght)
   wasu (multi lmet lalt lsft up)
   wasd (multi lmet lalt lsft down)
+
+  ;; Tổ hợp: Win (meta) + Alt + Shift + Mũi tên
+  wwasl (multi lctl lmet lalt lsft left)
+  wwasr (multi lctl lmet lalt lsft rght)
+  wwasu (multi lctl lmet lalt lsft up)
+  wwasd (multi lctl lmet lalt lsft down)
+  onl (multi lctl lmet lalt lsft o)
+  hold (multi lctl lmet lalt lsft)
+  test (macro left down rght up)
 )
 
 (defalias

@@ -232,3 +232,14 @@ vim.keymap.set("n", "<A-S-D-Left>",  "<C-w>h", { desc = "Focus left" })
 vim.keymap.set("n", "<A-S-D-Down>",  "<C-w>j", { desc = "Focus down" })
 vim.keymap.set("n", "<A-S-D-Up>",    "<C-w>k", { desc = "Focus up" })
 vim.keymap.set("n", "<A-S-D-Right>", "<C-w>l", { desc = "Focus right" })
+
+local key = vim.keymap.set
+
+-- Ctrl + Alt + Shift + Win + Mũi tên: Mở split mới theo hướng đó
+key("n", "<C-A-S-D-Left>",  "<cmd>leftabove vsplit<cr>", { desc = "Open split left" })
+key("n", "<C-A-S-D-Right>", "<cmd>rightbelow vsplit<cr>", { desc = "Open split right" })
+key("n", "<C-A-S-D-Up>",    "<cmd>leftabove split<cr>",   { desc = "Open split up" })
+key("n", "<C-A-S-D-Down>",  "<cmd>rightbelow split<cr>",  { desc = "Open split down" })
+
+-- Ctrl + Alt + Shift + Win + O: Đóng tất cả trừ cửa sổ hiện tại
+vim.keymap.set("n", "<C-A-S-D-o>", "<cmd>only<cr>", { desc = "Close all but current" })
