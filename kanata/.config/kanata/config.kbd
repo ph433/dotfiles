@@ -23,10 +23,10 @@
 (deflayer mod_nvim
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  @taba   esc     @t1     @pra2    @fd     _       _       _       S-5     .       C-A-t   _       _       _               _       _       _       _
-  @osl_d  tab     @larr   down    @hhe    @tabii  @tabi   @hctl   @shi    lalt    lmet    del     _               _       _       _       _
-  @sropt  C-z     _       C-c     C-v     _       v       A-c     A-v     C-a     C-y     @cmd            _               _       _       _
-  @osl_md _       @colosw ent                             @num            _                       _       caps    _       _               _
+  @taba   esc     @t1     up      @fd     _       _       _       S-5     .       C-A-t   _       _       _               _       _       _       _
+  @osl_d  tab     left    down    rght    @tabii  @tabi   C-c     C-v     lalt    @4arr   del     _               _       _       _       _
+  @sropt  C-z     @colosw C-c     C-v     _       v       A-c     A-v     C-a     C-y     @cmd            _               _       _       _
+  @osl_md _       @nvsw   ent                             @num            _                       _       caps    _       _               _
 )
 
 (deflayer mod_nvim2
@@ -38,7 +38,7 @@
   @osl_md _       @colosw ent                             @num            _                       _       caps    _       _               _
 )
 
-(deflayer function
+(deflayer mod
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
@@ -47,12 +47,102 @@
   _       _       _       _                                       _       _                       _       _       _       _               _
 )
 
+(deflayer backto-fake-4-arrows
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       @fake4  _       _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       _                                       _       _                       _       _       _       _               _
+)
+
+(deflayer backto-ctrlhomend
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       @ctlhe  _       _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       _                                       _       _                       _       _       _       _               _
+)
+
+(deflayer backto-homend
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       @hhe    _       _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       _                                       _       _                       _       _       _       _               _
+)
+
+(deflayer backto-holdctrl
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       @hctl   _       _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       _                                       _       _                       _       _       _       _               _
+)
+
+(deflayer backto-ctrlshifthomend
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       @cshe   _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       _                                       _       _                       _       _       _       _               _
+)
+
+(deflayer backto-shifthomend
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       @sfthe  _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       _                                       _       _                       _       _       _       _               _
+)
+
+(deflayer backto-holdctrlshift
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       @hcsft  _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       _                                       _       _                       _       _       _       _               _
+)
+
+(deflayer backto-holdshift
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       @hsft   _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       _                                       _       _                       _       _       _       _               _
+)
+
+(deflayer 4-arrows-switch
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       @hctl   @hsft   _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @nvsw   _                                       _       _                       _       _       _       _               _
+)
+
+(deflayer mod1
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       C-a     _       _       _       _       _       C-c     C-v     _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       _                                       _       _                       _       _       _       _               _
+)
+
 (deflayer holdctrl
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       esc     _       C-up    _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       C-left  C-down  C-rght  _       _       @larr   @hcsft  _       _       _       _                       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       C-left  C-down  C-rght  _       _       @hhe    @hcsft  _       @4arr   _       _                       _       _       _       _
+  @b01    _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @nvsw   _                                       _       _                       _       _       _       _               _
 )
 
@@ -60,8 +150,26 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       esc     _       S-up    _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       S-left  S-down  S-rght  _       _       @hcsft  @larr   _       _       _       _                       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       S-left  S-down  S-rght  _       _       @fake4  @hcsft  _       @4arr   _       _                       _       _       _       _
+  @c01    _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @nvsw   _                                       _       _                       _       _       _       _               _
+)
+
+(deflayer fake-4-arrows
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       up      _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       left    down    rght    _       _       @hctl   @hsft   _       _       _       _                       _       _       _       _
+  @b02    _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       _                                       _       _                       _       _       _       _               _
+)
+
+(deflayer homend 
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       up      _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       home    down    end     _       _       @ctlhe  @sfthe  _       @4arr   _       _                       _       _       _       _
+  @b04    _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @nvsw   _                                       _       _                       _       _       _       _               _
 )
 
@@ -69,8 +177,8 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       C-home  _       C-end   _       _       @hhe    @cshe   _       _       _       _                       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       C-home  _       C-end   _       _       @fake4  @cshe   _       @4arr   _       _                       _       _       _       _
+  @b03    _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @nvsw   _                                       _       _                       _       _       _       _               _
 )
 
@@ -78,8 +186,8 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       _       S-up    _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       S-home  S-down  S-end   _       _       @cshe   @hhe    _       _       _       _                       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       S-home  S-down  S-end   _       _       @hhe    @cshe   _       @4arr   _       _                       _       _       _       _
+  @c03    _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @nvsw   _                                       _       _                       _       _       _       _               _
 )
 
@@ -87,8 +195,8 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       esc     _       @csu    _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       @csl    @csd    @csr    _       _       @hctl   @hsft   _       _       _       _                       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @csl    @csd    @csr    _       _       @hctl   @sfthe  _       @4arr   _       _                       _       _       _       _
+  @c04    _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @nvsw   _                                       _       _                       _       _       _       _               _
 )
 
@@ -96,8 +204,8 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       esc     _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       @csh    _       @cse    _       _       @ctlhe  @sfthe  _       _       _       _                       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @csh    _       @cse    _       _       @ctlhe  @hsft   _       @4arr   _       _                       _       _       _       _
+  @c02    _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @nvsw   _                                       _       _                       _       _       _       _               _
 )
 
@@ -181,16 +289,6 @@
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       _       _                                       _       _                       _       _       _       _               _
 )
-
-(deflayer homend 
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       _       up      _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       home    down    end     _       _       @ctlhe  @sfthe  _       _       _       _                       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @nvsw   _                                       _       _                       _       _       _       _               _
-)
-
 
 (deflayer mod_switch 
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
@@ -420,6 +518,19 @@
   ctlhe (layer-switch ctrlhomend)
   sfthe (layer-switch shifthomend)
   hcsft (layer-switch holdctrlshift)
+  4arr (layer-switch 4-arrows-switch)
+  fake4 (layer-switch fake-4-arrows)
+
+  b01 (one-shot-press 1000 (layer-toggle backto-fake-4-arrows))
+  b02 (one-shot-press 1000 (layer-toggle backto-ctrlhomend))
+  b03 (one-shot-press 1000 (layer-toggle backto-homend))
+  b04 (one-shot-press 1000 (layer-toggle backto-holdctrl))
+
+  c01 (one-shot-press 1000 (layer-toggle backto-ctrlshifthomend))
+  c02 (one-shot-press 1000 (layer-toggle backto-shifthomend))
+  c03 (one-shot-press 1000 (layer-toggle backto-holdctrlshift))
+  c04 (one-shot-press 1000 (layer-toggle backto-holdshift))
+
   cshe (layer-switch ctrlshifthomend)
   colosw (layer-switch colemak-dh)
   colotg (layer-toggle colemak-dh)
