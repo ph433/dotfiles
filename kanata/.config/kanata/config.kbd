@@ -32,10 +32,19 @@
 (deflayer mod_nvim2
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  @tabi   esc     _       up      @viw    A-tab   _       _       _       _       C-A-t   _       _       _               _       _       _       _
-  @osl_d  tab     @larr   down    rght    @tabii  @tabi   lctl    @shi    lalt    lmet    del     _               _       _       _       _
-  @sropt  C-z     _       C-c     C-v     _       v       A-c     A-v     C-a     C-y     @cmd            _               _       _       _
-  @osl_md _       @colosw ent                             @num            _                       _       caps    _       _               _
+  _       _       _       up      _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       left    down    rght    _       _       _       _       _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       ent                                     @num    _                       _       _       _       _               _
+)
+
+(deflayer mod_nvim_2
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       up      _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       left    down    rght    _       _       _       _       _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       ent                                     @colosw _                       _       _       _       _               _
 )
 
 (deflayer mod
@@ -460,7 +469,7 @@
   _       @f1-12  _       @numsh  @coleff _       _       _       _       _       _       _       _       _               _       _       _       _
   bks     1       2       3       4       5       6       7       8       9       0       del     _                       _       _       _       _
   @mdfns  _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @nvsw   _                                       @nvtg   _                       _       _       _       _               _
+  _       _       @nvsw   _                                       @nvtg2  _                       _       _       _       _               _
 )
 
 (deflayer modifiernumshiftholder
@@ -666,7 +675,8 @@
   m2 (multi (release-key lsft) (release-key lmet) (layer-toggle mod_active2))
   m3 (layer-toggle mod_active3)
   mod_shit (layer-toggle mod_shit) 
-  nvtg (one-shot-press 1000 (layer-toggle mod_nvim))
+  nvtg (one-shot-press 1000 (layer-toggle mod_nvim2))
+  nvtg2 (one-shot-press 1000 (layer-toggle mod_nvim_2))
   colotg (layer-toggle colemak-dh)
   nvsw (layer-switch mod_nvim) 
   colosw (layer-switch colemak-dh)
