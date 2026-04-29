@@ -159,88 +159,95 @@ vim.keymap.set({'n', 'v'}, '<C-Right>', 'e', { noremap = true, silent = true })
 
 local opts = { noremap = true, silent = true }
 
--- 1. Hàm tìm kiếm TRONG DÒNG (Cho ; và ,)
-local function move_in_line(char, forward)
+--- 1. HÀM TRỢ GIÚP ---
+
+-- Tính "chi phí" di chuyển để tìm điểm gần nhất
+-- Ưu tiên cùng dòng bằng cách nhân khoảng cách dòng với 1000
+local function get_distance_cost(l1, c1, l2, c2)
+  return math.abs(l1 - l2) * 1000 + math.abs(c1 - c2)
+end
+
+--- 2. CÁC HÀM XỬ LÝ CHÍNH ---
+
+-- Tìm ký tự GẦN NHẤT (dùng cho phím f)
+local function move_to_closest(char)
   if not char or char == "" then return end
+  local pattern = "\\c[[=" .. char .. "=]]"
+  local cur_pos = vim.fn.getpos('.')
+  local cur_l, cur_c = cur_pos[2], cur_pos[3]
+
+  -- Tìm vị trí gần nhất phía trước (b) và phía sau (f)
+  -- 'n' để không di chuyển con trỏ, 'w' để quét toàn file
+  local b_pos = vim.fn.searchpos(pattern, "bnw")
+  local f_pos = vim.fn.searchpos(pattern, "nw")
+
+  local target = nil
+  if b_pos[1] > 0 and f_pos[1] > 0 then
+    local d_b = get_distance_cost(cur_l, cur_c, b_pos[1], b_pos[2])
+    local d_f = get_distance_cost(cur_l, cur_c, f_pos[1], f_pos[2])
+    target = (d_b < d_f) and b_pos or f_pos
+  elseif b_pos[1] > 0 then target = b_pos
+  elseif f_pos[1] > 0 then target = f_pos
+  end
+
+  if target then
+    vim.fn.cursor(target[1], target[2])
+    -- Lưu lại để dùng cho ; , < > (mặc định coi như tìm xuôi)
+    vim.fn.setcharsearch({ char = char, forward = 1, type = 'f' })
+  end
+end
+
+-- Tìm TRONG DÒNG (dùng cho ; và ,)
+local function move_in_line(char, forward)
   local pattern = "\\c[[=" .. char .. "=]]"
   local stop_line = vim.fn.line('.')
   local flags = forward and "W" or "bW"
-  
   local found = vim.fn.search(pattern, flags, stop_line)
-  
   if found == 0 then
-    if forward then
-      vim.fn.cursor(stop_line, 1)
-    else
-      vim.fn.cursor(stop_line, vim.fn.col('$'))
-    end
+    vim.fn.cursor(stop_line, forward and 1 or vim.fn.col('$'))
     vim.fn.search(pattern, flags, stop_line)
   end
 end
 
--- 2. Hàm nhảy DỌC tới ký tự ĐẦU TIÊN của dòng (Cho < và >)
+-- Tìm DỌC tới đầu dòng (dùng cho < và >)
 local function move_vertical_start(char, forward)
-  if not char or char == "" then return end
   local pattern = "\\c[[=" .. char .. "=]]"
-  
-  -- Lưu vị trí hiện tại
   local current_line = vim.fn.line('.')
+  -- Nhảy ra khỏi ranh giới dòng hiện tại để tìm dòng khác
+  vim.fn.cursor(current_line, forward and vim.fn.col('$') or 1)
   
-  -- Thiết lập flags: 
-  -- 'w' để wrap quanh file
-  -- 'b' để tìm ngược (backward)
-  local search_flags = forward and "w" or "bw"
+  local flags = forward and "w" or "bw"
+  local found = vim.fn.search(pattern, flags)
   
-  -- Bước 1: Tìm vị trí của ký tự tiếp theo/trước đó KHÔNG nằm trên dòng hiện tại
-  -- Ta dùng một vòng lặp nhỏ hoặc search với cursor offset
-  local target_line = 0
-  
-  -- Nhảy tạm thời để tìm dòng khác
-  if forward then
-    vim.fn.cursor(current_line, vim.fn.col('$')) -- Nhảy xuống cuối dòng hiện tại
-  else
-    vim.fn.cursor(current_line, 1) -- Nhảy về đầu dòng hiện tại
-  end
-
-  local found = vim.fn.search(pattern, search_flags)
-
-  -- Nếu tìm thấy và vẫn ở dòng cũ, tìm tiếp phát nữa để chắc chắn sang dòng mới
+  -- Nếu vẫn dính ở dòng cũ, tìm tiếp phát nữa
   if found ~= 0 and vim.fn.line('.') == current_line then
-    found = vim.fn.search(pattern, search_flags)
+    found = vim.fn.search(pattern, flags)
   end
 
   if found ~= 0 then
-    -- Bước 2: Đã sang dòng mới, ép về đầu dòng đó
     local new_line = vim.fn.line('.')
     vim.fn.cursor(new_line, 1)
-    
-    -- Bước 3: Tìm chữ đó đầu tiên trong dòng này
     vim.fn.search(pattern, "W", new_line)
-  else
-    -- Nếu không tìm thấy dòng nào khác, trả con trỏ về vị trí cũ
-    vim.fn.cursor(current_line, 1)
-    print("Không tìm thấy '" .. char .. "' ở các dòng khác")
   end
 end
 
--- --- MAP PHÍM ---
+--- 3. MAP PHÍM ---
 
--- f / F: Khởi tạo
+-- f: Tìm GẦN NHẤT (bất kể trước sau, trên dưới)
 vim.keymap.set({'n', 'x', 'o'}, 'f', function()
   local char = vim.fn.getcharstr()
   if char == "" or char:match('%s') then return end
-  vim.fn.setcharsearch({ char = char, forward = 1, type = 'f' })
-  move_in_line(char, true)
+  move_to_closest(char)
 end, opts)
 
+-- F: Giữ nguyên logic tìm ngược truyền thống nếu cần, hoặc gán giống f
 vim.keymap.set({'n', 'x', 'o'}, 'F', function()
   local char = vim.fn.getcharstr()
   if char == "" or char:match('%s') then return end
-  vim.fn.setcharsearch({ char = char, forward = 0, type = 'f' })
-  move_in_line(char, false)
+  move_to_closest(char)
 end, opts)
 
--- Duyệt ngang (Tiếp tục vị trí hiện tại trong dòng)
+-- ; và , (Ngang)
 vim.keymap.set({'n', 'x', 'o'}, ';', function()
   local res = vim.fn.getcharsearch()
   if res and res.char ~= "" then move_in_line(res.char, true) end
@@ -251,7 +258,7 @@ vim.keymap.set({'n', 'x', 'o'}, ',', function()
   if res and res.char ~= "" then move_in_line(res.char, false) end
 end, opts)
 
--- Duyệt dọc (Luôn nhảy tới chữ ĐẦU TIÊN của dòng tiếp theo/trước đó)
+-- > và < (Dọc)
 vim.keymap.set({'n', 'x', 'o'}, '>', function()
   local res = vim.fn.getcharsearch()
   if res and res.char ~= "" then move_vertical_start(res.char, true) end
