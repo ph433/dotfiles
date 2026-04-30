@@ -320,3 +320,9 @@ key("n", "<C-A-S-D-r>", "<cmd>wincmd r<cr>", { desc = "Rotate windows" })
 
 -- 4. Tối đa hóa cửa sổ hiện tại (về chiều ngang hoặc dọc)
 key("n", "<C-A-S-D-m>", "<cmd>vertical resize | resize<cr>", { desc = "Maximize current split" })
+
+vim.keymap.set('n', '<C-t>', ':vsplit<CR>', { noremap = true, silent = true, desc = "Mở cửa sổ dọc mới" })
+vim.keymap.set('n', '<C-S-t>', ':split<CR>', { noremap = true, silent = true, desc = "Mở cửa sổ dọc mới" })
+-- Đóng cửa sổ hiện tại
+vim.keymap.set('n', '<C-w>', ':close<CR>', { noremap = true, silent = true, desc = "Đóng cửa sổ hiện tại" })
+vim.keymap.set('n', '<C-S-w>', ':only<CR>', { noremap = true, silent = true, desc = "Giữ lại cửa sổ duy nhất" })
