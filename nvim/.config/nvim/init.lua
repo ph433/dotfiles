@@ -326,3 +326,16 @@ vim.keymap.set('n', '<C-S-t>', ':split<CR>', { noremap = true, silent = true, de
 -- Đóng cửa sổ hiện tại
 vim.keymap.set('n', '<C-w>', ':close<CR>', { noremap = true, silent = true, desc = "Đóng cửa sổ hiện tại" })
 vim.keymap.set('n', '<C-S-w>', ':only<CR>', { noremap = true, silent = true, desc = "Giữ lại cửa sổ duy nhất" })
+
+-- Map phím * để tìm nội dung đang có trong Clipboard
+vim.keymap.set('n', '*', function()
+  -- Lấy nội dung từ clipboard hệ thống
+  local clipboard_content = vim.fn.getreg('+')
+  
+  -- Thoát các ký tự đặc biệt để không làm lỗi Regex của Vim
+  local escaped_content = vim.fn.escape(clipboard_content, '\\/.*$^~[]')
+  
+  -- Thực hiện lệnh tìm kiếm: / nội dung /
+  -- <CR> để thực thi ngay, nếu muốn sửa lại trước khi tìm thì bỏ <CR>
+  vim.cmd('/' .. escaped_content)
+end, { noremap = true, silent = false, desc = "Tìm kiếm nội dung từ clipboard" })
