@@ -23,9 +23,9 @@
 (deflayer mod_nvim
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  @taba   esc     @t1     up      @fd     @pra2   S-8     _       S-5     .       C-A-t   _       _       _               _       _       _       _
-  @osl_d  tab     left    down    rght    @tabii  @tabi   @numm   C-v     lalt    @4arr   del     _               _       _       _       _
-  @sropt  C-z     @colosw C-c     C-v     _       v       A-c     A-v     C-a     C-y     @cmd            _               _       _       _
+  @tabii  esc     _       up      @fd     @pra2   _       S-8     S-5     .       _       _       _       _               _       _       _       _
+  @osl_d  tab     left    down    rght    @tabi   @taba   @4arr   _       @alts   @4arr   del     _               _       _       _       _
+  @sropt  C-z     _       C-c     C-v     _       v       A-c     A-v     C-a     C-y     @cmd            _               _       _       _
   @osl_md _       @nvsw   ent                             @colosw         _                       _       caps    _       _               _
 )
 
@@ -47,7 +47,7 @@
   _       _       _       ent                                     @colosw _                       _       _       _       _               _
 )
 
-(deflayer mod
+(deflayer function-modifier
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
@@ -203,8 +203,8 @@
 (deflayer 4-arrows-switch
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       _       _       _       _       _       @hctl   @hsft   _       @r4arr  _       _                       _       _       _       _
+  _       _       _       @shin   _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       @num    @ctln   @winn   @altn   _       _       @hctl   @hsft   _       @r4arr  _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @nvsw   _                                       _       _                       _       _       _       _               _
 )
@@ -459,7 +459,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   bks     S-1     S-2     S-3     S-4     S-5     S-6     S-7     S-8     S-9     S-0     del     _                       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  @num    _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @nvsw   @numm                                   _       _                       _       _       _       _               _
 )
 
@@ -469,7 +469,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @cstab  A-1     A-2     A-3     A-4     A-5     A-6     A-7     A-8     A-9     A-0     @ctab   _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @nvsw   @numm                                       _       _                       _       _       _       _               _
+  _       _       _       @numm                                       _       _                       _       _       _       _               _
 )
 
 (deflayer mod_winc
@@ -553,6 +553,15 @@
   _       _       @nvsw   _                                       _       _                       _       _       _       _               _
 )
 
+(deflayer alt-tab
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       A-1     A-2     A-3     A-4     A-5     A-6     A-7     A-8     A-9     A-0     _       _       _               _       _       _       _
+  _       A-S-q   _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       @altt   _       _       _       A-f     _       _       _       @alta   _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @nvsw   @aent                                   _       _                       _       _       _       _               _
+)
+
 (deflayer nvim_delete
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
@@ -570,6 +579,24 @@
   bks     a       r       s       t       g       m       n       e       i       o       del     _                       _       _       _       _
   @sent   x       c       d       v       z       k       h       ,       .       /       @ss             _               _       _       _
   @ctl    @win    @nvsw   _                                       @nvtg   @m2                     _       _       _       _               _
+)
+
+(deflayer colemak-dh-rofi
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  @tabe   q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
+  bks     a       r       s       t       g       m       n       e       i       o       del     _                       _       _       _       _
+  @sent   x       c       d       v       z       k       h       ,       .       /       @ss             _               _       _       _
+  @ctl    @win    @altnv  @entb                                   @nvtg   @m2                     _       _       _       _               _
+)
+
+(deflayer mod_nvim-rofi
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       A-1     A-2     A-3     A-4     A-5     A-6     A-7     A-8     A-9     A-0     _       _       _               _       _       _       _
+  _       @qq     _       up      _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       left    down    rght    _       _       _       _       _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @nvsw   @entb                                   @altco  _                       _       _       _       _               _
 )
 
 (deflayer colemak-dh-f
@@ -603,7 +630,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       _       _       @fs     _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       _       _       @srchf  _       _       @cmd    _       _       _       _       _                       _       _       _       _
+  _       _       _       _       @srchf  @stabi  @staba  @cmd    _       _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       _       @entnb                                  _       _                       _       _       _       _               _
 )
@@ -799,6 +826,10 @@
   tabe (multi (layer-switch mod_nvim) esc)
   taba (multi (layer-switch colemak-dh) a)
   tabi (multi (layer-switch colemak-dh) i)
+
+  staba (multi (layer-switch colemak-dh) shft a)
+  stabi (multi (layer-switch colemak-dh) shft i)
+
   fd (multi f (one-shot-press 1000 (layer-toggle colemak-dh-f)))
   fs (multi lsft f (one-shot-press 1000 (layer-toggle colemak-dh-f)))
   t1 (multi t (one-shot-press 1000 (layer-toggle colemak-dh-f)))
@@ -828,6 +859,16 @@
   ctln (layer-switch mod_ctrlc)
   winn (layer-switch mod_winc)
   altn (layer-switch mod_altc-mv)
+
+  altt (multi lalt tab (layer-switch colemak-dh-rofi))
+  alta (multi lalt tab (layer-switch mod_nvim-rofi))
+  altco (layer-switch colemak-dh-rofi)
+  altnv (layer-switch mod_nvim-rofi)
+  alts (layer-switch alt-tab)
+  entb (multi ent (layer-switch mod_nvim))
+  aent (multi alt ent (layer-switch colemak-dh))
+  qq (multi esc (layer-switch mod_nvim))
+
 )
 
 (defalias
