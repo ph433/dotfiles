@@ -32,7 +32,7 @@
 (deflayer mod_nvim2
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       _       up      _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       esc     _       up      _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       tab     left    down    rght    _       _       _       _       _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       _       ent                                     @num    _                       _       _       _       _               _
@@ -556,10 +556,10 @@
 (deflayer alt-tab
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       @a_1    @a_2    @a_3    @a_4    @a_5    @a_6    @a_7    @a_8    @a_9    @a_0    _       _       _                       _       _       _       _
-  _       A-S-q   _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       A-S-q   _       _       A-S-r   _       _       _       _       _       _       _       _       _               _       _       _       _
   _       @altt   _       @altd   A-f     _       _       _       _       @altfe  _       @alta   _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @nvsw   @aent                                   _       _                       _       _       _       _               _
+  _       _       @nvsw   @aent                                   @alt    _                       _       _       _       _               _
 )
 
 (deflayer alt-tab-forever
@@ -574,8 +574,8 @@
 (deflayer workspace_switch
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       @a_1    @a_2    @a_3    @a_4    @a_5    @a_6    @a_7    @a_8    @a_9    @a_0    _       _                       _       _       _       _
+  A-p     _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  @c_st   @a_1    @a_2    @a_3    @a_4    @a_5    @a_6    @a_7    @a_8    @a_9    @a_0    @c_t    _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @nvsw   @aent                                   _       _                       _       _       _       _               _
 )
@@ -584,7 +584,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       @aa_1   @aa_2   @aa_3   @aa_4   @aa_5   @aa_6   @aa_7   @aa_8   @aa_9   @aa_0   _       _                       _       _       _       _
+  @cc_st  @aa_1   @aa_2   @aa_3   @aa_4   @aa_5   @aa_6   @aa_7   @aa_8   @aa_9   @aa_0   @cc_t   _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @nvsw   @aent                                   _       _                       _       _       _       _               _
 )
@@ -1010,6 +1010,9 @@
   a_8 (multi alt 8 (layer-switch mod_nvim))
   a_9 (multi alt 9 (layer-switch mod_nvim))
   a_0 (multi alt 0 (layer-switch mod_nvim))
+
+  c_st (multi lctl lsft tab (layer-switch mod_nvim))
+  c_t (multi lctl tab (layer-switch mod_nvim))
 )
 
 (defalias
@@ -1023,4 +1026,7 @@
   aa_8 (multi alt 8)
   aa_9 (multi alt 9)
   aa_0 (multi alt 0)
+
+  cc_st (multi lctl lsft tab)
+  cc_t (multi lctl tab)
 )
