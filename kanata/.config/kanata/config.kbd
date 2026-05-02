@@ -24,7 +24,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @tabii  esc     _       up      @fd     @pra2   _       S-8     S-5     .       _       _       _       _               _       _       _       _
-  @osl_d  tab     left    down    rght    @tabi   @taba   @4arr   _       @alts   @4arr   del     _               _       _       _       _
+  @osl_d  tab     left    down    rght    @tabi   @taba   @4arr   _       @alts   @wssw   del     _               _       _       _       _
   @sropt  C-z     _       C-c     C-v     _       v       A-c     A-v     C-a     C-y     @cmd            _               _       _       _
   @osl_md _       @nvsw   ent                             @colosw         _                       _       caps    _       _               _
 )
@@ -33,7 +33,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       _       up      _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       left    down    rght    _       _       _       _       _       _       _       _                       _       _       _       _
+  _       tab     left    down    rght    _       _       _       _       _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       _       ent                                     @num    _                       _       _       _       _               _
 )
@@ -469,7 +469,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @cstab  A-1     A-2     A-3     A-4     A-5     A-6     A-7     A-8     A-9     A-0     @ctab   _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       _       @numm                                       _       _                       _       _       _       _               _
+  _       _       _       @numm                                   _       _                       _       _       _       _               _
 )
 
 (deflayer mod_winc
@@ -555,9 +555,36 @@
 
 (deflayer alt-tab
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       A-1     A-2     A-3     A-4     A-5     A-6     A-7     A-8     A-9     A-0     _       _       _               _       _       _       _
+  _       @a_1    @a_2    @a_3    @a_4    @a_5    @a_6    @a_7    @a_8    @a_9    @a_0    _       _       _                       _       _       _       _
   _       A-S-q   _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       @altt   _       _       _       A-f     _       _       _       @alta   _       _       _                       _       _       _       _
+  _       @altt   _       @altd   A-f     _       _       _       _       @altfe  _       @alta   _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @nvsw   @aent                                   _       _                       _       _       _       _               _
+)
+
+(deflayer alt-tab-forever
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       A-1     A-2     A-3     A-4     A-5     A-6     A-7     A-8     A-9     A-0     _       _       _                       _       _       _       _
+  _       A-S-q   _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       @altt   _       @altd   A-f     _       _       _       _       @alta   _       @alta   _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @nvsw   @aent                                   _       _                       _       _       _       _               _
+)
+
+(deflayer workspace_switch
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       @a_1    @a_2    @a_3    @a_4    @a_5    @a_6    @a_7    @a_8    @a_9    @a_0    _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @nvsw   @aent                                   _       _                       _       _       _       _               _
+)
+
+(deflayer workspace_sswitch
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       @aa_1   @aa_2   @aa_3   @aa_4   @aa_5   @aa_6   @aa_7   @aa_8   @aa_9   @aa_0   _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @nvsw   @aent                                   _       _                       _       _       _       _               _
 )
@@ -594,7 +621,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       A-1     A-2     A-3     A-4     A-5     A-6     A-7     A-8     A-9     A-0     _       _       _               _       _       _       _
   _       @qq     _       up      _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       left    down    rght    _       _       _       _       _       _       _       _                       _       _       _       _
+  _       _       C-S-tab down    C-tab   _       _       _       _       _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @nvsw   @entb                                   @altco  _                       _       _       _       _               _
 )
@@ -861,10 +888,12 @@
   altn (layer-switch mod_altc-mv)
 
   altt (multi lalt tab (layer-switch colemak-dh-rofi))
+  altd (multi lalt d (layer-switch colemak-dh-rofi))
   alta (multi lalt tab (layer-switch mod_nvim-rofi))
   altco (layer-switch colemak-dh-rofi)
   altnv (layer-switch mod_nvim-rofi)
-  alts (layer-switch alt-tab)
+  alts (one-shot-press 1000 (layer-toggle alt-tab))
+  altfe (layer-switch alt-tab-forever)
   entb (multi ent (layer-switch mod_nvim))
   aent (multi alt ent (layer-switch colemak-dh))
   qq (multi esc (layer-switch mod_nvim))
@@ -963,4 +992,35 @@
   , (multi , (layer-switch colemak-dh-ff))
   . (multi . (layer-switch colemak-dh-ff))
   / (multi / (layer-switch colemak-dh-ff))
+)
+
+(defalias
+  wssw (tap-dance 200 (
+    (one-shot-press 1000 (layer-toggle workspace_switch)) 
+    (layer-switch workspace_sswitch)
+  ))
+
+  a_1 (multi alt 1 (layer-switch mod_nvim))
+  a_2 (multi alt 2 (layer-switch mod_nvim))
+  a_3 (multi alt 3 (layer-switch mod_nvim))
+  a_4 (multi alt 4 (layer-switch mod_nvim))
+  a_5 (multi alt 5 (layer-switch mod_nvim))
+  a_6 (multi alt 6 (layer-switch mod_nvim))
+  a_7 (multi alt 7 (layer-switch mod_nvim))
+  a_8 (multi alt 8 (layer-switch mod_nvim))
+  a_9 (multi alt 9 (layer-switch mod_nvim))
+  a_0 (multi alt 0 (layer-switch mod_nvim))
+)
+
+(defalias
+  aa_1 (multi alt 1)
+  aa_2 (multi alt 2)
+  aa_3 (multi alt 3)
+  aa_4 (multi alt 4)
+  aa_5 (multi alt 5)
+  aa_6 (multi alt 6)
+  aa_7 (multi alt 7)
+  aa_8 (multi alt 8)
+  aa_9 (multi alt 9)
+  aa_0 (multi alt 0)
 )
