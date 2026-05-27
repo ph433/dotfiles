@@ -23,11 +23,13 @@
 (deflayer mod_nvim
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  @tabii  esc     _       up      @fd     @pra2   _       S-8     S-5     .       _       _       _       _               _       _       _       _
-  @osl_d  tab     left    down    rght    @tabi   @taba   @4arr   _       @alts   @wssw   del     _               _       _       _       _
+  @tabii  esc     home    up      end     @pra2   _       @tabi   @tabii  @taba   _       _       _       _               _       _       _       _
+  @osl_d  tab     left    down    rght    spc     @fd     lctl    lsft    lmet    @lialt  del     _               _       _       _       _
   @sropt  C-z     _       C-c     C-v     _       v       A-c     A-v     C-a     C-y     @cmd            _               _       _       _
   @osl_md _       @nvsw   ent                             @colosw         _                       _       caps    _       _               _
 )
+
+;; @4arr   _       @alts   @wssw
 
 (deflayer mod_nvim2
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
@@ -395,25 +397,25 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       @onl    _       @wasu   _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       @wasl   @wasd   @wasr   @test   @hold   @x1     @=1     @r1     @m1     _       _                       _       _       _       _
+  _       _       @wasl   @wasd   @wasr   _       _       @x1     @e1     @m1     @r1     _       _                       _       _       _       _
   @swwas  _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @nvsw   _                                       _       _                       _       _       _       _               _
 )
 
-(deflayer equalscreens 
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       @=1     _       _                       _       _       _       _
-  @pra2   _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       _       _                                       _       _                       _       _       _       _               _
-)
+;; (deflayer equalscreens 
+;;   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+;;   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+;;   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+;;   _       _       _       _       _       _       _       _       _       _       @=1     _       _                       _       _       _       _
+;;   @pra2   _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+;;   _       _       _       _                                       _       _                       _       _       _       _               _
+;; )
 
 (deflayer createwindows 
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       @onl    _       @wwasu  _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       @wwasl  @wwasd  @wwasr  _       _       @x1     @=1     @r1     @m1     _       _                       _       _       _       _
+  _       _       @wwasl  @wwasd  @wwasr  _       _       @x1     @e1     @m1     @r1     _       _                       _       _       _       _
   @pra2   _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @nvsw   _                                       _       _                       _       _       _       _               _
 )
@@ -463,13 +465,31 @@
   _       _       @nvsw   @numm                                   _       _                       _       _       _       _               _
 )
 
+(deflayer mod_altc-mv-temp
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  @cstab  A-1     A-2     A-3     A-4     A-5     A-6     A-7     A-8     A-9     A-0     @ctab   _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @altns  @numm                                   _       _                       _       _       _       _               _
+)
+
 (deflayer mod_altc-mv
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @cstab  A-1     A-2     A-3     A-4     A-5     A-6     A-7     A-8     A-9     A-0     @ctab   _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       _       @numm                                   _       _                       _       _       _       _               _
+  _       _       @nvsw   @numm                                   _       _                       _       _       _       _               _
+)
+
+(deflayer like-alt
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       A-esc   A-home  A-up    A-end   _       _       _       _       _       _       _       _       _               _       _       _       _
+  A-bks   A-tab   A-left  A-down  A-rght  A-spc   _       _       _       _       _       A-del   _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @altn   A-ent                                   _       _                       _       _       _       _               _
 )
 
 (deflayer mod_winc
@@ -605,7 +625,7 @@
   @tabe   q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
   bks     a       r       s       t       g       m       n       e       i       o       del     _                       _       _       _       _
   @sent   x       c       d       v       z       k       h       ,       .       /       @ss             _               _       _       _
-  @ctl    @win    @nvsw   _                                       @nvtg   @m2                     _       _       _       _               _
+  @ctl    @win    @nvsw   _                                       @nvtg   @alt                    _       _       _       _               _
 )
 
 (deflayer colemak-dh-rofi
@@ -774,7 +794,7 @@
   m2 (multi (release-key lsft) (release-key lmet) (layer-toggle mod_active2))
   m3 (layer-toggle mod_active3)
   mod_shit (layer-toggle mod_shit) 
-  nvtg (one-shot-press 1000 (layer-toggle mod_nvim2))
+  nvtg (one-shot-press 1000 (layer-toggle mod_nvim))
   nvtg2 (one-shot-press 1000 (layer-toggle mod_nvim_2))
   colotg (layer-toggle colemak-dh)
   nvsw (layer-switch mod_nvim) 
@@ -885,7 +905,8 @@
   shin (layer-switch mod_shiftc)
   ctln (layer-switch mod_ctrlc)
   winn (layer-switch mod_winc)
-  altn (layer-switch mod_altc-mv)
+  altn (multi (release-key lalt) (one-shot-press 1000 (layer-toggle mod_altc-mv-temp)))
+  altns (layer-switch mod_altc-mv)
 
   altt (multi lalt tab (layer-switch colemak-dh-rofi))
   altd (multi lalt d (layer-switch colemak-dh-rofi))
@@ -908,7 +929,7 @@
 )
 
 (defalias
-  numc (multi (release-key lsft) (one-shot 1000 lctl) (one-shot-press 1000 (layer-toggle mod_num))) 
+  numc (multi (release-key lsft) (one-shot 1000 lctl) (one-shot-press 1000 (layer-toggle mod_num)))
   nums (multi (release-key lsft) (one-shot 1000 lsft) (one-shot-press 1000 (layer-toggle mod_num)))
   numa (multi (release-key lsft) (one-shot 1000 lalt) (one-shot-press 1000 (layer-toggle mod_num)))
   numw (multi (release-key lsft) (one-shot 1000 lmet) (one-shot-press 1000 (layer-toggle mod_num)))
@@ -935,27 +956,25 @@
 
 (defalias
   ;; Tổ hợp: Win (meta) + Alt + Shift + Mũi tên
-  wasl (multi lmet lalt lsft left)
-  wasr (multi lmet lalt lsft rght)
-  wasu (multi lmet lalt lsft up)
-  wasd (multi lmet lalt lsft down)
+  wasl (multi lsft lalt h)
+  wasr (multi lsft lalt l)
+  wasu (multi lsft lalt k)
+  wasd (multi lsft lalt j)
 
   ;; Tổ hợp: Win (meta) + Alt + Shift + Mũi tên
   swwas (layer-switch createwindows)
-  wwasl (multi lctl lmet lalt lsft left)
-  wwasr (multi lctl lmet lalt lsft rght)
-  wwasu (multi lctl lmet lalt lsft up)
-  wwasd (multi lctl lmet lalt lsft down)
-  onl (multi lctl lmet lalt lsft o)
-  hold (multi lctl lmet lalt lsft)
-  test (macro left down rght up)
+  wwasl (multi lctl lalt h)
+  wwasr (multi lctl lalt l)
+  wwasu (multi lctl lalt k)
+  wwasd (multi lctl lalt j)
+  onl (multi lsft lalt o)
 )
 
 (defalias
-  m1 (multi lctl lmet lalt lsft m (layer-switch equalscreens));; @onl (only)
-  x1 (multi lctl lmet lalt lsft x) ;; @cls (close)
-  =1 (multi lctl lmet lalt lsft = (layer-switch pre-right-arrow2)) ;; @equ (equalize)
-  r1 (multi lctl lmet lalt lsft r) ;; @rot (rotate)
+  m1 (multi lsft lalt m) ;; @onl (only)
+  x1 (multi lsft lalt x) ;; @cls (close)
+  e1 (multi lsft lalt e) ;; @equ (equalize)
+  r1 (multi lsft lalt r) ;; @rot (rotate)
 )
 
 (defalias
@@ -1029,4 +1048,8 @@
 
   cc_st (multi lctl lsft tab)
   cc_t (multi lctl tab)
+)
+
+(defalias
+  lialt (one-shot-press 1000 (layer-toggle like-alt))
 )

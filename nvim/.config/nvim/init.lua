@@ -292,34 +292,34 @@ end, opts)
 -- vim.keymap.set("n", "<D-Up>",    "<C-w>k", { desc = "Focus up" })
 -- vim.keymap.set("n", "<D-Right>", "<C-w>l", { desc = "Focus right" })
 
--- Chuyển focus bằng Alt + Shift + Win + Phím mũi tên
-vim.keymap.set("n", "<A-S-D-Left>",  "<C-w>h", { desc = "Focus left" })
-vim.keymap.set("n", "<A-S-D-Down>",  "<C-w>j", { desc = "Focus down" })
-vim.keymap.set("n", "<A-S-D-Up>",    "<C-w>k", { desc = "Focus up" })
-vim.keymap.set("n", "<A-S-D-Right>", "<C-w>l", { desc = "Focus right" })
-
 local key = vim.keymap.set
 
--- Ctrl + Alt + Shift + Win + Mũi tên: Mở split mới theo hướng đó
-key("n", "<C-A-S-D-Left>",  "<cmd>leftabove vsplit<cr>", { desc = "Open split left" })
-key("n", "<C-A-S-D-Right>", "<cmd>rightbelow vsplit<cr>", { desc = "Open split right" })
-key("n", "<C-A-S-D-Up>",    "<cmd>leftabove split<cr>",   { desc = "Open split up" })
-key("n", "<C-A-S-D-Down>",  "<cmd>rightbelow split<cr>",  { desc = "Open split down" })
+-- Chuyển focus bằng Alt + h/j/k/l (st nhận diện cực mượt)
+key("n", "<S-A-h>", "<C-w>h", { desc = "Focus left" })
+key("n", "<S-A-j>", "<C-w>j", { desc = "Focus down" })
+key("n", "<S-A-k>", "<C-w>k", { desc = "Focus up" })
+key("n", "<S-A-l>", "<C-w>l", { desc = "Focus right" })
 
--- Ctrl + Alt + Shift + Win + O: Đóng tất cả trừ cửa sổ hiện tại
-vim.keymap.set("n", "<C-A-S-D-o>", "<cmd>only<cr>", { desc = "Close all but current" })
+-- Mở split mới bằng Ctrl + Alt + h/j/k/l
+key("n", "<C-A-h>", "<cmd>leftabove vsplit<cr>", { desc = "Open split left" })
+key("n", "<C-A-l>", "<cmd>rightbelow vsplit<cr>", { desc = "Open split right" })
+key("n", "<C-A-k>", "<cmd>leftabove split<cr>",   { desc = "Open split up" })
+key("n", "<C-A-j>", "<cmd>rightbelow split<cr>",  { desc = "Open split down" })
 
--- 1. Ctrl-Alt-Shift-Win + '=' : Cân bằng lại tất cả cửa sổ (rất cần sau khi resize lung tung)
-key("n", "<C-A-S-D-=>", "<cmd>wincmd =<cr>", { desc = "Equalize windows" })
+-- 1. Alt + o : Đóng tất cả trừ cửa sổ hiện tại (only)
+key("n", "<S-A-o>", "<cmd>only<cr>", { desc = "Close all but current" })
 
--- 2. Ctrl-Alt-Shift-Win + 'x' : Đóng duy nhất cửa sổ đang focus
-key("n", "<C-A-S-D-x>", "<cmd>close<cr>", { desc = "Close current split" })
+-- 2. Alt + = : Cân bằng lại kích thước tất cả cửa sổ
+key("n", "<S-A-e>", "<cmd>wincmd =<cr>", { desc = "Equalize windows" })
 
--- 3. Ctrl-Alt-Shift-Win + 'r' : Xoay vị trí các cửa sổ (Rotate)
-key("n", "<C-A-S-D-r>", "<cmd>wincmd r<cr>", { desc = "Rotate windows" })
+-- 3. Alt + x : Đóng duy nhất cửa sổ đang focus (close)
+key("n", "<S-A-x>", "<cmd>close<cr>", { desc = "Close current split" })
 
--- 4. Tối đa hóa cửa sổ hiện tại (về chiều ngang hoặc dọc)
-key("n", "<C-A-S-D-m>", "<cmd>vertical resize | resize<cr>", { desc = "Maximize current split" })
+-- 4. Alt + r : Xoay vị trí các cửa sổ (Rotate)
+key("n", "<S-A-r>", "<cmd>wincmd r<cr>", { desc = "Rotate windows" })
+
+-- 5. Alt + m : Tối đa hóa cửa sổ hiện tại (Maximize)
+key("n", "<S-A-m>", "<cmd>vertical resize | resize<cr>", { desc = "Maximize current split" })
 
 vim.keymap.set('n', '<C-t>', ':vsplit<CR>', { noremap = true, silent = true, desc = "Mở cửa sổ dọc mới" })
 vim.keymap.set('n', '<C-S-t>', ':split<CR>', { noremap = true, silent = true, desc = "Mở cửa sổ dọc mới" })
@@ -339,3 +339,13 @@ vim.keymap.set('n', '*', function()
   -- <CR> để thực thi ngay, nếu muốn sửa lại trước khi tìm thì bỏ <CR>
   vim.cmd('/' .. escaped_content)
 end, { noremap = true, silent = false, desc = "Tìm kiếm nội dung từ clipboard" })
+
+-- Ctrl + Home: Về đầu file và nhảy về đầu dòng (gg0)
+vim.keymap.set({'n', 'v'}, '<C-Home>', 'gg0', { desc = 'Go to top of file and start of line' })
+
+-- Ctrl + End: Xuống cuối file và nhảy đến cuối dòng (G$)
+vim.keymap.set({'n', 'v'}, '<C-End>', 'G$', { desc = 'Go to bottom of file and end of line' })
+
+-- Dành riêng cho Insert Mode
+vim.keymap.set('i', '<C-Home>', '<C-O>gg0', { desc = 'Go to top of file and start of line' })
+vim.keymap.set('i', '<C-End>', '<C-O>G$', { desc = 'Go to bottom of file and end of line' })
