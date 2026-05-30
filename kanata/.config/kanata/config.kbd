@@ -557,7 +557,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       @swes   @swh    @swu    @swe    _       _       _       _       _       _       _       _       _               _       _       _       _
-  @swb    @swt    @swl    @swd    @swr    @swsp   _       _       _       _       _       @swde   _                       _       _       _       _
+  @swb    @swt    @swl    @swd    @swr    @swsp   _       @csw    _       _       _       @swde   _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @altn   @swen                                   @alta   _                       _       _       _       _               _
 )
@@ -566,7 +566,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       @cwes   @cwh    @cwu    @cwe    _       _       _       _       _       _       _       _       _               _       _       _       _
-  @cwb    @cwt    @cwl    @cwd    @cwr    @cwsp   _       _       _       _       _       @cwde   _                       _       _       _       _
+  @cwb    @cwt    @cwl    @cwd    @cwr    @cwsp   _       _       @csw    _       _       @cwde   _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @altn   @cwen                                   @alta   _                       _       _       _       _               _
 )
@@ -575,9 +575,18 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       @cses   @csh    @csu    @cse    _       _       _       _       _       _       _       _       _               _       _       _       _
-  @csb    @cst    @csl    @csd    @csr    @cssp   _       _       _       _       _       @csde   _                       _       _       _       _
+  @csb    @cst    @csl    @csd    @csr    @cssp   _       _       _       @csw    _       @csde   _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @altn   @csen                                   @alta   _                       _       _       _       _               _
+)
+
+(deflayer like-ctl-sft-win
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       @cswes  @cswh   @cswu   @cswe   _       _       _       _       _       _       _       _       _               _       _       _       _
+  @cswb   @cswt   @cswl   @cswd   @cswr   @cswsp  _       _       _       _       _       @cswde  _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @altn   @cswen                                  @alta   _                       _       _       _       _               _
 )
 
 (deflayer like-ctl
@@ -1187,6 +1196,8 @@
   cw (one-shot-press 1000 (layer-toggle like-ctl-win))
   cs (one-shot-press 1000 (layer-toggle like-ctl-sft))
 
+  csw (one-shot-press 1000 (layer-toggle like-ctl-sft-win))
+
 
 )
 
@@ -1279,4 +1290,19 @@
   csb (multi lctl lsft bks)
   csde (multi lctl lsft del)
   csen (multi lctl lsft ent)
+)
+
+(defalias
+  cswu (multi lctl lsft lmet up)
+  cswl (multi lctl lsft lmet left)
+  cswr (multi lctl lsft lmet rght)
+  cswd (multi lctl lsft lmet down)
+  cswh (multi lctl lsft lmet home)
+  cswe (multi lctl lsft lmet end)
+  cswes (multi lctl lsft lmet esc)
+  cswt (multi lctl lsft lmet tab)
+  cswsp (multi lctl lsft lmet spc)
+  cswb (multi lctl lsft lmet bks)
+  cswde (multi lctl lsft lmet del)
+  cswen (multi lctl lsft lmet ent)
 )
