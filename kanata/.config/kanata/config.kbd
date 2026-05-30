@@ -530,7 +530,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       @caes   @cah    @cau    @cae    _       _       _       _       _       _       _       _       _               _       _       _       _
-  @cab    @cat    @cal    @cad    @car    @casp   _       _       _       _       _       @cade   _                       _       _       _       _
+  @cab    @cat    @cal    @cad    @car    @casp   _       _       @csa    @cwa    _       @cade   _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @altn   @caen                                   @alta   _                       _       _       _       _               _
 )
@@ -539,7 +539,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       @saes   @sah    @sau    @sae    _       _       _       _       _       _       _       _       _               _       _       _       _
-  @sab    @sat    @sal    @sad    @sar    @sasp   _       _       _       _       _       @sade   _                       _       _       _       _
+  @sab    @sat    @sal    @sad    @sar    @sasp   _       @csa    _       @swa    _       @sade   _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @altn   @saen                                   @alta   _                       _       _       _       _               _
 )
@@ -548,7 +548,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       @waes   @wah    @wau    @wae    _       _       _       _       _       _       _       _       _               _       _       _       _
-  @wab    @wat    @wal    @wad    @war    @wasp   _       _       _       _       _       @wade   _                       _       _       _       _
+  @wab    @wat    @wal    @wad    @war    @wasp   _       @cwa    @swa    _       _       @wade   _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @altn   @waen                                   @alta   _                       _       _       _       _               _
 )
@@ -557,7 +557,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       @swes   @swh    @swu    @swe    _       _       _       _       _       _       _       _       _               _       _       _       _
-  @swb    @swt    @swl    @swd    @swr    @swsp   _       @csw    _       _       _       @swde   _                       _       _       _       _
+  @swb    @swt    @swl    @swd    @swr    @swsp   _       @csw    _       _       @swa    @swde   _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @altn   @swen                                   @alta   _                       _       _       _       _               _
 )
@@ -566,7 +566,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       @cwes   @cwh    @cwu    @cwe    _       _       _       _       _       _       _       _       _               _       _       _       _
-  @cwb    @cwt    @cwl    @cwd    @cwr    @cwsp   _       _       @csw    _       _       @cwde   _                       _       _       _       _
+  @cwb    @cwt    @cwl    @cwd    @cwr    @cwsp   _       _       @csw    _       @cwa    @cwde   _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @altn   @cwen                                   @alta   _                       _       _       _       _               _
 )
@@ -575,7 +575,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       @cses   @csh    @csu    @cse    _       _       _       _       _       _       _       _       _               _       _       _       _
-  @csb    @cst    @csl    @csd    @csr    @cssp   _       _       _       @csw    _       @csde   _                       _       _       _       _
+  @csb    @cst    @csl    @csd    @csr    @cssp   _       _       _       @csw    @csa    @csde   _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @altn   @csen                                   @alta   _                       _       _       _       _               _
 )
@@ -587,6 +587,33 @@
   @cswb   @cswt   @cswl   @cswd   @cswr   @cswsp  _       _       _       _       _       @cswde  _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @altn   @cswen                                  @alta   _                       _       _       _       _               _
+)
+
+(deflayer like-ctl-sft-alt
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       @csaes  @csah   @csau   @csae   _       _       _       _       _       _       _       _       _               _       _       _       _
+  @csab   @csat   @csal   @csad   @csar   @csasp  _       _       _       _       _       @csade  _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @altn   @csaen                                  @alta   _                       _       _       _       _               _
+)
+
+(deflayer like-sft-win-alt
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       @swaes  @swah   @swau   @swae   _       _       _       _       _       _       _       _       _               _       _       _       _
+  @swab   @swat   @swal   @swad   @swar   @swasp  _       _       _       _       _       @swade  _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @altn   @swaen                                  @alta   _                       _       _       _       _               _
+)
+
+(deflayer like-ctl-win-alt
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       @cwaes  @cwah   @cwau   @cwae   _       _       _       _       _       _       _       _       _               _       _       _       _
+  @cwab   @cwat   @cwal   @cwad   @cwar   @cwasp  _       _       _       _       _       @cwade  _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @altn   @cwaen                                  @alta   _                       _       _       _       _               _
 )
 
 (deflayer like-ctl
@@ -1197,6 +1224,9 @@
   cs (one-shot-press 1000 (layer-toggle like-ctl-sft))
 
   csw (one-shot-press 1000 (layer-toggle like-ctl-sft-win))
+  csa (one-shot-press 1000 (layer-toggle like-ctl-sft-alt))
+  swa (one-shot-press 1000 (layer-toggle like-sft-win-alt))
+  cwa (one-shot-press 1000 (layer-toggle like-ctl-win-alt))
 
 
 )
@@ -1305,4 +1335,49 @@
   cswb (multi lctl lsft lmet bks)
   cswde (multi lctl lsft lmet del)
   cswen (multi lctl lsft lmet ent)
+)
+
+(defalias
+  csau (multi lctl lsft lalt up)
+  csal (multi lctl lsft lalt left)
+  csar (multi lctl lsft lalt rght)
+  csad (multi lctl lsft lalt down)
+  csah (multi lctl lsft lalt home)
+  csae (multi lctl lsft lalt end)
+  csaes (multi lctl lsft lalt esc)
+  csat (multi lctl lsft lalt tab)
+  csasp (multi lctl lsft lalt spc)
+  csab (multi lctl lsft lalt bks)
+  csade (multi lctl lsft lalt del)
+  csaen (multi lctl lsft lalt ent)
+)
+
+(defalias
+  swau (multi lsft lmet lalt up)
+  swal (multi lsft lmet lalt left)
+  swar (multi lsft lmet lalt rght)
+  swad (multi lsft lmet lalt down)
+  swah (multi lsft lmet lalt home)
+  swae (multi lsft lmet lalt end)
+  swaes (multi lsft lmet lalt esc)
+  swat (multi lsft lmet lalt tab)
+  swasp (multi lsft lmet lalt spc)
+  swab (multi lsft lmet lalt bks)
+  swade (multi lsft lmet lalt del)
+  swaen (multi lsft lmet lalt ent)
+)
+
+(defalias
+  cwau (multi lctl lmet lalt up)
+  cwal (multi lctl lmet lalt left)
+  cwar (multi lctl lmet lalt rght)
+  cwad (multi lctl lmet lalt down)
+  cwah (multi lctl lmet lalt home)
+  cwae (multi lctl lmet lalt end)
+  cwaes (multi lctl lmet lalt esc)
+  cwat (multi lctl lmet lalt tab)
+  cwasp (multi lctl lmet lalt spc)
+  cwab (multi lctl lmet lalt bks)
+  cwade (multi lctl lmet lalt del)
+  cwaen (multi lctl lmet lalt ent)
 )
