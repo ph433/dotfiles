@@ -29,35 +29,6 @@
   _       _       @nvsw   ent                             @colosw         _                       _       caps    _       _               _
 )
 
-;; @4arr   _       @alts   @wssw
-
-(deflayer mod_nvim2
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       esc     _       up      _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       tab     left    down    rght    _       _       _       _       _       _       _       _                       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       _       ent                                     @num    _                       _       _       _       _               _
-)
-
-(deflayer mod_nvim_2
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       _       up      _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       left    down    rght    _       _       _       _       _       _       _       _                       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       _       ent                                     @colosw _                       _       _       _       _               _
-)
-
-(deflayer function-modifier
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       _       _                                       _       _                       _       _       _       _               _
-)
-
 (deflayer backto-fake-4-arrows
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
@@ -447,6 +418,24 @@
   _       _       _       @larrm                                  _       _                       _       _       _       _               _
 )
 
+(deflayer mod_altc-al-temp ;;al = alphabet
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       A-q     A-w     A-f     A-p     A-b     A-j     A-l     A-u     A-y     A-;     _       _       _               _       _       _       _
+  A-bks   A-a     A-r     A-s     A-t     A-g     A-m     A-n     A-e     A-i     A-o     A-del   _                       _       _       _       _
+  _       A-x     A-c     A-d     A-v     A-z     A-k     A-h     A-,     A-.     A-/     _               _               _       _       _
+  _       _       @altas  A-spc                                   @altas  _                       _       _       _       _               _
+)
+
+(deflayer mod_altc-al
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       A-q     A-w     A-f     A-p     A-b     A-j     A-l     A-u     A-y     A-;     _       _       _               _       _       _       _
+  A-bks   A-a     A-r     A-s     A-t     A-g     A-m     A-n     A-e     A-i     A-o     A-del   _                       _       _       _       _
+  _       A-x     A-c     A-d     A-v     A-z     A-k     A-h     A-,     A-.     A-/     _               _               _       _       _
+  _       _       @nvsw   A-spc                                   _       _                       _       _       _       _               _
+)
+
 (deflayer left-arrow 
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
@@ -473,7 +462,6 @@
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @nvsw   _                                       _       _                       _       _       _       _               _
 )
-
 
 (deflayer mod_ctlc-mv-temp
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
@@ -533,16 +521,70 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       A-esc   A-home  A-up    A-end   _       _       _       _       _       _       _       _       _               _       _       _       _
-  A-bks   A-tab   A-left  A-down  A-rght  A-spc   _       _       _       _       @altn   A-del   _                       _       _       _       _
+  A-bks   A-tab   A-left  A-down  A-rght  A-spc   _       @ca     @sa     @wa     @altn   A-del   _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @altn   A-ent                                   _       _                       _       _       _       _               _
+  _       _       @altn   A-ent                                   @alta   _                       _       _       _       _               _
+)
+
+(deflayer like-ctl-alt
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       @caes   @cah    @cau    @cae    _       _       _       _       _       _       _       _       _               _       _       _       _
+  @cab    @cat    @cal    @cad    @car    @casp   _       _       _       _       _       @cade   _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @altn   @caen                                   @alta   _                       _       _       _       _               _
+)
+
+(deflayer like-sft-alt
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       @saes   @sah    @sau    @sae    _       _       _       _       _       _       _       _       _               _       _       _       _
+  @sab    @sat    @sal    @sad    @sar    @sasp   _       _       _       _       _       @sade   _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @altn   @saen                                   @alta   _                       _       _       _       _               _
+)
+
+(deflayer like-win-alt
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       @waes   @wah    @wau    @wae    _       _       _       _       _       _       _       _       _               _       _       _       _
+  @wab    @wat    @wal    @wad    @war    @wasp   _       _       _       _       _       @wade   _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @altn   @waen                                   @alta   _                       _       _       _       _               _
+)
+
+(deflayer like-sft-win
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       @swes   @swh    @swu    @swe    _       _       _       _       _       _       _       _       _               _       _       _       _
+  @swb    @swt    @swl    @swd    @swr    @swsp   _       _       _       _       _       @swde   _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @altn   @swen                                   @alta   _                       _       _       _       _               _
+)
+
+(deflayer like-ctl-win
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       @cwes   @cwh    @cwu    @cwe    _       _       _       _       _       _       _       _       _               _       _       _       _
+  @cwb    @cwt    @cwl    @cwd    @cwr    @cwsp   _       _       _       _       _       @cwde   _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @altn   @cwen                                   @alta   _                       _       _       _       _               _
+)
+
+(deflayer like-ctl-sft
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       @cses   @csh    @csu    @cse    _       _       _       _       _       _       _       _       _               _       _       _       _
+  @csb    @cst    @csl    @csd    @csr    @cssp   _       _       _       _       _       @csde   _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @altn   @csen                                   @alta   _                       _       _       _       _               _
 )
 
 (deflayer like-ctl
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       C-esc   C-home  C-up    C-end   _       _       _       _       _       _       _       _       _               _       _       _       _
-  C-bks   C-tab   C-left  C-down  C-rght  C-spc   _       @ctln   _       _       _       C-del   _                       _       _       _       _
+  C-bks   C-tab   C-left  C-down  C-rght  C-spc   _       @ctln   @cs     @cw     @ca     C-del   _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @ctln   C-ent                                   _       _                       _       _       _       _               _
 )
@@ -551,7 +593,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       S-esc   S-home  S-up    S-end   _       _       _       _       _       _       _       _       _               _       _       _       _
-  S-bks   S-tab   S-left  S-down  S-rght  S-spc   _       _       @sftn   _       _       S-del   _                       _       _       _       _
+  S-bks   S-tab   S-left  S-down  S-rght  S-spc   _       @cs     @sftn   @sw     @sa     S-del   _                       _       _       _       _
   _       _       _       C-S-c   C-S-v   _       S-v     _       _       _       _       _               _               _       _       _
   _       _       @sftn   S-ent                                   _       _                       _       _       _       _               _
 )
@@ -560,7 +602,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       M-esc   M-home  M-up    M-end   _       _       _       _       _       _       _       _       _               _       _       _       _
-  M-bks   M-tab   M-left  M-down  M-rght  M-spc   _       _       _       @metn   _       M-del   _                       _       _       _       _
+  M-bks   M-tab   M-left  M-down  M-rght  M-spc   _       @cw     @sw     @metn   @wa     M-del   _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @metn   M-ent                                   _       _                       _       _       _       _               _
 )
@@ -595,10 +637,10 @@
 (deflayer mod_num
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       @f1-12  _       @upnv   @coleff _       _       _       @donv   _       _       _       _       _               _       _       _       _
+  _       @f1-12  _       @upnv   @gg     _       _       _       @donv   _       _       _       _       _               _       _       _       _
   bks     1       2       3       4       5       6       7       8       9       0       del     _                       _       _       _       _
   @mdfns  _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @nvsw   _                                       @nvtg2  _                       _       _       _       _               _
+  _       _       @nvsw   _                                       _       _                       _       _       _       _               _
 )
 
 (deflayer modifiernumshiftholder
@@ -650,7 +692,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       @a_1    @a_2    @a_3    @a_4    @a_5    @a_6    @a_7    @a_8    @a_9    @a_0    _       _       _                       _       _       _       _
   _       A-S-q   _       _       A-S-r   _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       @altt   _       @altd   A-f     _       _       _       _       @altfe  _       @alta   _                       _       _       _       _
+  _       @altt   _       @altd   A-f     _       _       _       _       @altfe  _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @nvsw   @aent                                   @alt    _                       _       _       _       _               _
 )
@@ -659,7 +701,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       A-1     A-2     A-3     A-4     A-5     A-6     A-7     A-8     A-9     A-0     _       _       _                       _       _       _       _
   _       A-S-q   _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       @altt   _       @altd   A-f     _       _       _       _       @alta   _       @alta   _                       _       _       _       _
+  _       @altt   _       @altd   A-f     _       _       _       _       _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @nvsw   @aent                                   _       _                       _       _       _       _               _
 )
@@ -868,7 +910,6 @@
   m3 (layer-toggle mod_active3)
   mod_shit (layer-toggle mod_shit) 
   nvtg (one-shot-press 1000 (layer-toggle mod_nvim))
-  nvtg2 (one-shot-press 1000 (layer-toggle mod_nvim_2))
   colotg (layer-toggle colemak-dh)
   nvsw (layer-switch mod_nvim) 
   colosw (layer-switch colemak-dh)
@@ -977,7 +1018,6 @@
 
   altt (multi lalt tab (layer-switch colemak-dh-rofi))
   altd (multi lalt d (layer-switch colemak-dh-rofi))
-  alta (multi lalt tab (layer-switch mod_nvim-rofi))
   altco (layer-switch colemak-dh-rofi)
   altnv (layer-switch mod_nvim-rofi)
   alts (one-shot-press 1000 (layer-toggle alt-tab))
@@ -1003,14 +1043,14 @@
   numw (multi (release-key lsft) (one-shot 1000 lmet) (one-shot-press 1000 (layer-toggle mod_num)))
 )
 
-(defalias
-  csl (multi lctl lsft left)
-  csd (multi lctl lsft down)
-  csr (multi lctl lsft rght)
-  csu (multi lctl lsft up)
-  cse (multi lctl lsft end)
-  csh (multi lctl lsft home)
-)
+;; (defalias
+;;   csl (multi lctl lsft left)
+;;   csd (multi lctl lsft down)
+;;   csr (multi lctl lsft rght)
+;;   csu (multi lctl lsft up)
+;;   cse (multi lctl lsft end)
+;;   csh (multi lctl lsft home)
+;; )
 
 (defalias
   ctab (multi lctl tab)
@@ -1022,6 +1062,7 @@
   cgn (macro c g n)
   upnv (multi up (layer-switch mod_nvim))
   donv (multi down (layer-switch mod_nvim))
+  gg (macro g g)
 )
 
 (defalias
@@ -1126,7 +1167,9 @@
   ;; ctln (layer-switch mod_ctrlc)
   winn (layer-switch mod_winc)
   altn (one-shot-press 1000 (layer-toggle mod_altc-mv-temp))
+  alta (one-shot-press 1000 (layer-toggle mod_altc-al-temp))
   altns (layer-switch mod_altc-mv)
+  altas (layer-switch mod_altc-al)
   ctln (one-shot-press 1000 (layer-toggle mod_ctlc-mv-temp))
   ctlns (layer-switch mod_ctlc-mv)
   sftn (one-shot-press 1000 (layer-toggle mod_sftc-mv-temp))
@@ -1137,6 +1180,103 @@
   lictl (one-shot-press 1000 (layer-toggle like-ctl))
   lisft (one-shot-press 1000 (layer-toggle like-sft))
   limet (one-shot-press 1000 (layer-toggle like-met))
+  ca (one-shot-press 1000 (layer-toggle like-ctl-alt))
+  sa (one-shot-press 1000 (layer-toggle like-sft-alt))
+  wa (one-shot-press 1000 (layer-toggle like-win-alt))
+  sw (one-shot-press 1000 (layer-toggle like-sft-win))
+  cw (one-shot-press 1000 (layer-toggle like-ctl-win))
+  cs (one-shot-press 1000 (layer-toggle like-ctl-sft))
 
 
+)
+
+(defalias
+  cau (multi lctl lalt up)
+  cal (multi lctl lalt left)
+  car (multi lctl lalt rght)
+  cad (multi lctl lalt down)
+  cah (multi lctl lalt home)
+  cae (multi lctl lalt end)
+  caes (multi lctl lalt esc)
+  cat (multi lctl lalt tab)
+  casp (multi lctl lalt spc)
+  cab (multi lctl lalt bks)
+  cade (multi lctl lalt del)
+  caen (multi lctl lalt ent)
+)
+
+(defalias
+  sau (multi lsft lalt up)
+  sal (multi lsft lalt left)
+  sar (multi lsft lalt rght)
+  sad (multi lsft lalt down)
+  sah (multi lsft lalt home)
+  sae (multi lsft lalt end)
+  saes (multi lsft lalt esc)
+  sat (multi lsft lalt tab)
+  sasp (multi lsft lalt spc)
+  sab (multi lsft lalt bks)
+  sade (multi lsft lalt del)
+  saen (multi lsft lalt ent)
+)
+
+(defalias
+  wau (multi lmet lalt up)
+  wal (multi lmet lalt left)
+  war (multi lmet lalt rght)
+  wad (multi lmet lalt down)
+  wah (multi lmet lalt home)
+  wae (multi lmet lalt end)
+  waes (multi lmet lalt esc)
+  wat (multi lmet lalt tab)
+  wasp (multi lmet lalt spc)
+  wab (multi lmet lalt bks)
+  wade (multi lmet lalt del)
+  waen (multi lmet lalt ent)
+)
+
+
+(defalias
+  swu (multi lsft lmet up)
+  swl (multi lsft lmet left)
+  swr (multi lsft lmet rght)
+  swd (multi lsft lmet down)
+  swh (multi lsft lmet home)
+  swe (multi lsft lmet end)
+  swes (multi lsft lmet esc)
+  swt (multi lsft lmet tab)
+  swsp (multi lsft lmet spc)
+  swb (multi lsft lmet bks)
+  swde (multi lsft lmet del)
+  swen (multi lsft lmet ent)
+)
+
+(defalias
+  cwu (multi lctl lmet up)
+  cwl (multi lctl lmet left)
+  cwr (multi lctl lmet rght)
+  cwd (multi lctl lmet down)
+  cwh (multi lctl lmet home)
+  cwe (multi lctl lmet end)
+  cwes (multi lctl lmet esc)
+  cwt (multi lctl lmet tab)
+  cwsp (multi lctl lmet spc)
+  cwb (multi lctl lmet bks)
+  cwde (multi lctl lmet del)
+  cwen (multi lctl lmet ent)
+)
+
+(defalias
+  csu (multi lctl lsft up)
+  csl (multi lctl lsft left)
+  csr (multi lctl lsft rght)
+  csd (multi lctl lsft down)
+  csh (multi lctl lsft home)
+  cse (multi lctl lsft end)
+  cses (multi lctl lsft esc)
+  cst (multi lctl lsft tab)
+  cssp (multi lctl lsft spc)
+  csb (multi lctl lsft bks)
+  csde (multi lctl lsft del)
+  csen (multi lctl lsft ent)
 )
