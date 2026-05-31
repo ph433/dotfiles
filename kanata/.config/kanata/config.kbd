@@ -318,6 +318,24 @@
   lctl    lmet    @nvsw   _                                       @nvtg   _                       _       _       _       _               _
 )
 
+(deflayer colemak-dh-shift-temp
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       S-1     S-2     S-3     S-4     S-5     S-6     S-7     S-8     S-9     S-0     _       _       _               _       _       _       _
+  _       S-q     S-w     S-f     S-p     S-b     S-j     S-l     S-u     S-y     S-;     _       _       _               _       _       _       _
+  S-bks   S-a     S-r     S-s     S-t     S-g     S-m     S-n     S-e     S-i     S-o     S-'     _                       _       _       _       _
+  @sfts   S-x     S-c     S-d     S-v     S-z     S-k     S-h     S-,     S-.     S-/     _               _               _       _       _
+  _       _       _       S-spc                                   _       _                       _       _       _       _               _
+)
+
+(deflayer colemak-dh-shift
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       S-1     S-2     S-3     S-4     S-5     S-6     S-7     S-8     S-9     S-0     _       _       _               _       _       _       _
+  _       S-q     S-w     S-f     S-p     S-b     S-j     S-l     S-u     S-y     S-;     _       _       _               _       _       _       _
+  S-bks   S-a     S-r     S-s     S-t     S-g     S-m     S-n     S-e     S-i     S-o     S-'     _                       _       _       _       _
+  @colosw S-x     S-c     S-d     S-v     S-z     S-k     S-h     S-,     S-.     S-/     _               _               _       _       _
+  _       _       @nvsw   S-spc                                   _       _                       _       _       _       _               _
+)
+
 (deflayer colemak-dh-dmenu
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
@@ -402,7 +420,8 @@
 )
 
 (defalias
-  ss (one-shot 1000 lsft) ;; Sticky Shift
+  ss (one-shot-press 1000 (layer-toggle colemak-dh-shift-temp))
+  sfts (layer-switch colemak-dh-shift)
   ;; sc (one-shot 2000 lctl) ;; Sticky Ctrl
   ;; sa (one-shot 2000 lalt) ;; Sticky Alt
   ;; sw (one-shot 2000 lmet) ;; Sticky Win (Super)
