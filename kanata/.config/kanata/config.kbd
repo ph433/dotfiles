@@ -68,18 +68,18 @@
 (deflayer mod_altc-al-temp ;;al = alphabet
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       A-q     A-w     A-f     A-p     A-b     A-j     A-l     A-u     A-y     A-;     _       _       _               _       _       _       _
-  A-bks   A-a     A-r     A-s     A-t     A-g     A-m     A-n     A-e     A-i     A-o     A-del   _                       _       _       _       _
-  _       A-x     A-c     A-d     A-v     A-z     A-k     A-h     A-,     A-.     A-/     _               _               _       _       _
+  _       A-q     A-w     A-e     A-r     A-t     A-y     A-u     A-i     A-o     A-p     _       _       _               _       _       _       _
+  A-bks   A-a     A-s     A-d     A-f     A-g     A-h     A-j     A-k     A-l     A-;     A-del   _                       _       _       _       _
+  _       A-z     A-x     A-c     A-v     A-b     A-n     A-m     A-,     A-.     A-/     _               _               _       _       _
   _       _       @altas  A-spc                                   @altas  _                       _       _       _       _               _
 )
 
 (deflayer mod_altc-al
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       A-q     A-w     A-f     A-p     A-b     A-j     A-l     A-u     A-y     A-;     _       _       _               _       _       _       _
-  A-bks   A-a     A-r     A-s     A-t     A-g     A-m     A-n     A-e     A-i     A-o     A-del   _                       _       _       _       _
-  _       A-x     A-c     A-d     A-v     A-z     A-k     A-h     A-,     A-.     A-/     _               _               _       _       _
+  _       A-q     A-w     A-e     A-r     A-t     A-y     A-u     A-i     A-o     A-p     _       _       _               _       _       _       _
+  A-bks   A-a     A-s     A-d     A-f     A-g     A-h     A-j     A-k     A-l     A-;     A-del   _                       _       _       _       _
+  _       A-z     A-x     A-c     A-v     A-b     A-n     A-m     A-,     A-.     A-/     _               _               _       _       _
   _       _       @nvsw   A-spc                                   _       _                       _       _       _       _               _
 )
 
@@ -423,7 +423,7 @@
   cgn (macro c g n)
   upnv (multi up (layer-switch mod_nvim))
   donv (multi down (layer-switch mod_nvim))
-  gg (macro g g)
+  gg (multi (macro g g) (layer-switch mod_nvim))
 )
 
 (defalias
