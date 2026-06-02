@@ -74,7 +74,7 @@
   _       _       @nvsw   _                                       _       _                       _       _       _       _               _
 )
 
-(deflayer mod_altc-al-temp ;;al = alphabet
+(deflayer mod_altc-al-temp ;;al = alphabet-qwert
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       A-q     A-w     A-e     A-r     A-t     A-y     A-u     A-i     A-o     A-p     _       _       _               _       _       _       _
@@ -90,6 +90,24 @@
   A-bks   A-a     A-s     A-d     A-f     A-g     A-h     A-j     A-k     A-l     A-;     A-del   _                       _       _       _       _
   _       A-z     A-x     A-c     A-v     A-b     A-n     A-m     A-,     A-.     A-/     _               _               _       _       _
   _       _       @nvsw   A-spc                                   _       _                       _       _       _       _               _
+)
+
+(deflayer mod_ctlc-al-temp
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       C-q     C-w     C-e     C-r     C-t     C-y     C-u     C-i     C-o     C-p     _       _       _               _       _       _       _
+  C-bks   C-a     C-s     C-d     C-f     C-g     C-h     C-j     C-k     C-l     C-;     C-del   _                       _       _       _       _
+  _       C-z     C-x     C-c     C-v     C-b     C-n     C-m     C-,     C-.     C-/     _               _               _       _       _
+  _       _       @ctlas  C-spc                                   @ctlas  _                       _       _       _       _               _
+)
+
+(deflayer mod_ctlc-al
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       C-q     C-w     C-e     C-r     C-t     C-y     C-u     C-i     C-o     C-p     _       _       _               _       _       _       _
+  C-bks   C-a     C-s     C-d     C-f     C-g     C-h     C-j     C-k     C-l     C-;     C-del   _                       _       _       _       _
+  _       C-z     C-x     C-c     C-v     C-b     C-n     C-m     C-,     C-.     C-/     _               _               _       _       _
+  _       _       @nvsw   C-spc                                   _       _                       _       _       _       _               _
 )
 
 (deflayer mod_altc-mv-temp
@@ -126,6 +144,42 @@
   @cstab  C-1     C-2     C-3     C-4     C-5     C-6     C-7     C-8     C-9     C-0     @ctab   _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @nvsw   _                                       _       _                       _       _       _       _               _
+)
+
+(deflayer mod_sftc-al-temp
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       S-q     S-w     S-e     S-r     S-t     S-y     S-u     S-i     S-o     S-p     _       _       _               _       _       _       _
+  S-bks   S-a     S-s     S-d     S-f     S-g     S-h     S-j     S-k     S-l     S-;     S-del   _                       _       _       _       _
+  _       S-z     S-x     S-c     S-v     S-b     S-n     S-m     S-,     S-.     S-/     _               _               _       _       _
+  _       _       @sftas  S-spc                                   @sftas  _                       _       _       _       _               _
+)
+
+(deflayer mod_sftc-al
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       S-q     S-w     S-e     S-r     S-t     S-y     S-u     S-i     S-o     S-p     _       _       _               _       _       _       _
+  S-bks   S-a     S-s     S-d     S-f     S-g     S-h     S-j     S-k     S-l     S-;     S-del   _                       _       _       _       _
+  _       S-z     S-x     S-c     S-v     S-b     S-n     S-m     S-,     S-.     S-/     _               _               _       _       _
+  _       _       @nvsw   S-spc                                   _       _                       _       _       _       _               _
+)
+
+(deflayer mod_metc-al-temp
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       M-q     M-w     M-e     M-r     M-t     M-y     M-u     M-i     M-o     M-p     _       _       _               _       _       _       _
+  M-bks   M-a     M-s     M-d     M-f     M-g     M-h     M-j     M-k     M-l     M-;     M-del   _                       _       _       _       _
+  _       M-z     M-x     M-c     M-v     M-b     M-n     M-m     M-,     M-.     M-/     _               _               _       _       _
+  _       _       @metas  M-spc                                   @metas  _                       _       _       _       _               _
+)
+
+(deflayer mod_metc-al
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       M-q     M-w     M-e     M-r     M-t     M-y     M-u     M-i     M-o     M-p     _       _       _               _       _       _       _
+  M-bks   M-a     M-s     M-d     M-f     M-g     M-h     M-j     M-k     M-l     M-;     M-del   _                       _       _       _       _
+  _       M-z     M-x     M-c     M-v     M-b     M-n     M-m     M-,     M-.     M-/     _               _               _       _       _
+  _       _       @nvsw   M-spc                                   _       _                       _       _       _       _               _
 )
 
 (deflayer mod_sftc-mv-temp
@@ -278,16 +332,16 @@
   _       C-esc   C-home  C-up    C-end   _       _       _       _       _       _       _       _       _               _       _       _       _
   C-bks   C-tab   C-left  C-down  C-rght  C-spc   _       @ctln   @cs     @cw     @ca     C-del   _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @ctln   C-ent                                   _       _                       _       _       _       _               _
+  _       _       @ctln   C-ent                                   @ctla   _                       _       _       _       _               _
 )
 
 (deflayer like-sft
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       S-esc   S-home  S-up    S-end   _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       S-esc   S-home  S-up    S-end   _       _       @stabi  _       @staba  _       _       _       _               _       _       _       _
   S-bks   S-tab   S-left  S-down  S-rght  S-spc   _       @cs     @sftn   @sw     @sa     S-del   _                       _       _       _       _
   _       _       _       C-S-c   C-S-v   _       S-v     _       _       _       _       _               _               _       _       _
-  _       _       @sftn   S-ent                                   _       _                       _       _       _       _               _
+  _       _       @sftn   S-ent                                   @sfta   _                       _       _       _       _               _
 )
 
 (deflayer like-met
@@ -296,24 +350,24 @@
   _       M-esc   M-home  M-up    M-end   _       _       _       _       _       _       _       _       _               _       _       _       _
   M-bks   M-tab   M-left  M-down  M-rght  M-spc   _       @cw     @sw     @metn   @wa     M-del   _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @metn   M-ent                                   _       _                       _       _       _       _               _
+  _       _       @metn   M-ent                                   @meta   _                       _       _       _       _               _
 )
 
 (deflayer mod_num-temp
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  @gg     `       -       =       S-=     _       _       _       \       _       _       _       _       _               _       _       _       _
+  @gg     `       -       =       S-=     S-\     \       [       S-9     S-0     ]       _       _       _               _       _       _       _
   bks     1       2       3       4       5       6       7       8       9       0       del     _                       _       _       _       _
-  _       [       S-9     S-0     ]       _       _       _       ,       .       /       _               _               _       _       _
-  _       _       @ns     _                                       @ns     _                       _       _       _       _               _
+  _       _       _       _       _       _       _       _       ,       .       /       _               _               _       _       _
+  _       _       @ns     spc                                     @ns     _                       _       _       _       _               _
 )
 
 (deflayer mod_num-shift-temp
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  @gg     S-`     S--     _       _       _       _       _       S-\     _       _       _       _       _               _       _       _       _
+  @gg     S-`     S--     _       _       _       _       S-[     _       _       S-]     _       _       _               _       _       _       _
   bks     S-1     S-2     S-3     S-4     S-5     S-6     S-7     S-8     S-9     S-0     del     _                       _       _       _       _
-  _       S-[     _       _       S-]     _       _       _       S-,     S-.     S-/     _               _               _       _       _
+  _       _       _       _       _       _       _       _       S-,     S-.     S-/     _               _               _       _       _
   _       _       _       _                                       _       _                       _       _       _       _               _
 ) 
 
@@ -539,12 +593,21 @@
   alta (one-shot-press 1000 (layer-toggle mod_altc-al-temp))
   altns (layer-switch mod_altc-mv)
   altas (layer-switch mod_altc-al)
+
   ctln (one-shot-press 1000 (layer-toggle mod_ctlc-mv-temp))
+  ctla (one-shot-press 1000 (layer-toggle mod_ctlc-al-temp))
   ctlns (layer-switch mod_ctlc-mv)
+  ctlas (layer-switch mod_ctlc-al)
+
   sftn (one-shot-press 1000 (layer-toggle mod_sftc-mv-temp))
+  sfta (one-shot-press 1000 (layer-toggle mod_sftc-al-temp))
   sftns (layer-switch mod_sftc-mv)
+  sftas (layer-switch mod_sftc-al)
+
   metn (one-shot-press 1000 (layer-toggle mod_metc-mv-temp))
+  meta (one-shot-press 1000 (layer-toggle mod_metc-al-temp))
   metns (layer-switch mod_metc-mv)
+  metas (layer-switch mod_metc-al)
 
   lialt (one-shot-press 1000 (layer-toggle like-alt))
   lictl (one-shot-press 1000 (layer-toggle like-ctl))
