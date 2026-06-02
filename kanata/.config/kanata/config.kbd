@@ -35,7 +35,7 @@
   @tabii  esc     home    up      end     @pra2   _       @tabi   @tabii  @taba   _       _       _       _               _       _       _       _
   @osl_d  tab     left    down    rght    spc     @fd     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
   @sropt  C-z     _       C-c     C-v     _       v       A-c     A-v     C-a     C-y     @cmd            _               _       _       _
-  _       _       @nvsw   ent                             @colet          _                       _       caps    _       _               _
+  _       _       _       ent                             @nvsw           _                       _       caps    _       _               _
 )
 
 (deflayer pre-right-arrow2-temp
@@ -304,8 +304,8 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @gg     `       -       =       S-=     _       _       _       \       _       _       _       _       _               _       _       _       _
   bks     1       2       3       4       5       6       7       8       9       0       del     _                       _       _       _       _
-  @ns     [       S-9     S-0     ]       _       _       _       ,       .       /       _               _               _       _       _
-  _       _       @nvsw   _                                       @ns     _                       _       _       _       _               _
+  _       [       S-9     S-0     ]       _       _       _       ,       .       /       _               _               _       _       _
+  _       _       @ns     _                                       @ns     _                       _       _       _       _               _
 )
 
 (deflayer mod_num-shift-temp
@@ -315,7 +315,7 @@
   bks     S-1     S-2     S-3     S-4     S-5     S-6     S-7     S-8     S-9     S-0     del     _                       _       _       _       _
   _       S-[     _       _       S-]     _       _       _       S-,     S-.     S-/     _               _               _       _       _
   _       _       _       _                                       _       _                       _       _       _       _               _
-) ;; nss = num shift switch
+) 
 
 (deflayer nvim_delete
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
@@ -326,14 +326,13 @@
   _       _       _       _                                       _       _                       _       _       _       _               _
 )
 
-
 (deflayer colemak-dh
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @tabe   q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
   bks     a       r       s       t       g       m       n       e       i       o       '       _                       _       _       _       _
   @ss     x       c       d       v       z       k       h       ,       .       /       @ss             _               _       _       _
-  lctl    lmet    @nvswt  _                                       @numt   _                       _       _       _       _               _
+  lctl    lmet    @numt   _                                       @nvswt  _                       _       _       _       _               _
 )
 
 (deflayer colemak-dh-temp
