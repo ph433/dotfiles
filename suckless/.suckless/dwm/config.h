@@ -6,7 +6,6 @@
 #include "patch/killunsel.c" /* NHÉT VÀO ĐÂY */
 
 /* See LICENSE file for copyright and license details. */
-
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
@@ -73,6 +72,13 @@ static const char *flameshotcmd[] = { "flameshot", "gui", NULL };
 static const char *firefoxcmd[]   = { "firefox", NULL };
 static const char *youtubecmd[]   = { "firefox", "https://www.youtube.com", NULL };
 
+static const char *upvol[]   = { "amixer", "set", "Master", "5%+",     NULL };
+static const char *downvol[] = { "amixer", "set", "Master", "5%-",     NULL };
+static const char *mutevol[] = { "amixer", "set", "Master", "toggle",  NULL };
+static const char *dim_brightness[]   = { "brightnessctl", "set", "5%-", NULL };
+static const char *raise_brightness[] = { "brightnessctl", "set", "+5%", NULL };
+
+
 void
 viewnext(const Arg *arg) {
     if (selmon->tagset[selmon->seltags] & (1 << (LENGTH(tags) - 1)))
@@ -135,7 +141,13 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_7,                      6)
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
-	{ MODKEY|ShiftMask,             XK_Escape,      quit,           {0} },
+	{ MODKEY|ShiftMask,             XK_Escape, quit,           {0} },
+	/* CHỈNH ÂM LƯỢNG BẰNG WIN + DẤU TRỪ / DẤU BẰNG */
+        { Mod4Mask,                     XK_minus,  spawn,          {.v = downvol } },
+        { Mod4Mask|ShiftMask,           XK_equal,  spawn,          {.v = upvol   } },
+	{ Mod4Mask,                     XK_equal,  spawn,          {.v = mutevol } },
+	{ ControlMask,                  XK_minus,  spawn,          {.v = dim_brightness } },
+        { ControlMask|ShiftMask,        XK_equal,  spawn,          {.v = raise_brightness } },
 };
 
 /* button definitions */
