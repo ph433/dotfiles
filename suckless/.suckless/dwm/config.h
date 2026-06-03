@@ -1,9 +1,9 @@
 /* Khai báo cấu trúc hàm focusdir */
 #include "patch/focusdir.h"
-
+#include "patch/killunsel.h" /* NHÉT VÀO ĐÂY */
 /* Nhúng thẳng code thuật toán vào dwm */
 #include "patch/focusdir.c"
-
+#include "patch/killunsel.c" /* NHÉT VÀO ĐÂY */
 
 /* See LICENSE file for copyright and license details. */
 
@@ -109,7 +109,9 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_Right,  viewnext,       {0} },
 	{ MODKEY,                       XK_Left,   viewprev,       {0} },
 	{ Mod4Mask,                     XK_Escape, killclient,     {0} },
-	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
+	{ Mod4Mask,                     XK_q,      killunsel,      {0} }, // Win + Q: Giữ lại 1 thằng, giết xung quanh
+        { Mod4Mask,                     XK_Escape, killclient,     {0} }, // Win + Esc: Giết đúng 1 thằng đang chọn
+        { Mod4Mask|ShiftMask,           XK_q,      killws,         {0} }, // Win + Shift + Q: Combo gộp (Win Q + Win Esc) giết sạch bách
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
