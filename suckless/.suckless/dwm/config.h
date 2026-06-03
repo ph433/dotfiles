@@ -1,3 +1,10 @@
+/* Khai báo cấu trúc hàm focusdir */
+#include "patch/focusdir.h"
+
+/* Nhúng thẳng code thuật toán vào dwm */
+#include "patch/focusdir.c"
+
+
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
@@ -60,9 +67,27 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
-static const char *termcmd[]  = { "st", NULL };
+static const char *termcmd[]  = { "alacritty", NULL };
 static const char *copyqcmd[] = { "copyq", "toggle", NULL };
 static const char *flameshotcmd[] = { "flameshot", "gui", NULL };
+static const char *firefoxcmd[]   = { "firefox", NULL };
+static const char *youtubecmd[]   = { "firefox", "https://www.youtube.com", NULL };
+
+void
+viewnext(const Arg *arg) {
+    if (selmon->tagset[selmon->seltags] & (1 << (LENGTH(tags) - 1)))
+        view(&(Arg){ .ui = 1 });
+    else
+        view(&(Arg){ .ui = selmon->tagset[selmon->seltags] << 1 });
+}
+
+void
+viewprev(const Arg *arg) {
+    if (selmon->tagset[selmon->seltags] & 1)
+        view(&(Arg){ .ui = 1 << (LENGTH(tags) - 1) });
+    else
+        view(&(Arg){ .ui = selmon->tagset[selmon->seltags] >> 1 });
+}
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -70,6 +95,8 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
         { MODKEY,                       XK_v,      spawn,          {.v = copyqcmd } },
         { MODKEY,                       XK_c,      spawn,          {.v = flameshotcmd } },
+	{ Mod4Mask,                     XK_f,      spawn,          {.v = firefoxcmd } },
+	{ Mod4Mask|ShiftMask,           XK_y,      spawn,          {.v = youtubecmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
@@ -79,7 +106,9 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
 	{ MODKEY|ShiftMask,             XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
-	{ MODKEY|ShiftMask,             XK_c,      killclient,     {0} },
+	{ MODKEY,                       XK_Right,  viewnext,       {0} },
+	{ MODKEY,                       XK_Left,   viewprev,       {0} },
+	{ Mod4Mask,                     XK_Escape, killclient,     {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
@@ -91,6 +120,10 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
+        { Mod4Mask,                     XK_Left,   focusdir,       {.i = 0 } }, // Trái
+        { Mod4Mask,                     XK_Right,  focusdir,       {.i = 1 } }, // Phải
+        { Mod4Mask,                     XK_Up,     focusdir,       {.i = 2 } }, // Lên
+        { Mod4Mask,                     XK_Down,   focusdir,       {.i = 3 } }, // Xuống
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
@@ -100,7 +133,7 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_7,                      6)
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
-	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+	{ MODKEY|ShiftMask,             XK_Escape,      quit,           {0} },
 };
 
 /* button definitions */
