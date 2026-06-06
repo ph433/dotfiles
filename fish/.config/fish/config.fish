@@ -89,13 +89,20 @@ if status is-interactive
 	alias g="git"
 	alias v="nvim"
 	set -x BAT_THEME "Dracula"
+
 	# set -gx FZF_DEFAULT_OPTS '--layout=reverse --border --preview-window=bottom:50%:hsplit:wrap'
 	# fzf_configure_bindings --directory=\cf --history=\cj --variables=\cv --git_log=\cl --git_status=\cs --processes=\cp
 	fzf_configure_bindings_custom --directory=\ct --find_files=\cf --history=\cj --variables=\cv --git_log=\cl --git_status=\cs --processes=\cp
 	# bind \ct __fzf_search_directory_custom
 	# bind \cf __fzf_find_files_custom
-	set -gx fzf_fd_opts --type=d --hidden --follow --exclude=.git
-	set -gx fzf_configure_options --layout=reverse --border --preview-window=bottom:50%
+	set -gx fzf_fd_opts --type=d --hidden --follow --exclude=.git --color=always
+	set -gx LS_COLORS (cat ~/.config/fish/.ls_colors)
+	# # Ép TẤT CẢ các tính năng fzf preview thư mục dùng eza lên màu + icon
+	set -gx fzf_preview_dir_cmd "eza --all --icons=always --color=always --grid"
+	#
+	# # Ép TẤT CẢ các tính năng fzf preview file dùng bat lên màu True Color
+	# set -gx fzf_preview_file_cmd "bat --style=numbers --color=always --line-range :100"
+
 	# Nạp phím tắt chính chủ từ nguồn cài đặt fzf
 	# if test -f ~/.fzf/shell/key-bindings.fish
 	# 	source ~/.fzf/shell/key-bindings.fish
