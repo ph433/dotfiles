@@ -1,6 +1,6 @@
 function __fzf_find_files_custom
     # Dùng fd quét file phẳng (--type f), hiện đồ ẩn, né thư mục rác .git
-    set -l file (fd --type f --hidden --exclude .git | fzf \
+    set -l file (fd --type f --hidden --follow --exclude .git | fzf \
         --layout=reverse \
         --border \
         --preview-window="bottom:50%" \
