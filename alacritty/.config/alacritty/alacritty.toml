@@ -1,0 +1,79 @@
+[window]
+# Chỉnh khoảng cách chữ với mép cửa sổ cho thoáng
+# Độ mờ của cửa sổ (0.0 là trong suốt, 1.0 là đặc)
+opacity = 1.0
+title = "Alacritty"
+padding = { x = 0, y = 0 } # Chỉ giữ lại dòng này để khít màn hình
+# dynamic_padding = true
+# decorations = "None"
+[font]
+size = 9.0
+# Lưu ý: Nếu bạn chưa cài JetBrainsMono Nerd Font, Alacritty sẽ dùng font mặc định
+normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }
+
+[cursor]
+# Hình dáng con trỏ (Block là hình khối, Underline là gạch chân)
+style = "Block"
+
+# =====================================================================
+# HỆ THỐNG PHÍM TẮT ĐIỀU KHIỂN - ALACRITTY MAPPED KEYS
+# =====================================================================
+
+# 1. Bấm F11 để bật/tắt chế độ Toàn màn hình (Fullscreen)
+[[keyboard.bindings]]
+key = "F11"
+action = "ToggleFullscreen"
+
+# 2. Bấm Windows + Space để bật/tắt chế độ Vi-Mode (Copy Mode)
+[[keyboard.bindings]]
+key = "Escape"
+mods = "Control"
+action = "ToggleViMode"
+
+[[keyboard.bindings]]
+key = "C"
+mods = "Control"
+mode = "Vi"
+action = "Copy"
+
+# =====================================================================
+# ÉP NÚT ESCAPE THOÁT VI-MODE (ESC TO EXIT VI-MODE)
+# =====================================================================
+
+# Bấm đúng nút Escape khi đang ở Vi-Mode để bay thẳng về Shell gõ lệnh
+[[keyboard.bindings]]
+key = "Escape"
+mode = "Vi"
+action = "ToggleViMode"
+
+# =====================================================================
+# ĐỘ CỤM PHÍM CTRL + MŨI TÊN TRONG VI-MODE
+# =====================================================================
+
+# 1. Ctrl + Mũi tên Trái -> Nhảy lùi lại một từ (Giống phím 'b')
+[[keyboard.bindings]]
+key = "Left"
+mods = "Control"
+mode = "Vi"
+action = "WordLeft"
+
+# 2. Ctrl + Mũi tên Phải -> Nhảy tiến lên một từ (Giống phím 'w')
+[[keyboard.bindings]]
+key = "Right"
+mods = "Control"
+mode = "Vi"
+action = "WordRight"
+
+# 3. Ctrl + Mũi tên Lên -> Cuộn màn hình lên nửa trang (Giống Ctrl + b)
+[[keyboard.bindings]]
+key = "Up"
+mods = "Control"
+mode = "Vi"
+action = "ScrollPageUp"
+
+# 4. Ctrl + Mũi tên Xuống -> Cuộn màn hình xuống nửa trang (Giống Ctrl + f)
+[[keyboard.bindings]]
+key = "Down"
+mods = "Control"
+mode = "Vi"
+action = "ScrollPageDown"
