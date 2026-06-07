@@ -1,3 +1,15 @@
+-- ==========================================================================
+-- 2. ĐỊNH DẠNG FILE & ĐIỀU HƯỚNG CẤU HÌNH KANATA
+-- ==========================================================================
+vim.filetype.add({ extension = { kbd = "kanata" } })
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "kanata",
+  callback = function()
+    vim.bo.commentstring = ";; %s"
+  end,
+})
+
 -- Tự động lưu đường dẫn file vừa mở vào file log hệ thống
 vim.api.nvim_create_autocmd("BufReadPost", {
   group = vim.api.nvim_create_augroup("LogRecentFiles", { clear = true }),
