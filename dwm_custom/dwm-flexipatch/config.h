@@ -478,7 +478,7 @@ static char tagicons[][NUMTAGS][MAX_TAGLEN] =
 static char *tagicons[][NUMTAGS] =
 #endif // NAMETAG_PATCH
 {
-	[DEFAULT_TAGS]        = { "1", "2", "3", "4", "5", "6", "7", "8", "9" },
+	[DEFAULT_TAGS]        = { "", "", "", "", "", "", "", "", "⚙" },
 	[ALTERNATIVE_TAGS]    = { "A", "B", "C", "D", "E", "F", "G", "H", "I" },
 	[ALT_TAGS_DECORATION] = { "<1>", "<2>", "<3>", "<4>", "<5>", "<6>", "<7>", "<8>", "<9>" },
 };
@@ -908,8 +908,15 @@ static const char *dmenucmd[] = {
 	#endif // BAR_DMENUMATCHTOP_PATCH
 	NULL
 };
-static const char *termcmd[]  = { "st", NULL };
+static const char *termcmd[]  = { "alacritty", NULL };
 
+static const char *upvol[]           = { "amixer", "set", "Master", "5%+",    NULL };
+static const char *downvol[]         = { "amixer", "set", "Master", "5%-",    NULL };
+static const char *mutevol[]         = { "amixer", "set", "Master", "toggle", NULL };
+static const char *dim_brightness[]   = { "brightnessctl", "set", "5%-",       NULL };
+static const char *raise_brightness[] = { "brightnessctl", "set", "5%+",       NULL }; 
+
+/* Mẹo nhỏ: Sửa quả "+5%" của thằng độ sáng thành "5%+" cho nó đồng bộ phom với amixer ghen */
 #if BAR_STATUSCMD_PATCH
 #if BAR_DWMBLOCKS_PATCH
 /* This defines the name of the executable that handles the bar (used for signalling purposes) */
@@ -1042,11 +1049,16 @@ ResourcePref resources[] = {
 
 static const Key keys[] = {
 	/* modifier                     key            function                argument */
+	{ Mod4Mask,                     XK_minus,      spawn,                  {.v = downvol } },
+        { Mod4Mask|ShiftMask,           XK_equal,      spawn,                  {.v = upvol   } },
+	{ Mod4Mask,                     XK_equal,      spawn,                  {.v = mutevol } },
+	{ ControlMask,                  XK_minus,      spawn,                  {.v = dim_brightness } },
+        { ControlMask|ShiftMask,        XK_equal,      spawn,                  {.v = raise_brightness } },
 	#if KEYMODES_PATCH
 	{ MODKEY,                       XK_Escape,     setkeymode,             {.ui = COMMANDMODE} },
 	#endif // KEYMODES_PATCH
-	{ MODKEY,                       XK_p,          spawn,                  {.v = dmenucmd } },
-	{ MODKEY|ShiftMask,             XK_Return,     spawn,                  {.v = termcmd } },
+	{ MODKEY,                       XK_BackSpace,  spawn,                  {.v = dmenucmd } },
+	{ MODKEY,                       XK_Return,     spawn,                  {.v = termcmd } },
 	#if RIODRAW_PATCH
 	{ MODKEY|ControlMask,           XK_p,          riospawnsync,           {.v = dmenucmd } },
 	{ MODKEY|ControlMask,           XK_Return,     riospawn,               {.v = termcmd } },
@@ -1070,10 +1082,10 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_k,          focusstack,             {.i = -1 } },
 	#endif // STACKER_PATCH
 	#if FOCUSDIR_PATCH
-	{ MODKEY,                       XK_Left,       focusdir,               {.i = 0 } }, // left
-	{ MODKEY,                       XK_Right,      focusdir,               {.i = 1 } }, // right
-	{ MODKEY,                       XK_Up,         focusdir,               {.i = 2 } }, // up
-	{ MODKEY,                       XK_Down,       focusdir,               {.i = 3 } }, // down
+	{ Mod4Mask,                       XK_Left,       focusdir,               {.i = 0 } }, // left
+	{ Mod4Mask,                       XK_Right,      focusdir,               {.i = 1 } }, // right
+	{ Mod4Mask,                       XK_Up,         focusdir,               {.i = 2 } }, // up
+	{ Mod4Mask,                       XK_Down,       focusdir,               {.i = 3 } }, // down
 	#endif // FOCUSDIR_PATCH
 	#if PLACEDIR_PATCH
 	{ MODKEY|ControlMask,           XK_Left,       placedir,               {.i = 0 } }, // left
@@ -1184,8 +1196,8 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_Left,       shiftview,              { .i = +1 } },
 	#endif // SHIFTVIEW_PATCH
 	#if SHIFTVIEW_CLIENTS_PATCH
-	{ MODKEY|Mod4Mask,              XK_Tab,        shiftviewclients,       { .i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_backslash,  shiftviewclients,       { .i = +1 } },
+	{ MODKEY|Mod4Mask,              XK_Right,      shiftviewclients,       { .i = -1 } },
+	{ MODKEY|Mod4Mask,              XK_Left,       shiftviewclients,       { .i = +1 } },
 	#endif // SHIFTVIEW_CLIENTS_PATCH
 	#if SHIFTBOTH_PATCH
 	{ MODKEY|ControlMask,           XK_Left,       shiftboth,              { .i = -1 } }, // note keybinding conflict with focusadjacenttag tagandviewtoleft placedir
@@ -1203,12 +1215,12 @@ static const Key keys[] = {
 	#endif // BAR_WINTITLEACTIONS_PATCH
 	{ MODKEY|ShiftMask,             XK_c,          killclient,             {0} },
 	#if KILLUNSEL_PATCH
-	{ MODKEY|ShiftMask,             XK_x,          killunsel,              {0} },
+	{ Mod4Mask,                     XK_q,          killunsel,              {0} },
 	#endif // KILLUNSEL_PATCH
 	#if SELFRESTART_PATCH
 	{ MODKEY|ShiftMask,             XK_r,          self_restart,           {0} },
 	#endif // SELFRESTART_PATCH
-	{ MODKEY|ShiftMask,             XK_q,          quit,                   {0} },
+	{ MODKEY|ShiftMask,             XK_Escape,     quit,                   {0} },
 	#if RESTARTSIG_PATCH
 	{ MODKEY|ControlMask|ShiftMask, XK_q,          quit,                   {1} },
 	#endif // RESTARTSIG_PATCH
@@ -1224,10 +1236,26 @@ static const Key keys[] = {
 	#if XRDB_PATCH || XRESOURCES_PATCH
 	{ MODKEY|ShiftMask,             XK_F5,         xrdb,                   {.v = NULL } },
 	#endif // XRDB_PATCH | XRESOURCES_PATCH
-	{ MODKEY,                       XK_t,          setlayout,              {.v = &layouts[0]} },
-	{ MODKEY,                       XK_f,          setlayout,              {.v = &layouts[1]} },
-	{ MODKEY,                       XK_m,          setlayout,              {.v = &layouts[2]} },
-	#if COLUMNS_LAYOUT
+	/* modifier                     key            function                argument */
+
+	// Win + 0: Trả về layout mặc định Tile []= (layouts[0])
+	{ Mod4Mask,                     XK_0,          setlayout,              {.v = &layouts[0]} },
+
+	// Win + 1: Bật chế độ thả nổi tự do Floating ><> (layouts[1])
+	{ Mod4Mask,                     XK_1,          setlayout,              {.v = &layouts[1]} },
+
+	// Win + 2: Bật vòng xoắn ốc tỷ lệ vàng Fibonacci Dwindle [\\] (layouts[11])
+	{ Mod4Mask,                     XK_2,          setlayout,              {.v = &layouts[11]} },
+
+	// Win + 3: Bật chế độ Boong Tàu Deck [D] (layouts[5])
+	{ Mod4Mask,                     XK_3,          setlayout,              {.v = &layouts[5]} },
+
+	// Win + 4: Bật chế độ Lưới Không Khoảng Trống Gapless Grid ::: (layouts[10])
+	{ Mod4Mask,                     XK_4,          setlayout,              {.v = &layouts[10]} },
+
+	// Win + 5: Bật chế độ Tâm Điểm Giữa Màn Centered Master >M> (layouts[4])
+	{ Mod4Mask,                     XK_5,          setlayout,              {.v = &layouts[4]} },
+        #if COLUMNS_LAYOUT
 	{ MODKEY,                       XK_c,          setlayout,              {.v = &layouts[3]} },
 	#endif // COLUMNS_LAYOUT
 	#if FLEXTILE_DELUXE_LAYOUT
@@ -1438,8 +1466,8 @@ static const Key keys[] = {
 	{ MODKEY|ControlMask,           XK_numbersign, setborderpx,            {.i = 0 } },
 	#endif // SETBORDERPX_PATCH
 	#if CYCLELAYOUTS_PATCH
-	{ MODKEY|ControlMask,           XK_comma,      cyclelayout,            {.i = -1 } },
-	{ MODKEY|ControlMask,           XK_period,     cyclelayout,            {.i = +1 } },
+	{ Mod4Mask,                     XK_Tab,        cyclelayout,            {.i = +1 } },
+        { Mod4Mask|ShiftMask,           XK_Tab,        cyclelayout,            {.i = -1 } },
 	#endif // CYCLELAYOUTS_PATCH
 	#if MPDCONTROL_PATCH
 	{ MODKEY,                       XK_F1,         mpdchange,              {.i = -1} },
