@@ -77,3 +77,31 @@ key = "Down"
 mods = "Control"
 mode = "Vi"
 action = "ScrollPageDown"
+
+# Phát 1: Bấm Ctrl + V để kích hoạt chế độ bôi đen (Toggle Normal Visual Mode)
+[[keyboard.bindings]]
+key = "V"
+mods = "Control"
+mode = "Vi"
+action = "ToggleNormalSelection"
+
+# Phát 2: Tiện tay cuộn phốc một phát lên đỉnh đầu lịch sử để hốt sạch văn bản
+[[keyboard.bindings]]
+key = "V"
+mods = "Control"
+mode = "Vi"
+action = "ScrollToTop"
+
+# 1. Ctrl + Home -> Bay phốc phát lên dòng ĐẦU TIÊN của lịch sử (Giống phím 'g')
+[[keyboard.bindings]]
+key = "Home"
+mods = "Control"
+mode = "Vi"
+action = "ScrollToTop"
+
+# 2. Ctrl + End -> Lao vèo phát xuống dòng CUỐI CÙNG dưới đáy (Giống phím 'G')
+[[keyboard.bindings]]
+key = "End"
+mods = "Control"
+mode = "Vi"
+action = "ScrollToBottom"
