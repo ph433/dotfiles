@@ -1,23 +1,21 @@
 return {
-  "folke/tokyonight.nvim",
+  "maxmx03/dracula.nvim", -- 🎯 CHUẨN PHOM Ở ĐÂY (Thêm số 3 vào đuôi)
   lazy = false,
   priority = 1000,
   config = function()
-    require("tokyonight").setup({
-      style = "night",
-      transparent = false,
-      styles = {
-        sidebars = "dark",
-        floats = "dark",
+    require("dracula").setup({
+      colors = {
+        bg = "#000000",          -- Ép nền đen xì nguyên khối đúng gu ông
+        bg_dark = "#000000",     
+        bg_float = "#000000",    
+        bg_sidebar = "#000000",  
+        statusline_bg = "#000000",
       },
-      on_colors = function(colors)
-        colors.bg = "#000000"
-        colors.bg_dark = "#000000"
-        colors.bg_float = "#000000"
-        colors.bg_sidebar = "#000000"
-        colors.bg_statusline = "#000000"
-      end,
+      show_end_of_buffer = false, 
+      transparent_bg = false,
+      lualine_bg_color = "#000000",
     })
-    vim.cmd[[colorscheme tokyonight]]
+    
+    vim.cmd[[colorscheme dracula]]
   end,
 }
