@@ -1,4 +1,4 @@
-function __fzf_search_directory_custom --description "Search the current directory (Custom version with 100% height and specialized preview)"
+function __fzf_search_directory_custom --description "Search the current directory (Absolute output on select)"
     # Sử dụng fd trực tiếp để quét nhanh
     set -f fd_cmd (command -v fdfind || command -v fd  || echo "fd")
     set -f --append fd_cmd --color=always $fzf_fd_opts
@@ -14,15 +14,31 @@ function __fzf_search_directory_custom --description "Search the current directo
         set --append fd_cmd --base-directory=$unescaped_exp_token
         # 🎯 SỬA CHỖ 1: Đổi sang hàm custom và sửa lại cách bao bọc nháy đơn để FZF truyền tham số chính xác
         set --prepend fzf_arguments --prompt="Directory $unescaped_exp_token> " --preview "_fzf_preview_dir_custom '$unescaped_exp_token{}'"
-        set -f file_paths_selected $unescaped_exp_token($fd_cmd 2>/dev/null | _fzf_wrapper $fzf_arguments)
+        set -f file_paths_selected ($fd_cmd 2>/dev/null | _fzf_wrapper $fzf_arguments)
+        
+        # Vì có --base-directory nên ta phải bù lại phần tiền tố $unescaped_exp_token vào trước kết quả
+        if test $status -eq 0 && test -n "$file_paths_selected"
+            set -f temp_paths
+            for path in $file_paths_selected
+                set --append temp_paths "$unescaped_exp_token$path"
+            end
+            set file_paths_selected $temp_paths
+        end
     else
         # 🎯 CHỖ 2 ĐÃ ĐÚNG: Giữ nguyên con hàng chuyên dụng của bạn
         set --prepend fzf_arguments --prompt="Directory> " --query="$unescaped_exp_token" --preview '_fzf_preview_dir_custom {}'
         set -f file_paths_selected ($fd_cmd 2>/dev/null | _fzf_wrapper $fzf_arguments)
     end
 
-    if test $status -eq 0
-        commandline --current-token --replace -- (string escape -- $file_paths_selected | string join ' ')
+    # 🎯 ĐOẠN BIẾN ĐỔI THÀNH ĐƯỜNG DẪN TUYỆT ĐỐI KHI IN RA
+    if test $status -eq 0 && test -n "$file_paths_selected"
+        set -f absolute_paths
+        for path in $file_paths_selected
+            # Dùng realpath để dịch bất kỳ đường dẫn tương đối nào thành tuyệt đối
+            set --append absolute_paths (realpath -- $path)
+        end
+        
+        commandline --current-token --replace -- (string escape -- $absolute_paths | string join ' ')
     end
 
     commandline --function repaint
