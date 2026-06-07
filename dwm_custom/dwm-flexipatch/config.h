@@ -516,23 +516,27 @@ static const int tagrows = 2;
  * the patches you enable.
  */
 static const Rule rules[] = {
-	/* xprop(1):
-	 *	WM_CLASS(STRING) = instance, class
-	 *	WM_NAME(STRING) = title
-	 *	WM_WINDOW_ROLE(STRING) = role
-	 *	_NET_WM_WINDOW_TYPE(ATOM) = wintype
-	 */
-	RULE(.wintype = WTYPE "DIALOG", .isfloating = 1)
-	RULE(.wintype = WTYPE "UTILITY", .isfloating = 1)
-	RULE(.wintype = WTYPE "TOOLBAR", .isfloating = 1)
-	RULE(.wintype = WTYPE "SPLASH", .isfloating = 1)
-	RULE(.class = "Gimp", .tags = 1 << 4)
-	RULE(.class = "Firefox", .tags = 1 << 7)
-	#if RENAMED_SCRATCHPADS_PATCH
-	RULE(.instance = "spterm", .scratchkey = 's', .isfloating = 1)
-	#elif SCRATCHPADS_PATCH
-	RULE(.instance = "spterm", .tags = SPTAG(0), .isfloating = 1)
-	#endif // SCRATCHPADS_PATCH
+    /* xprop(1):
+     * WM_CLASS(STRING) = instance, class
+     * WM_NAME(STRING) = title
+     * WM_WINDOW_ROLE(STRING) = role
+     * _NET_WM_WINDOW_TYPE(ATOM) = wintype
+     */
+    RULE(.wintype = WTYPE "DIALOG", .isfloating = 1)
+    RULE(.wintype = WTYPE "UTILITY", .isfloating = 1)
+    RULE(.wintype = WTYPE "TOOLBAR", .isfloating = 1)
+    RULE(.wintype = WTYPE "SPLASH", .isfloating = 1)
+    RULE(.class = "Gimp", .tags = 1 << 4)
+    RULE(.class = "Firefox", .tags = 1 << 8) // Đã đồng bộ sang tag số 9 (1 << 8) theo block dưới của bạn
+    
+    /* Bỏ CopyQ vào đây ghen */
+    RULE(.class = "copyq", .isfloating = 1)
+
+    #if RENAMED_SCRATCHPADS_PATCH
+    RULE(.instance = "spterm", .scratchkey = 's', .isfloating = 1)
+    #elif SCRATCHPADS_PATCH
+    RULE(.instance = "spterm", .tags = SPTAG(0), .isfloating = 1)
+    #endif // SCRATCHPADS_PATCH
 };
 
 #if MONITOR_RULES_PATCH
@@ -911,6 +915,10 @@ static const char *dmenucmd[] = {
 	NULL
 };
 static const char *termcmd[]  = { "alacritty", NULL };
+static const char *copyqcmd[] = { "copyq", "toggle", NULL };
+static const char *flameshotcmd[] = { "flameshot", "gui", NULL };
+static const char *firefoxcmd[]   = { "firefox", NULL };
+static const char *youtubecmd[]   = { "firefox", "https://www.youtube.com", NULL };
 
 static const char *upvol[]           = { "amixer", "set", "Master", "5%+",    NULL };
 static const char *downvol[]         = { "amixer", "set", "Master", "5%-",    NULL };
@@ -1061,6 +1069,10 @@ static const Key keys[] = {
 	#endif // KEYMODES_PATCH
 	{ MODKEY,                       XK_BackSpace,  spawn,                  {.v = dmenucmd } },
 	{ MODKEY,                       XK_Return,     spawn,                  {.v = termcmd } },
+        { MODKEY,                       XK_v,          spawn,                  {.v = copyqcmd } },
+        { MODKEY,                       XK_c,          spawn,                  {.v = flameshotcmd } },
+	{ Mod4Mask,                     XK_f,          spawn,                  {.v = firefoxcmd } },
+	{ Mod4Mask|ShiftMask,           XK_y,          spawn,                  {.v = youtubecmd } },
 	#if RIODRAW_PATCH
 	{ MODKEY|ControlMask,           XK_p,          riospawnsync,           {.v = dmenucmd } },
 	{ MODKEY|ControlMask,           XK_Return,     riospawn,               {.v = termcmd } },
