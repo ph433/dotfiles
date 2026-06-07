@@ -755,50 +755,52 @@ static const Layout layouts[] = {
 };
 #else
 static const Layout layouts[] = {
-	/* symbol     arrange function */
-	#if TILE_LAYOUT
-	{ "[]=",      tile },    /* first entry is default */
-	#endif
-	{ "><>",      NULL },    /* no layout function means floating behavior */
-	#if MONOCLE_LAYOUT
-	{ "[M]",      monocle },
-	#endif
-	#if BSTACK_LAYOUT
-	{ "TTT",      bstack },
-	#endif
-	#if BSTACKHORIZ_LAYOUT
-	{ "===",      bstackhoriz },
-	#endif
-	#if CENTEREDMASTER_LAYOUT
-	{ "|M|",      centeredmaster },
-	#endif
-	#if CENTEREDFLOATINGMASTER_LAYOUT
-	{ ">M>",      centeredfloatingmaster },
-	#endif
-	#if COLUMNS_LAYOUT
-	{ "|||",      col },
-	#endif
-	#if DECK_LAYOUT
-	{ "[D]",      deck },
-	#endif
-	#if FIBONACCI_SPIRAL_LAYOUT
-	{ "(@)",      spiral },
-	#endif
-	#if FIBONACCI_DWINDLE_LAYOUT
-	{ "[\\]",     dwindle },
-	#endif
-	#if GRIDMODE_LAYOUT
-	{ "HHH",      grid },
-	#endif
-	#if HORIZGRID_LAYOUT
-	{ "---",      horizgrid },
-	#endif
-	#if GAPPLESSGRID_LAYOUT
-	{ ":::",      gaplessgrid },
-	#endif
-	#if NROWGRID_LAYOUT
-	{ "###",      nrowgrid },
-	#endif
+    /* symbol     arrange function */
+    #if TILE_LAYOUT
+    { "[]=",      tile },    /* VỊ TRÍ 0 - Mặc định */
+    #endif
+    { "><>",      NULL },    /* VỊ TRÍ 1 - Thả nổi Floating */
+    
+    #if FIBONACCI_DWINDLE_LAYOUT
+    { "[\\]",     dwindle }, /* VỊ TRÍ 2 - Đưa Dwindle lên đây */
+    #endif
+    #if FIBONACCI_SPIRAL_LAYOUT
+    { "(@)",      spiral },  /* VỊ TRÍ 3 - Đưa Spiral lên đây */
+    #endif
+
+    #if MONOCLE_LAYOUT
+    { "[M]",      monocle }, /* VỊ TRÍ 4 - Monocle lùi xuống số 4 */
+    #endif
+    #if BSTACK_LAYOUT
+    { "TTT",      bstack },
+    #endif
+    #if BSTACKHORIZ_LAYOUT
+    { "===",      bstackhoriz },
+    #endif
+    #if CENTEREDMASTER_LAYOUT
+    { "|M|",      centeredmaster },
+    #endif
+    #if CENTEREDFLOATINGMASTER_LAYOUT
+    { ">M>",      centeredfloatingmaster },
+    #endif
+    #if COLUMNS_LAYOUT
+    { "|||",      col },
+    #endif
+    #if DECK_LAYOUT
+    { "[D]",      deck },
+    #endif
+    #if GRIDMODE_LAYOUT
+    { "HHH",      grid },
+    #endif
+    #if HORIZGRID_LAYOUT
+    { "---",      horizgrid },
+    #endif
+    #if GAPPLESSGRID_LAYOUT
+    { ":::",      gaplessgrid },
+    #endif
+    #if NROWGRID_LAYOUT
+    { "###",      nrowgrid },
+    #endif
 };
 #endif // FLEXTILE_DELUXE_LAYOUT
 
@@ -1192,12 +1194,12 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask|ControlMask, XK_Right,      shifttagclients,        { .i = +1 } },
 	#endif // SHIFTTAGCLIENTS_PATCH
 	#if SHIFTVIEW_PATCH
-	{ MODKEY,                       XK_Right,      shiftview,              { .i = -1 } },
-	{ MODKEY,                       XK_Left,       shiftview,              { .i = +1 } },
+	{ MODKEY,                       XK_Left,       shiftview,              { .i = -1 } },
+	{ MODKEY,                       XK_Right,      shiftview,              { .i = +1 } },
 	#endif // SHIFTVIEW_PATCH
 	#if SHIFTVIEW_CLIENTS_PATCH
-	{ MODKEY|Mod4Mask,              XK_Right,      shiftviewclients,       { .i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_Left,       shiftviewclients,       { .i = +1 } },
+	{ MODKEY|Mod4Mask,              XK_Left,       shiftviewclients,       { .i = -1 } },
+	{ MODKEY|Mod4Mask,              XK_Right,      shiftviewclients,       { .i = +1 } },
 	#endif // SHIFTVIEW_CLIENTS_PATCH
 	#if SHIFTBOTH_PATCH
 	{ MODKEY|ControlMask,           XK_Left,       shiftboth,              { .i = -1 } }, // note keybinding conflict with focusadjacenttag tagandviewtoleft placedir
@@ -1213,7 +1215,7 @@ static const Key keys[] = {
 	{ MODKEY|Mod1Mask,              XK_j,          focusstack,             {.i = +2 } }, // The +/-2 allows focusstack to also focus on hidden
 	{ MODKEY|Mod1Mask,              XK_k,          focusstack,             {.i = -2 } }, // i.e. minimized clients.
 	#endif // BAR_WINTITLEACTIONS_PATCH
-	{ MODKEY|ShiftMask,             XK_c,          killclient,             {0} },
+	{ Mod4Mask,                     XK_Escape,     killclient,             {0} }, // Win + Esc: Giết đúng 1 thằng đang chọn
 	#if KILLUNSEL_PATCH
 	{ Mod4Mask,                     XK_q,          killunsel,              {0} },
 	#endif // KILLUNSEL_PATCH
@@ -1239,22 +1241,25 @@ static const Key keys[] = {
 	/* modifier                     key            function                argument */
 
 	// Win + 0: Trả về layout mặc định Tile []= (layouts[0])
-	{ Mod4Mask,                     XK_0,          setlayout,              {.v = &layouts[0]} },
+	{ Mod4Mask,                    XK_0,          setlayout,               {.v = &layouts[0]} },
 
 	// Win + 1: Bật chế độ thả nổi tự do Floating ><> (layouts[1])
-	{ Mod4Mask,                     XK_1,          setlayout,              {.v = &layouts[1]} },
+	{ Mod4Mask,                    XK_1,          setlayout,               {.v = &layouts[1]} },
 
-	// Win + 2: Bật vòng xoắn ốc tỷ lệ vàng Fibonacci Dwindle [\\] (layouts[11])
-	{ Mod4Mask,                     XK_2,          setlayout,              {.v = &layouts[11]} },
+	// Win + 2: Bật vòng xoắn ốc Fibonacci Dwindle [\\] (layouts[2] gốc chuẩn chỉ)
+	{ Mod4Mask,                    XK_2,          setlayout,               {.v = &layouts[2]} },
 
-	// Win + 3: Bật chế độ Boong Tàu Deck [D] (layouts[5])
-	{ Mod4Mask,                     XK_3,          setlayout,              {.v = &layouts[5]} },
+	// Win + 3: Bật vòng xoắn ốc Fibonacci Spiral (@) (layouts[3] gốc chuẩn chỉ)
+	{ Mod4Mask,                    XK_3,          setlayout,               {.v = &layouts[3]} },
 
-	// Win + 4: Bật chế độ Lưới Không Khoảng Trống Gapless Grid ::: (layouts[10])
-	{ Mod4Mask,                     XK_4,          setlayout,              {.v = &layouts[10]} },
-
-	// Win + 5: Bật chế độ Tâm Điểm Giữa Màn Centered Master >M> (layouts[4])
-	{ Mod4Mask,                     XK_5,          setlayout,              {.v = &layouts[4]} },
+	// // Win + 3: Bật chế độ Boong Tàu Deck [D] (layouts[5])
+	// { Mod4Mask,                     XK_3,          setlayout,              {.v = &layouts[5]} },
+	//
+	// // Win + 4: Bật chế độ Lưới Không Khoảng Trống Gapless Grid ::: (layouts[10])
+	// { Mod4Mask,                     XK_4,          setlayout,              {.v = &layouts[10]} },
+	//
+	// // Win + 5: Bật chế độ Tâm Điểm Giữa Màn Centered Master >M> (layouts[4])
+	// { Mod4Mask,                     XK_5,          setlayout,              {.v = &layouts[4]} },
         #if COLUMNS_LAYOUT
 	{ MODKEY,                       XK_c,          setlayout,              {.v = &layouts[3]} },
 	#endif // COLUMNS_LAYOUT
