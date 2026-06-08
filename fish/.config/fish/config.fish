@@ -85,21 +85,24 @@ if status is-interactive
 	# if type -q zoxide
 	# 	alias cd="z"
 	# end
+	# Gõ 'lt' để hiện cây thư mục bằng eza, có màu sắc, icon và đẩy thư mục lên đầu
+	alias lt="eza --tree --level=2 --icons --group-directories-first"
 
+	# Gõ 'lta' để hiện cây thư mục bốc sạch cả file ẩn kịch trần
+	alias lta="eza --tree --level=2 --icons --group-directories-first -a"
 	alias g="git"
 	alias v="nvim"
 	set -x BAT_THEME "Dracula"
 
 	# set -gx FZF_DEFAULT_OPTS '--layout=reverse --border --preview-window=bottom:50%:hsplit:wrap'
 	# fzf_configure_bindings --directory=\cf --history=\cj --variables=\cv --git_log=\cl --git_status=\cs --processes=\cp
-	fzf_configure_bindings_custom --directory=\ct --find_files=\cf --history=\cj --variables=\cv --git_log=\cl --git_status=\cs --processes=\cp
+	fzf_configure_bindings_custom --directory=\cx --find_files=\cy --history=\cj --variables=\cv --git_log=\cl --git_status=\ca --processes=\cp --recent=ctrl-shift-y
 	# bind \ct __fzf_search_directory_custom
 	# bind \cf __fzf_find_files_custom
 	set -gx fzf_fd_opts --type=d --hidden --follow --exclude=.git --color=always
 	set -gx LS_COLORS (cat ~/.config/fish/.ls_colors)
 	# # Ép TẤT CẢ các tính năng fzf preview thư mục dùng eza lên màu + icon
-	set -gx fzf_preview_dir_cmd "eza --all --icons=always --color=always --grid"
-	#
+	# set -gx fzf_preview_dir_cmd "eza --all --icons=always --color=always --grid"
 	# # Ép TẤT CẢ các tính năng fzf preview file dùng bat lên màu True Color
 	# set -gx fzf_preview_file_cmd "bat --style=numbers --color=always --line-range :100"
 
@@ -119,4 +122,60 @@ if status is-interactive
 	if type -q starship
 		starship init fish | source
 	end
+end
+
+function glog --description "FZF Duyệt Git Log và Preview Commit bằng Delta"
+    git log --graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" | fzf \
+        --ansi \
+        --no-sort \
+        --reverse \
+        --header="[Git Log] Chọn commit để xem chi tiết" \
+        --preview="git show --color=always {2} | delta --side-by-side --width=\$FZF_PREVIEW_COLUMNS"
+end
+
+function gdiff --description "FZF Git Diff Preview với Delta"
+    # Kiểm tra xem có đang ở trong repo Git không
+    git rev-parse --is-inside-work-tree >/dev/null 2>&1
+    if test $status -ne 0
+        echo "Lỗi: Thư mục này không phải là một Git Repository!"
+        return 1
+    end
+
+    # Gọi FZF lấy danh sách file thay đổi, preview bằng git diff + delta
+    git status -s | fzf \
+        --no-sort \
+        --reverse \
+        --tiebreak=index \
+        --header="[Git Diff] Chọn file để soi code thay đổi" \
+        --preview="git diff --color=always {2} | delta --width=\$FZF_PREVIEW_COLUMNS" \
+        --bind="ctrl-m:execute(nvim -d {2}; clear)" # Sửa dòng này: Thay +refresh bằng ; clear
+end
+
+function y
+    if test (count $argv) -eq 0
+        echo "Nhập tên bài hát nữa bạn ơi! Ví dụ: y lofi chill"
+        return
+    end
+
+    echo "🔍 Đang bốc dữ liệu trực tiếp từ YouTube bằng yt-dlp..."
+
+    # Dùng yt-dlp quét 10 kết quả đầu tiên, chỉ lấy Tiêu đề và URL để hiện menu fzf
+    yt-dlp "ytsearch10:$argv" \
+        --flat-playlist \
+        --dump-json \
+        --extractor-args "youtube:player_client=android" 2>/dev/null \
+        | jq -r '.title + " | " + .url' \
+        | fzf --ansi --reverse --prompt="🎵 Chọn bài để quẩy: " \
+        | read -l selected
+
+    if test -n "$selected"
+        # Bốc tách link URL ở cuối chuỗi ra để ném cho mpv phát audio
+        set -l video_url (echo $selected | awk -F ' | ' '{print $NF}')
+        set -l video_title (echo $selected | awk -F ' | ' '{$NF=""; print $0}')
+        
+        echo "▶️ Đang phát bài: $video_title"
+        mpv --no-video "$video_url"
+    else
+        echo "Đã hủy chọn bài."
+    end
 end
