@@ -159,9 +159,10 @@ function y
 
     echo "🔍 Đang bốc dữ liệu trực tiếp từ YouTube bằng yt-dlp..."
 
-    # 1. Quét 20 kết quả như ảnh
-    # 2. Dùng jq lấy thêm channel, duration, view_count
-    # 3. Dùng awk để format thời gian, thêm dấu phẩy cho lượt xem và căn lề các cột
+    # 1. yt-dlp lấy data
+    # 2. jq parse thành TSV
+    # 3. awk format dữ liệu và chèn các cột "|" ngăn cách bằng Tab (OFS='\t')
+    # 4. column -t căn đều các cột theo Tab
     yt-dlp "ytsearch20:$argv" \
         --flat-playlist \
         --dump-json \
@@ -173,8 +174,7 @@ function y
             (.view_count // 0), 
             .url
           ] | @tsv' \
-        | awk -F '\t' '
-            # Hàm thêm dấu phẩy cho lượt xem (ví dụ: 1234567 -> 1,234,567)
+        | awk -F '\t' -v OFS='\t' '
             function commas(n) {
                 if (n == 0 || n == "null") return "N/A"
                 r = ""
@@ -185,31 +185,30 @@ function y
                 return n r
             }
             {
-                # Cắt ngắn tiêu đề và tên kênh nếu quá dài để không bị vỡ khung
                 title = length($1) > 55 ? substr($1, 1, 52) "..." : $1
                 channel = length($2) > 20 ? substr($2, 1, 17) "..." : $2
                 
-                # Chuyển đổi giây sang định dạng phút:giây (MM:SS)
                 m = int($3 / 60)
                 s = int($3 % 60)
                 time = sprintf("%d:%02d", m, s)
                 
                 views = commas($4)
                 
-                # Căn lề: %-55s nghĩa là chuỗi chiếm 55 ký tự, căn trái
-                printf "%-55s | %-20s | %-5s | %-12s | %s\n", title, channel, time, views, $5
+                # In ra các trường cách nhau bởi Tab, tách riêng dấu "|" thành các cột độc lập để dễ căn lề
+                print title, "|", channel, "|", time, "|", views, "|", $5
             }
         ' \
+        | column -t -s (printf '\t') \
         | fzf --ansi --reverse --prompt="🎵 Chọn bài để quẩy: " \
         | read -l selected
 
     if test -n "$selected"
-        # Bốc tách URL (ở vị trí cuối cùng)
+        # Lấy URL ở cột cuối cùng
         set -l video_url (echo $selected | awk '{print $NF}')
         
-        # Bốc tách Tiêu đề (lấy nội dung trước dấu | đầu tiên) và xóa khoảng trắng thừa
+        # Lấy tiêu đề trước dấu "|" đầu tiên và xóa khoảng trắng 2 đầu
         set -l video_title (echo $selected | awk -F '\\|' '{print $1}')
-        set video_title (string trim -r "$video_title")
+        set video_title (string trim "$video_title")
         
         echo "▶️ Đang phát bài: $video_title"
         mpv --no-video "$video_url"
