@@ -1,4 +1,4 @@
-function __fzf_file_recent --description "Bốc danh sách file vừa làm việc trong Neovim ra FZF với tốc độ bàn thờ"
+function __fzf_file_recent --description "Bốc danh sách file Frecency ra FZF với tốc độ bàn thờ"
     set -l log_file "$HOME/.cache/yazi/file_recent.log"
 
     if not test -f "$log_file"
@@ -6,20 +6,22 @@ function __fzf_file_recent --description "Bốc danh sách file vừa làm việ
         return
     end
 
-    # Đọc trực tiếp file log (luôn có sẵn), loại bỏ các file lỡ bị xóa vật lý, rồi ném vào FZF
-    set -l file (cat "$log_file" | while read -l line
+    # Đọc log, lọc file tồn tại vật lý, đưa cả ĐIỂM SỐ vào fzf để hiển thị trực quan
+    # Dùng awk để đảo ngược: fzf nhìn thấy đường dẫn để preview, nhưng hiển thị thì thấy cả điểm
+    set -l selected (cat "$log_file" | while read -l score line
         if test -f "$line"
-            echo "$line"
+            echo "$score $line"
         end
     end | fzf \
         --layout=reverse \
         --border \
-        --prompt="File Recent (Neovim History)> " \
+        --prompt="Frecency Files (Neovim History)> " \
         --preview-window="bottom:50%" \
-        --preview 'bat --style=numbers --color=always --line-range :100 {}')
+        --preview 'bat --style=numbers --color=always --line-range :100 (string replace -r "^\d+\s+" "" {})')
 
-    # Nếu chọn được file, ném thẳng đường dẫn file đó vào vị trí con trỏ chuột trên Terminal
-    if test -n "$file"
+    # Nếu chọn được file, lọc bỏ điểm số chỉ lấy đường dẫn đưa vào dòng lệnh
+    if test -n "$selected"
+        set -l file (string replace -r "^\d+\s+" "" "$selected")
         commandline -i (string escape $file)
     end
     commandline -f repaint
