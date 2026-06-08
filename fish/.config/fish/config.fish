@@ -159,19 +159,57 @@ function y
 
     echo "🔍 Đang bốc dữ liệu trực tiếp từ YouTube bằng yt-dlp..."
 
-    # Dùng yt-dlp quét 10 kết quả đầu tiên, chỉ lấy Tiêu đề và URL để hiện menu fzf
-    yt-dlp "ytsearch10:$argv" \
+    # 1. Quét 20 kết quả như ảnh
+    # 2. Dùng jq lấy thêm channel, duration, view_count
+    # 3. Dùng awk để format thời gian, thêm dấu phẩy cho lượt xem và căn lề các cột
+    yt-dlp "ytsearch20:$argv" \
         --flat-playlist \
         --dump-json \
         --extractor-args "youtube:player_client=android" 2>/dev/null \
-        | jq -r '.title + " | " + .url' \
+        | jq -r '[
+            (.title // "Không rõ"), 
+            (.channel // .uploader // "Không rõ"), 
+            (.duration // 0), 
+            (.view_count // 0), 
+            .url
+          ] | @tsv' \
+        | awk -F '\t' '
+            # Hàm thêm dấu phẩy cho lượt xem (ví dụ: 1234567 -> 1,234,567)
+            function commas(n) {
+                if (n == 0 || n == "null") return "N/A"
+                r = ""
+                while(length(n) > 3) {
+                    r = "," substr(n, length(n)-2) r
+                    n = substr(n, 1, length(n)-3)
+                }
+                return n r
+            }
+            {
+                # Cắt ngắn tiêu đề và tên kênh nếu quá dài để không bị vỡ khung
+                title = length($1) > 55 ? substr($1, 1, 52) "..." : $1
+                channel = length($2) > 20 ? substr($2, 1, 17) "..." : $2
+                
+                # Chuyển đổi giây sang định dạng phút:giây (MM:SS)
+                m = int($3 / 60)
+                s = int($3 % 60)
+                time = sprintf("%d:%02d", m, s)
+                
+                views = commas($4)
+                
+                # Căn lề: %-55s nghĩa là chuỗi chiếm 55 ký tự, căn trái
+                printf "%-55s | %-20s | %-5s | %-12s | %s\n", title, channel, time, views, $5
+            }
+        ' \
         | fzf --ansi --reverse --prompt="🎵 Chọn bài để quẩy: " \
         | read -l selected
 
     if test -n "$selected"
-        # Bốc tách link URL ở cuối chuỗi ra để ném cho mpv phát audio
-        set -l video_url (echo $selected | awk -F ' | ' '{print $NF}')
-        set -l video_title (echo $selected | awk -F ' | ' '{$NF=""; print $0}')
+        # Bốc tách URL (ở vị trí cuối cùng)
+        set -l video_url (echo $selected | awk '{print $NF}')
+        
+        # Bốc tách Tiêu đề (lấy nội dung trước dấu | đầu tiên) và xóa khoảng trắng thừa
+        set -l video_title (echo $selected | awk -F '\\|' '{print $1}')
+        set video_title (string trim -r "$video_title")
         
         echo "▶️ Đang phát bài: $video_title"
         mpv --no-video "$video_url"
