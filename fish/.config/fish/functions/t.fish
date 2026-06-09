@@ -31,8 +31,7 @@ function t
         functions -e _t_cleanup 2>/dev/null
     end
 
-    # 🛠 FIX DEADLOCK: Giao việc kết nối I/O của FIFO cho `sh` xử lý ngầm. 
-    # Thay sleep infinity bằng tail -f /dev/null để tương thích đa nền tảng hơn.
+    # 🛠 FIX DEADLOCK
     sh -c '
         tail -f /dev/null > "$1" &
         p1=$!
@@ -44,7 +43,7 @@ function t
     set -g _t_sleep_pid $t_sleep_pid
     set -g _t_ueberzug_pid $t_ub_pid
 
-    # 2. Tạo script Preview
+    # 2. Tạo script Preview (Chỉ tập trung vẽ Thumbnail kích thước lớn)
     set -l preview_script "$_t_tmp_dir/preview.sh"
     echo '#!/usr/bin/env bash
 line="$1"
@@ -57,38 +56,34 @@ y=${FZF_PREVIEW_TOP:-0}
 w=${FZF_PREVIEW_COLUMNS:-0}
 h=${FZF_PREVIEW_LINES:-0}
 
-C_CYAN="\033[1;36m"
-C_BLUE="\033[1;34m"
-C_YELLOW="\033[1;33m"
-C_MAG="\033[1;35m"
-C_GREEN="\033[1;32m"
-C_RESET="\033[0m"
-
-echo "" # Padding top
-
 if [[ -n "$vid_id" && -p "'$FIFO_UEBERZUG'" ]]; then
     img_path="'$_t_tmp_dir'/${vid_id}.jpg"
     current_vid_file="'$_t_tmp_dir'/current_vid"
     echo "$vid_id" > "$current_vid_file"
 
+    # Đọc thông tin hiển thị dạng text ở phía trên ảnh trong khung preview
     TAB=$(printf "\t")
     IFS="$TAB" read -r m_id m_title m_channel m_time m_views < <(grep -m 1 "^${vid_id}" "'$_t_tmp_dir'/metadata.tsv" 2>/dev/null)
 
-    if [[ -n "$m_title" ]]; then
-        echo -e " ${C_CYAN}▶ Tiêu đề:${C_RESET} ${m_title}"
-        echo -e " ${C_YELLOW}👤 Kênh:   ${C_RESET} ${m_channel:-N/A}"
-        echo -e " ${C_MAG}👁 Lượt xem:${C_RESET} ${m_views:-N/A} views"
-        echo -e " ${C_BLUE}⏱ Thời lượng:${C_RESET} ${m_time:-N/A}"
-        echo -e " ${C_GREEN}🔗 Link:   ${C_RESET} youtu.be/${vid_id}"
-    else
-        echo -e " ${C_CYAN}Đang tải dữ liệu...${C_RESET}"
-    fi
+    C_CYAN="\033[1;36m"
+    C_YELLOW="\033[1;33m"
+    C_RESET="\033[0m"
 
-    img_h=$(( h - 2 ))
+    if [[ -n "$m_title" ]]; then
+        echo -e " ${C_CYAN}▶ Channel:${C_RESET} ${m_channel:-N/A}  |  ${C_YELLOW}👁 Views:${C_RESET} ${m_views:-N/A}"
+    else
+        echo -e " ${C_CYAN}Đang tải thumbnail chất lượng cao...${C_RESET}"
+    fi
+    echo "" # Tạo khoảng trống ngăn cách dòng chữ và ảnh
+
+    # Tính toán kích thước phóng to tối đa theo chiều rộng khung preview dưới
+    img_h=$(( h - 3 )) 
     if [[ $img_h -lt 5 ]]; then img_h=5; fi
-    img_w=$(( img_h * 7 / 2 )) 
-    img_x=$(( x + w - img_w - 2 ))
-    img_y=$(( y + 1 ))             
+    
+    # Tỷ lệ 16:9 phóng to vừa vặn bề ngang khung hình fzf
+    img_w=$(( w - 4 ))
+    img_x=$(( x + 2 ))
+    img_y=$(( y + 2 ))             
 
     draw_image() {
         if [[ "$(cat "$current_vid_file" 2>/dev/null)" == "$vid_id" ]]; then
@@ -115,7 +110,7 @@ fi
 
     echo "⚡ Đang truy xuất siêu tốc từ YouTube..."
 
-    # 3. Bộ lọc fzf tối giản
+    # 3. Bộ lọc fzf (Đẩy thông tin chi tiết: Thời lượng, Kênh lên nửa trên)
     set -l selected (yt-dlp "ytsearch10:$search_query" \
         --flat-playlist \
         --playlist-end 10 \
@@ -156,21 +151,24 @@ fi
 
                 system("(curl -s -f \"https://img.youtube.com/vi/" id "/maxresdefault.jpg\" -o \"" tmp "/" id ".jpg\" || curl -s -f \"https://img.youtube.com/vi/" id "/hqdefault.jpg\" -o \"" tmp "/" id ".jpg\") >/dev/null 2>&1 &")
 
-                title_trunc = length($1) > 65 ? substr($1, 1, 62) "..." : $1
+                # Cắt gọn bớt tiêu đề để nhường chỗ hiển thị tên Kênh và Thời lượng ở nửa trên
+                title_trunc = length($1) > 45 ? substr($1, 1, 42) "..." : $1
+                channel_trunc = length(channel_full) > 20 ? substr(channel_full, 1, 17) "..." : channel_full
                 
-                print title_trunc "\t|\t" time "\t" $5
+                # Cấu trúc hiển thị dòng tìm kiếm: Tiêu đề | Kênh | Thời lượng
+                print title_trunc "\t[\033[1;33m" channel_trunc "\033[0m]\t\033[1;36m" time "\033[0m\t" $5
             }
         ' \
         | column -t -s (printf '\t') \
         | env FIFO_UEBERZUG="$FIFO_UEBERZUG" fzf --ansi --reverse \
-            --prompt="🎵 Chọn bài bằng Lên/Xuống: " \
+            --prompt="🎵 Tìm kiếm: " \
+            --header="Danh sách bài hát kết quả (Tiêu đề | Kênh | Thời lượng):" \
             --preview "$preview_script {}" \
-            --preview-window "down:35%:border-top" \
+            --preview-window "down:60%:border-top" \
             --with-nth="1..-2" \
-            --info=hidden)
+            --info=inline)
 
     # 4. Dọn dẹp thủ công NGAY SAU KHI fzf TẮT
-    # 🛠 FIX DEADLOCK: Cô lập việc ghi FIFO khi dọn dẹp khỏi Fish
     if test -p "$FIFO_UEBERZUG"
         sh -c 'printf "{\"action\": \"remove\", \"identifier\": \"fzf_preview\"}\n" > "$1" 2>/dev/null &' _ "$FIFO_UEBERZUG"
     end
@@ -185,7 +183,7 @@ fi
     # 5. Xử lý chơi nhạc
     if test -n "$selected"
         set -l video_url (echo $selected | awk '{print $NF}')
-        set -l video_title (echo $selected | awk -F '\\|' '{print $1}' | xargs)
+        set -l video_title (echo $selected | awk -F '  +' '{print $1}' | xargs)
         
         echo "▶️ Đang phát bài: $video_title"
         mpv --no-video "$video_url"
@@ -198,3 +196,4 @@ fi
         rm -rf "$_t_tmp_dir"
     end
 end
+
