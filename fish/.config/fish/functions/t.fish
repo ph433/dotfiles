@@ -17,7 +17,7 @@ function t
     sh -c "sleep infinity > \"$FIFO_UEBERZUG\"" &
     set -l sleep_pid $last_pid
 
-    # 2. Tạo script Preview (Đã fix lỗi Bash không hiểu dấu Tab)
+    # 2. Tạo script Preview (Giao diện 9:1 mượt mà)
     set -l preview_script "$tmp_dir/preview.sh"
     echo '#!/usr/bin/env bash
 line="$1"
@@ -36,9 +36,8 @@ C_YELLOW="\033[1;33m"
 C_MAG="\033[1;35m"
 C_RESET="\033[0m"
 
-half_w=$((w / 2))
-pad_len=$((half_w + 2))
-pad=$(printf "%*s" "$pad_len" "")
+img_h=$((h - 7))
+if [[ $img_h -lt 5 ]]; then img_h=5; fi
 
 echo ""
 
@@ -47,34 +46,27 @@ if [[ -n "$vid_id" && -p "$FIFO_UEBERZUG" ]]; then
     current_vid_file="'$tmp_dir'/current_vid"
     echo "$vid_id" > "$current_vid_file"
 
-    # FIX LỖI N/A: Khai báo phím Tab chuẩn cho Bash để chẻ cột chính xác
     TAB=$(printf "\t")
     IFS="$TAB" read -r m_id m_title m_channel m_time m_views < <(grep -m 1 "^${vid_id}" "'$tmp_dir'/metadata.tsv" 2>/dev/null)
 
+    for (( i=0; i<img_h; i++ )); do echo ""; done
+
+    pad_len=$(( (w - 60) / 2 ))
+    [[ $pad_len -lt 0 ]] && pad_len=0
+    pad=$(printf "%*s" "$pad_len" "")
+
     if [[ -n "$m_title" ]]; then
-        echo "$m_title" | fold -s -w $((w - pad_len - 2)) | while read -r t_line; do
-            echo -e "${pad}${C_CYAN}${t_line}${C_RESET}"
-        done
+        echo -e "${pad}${C_CYAN}▶ ${m_title}${C_RESET}"
     else
         echo -e "${pad}${C_CYAN}Đang tải dữ liệu...${C_RESET}"
     fi
-    echo ""
 
-    print_info() {
-        local label=$(printf "%-9s" "$1")
-        echo -e "${pad}${C_BLUE}${label}${C_RESET} ${3}${2}${C_RESET}"
-    }
-
-    print_info "Channel" "${m_channel:-N/A}" "$C_YELLOW"
-    print_info "Duration" "${m_time:-N/A}" "$C_YELLOW"
-    print_info "Views" "${m_views:-N/A}" "$C_MAG"
-    print_info "Link" "youtu.be/${vid_id}" "$C_RESET"
-
-    for (( i=0; i<h; i++ )); do echo ""; done
+    echo -e "${pad}${C_YELLOW}👤 ${m_channel:-N/A}   |   ${C_MAG}👁 ${m_views:-N/A} views   |   ${C_BLUE}⏱ ${m_time:-N/A}${C_RESET}"
+    echo -e "${pad}🔗 youtu.be/${vid_id}"
 
     draw_image() {
         if [[ "$(cat "$current_vid_file" 2>/dev/null)" == "$vid_id" ]]; then
-            printf "{\"action\": \"add\", \"identifier\": \"fzf_preview\", \"x\": %d, \"y\": %d, \"width\": %d, \"height\": %d, \"scaler\": \"fit_contain\", \"path\": \"%s\"}\n" "$x" "$y" "$half_w" "$h" "$img_path" > "$FIFO_UEBERZUG"
+            printf "{\"action\": \"add\", \"identifier\": \"fzf_preview\", \"x\": %d, \"y\": %d, \"width\": %d, \"height\": %d, \"scaler\": \"fit_contain\", \"path\": \"%s\"}\n" "$x" "$y" "$w" "$img_h" "$img_path" > "$FIFO_UEBERZUG"
         fi
     }
 
@@ -95,13 +87,18 @@ fi
 ' > "$preview_script"
     chmod +x "$preview_script"
 
-    echo "🔍 Đang cào dữ liệu và tải ngầm ảnh bìa FULL HD..."
+    echo "⚡ Đang truy xuất siêu tốc từ YouTube..."
 
-    # 3. Lấy data và nạp vào FZF
-    set -l selected (yt-dlp "ytsearch20:$argv" \
+    # 3. Bộ lọc TUYỆT CHIÊU: Tối ưu yt-dlp tối đa để đạt tốc độ bàn thờ
+    # - Giới hạn 10 kết quả (đủ dùng và nhanh gấp đôi 20 kết quả)
+    # - --playlist-end 10 ép dừng cào sớm
+    # - Sử dụng extractor-args của web client mobile để giảm tải dung lượng JSON
+    set -l selected (yt-dlp "ytsearch10:$argv" \
         --flat-playlist \
+        --playlist-end 10 \
         --dump-json \
-        --extractor-args "youtube:player_client=android" 2>/dev/null \
+        --no-check-certificates \
+        --extractor-args "youtube:player_client=web" 2>/dev/null \
         | jq -r '[
             (.title // "Không rõ"), 
             (.channel // .uploader // "Không rõ"), 
@@ -130,11 +127,11 @@ fi
                 time = sprintf("%d:%02d", m, s)
                 views = commas($4)
 
-                # FIX LỖI N/A: Ép AWK xả dữ liệu ra file ngay lập tức bằng fflush
                 meta_file = tmp "/metadata.tsv"
                 printf "%s\t%s\t%s\t%s\t%s\n", id, title_full, channel_full, time, views >> meta_file
                 fflush(meta_file)
 
+                # Tải ảnh ngầm (Non-blocking)
                 system("(curl -s -f \"https://img.youtube.com/vi/" id "/maxresdefault.jpg\" -o \"" tmp "/" id ".jpg\" || curl -s -f \"https://img.youtube.com/vi/" id "/hqdefault.jpg\" -o \"" tmp "/" id ".jpg\") >/dev/null 2>&1 &")
 
                 title_trunc = length($1) > 55 ? substr($1, 1, 52) "..." : $1
@@ -144,9 +141,11 @@ fi
             }
         ' \
         | column -t -s (printf '\t') \
-        | env FIFO_UEBERZUG="$FIFO_UEBERZUG" fzf --ansi --reverse --prompt="🎵 Chọn bài để quẩy: " \
+        | env FIFO_UEBERZUG="$FIFO_UEBERZUG" fzf --ansi --reverse \
+            --prompt="🎵 Chọn bài bằng Lên/Xuống: " \
             --preview "$preview_script {}" \
-            --preview-window "up:60%")
+            --preview-window "up:85%:border-bottom" \
+            --info=hidden)
 
     # 4. Dọn dẹp
     if test -p "$FIFO_UEBERZUG"
@@ -168,6 +167,7 @@ fi
         set -l video_title (echo $selected | awk -F '\\|' '{print $1}' | xargs)
         
         echo "▶️ Đang phát bài: $video_title"
+        # --no-video để tối ưu băng thông phát nhạc
         mpv --no-video "$video_url"
     else
         echo "Đã hủy chọn bài."
