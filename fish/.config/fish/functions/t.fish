@@ -51,42 +51,24 @@ line="$1"
 url=$(echo "$line" | awk "{print \$NF}")
 vid_id=$(echo "$url" | sed -E "s/.*(v=|youtu\.be\/)([^&?]+).*/\2/")
 
-x=${FZF_PREVIEW_LEFT:-0}
-y=${FZF_PREVIEW_TOP:-0}
-w=${FZF_PREVIEW_COLUMNS:-0}
-h=${FZF_PREVIEW_LINES:-0}
+# Thêm < /dev/tty để ép tput đọc kích thước terminal thực tế
+cols=$(tput cols < /dev/tty)
+lines=$(tput lines < /dev/tty)
 
 if [[ -n "$vid_id" && -p "'$FIFO_UEBERZUG'" ]]; then
     img_path="'$_t_tmp_dir'/${vid_id}.jpg"
     current_vid_file="'$_t_tmp_dir'/current_vid"
     echo "$vid_id" > "$current_vid_file"
 
-    # Đọc thông tin hiển thị dạng text ở phía trên ảnh trong khung preview
-    TAB=$(printf "\t")
-    IFS="$TAB" read -r m_id m_title m_channel m_time m_views < <(grep -m 1 "^${vid_id}" "'$_t_tmp_dir'/metadata.tsv" 2>/dev/null)
-
-    C_CYAN="\033[1;36m"
-    C_YELLOW="\033[1;33m"
-    C_RESET="\033[0m"
-
-    if [[ -n "$m_title" ]]; then
-        echo -e " ${C_CYAN}▶ Channel:${C_RESET} ${m_channel:-N/A}  |  ${C_YELLOW}👁 Views:${C_RESET} ${m_views:-N/A}"
-    else
-        echo -e " ${C_CYAN}Đang tải thumbnail chất lượng cao...${C_RESET}"
-    fi
-    echo "" # Tạo khoảng trống ngăn cách dòng chữ và ảnh
-
-    # Tính toán kích thước phóng to tối đa theo chiều rộng khung preview dưới
-    img_h=$(( h - 3 )) 
-    if [[ $img_h -lt 5 ]]; then img_h=5; fi
-    
-    # Tỷ lệ 16:9 phóng to vừa vặn bề ngang khung hình fzf
-    img_w=$(( w - 4 ))
-    img_x=$(( x + 2 ))
-    img_y=$(( y + 2 ))             
+    # Ưu tiên lấy tọa độ chính xác tuyệt đối do chính fzf cung cấp. 
+    # Fallback tự tính nếu fzf ở phiên bản quá cũ.
+    img_x=${FZF_PREVIEW_LEFT:-0}
+    img_y=${FZF_PREVIEW_TOP:-$(( lines - (lines * 45 / 100) ))}
+    img_w=${FZF_PREVIEW_COLUMNS:-$cols}
+    img_h=${FZF_PREVIEW_LINES:-$(( (lines * 45 / 100) - 1 ))}
 
     draw_image() {
-        if [[ "$(cat "$current_vid_file" 2>/dev/null)" == "$vid_id" ]]; then
+    if [[ "$(cat "$current_vid_file" 2>/dev/null)" == "$vid_id" ]]; then
             printf "{\"action\": \"add\", \"identifier\": \"fzf_preview\", \"x\": %d, \"y\": %d, \"width\": %d, \"height\": %d, \"scaler\": \"fit_contain\", \"path\": \"%s\"}\n" "$img_x" "$img_y" "$img_w" "$img_h" "$img_path" > "'$FIFO_UEBERZUG'" &
         fi
     }
@@ -111,9 +93,9 @@ fi
     echo "⚡ Đang truy xuất siêu tốc từ YouTube..."
 
     # 3. Bộ lọc fzf (Đẩy thông tin chi tiết: Thời lượng, Kênh lên nửa trên)
-    set -l selected (yt-dlp "ytsearch10:$search_query" \
+    set -l selected (yt-dlp "ytsearch20:$search_query" \
         --flat-playlist \
-        --playlist-end 10 \
+        --playlist-end 20 \
         --dump-json \
         --no-check-certificates \
         --ignore-errors 2>/dev/null \
@@ -149,24 +131,25 @@ fi
                 printf "%s\t%s\t%s\t%s\t%s\n", id, title_full, channel_full, time, views >> meta_file
                 fflush(meta_file)
 
-                system("(curl -s -f \"https://img.youtube.com/vi/" id "/maxresdefault.jpg\" -o \"" tmp "/" id ".jpg\" || curl -s -f \"https://img.youtube.com/vi/" id "/hqdefault.jpg\" -o \"" tmp "/" id ".jpg\") >/dev/null 2>&1 &")
+		system("(curl -s -f \"https://img.youtube.com/vi/" id "/maxresdefault.jpg\" -o \"" tmp "/" id ".jpg\" || curl -s -f \"https://img.youtube.com/vi/" id "/hqdefault.jpg\" -o \"" tmp "/" id ".jpg\") >/dev/null 2>&1 &")
 
-                # Cắt gọn bớt tiêu đề để nhường chỗ hiển thị tên Kênh và Thời lượng ở nửa trên
-                title_trunc = length($1) > 45 ? substr($1, 1, 42) "..." : $1
-                channel_trunc = length(channel_full) > 20 ? substr(channel_full, 1, 17) "..." : channel_full
-                
-                # Cấu trúc hiển thị dòng tìm kiếm: Tiêu đề | Kênh | Thời lượng
-                print title_trunc "\t[\033[1;33m" channel_trunc "\033[0m]\t\033[1;36m" time "\033[0m\t" $5
-            }
-        ' \
-        | column -t -s (printf '\t') \
+		title_trunc = $1
+		channel_trunc = channel_full
+		idx = sprintf("%02d", NR)
+
+		# In ra đầy đủ thông tin: STT | Tiêu đề | Kênh | Thời lượng | Lượt xem
+		printf "\033[1;31m%s.\033[0m \033[1;32m%s\033[0m\t\033[1;33m%s\033[0m\t\033[1;36m%s\033[0m\t👁  \033[1;35m%s\033[0m\t%s\n", idx, title_trunc, "["channel_trunc"]", time, views, $5
+		}
+		' \
+			| column -t -s (printf '\t') \
         | env FIFO_UEBERZUG="$FIFO_UEBERZUG" fzf --ansi --reverse \
-            --prompt="🎵 Tìm kiếm: " \
-            --header="Danh sách bài hát kết quả (Tiêu đề | Kênh | Thời lượng):" \
-            --preview "$preview_script {}" \
-            --preview-window "down:60%:border-top" \
+            --prompt="🎵 Tìm kiếm (Top 20): " \
+            # --header="STT | Tên bài hát (Lục) | Kênh (Vàng) | Thời lượng (Cyan) | Lượt xem (Tím)" \
+            --color="border:-1" \
+	    --preview "$preview_script {}" \
+	    --preview-window "bottom:45%:border-top:noinfo" \
             --with-nth="1..-2" \
-            --info=inline)
+            --info=inline-right)
 
     # 4. Dọn dẹp thủ công NGAY SAU KHI fzf TẮT
     if test -p "$FIFO_UEBERZUG"
