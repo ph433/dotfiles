@@ -65,6 +65,11 @@ class YouTubeTUI:
         self.is_loading = True
         self.selected_video = None
         
+        # --- [SỬA ĐỔI 1]: Thêm biến quản lý trạng thái vẽ ---
+        self.needs_redraw = True     # Đánh dấu khi nào cần vẽ lại UI
+        self.drawn_thumbs = {}       # Lưu các ảnh đã vẽ: identifier -> path
+        self.last_page = -1          # Theo dõi trang hiện tại
+        
         # Cài đặt Curses
         curses.curs_set(0) # Ẩn con trỏ chuột
         curses.start_color()
@@ -78,7 +83,6 @@ class YouTubeTUI:
         threading.Thread(target=self.fetch_data, daemon=True).start()
 
     def fetch_data(self):
-        """Chạy yt-dlp để lấy data và tải thumbnail ngầm"""
         cmd = [
             "yt-dlp", f"ytsearch20:{SEARCH_QUERY}",
             "--flat-playlist", "--dump-json",
@@ -103,26 +107,27 @@ class YouTubeTUI:
                     'img_ready': False
                 }
                 self.videos.append(video)
+                self.needs_redraw = True # [SỬA ĐỔI]: Có data mới -> Cần vẽ lại
                 
                 # Tải thumbnail ngầm
                 threading.Thread(target=self.download_thumbnail, args=(video,), daemon=True).start()
                 
         except Exception as e:
-            pass # Bỏ qua lỗi mạng trong bản demo này
+            pass
         
         self.is_loading = False
+        self.needs_redraw = True # [SỬA ĐỔI]: Cập nhật UI khi tải xong list
 
     def download_thumbnail(self, video):
-        """Dùng curl tải ảnh bìa về thư mục tạm"""
         url_maxres = f"https://img.youtube.com/vi/{video['id']}/maxresdefault.jpg"
         url_hq = f"https://img.youtube.com/vi/{video['id']}/hqdefault.jpg"
         
-        # Thử tải maxres, nếu fail tải hq
         ret = subprocess.run(["curl", "-s", "-f", url_maxres, "-o", video['img_path']]).returncode
         if ret != 0:
             subprocess.run(["curl", "-s", "-f", url_hq, "-o", video['img_path']])
             
         video['img_ready'] = os.path.exists(video['img_path'])
+        self.needs_redraw = True # [SỬA ĐỔI]: Tải xong 1 ảnh -> Cần vẽ lại để hiện ảnh
 
     def format_views(self, views):
         if not views: return "N/A"
@@ -134,10 +139,10 @@ class YouTubeTUI:
         return f"{m}:{s:02d}"
 
     def draw_grid(self, max_y, max_x):
-        """Tính toán Grid và vẽ thumbnail/viền"""
-        self.stdscr.clear()
+        # [SỬA ĐỔI]: Dùng erase() thay clear() để giảm chớp nháy text
+        self.stdscr.erase()
         
-        if self.is_loading:
+        if self.is_loading and not self.videos:
             msg = f"Đang tìm kiếm: {SEARCH_QUERY}..."
             self.stdscr.addstr(max_y // 2, (max_x - len(msg)) // 2, msg, curses.color_pair(1))
             self.stdscr.refresh()
@@ -153,16 +158,17 @@ class YouTubeTUI:
         item_w = max_x // COLUMNS
         item_h = grid_h // ROWS
         
-        # Tính trang hiện tại
         current_page = self.current_idx // PAGE_SIZE
         start_idx = current_page * PAGE_SIZE
         end_idx = min(start_idx + PAGE_SIZE, len(self.videos))
 
-        # Clear ảnh cũ trên Ueberzugpp (chỉ clear ảnh của trang)
-        for i in range(PAGE_SIZE):
-            self.uz.clear(f"thumb_{i}")
+        # --- [SỬA ĐỔI 2]: CHỈ clear Ueberzugpp khi có sự kiện CHUYỂN TRANG ---
+        if self.last_page != current_page:
+            for i in range(PAGE_SIZE):
+                self.uz.clear(f"thumb_{i}")
+            self.drawn_thumbs.clear()
+            self.last_page = current_page
 
-        # Vẽ lưới các item
         for i in range(start_idx, end_idx):
             page_idx = i - start_idx
             col = page_idx % COLUMNS
@@ -170,17 +176,14 @@ class YouTubeTUI:
             
             x = col * item_w
             y = row * item_h
-            w = item_w - 2  # Chừa viền
+            w = item_w - 2  
             h = item_h - 2
 
             vid = self.videos[i]
-            
-            # Vẽ Box (Viền sáng nếu đang được chọn)
             is_selected = (i == self.current_idx)
             box_attr = curses.color_pair(2) | curses.A_BOLD if is_selected else curses.A_DIM
             
             try:
-                # Vẽ viền giả (ASCII box)
                 self.stdscr.attron(box_attr)
                 self.stdscr.addstr(y, x, "┌" + "─"*(w) + "┐")
                 for bh in range(1, h+1):
@@ -189,32 +192,30 @@ class YouTubeTUI:
                 self.stdscr.addstr(y+h+1, x, "└" + "─"*(w) + "┘")
                 self.stdscr.attroff(box_attr)
                 
-                # Vẽ title ngắn phía trên Box
                 short_title = vid['title'][:w-2] + ".." if len(vid['title']) > w else vid['title']
                 title_attr = curses.color_pair(4) if is_selected else curses.A_NORMAL
                 self.stdscr.addstr(y, x+2, f" {short_title} ", title_attr)
                 
             except curses.error:
-                pass # Bỏ qua nếu terminal quá nhỏ không vẽ kịp
+                pass 
 
-            # Gọi Ueberzugpp render ảnh vào trong lõi Box
+            # --- [SỬA ĐỔI 3]: CHỈ gọi lệnh draw khi ảnh chưa được vẽ trên ô tương ứng ---
             if vid['img_ready']:
-                self.uz.draw(f"thumb_{page_idx}", x+1, y+1, w, h, vid['img_path'])
+                thumb_id = f"thumb_{page_idx}"
+                if self.drawn_thumbs.get(thumb_id) != vid['img_path']:
+                    self.uz.draw(thumb_id, x+1, y+1, w, h, vid['img_path'])
+                    self.drawn_thumbs[thumb_id] = vid['img_path']
 
         self.draw_details(max_y, max_x)
         self.stdscr.refresh()
 
     def draw_details(self, max_y, max_x):
-        """Vẽ phần thông tin chi tiết dưới đáy (Tỷ lệ 1 phần)"""
         if not self.videos: return
         vid = self.videos[self.current_idx]
-        
         start_y = max_y - BOTTOM_LINES + 1
         
-        # Đường kẻ phân cách
         try:
             self.stdscr.addstr(start_y - 1, 0, "═" * max_x, curses.color_pair(1))
-            
             self.stdscr.addstr(start_y + 1, 2, f"▶ Tên: {vid['title']}", curses.color_pair(1) | curses.A_BOLD)
             self.stdscr.addstr(start_y + 2, 2, f"👤 Kênh: {vid['channel']}", curses.color_pair(2))
             self.stdscr.addstr(start_y + 3, 2, f"👁 Lượt xem: {vid['views']}")
@@ -228,33 +229,40 @@ class YouTubeTUI:
 
     def run(self):
         self.stdscr.nodelay(True)
-        self.stdscr.timeout(100) # Loop refresh mỗi 100ms
+        self.stdscr.timeout(100) 
         
         while True:
             max_y, max_x = self.stdscr.getmaxyx()
             
-            # Xử lý phím bấm
             key = self.stdscr.getch()
             if key != -1:
                 total = len(self.videos)
-                if key in [ord('q'), ord('Q'), 27]: # 27 là phím ESC
+                # --- [SỬA ĐỔI 4]: Đánh dấu needs_redraw = True mỗi khi thao tác phím thay đổi logic ---
+                if key in [ord('q'), ord('Q'), 27]: 
                     break
                 elif key == curses.KEY_RIGHT and total > 0:
                     self.current_idx = min(self.current_idx + 1, total - 1)
+                    self.needs_redraw = True
                 elif key == curses.KEY_LEFT and total > 0:
                     self.current_idx = max(self.current_idx - 1, 0)
+                    self.needs_redraw = True
                 elif key == curses.KEY_DOWN and total > 0:
                     self.current_idx = min(self.current_idx + COLUMNS, total - 1)
+                    self.needs_redraw = True
                 elif key == curses.KEY_UP and total > 0:
                     self.current_idx = max(self.current_idx - COLUMNS, 0)
+                    self.needs_redraw = True
+                elif key == curses.KEY_RESIZE:
+                    self.needs_redraw = True # Cập nhật lại UI khi resize terminal
                 elif key in [10, 13, curses.KEY_ENTER] and total > 0:
                     self.selected_video = self.videos[self.current_idx]
                     break
 
-            # Cập nhật UI
-            self.draw_grid(max_y, max_x)
+            # --- [SỬA ĐỔI 5]: Chỉ gọi hàm vẽ nếu hệ thống ghi nhận có sự thay đổi state ---
+            if self.needs_redraw:
+                self.draw_grid(max_y, max_x)
+                self.needs_redraw = False
 
-        # Cleanup trước khi thoát
         self.uz.close()
         self.temp_dir.cleanup()
 
