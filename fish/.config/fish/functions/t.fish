@@ -78,20 +78,23 @@ if [[ -n "$vid_id" && -p "'$FIFO_UEBERZUG'" ]]; then
     prev_w=${FZF_PREVIEW_COLUMNS:-$tty_cols}
     prev_h=${FZF_PREVIEW_LINES:-$(( (tty_lines * 60 / 100) - 1 ))}
 
-    # CHIA KHU VỰC: Ảnh chiếm 65% phía trên
-    img_area_h=$(( prev_h * 65 / 100 ))
+    # THIẾT LẬP KHOẢNG CÁCH (MARGIN)
+    margin_top=2 # Đẩy ảnh xuống 2 dòng so với viền trên của preview
+
+    # CHIA KHU VỰC: Ảnh chiếm 55% chiều cao (giảm một chút để nhường chỗ cho margin)
+    img_area_h=$(( prev_h * 55 / 100 ))
 
     # TÍNH TOÁN CĂN GIỮA ẢNH THEO TỶ LỆ CHUẨN (~16:9 quy đổi theo pixel terminal)
     ideal_w=$(( img_area_h * 35 / 10 ))
     [[ $ideal_w -gt $prev_w ]] && ideal_w=$prev_w
 
     img_x=$(( prev_x + (prev_w - ideal_w) / 2 ))
-    img_y=$prev_y
+    img_y=$(( prev_y + margin_top )) # Cập nhật tọa độ Y bị đẩy xuống
     img_w=$ideal_w
     img_h=$img_area_h
 
-    # Đẩy lề chữ xuống dưới ảnh
-    for ((i=0; i<img_area_h; i++)); do
+    # Đẩy lề chữ xuống dưới ảnh (bao gồm cả khoảng cách margin_top)
+    for ((i=0; i < (img_area_h + margin_top); i++)); do
         echo ""
     done
     
