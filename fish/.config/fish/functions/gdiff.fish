@@ -13,5 +13,6 @@ function gdiff --description "FZF Git Diff Preview với Delta"
         --tiebreak=index \
         --header="[Git Diff] Chọn file để soi code thay đổi" \
         --preview="git diff --color=always {2} | delta --width=\$FZF_PREVIEW_COLUMNS" \
+        --preview-window=bottom:70% \
         --bind="ctrl-m:execute(nvim -d {2}; clear)" # Sửa dòng này: Thay +refresh bằng ; clear
 end
