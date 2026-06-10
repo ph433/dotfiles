@@ -23,9 +23,9 @@
 (deflayer mod_nvim
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  @tabii  esc     home    up      end     @pra2tt _       @tabi   @tabii  @taba   _       _       _       _               _       _       _       _
+  @tabii  esc     home    up      end     @pra2tt _       @tabi   @tabii  @taba   C-p     _       _       _               _       _       _       _
   @osl_d  tab     left    down    rght    spc     @fd     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
-  @sropt  C-z     _       C-c     C-v     _       v       A-c     A-v     C-a     C-y     @cmd            _               _       _       _
+  @sropt  C-z     C-x     C-c     C-v     _       v       A-c     A-v     C-a     C-y     @ss             _               _       _       _
   _       _       @numt   ent                             @colet          _                       _       caps    _       _               _
 )
 
@@ -205,7 +205,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       S-esc   S-home  S-up    S-end   _       _       @stabi  _       @staba  _       _       _       _               _       _       _       _
   S-bks   S-tab   S-left  S-down  S-rght  S-spc   _       @cs     @sftn   @sw     @sa     S-del   _                       _       _       _       _
-  _       _       _       C-S-c   C-S-v   _       S-v     _       _       _       _       _               _               _       _       _
+  _       _       C-S-x   C-S-c   C-S-v   _       S-v     _       _       _       C-S-y   _               _               _       _       _
   _       _       @sftn   S-ent                                   @sfta   _                       _       _       _       _               _
 )
 
@@ -224,7 +224,7 @@
   @gg     `       -       =       S-=     S-\     \       [       S-9     S-0     ]       _       _       _               _       _       _       _
   bks     1       2       3       4       5       6       7       8       9       0       del     _                       _       _       _       _
   _       _       _       _       _       _       _       _       ,       .       /       _               _               _       _       _
-  _       _       @ns     spc                                     @ns     _                       _       _       _       _               _
+  _       _       @ns     spc                                     @char   _                       _       _       _       _               _
 )
 
 (deflayer mod_num-shift-temp
@@ -260,7 +260,7 @@
   @tabe   q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
   bks     a       r       s       t       g       m       n       e       i       o       '       _                       _       _       _       _
   @ss     x       c       d       v       z       k       h       ,       .       /       @ss             _               _       _       _
-  lctl    lmet    _       spc                                     @colosw _                       _       _       _       _               _
+  lctl    lmet    @char   spc                                     @colosw _                       _       _       _       _               _
 )
 
 (deflayer colemak-dh-shift-temp
@@ -269,7 +269,7 @@
   _       S-q     S-w     S-f     S-p     S-b     S-j     S-l     S-u     S-y     S-;     S-[     S-]     S-\             _       _       _       _
   S-bks   S-a     S-r     S-s     S-t     S-g     S-m     S-n     S-e     S-i     S-o     S-'     _                       _       _       _       _
   @sfts   S-x     S-c     S-d     S-v     S-z     S-k     S-h     S-,     S-.     S-/     _               _               _       _       _
-  _       _       _       S-spc                                   _       _                       _       _       _       _               _
+  _       _       _       S-ent                                   _       _                       _       _       _       _               _
 )
 
 (deflayer colemak-dh-shift
@@ -369,6 +369,7 @@
   sfts (layer-switch colemak-dh-shift)
 
   ns (one-shot-press 1000 (layer-toggle mod_num-shift-temp))
+  char (one-shot-press 1000 (layer-toggle char-bare))
 
   ;; sc (one-shot 2000 lctl) ;; Sticky Ctrl
   ;; sa (one-shot 2000 lalt) ;; Sticky Alt
@@ -697,8 +698,17 @@
 (deflayer number-bare 
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       -       =       S-=     _       _       _       _       _       _       _       _       _               _       _       _       _
   _       1       2       3       4       5       6       7       8       9       0       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       _       _                                       _       _                       _       _       _       _               _
+)
+
+(deflayer char-bare 
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       S-'     S-`     _       _       _       _       ;       S-;     _       _       _       _               _       _       _       _
+  _       S-[     [       S-9     /       `       '       \       S-0     ]       S-]     _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       ent                                     _       _                       _       _       _       _               _
 )
