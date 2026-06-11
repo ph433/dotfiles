@@ -41,8 +41,11 @@ vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
     local f = io.open(log_file, "r")
     if f then
       for line in f:lines() do
-        local score, path = line:match("^(%d+)%s+(.+)$")
+        -- Sửa pattern thành %S+ để hốt trọn gói (bất kể chấm hay phẩy)
+        local score, path = line:match("^(%S+)%s+(.+)$")
         if score and path then
+          -- Ép đổi dấu phẩy thành chấm (nếu có) trước khi cho Lua đọc số
+          score = score:gsub(",", ".")
           files_score[path] = tonumber(score)
         end
       end
@@ -79,7 +82,8 @@ vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
     local f_write = io.open(log_file, "w")
     if f_write then
       for _, item in ipairs(sorted_list) do
-        f_write:write(string.format("%d %s\n", item.score, item.path))
+        -- Sửa định dạng %d (số nguyên) thành %.1f (1 số thập phân)
+        f_write:write(string.format("%.1f %s\n", item.score, item.path))
       end
       f_write:close()
     end
