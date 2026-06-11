@@ -1,4 +1,4 @@
-function __fzf_file_recent --description "Bốc danh sách file Frecency (Tô màu xịn bằng set_color, Hỗ trợ Stow)"
+function __fzf_file_recent --description "Bốc danh sách file Frecency (True Color HEX & Hỗ trợ Stow)"
     set -l log_file "$HOME/.cache/yazi/file_recent.log"
 
     if not test -f "$log_file"
@@ -18,12 +18,12 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency (Tô m�
         set rel_pwd (string replace "$HOME/" "" "$PWD")
     end
 
-    # TẠO SẴN CÁC BIẾN MÀU BẰNG LỆNH CỦA FISH
-    set -l c_score (set_color yellow)
+    # TẠO MÀU TRUE COLOR BẰNG MÃ HEX (Bạn có thể tự đổi mã màu tùy thích)
+    set -l c_score (set_color ff9e64) # Màu Cam/Vàng nhẹ
     set -l c_reset (set_color normal)
-    set -l c_link (set_color magenta)   # Màu tím cho Symlink
-    set -l c_dot (set_color green)      # Màu xanh lá cho file thật trong dotfiles
-    set -l c_file (set_color cyan)      # Màu xanh lơ cho file bình thường
+    set -l c_link  (set_color bb9af7) # Màu Tím pastel (Symlink)
+    set -l c_dot   (set_color 9ece6a) # Màu Xanh lá mạ (Dotfiles thật)
+    set -l c_file  (set_color 7dcfff) # Màu Xanh lơ sáng (File thường)
 
     # 1. Quét dữ liệu và Phân loại màu sắc
     cat "$log_file" | sort -nr | while read -l score line
@@ -36,7 +36,7 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency (Tô m�
                 set path_color $c_dot
             end
 
-            # Nối chuỗi biến màu trực tiếp (Cực kỳ an toàn, không sợ lỗi ký tự escape)
+            # Nối chuỗi biến màu (Fish sẽ tự xuất ra mã ANSI 24-bit chuẩn xác)
             set -l colored_entry "$c_score$score$c_reset $path_color$line$c_reset"
             
             echo $colored_entry >> "$tmp_global"
