@@ -158,7 +158,7 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency (Alt-Sp
     set -l selected $fzf_output[2..-1]
 
     if test (count $selected) -gt 0
-        set -l file (string replace -r "^\S+\s+" "" "$selected[1]")
+        set -l file (string replace -r "^\S+\s+" "" -- "$selected[1]")
 
         if test "$key_pressed" = "enter"
             nvim $file
