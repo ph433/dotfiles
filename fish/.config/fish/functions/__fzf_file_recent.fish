@@ -1,4 +1,4 @@
-function __fzf_file_recent --description "Bốc danh sách file Frecency ra FZF với tốc độ bàn thờ"
+function __fzf_file_recent --description "Bốc danh sách file Frecency (Toggle Local/Global siêu mượt)"
     set -l log_file "$HOME/.cache/yazi/file_recent.log"
 
     if not test -f "$log_file"
@@ -6,23 +6,65 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency ra FZF 
         return
     end
 
-    # Dùng sort -nr để xếp điểm Frecency từ cao xuống thấp.
-    # Dùng --tiebreak=index để FZF ưu tiên độ khớp chữ trước, nếu khớp bằng nhau thì lấy file có điểm Frecency cao hơn.
-    set -l fzf_output (cat "$log_file" | while read -l score line
+    # Khởi tạo các file tạm (RAM) an toàn tuyệt đối
+    set -l tmp_global (mktemp)
+    set -l tmp_local (mktemp)
+    set -l toggle_state (mktemp)
+    set -l toggle_script (mktemp)
+
+    # Phân giải đường dẫn để trị dứt điểm lỗi Symlink (Dotfiles)
+    set -l real_pwd (realpath $PWD)
+
+    # 1. Quét dữ liệu 1 lần và chia vào 2 giỏ
+    cat "$log_file" | sort -nr | while read -l score line
         if test -f "$line"
-            echo "$score $line"
+            echo "$score $line" >> "$tmp_global"
+            
+            # Khớp thư mục hiện tại (cả đường dẫn ảo lẫn thật)
+            if string match -q "$PWD/*" "$line"; or string match -q "$real_pwd/*" "$line"
+                echo "$score $line" >> "$tmp_local"
+            end
         end
-    end | sort -nr | fzf \
+    end
+
+    # 2. Xử lý trạng thái khởi động (Nếu thư mục hiện tại không có file, tự mở Global)
+    set -l initial_file
+    if test -s "$tmp_local"
+        echo "local" > "$toggle_state"
+        set initial_file "$tmp_local"
+    else
+        echo "global" > "$toggle_state"
+        set initial_file "$tmp_global"
+    end
+
+    # 3. Tạo "Công tắc" (Script ẩn) để FZF chuyển qua lại không bao giờ bị lỗi cú pháp
+    echo "#!/bin/sh
+    state=\$(cat \"$toggle_state\")
+    if [ \"\$state\" = \"local\" ]; then
+        echo \"global\" > \"$toggle_state\"
+        cat \"$tmp_global\"
+    else
+        echo \"local\" > \"$toggle_state\"
+        cat \"$tmp_local\"
+    fi" > "$toggle_script"
+    chmod +x "$toggle_script"
+
+    # 4. Bọc TOÀN BỘ luồng chạy vào trong (...) để bắt output chuẩn xác
+    set -l fzf_output (cat "$initial_file" | fzf \
         --tiebreak=index \
         --layout=reverse \
         --border \
-        --prompt="Frecency Files (Neovim History)> " \
-        --header="Enter: Mở file bằng Nvim | Ctrl-Y: Dán đường dẫn ra con trỏ" \
+        --prompt="Frecency> " \
+        --header="Enter: Mở | Ctrl-Y: Dán | Ctrl-Space: Bật/Tắt (Thư mục hiện tại <-> Toàn cục)" \
         --preview-window="bottom:50%" \
         --preview 'bat --style=numbers --color=always --line-range :100 (string replace -r "^\d+\s+" "" {})' \
+        --bind="ctrl-space:reload($toggle_script)" \
         --expect=ctrl-y,enter)
 
-    # Nếu người dùng hủy (nhấn ESC hoặc Ctrl-C)
+    # Dọn dẹp RAM ngay sau khi FZF đóng
+    rm -f "$tmp_global" "$tmp_local" "$toggle_state" "$toggle_script"
+
+    # Thoát an toàn nếu bấm ESC / Ctrl-C
     if test (count $fzf_output) -eq 0
         commandline -f repaint 2>/dev/null
         return
@@ -31,19 +73,16 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency ra FZF 
     set -l key_pressed $fzf_output[1]
     set -l selected $fzf_output[2..-1]
 
+    # 5. Xử lý file được chọn
     if test (count $selected) -gt 0
-        # Lọc bỏ điểm số, chỉ lấy đường dẫn vật lý
         set -l file (string replace -r "^\d+\s+" "" "$selected[1]")
 
         if test "$key_pressed" = "enter"
-            # Chạy trực tiếp nvim đè lên terminal hiện tại
             nvim $file
         else if test "$key_pressed" = "ctrl-y"
-            # Chèn đường dẫn đã escape và 1 dấu cách vào ngay con trỏ
             commandline -i (string escape $file)" "
         end
     end
     
-    # Vẽ lại giao diện dòng lệnh sau khi nvim đóng hoặc sau khi dán file
     commandline -f repaint 2>/dev/null
 end
