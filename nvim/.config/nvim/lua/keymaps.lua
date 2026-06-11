@@ -139,3 +139,16 @@ vim.keymap.set('n', 'o', function()
   -- con trỏ sẽ được đặt ở dòng cuối cùng của nội dung vừa dán
   vim.api.nvim_put(lines, 'l', true, true)
 end, { noremap = true, silent = true })
+
+vim.keymap.set('n', 'O', function()
+  -- 1. Lấy mức thụt lề hiện tại của dòng
+  local line = vim.api.nvim_get_current_line()
+  local indent = line:match("^%s*")
+
+  -- 2. Thay thế dòng bằng nội dung clipboard
+  -- Lấy nội dung từ thanh ghi hệ thống '+'
+  local clipboard_content = vim.fn.getreg('+')
+  
+  -- Xóa dòng hiện tại và thay bằng (thụt lề + clipboard)
+  vim.api.nvim_set_current_line(indent .. clipboard_content)
+end, { desc = "Thay thế dòng giữ nguyên thụt lề" })
