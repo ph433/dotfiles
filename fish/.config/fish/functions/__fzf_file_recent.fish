@@ -113,7 +113,6 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency (True C
                     found = 1
                 } else {
                     score -= 0.5
-                    if (score < 1.0) score = 1.0
                 }
                 printf "%.1f %s\n", score, path
             }
