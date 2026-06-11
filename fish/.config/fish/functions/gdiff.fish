@@ -6,13 +6,13 @@ function gdiff --description "FZF Git Diff Preview với Delta"
         return 1
     end
 
-    # Gọi FZF lấy danh sách file thay đổi, preview bằng git diff + delta
+    # Gọi FZF lấy danh sách file thay đổi
     git status -s | fzf \
         --no-sort \
         --reverse \
         --tiebreak=index \
-        --header="[Git Diff] Chọn file để soi code thay đổi" \
+        --header="[Git Diff] Enter: Xem full màn hình (Nhấn 'q' để thoát) | Ctrl-C: Thoát FZF" \
         --preview="git diff --color=always {2} | delta --width=\$FZF_PREVIEW_COLUMNS" \
-        --preview-window=bottom:70% \
-        --bind="ctrl-m:execute(nvim -d {2}; clear)" # Sửa dòng này: Thay +refresh bằng ; clear
+        --preview-window="bottom:70%" \
+        --bind="ctrl-m:execute(git diff --color=always {2} | delta --paging=always)"
 end
