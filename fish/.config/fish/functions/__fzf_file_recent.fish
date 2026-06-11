@@ -6,14 +6,14 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency ra FZF 
         return
     end
 
-    # sort -nr xếp điểm cao lên đầu
-    # --no-sort ép FZF tuyệt đối giữ nguyên thứ tự này khi lọc từ khóa
+    # Dùng sort -nr để xếp điểm Frecency từ cao xuống thấp.
+    # Dùng --tiebreak=index để FZF ưu tiên độ khớp chữ trước, nếu khớp bằng nhau thì lấy file có điểm Frecency cao hơn.
     set -l fzf_output (cat "$log_file" | while read -l score line
         if test -f "$line"
             echo "$score $line"
         end
     end | sort -nr | fzf \
-        --no-sort \
+        --tiebreak=index \
         --layout=reverse \
         --border \
         --prompt="Frecency Files (Neovim History)> " \
