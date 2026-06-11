@@ -20,16 +20,24 @@ vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
     end
 
     local file_path = vim.api.nvim_buf_get_name(0)
+    
     -- Né đống file rác, file tạm, log, hoặc giao diện
     if file_path == "" 
        or file_path:match("toggleterm") 
        or file_path:match("NvimTree") 
-       -- or file_path:match("file_recent.log") -- KHÔNG chấm điểm cho chính file log
        or vim.bo.buftype ~= "" then
       return
     end
 
-    -- Đánh dấu cửa sổ hiện tại đã log file này, không chạy lại nữa khi đổi focus
+    -- ĐOẠN MỚI THÊM: Giải mã Symlink (Stow)
+    -- Hàm này ép Neovim quy đổi mọi đường dẫn ảo (như ~/.config/...) 
+    -- về chung một cái gốc vật lý (như ~/dotfiles/...)
+    local real_path = vim.loop.fs_realpath(file_path)
+    if real_path then
+        file_path = real_path
+    end
+
+    -- Đánh dấu cửa sổ hiện tại đã log file này...
     vim.w.frecency_logged = true
 
     local log_dir = vim.fn.expand("~/.cache/yazi/")
