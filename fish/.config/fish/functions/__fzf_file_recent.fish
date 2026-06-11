@@ -1,4 +1,4 @@
-function __fzf_file_recent --description "Bốc danh sách file Frecency (Toggle Local/Global siêu mượt)"
+function __fzf_file_recent --description "Bốc danh sách file Frecency (Hỗ trợ tuyệt đối GNU Stow)"
     set -l log_file "$HOME/.cache/yazi/file_recent.log"
 
     if not test -f "$log_file"
@@ -11,12 +11,28 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency (Toggle
     set -l toggle_state (mktemp)
     set -l toggle_script (mktemp)
 
+    # 1. Lấy đường dẫn thật của thư mục (nếu bản thân thư mục là symlink)
     set -l real_pwd (realpath $PWD)
+    
+    # 2. Lấy cấu trúc thư mục tương đối (Phép thuật cho Stow)
+    # Ví dụ: PWD là ~/.config/fish -> rel_pwd là .config/fish
+    set -l rel_pwd ""
+    if test "$PWD" != "$HOME"
+        set rel_pwd (string replace "$HOME/" "" "$PWD")
+    end
 
+    # Quét dữ liệu và lọc
     cat "$log_file" | sort -nr | while read -l score line
         if test -f "$line"
             echo "$score $line" >> "$tmp_global"
-            if string match -q "$PWD/*" "$line"; or string match -q "$real_pwd/*" "$line"
+            
+            # LỌC LOCAL 3 LỚP BẤT BẠI:
+            # - Lớp 1: Khớp đường dẫn ảo ($PWD)
+            # - Lớp 2: Khớp đường dẫn thật ($real_pwd)
+            # - Lớp 3 (Stow): Nếu đường dẫn thật của file có chứa cấu trúc thư mục hiện tại
+            if string match -q "$PWD/*" "$line"; \
+               or string match -q "$real_pwd/*" "$line"; \
+               or { test -n "$rel_pwd"; and string match -q "*/$rel_pwd/*" "$line"; }
                 echo "$score $line" >> "$tmp_local"
             end
         end
@@ -42,7 +58,6 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency (Toggle
     fi" > "$toggle_script"
     chmod +x "$toggle_script"
 
-    # [SỬA REGEX] Dùng \S+ để tương thích với cả dấu phẩy lẫn dấu chấm
     set -l fzf_output (cat "$initial_file" | fzf \
         --tiebreak=index \
         --layout=reverse \
@@ -65,7 +80,6 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency (Toggle
     set -l selected $fzf_output[2..-1]
 
     if test (count $selected) -gt 0
-        # [SỬA REGEX] Cắt bỏ cột điểm an toàn 100%
         set -l file (string replace -r "^\S+\s+" "" "$selected[1]")
 
         if test "$key_pressed" = "enter"
@@ -75,13 +89,11 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency (Toggle
 
             set -l tmp_log (mktemp)
             
-            # [ÉP BUỘC] env LC_NUMERIC=C bắt awk phải dùng dấu chấm (.)
             env LC_NUMERIC=C awk -v target="$file" '
             {
                 score = $1; path = $2
                 for(i=3; i<=NF; i++) path = path " " $i 
                 
-                # Biến phẩy thành chấm nếu lỡ có lưu sai từ trước
                 gsub(",", ".", score)
                 
                 if (path == target) {
