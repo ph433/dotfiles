@@ -1,4 +1,4 @@
-function __fzf_file_recent --description "Bốc danh sách file Frecency (Hỗ trợ tuyệt đối GNU Stow)"
+function __fzf_file_recent --description "Bốc danh sách file Frecency (Tô màu xịn bằng set_color, Hỗ trợ Stow)"
     set -l log_file "$HOME/.cache/yazi/file_recent.log"
 
     if not test -f "$log_file"
@@ -11,29 +11,40 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency (Hỗ t
     set -l toggle_state (mktemp)
     set -l toggle_script (mktemp)
 
-    # 1. Lấy đường dẫn thật của thư mục (nếu bản thân thư mục là symlink)
     set -l real_pwd (realpath $PWD)
     
-    # 2. Lấy cấu trúc thư mục tương đối (Phép thuật cho Stow)
-    # Ví dụ: PWD là ~/.config/fish -> rel_pwd là .config/fish
     set -l rel_pwd ""
     if test "$PWD" != "$HOME"
         set rel_pwd (string replace "$HOME/" "" "$PWD")
     end
 
-    # Quét dữ liệu và lọc
+    # TẠO SẴN CÁC BIẾN MÀU BẰNG LỆNH CỦA FISH
+    set -l c_score (set_color yellow)
+    set -l c_reset (set_color normal)
+    set -l c_link (set_color magenta)   # Màu tím cho Symlink
+    set -l c_dot (set_color green)      # Màu xanh lá cho file thật trong dotfiles
+    set -l c_file (set_color cyan)      # Màu xanh lơ cho file bình thường
+
+    # 1. Quét dữ liệu và Phân loại màu sắc
     cat "$log_file" | sort -nr | while read -l score line
-        if test -f "$line"
-            echo "$score $line" >> "$tmp_global"
+        if test -e "$line"
+            set -l path_color $c_file 
+
+            if test -L "$line"
+                set path_color $c_link
+            else if string match -q "*/dotfiles/*" "$line"
+                set path_color $c_dot
+            end
+
+            # Nối chuỗi biến màu trực tiếp (Cực kỳ an toàn, không sợ lỗi ký tự escape)
+            set -l colored_entry "$c_score$score$c_reset $path_color$line$c_reset"
             
-            # LỌC LOCAL 3 LỚP BẤT BẠI:
-            # - Lớp 1: Khớp đường dẫn ảo ($PWD)
-            # - Lớp 2: Khớp đường dẫn thật ($real_pwd)
-            # - Lớp 3 (Stow): Nếu đường dẫn thật của file có chứa cấu trúc thư mục hiện tại
+            echo $colored_entry >> "$tmp_global"
+            
             if string match -q "$PWD/*" "$line"; \
                or string match -q "$real_pwd/*" "$line"; \
                or { test -n "$rel_pwd"; and string match -q "*/$rel_pwd/*" "$line"; }
-                echo "$score $line" >> "$tmp_local"
+                echo $colored_entry >> "$tmp_local"
             end
         end
     end
@@ -59,13 +70,14 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency (Hỗ t
     chmod +x "$toggle_script"
 
     set -l fzf_output (cat "$initial_file" | fzf \
+        --ansi \
         --tiebreak=index \
         --layout=reverse \
         --border \
         --prompt="Frecency> " \
         --header="Enter: Mở | Ctrl-Y: Dán | Ctrl-Space: Bật/Tắt (Thư mục hiện tại <-> Toàn cục)" \
         --preview-window="bottom:50%" \
-        --preview 'bat --style=numbers --color=always --line-range :100 (string replace -r "^\S+\s+" "" {})' \
+        --preview 'bat --style=numbers --color=always --line-range :100 {2..}' \
         --bind="ctrl-space:reload($toggle_script)" \
         --expect=ctrl-y,enter)
 
