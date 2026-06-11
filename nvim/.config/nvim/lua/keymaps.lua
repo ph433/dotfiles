@@ -116,3 +116,26 @@ vim.keymap.set({'n', 'v'}, '<C-End>', 'G$', { desc = 'Go to bottom of file and e
 -- Dành riêng cho Insert Mode
 vim.keymap.set('i', '<C-Home>', '<C-O>gg0', { desc = 'Go to top of file and start of line' })
 vim.keymap.set('i', '<C-End>', '<C-O>G$', { desc = 'Go to bottom of file and end of line' })
+
+vim.keymap.set('n', 'o', function()
+  -- 1. Lấy thụt lề của dòng hiện tại
+  local line = vim.api.nvim_get_current_line()
+  local indent = line:match("^%s*")
+
+  -- 2. Đưa nội dung clipboard vào một bảng (table)
+  -- Bạn dùng '+' nếu muốn dán từ clipboard hệ thống (Ctrl+C bên ngoài)
+  -- Hoặc dùng '"' nếu chỉ dán từ nội dung đã copy trong nvim
+  local clipboard_content = vim.fn.getreg('+')
+  
+  -- 3. Chia nội dung clipboard thành từng dòng để dán
+  local lines = vim.split(clipboard_content, "\n")
+
+  -- 4. Thêm thụt lề vào từng dòng của nội dung dán
+  for i, l in ipairs(lines) do
+    lines[i] = indent .. l
+  end
+
+  -- 5. Chèn nội dung vào dưới dòng hiện tại (lệnh 'l' là below)
+  -- con trỏ sẽ được đặt ở dòng cuối cùng của nội dung vừa dán
+  vim.api.nvim_put(lines, 'l', true, true)
+end, { noremap = true, silent = true })
