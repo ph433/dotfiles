@@ -81,26 +81,33 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency (Alt-Sp
         echo \"\$mode\" > \"$mode_file\"
     fi
 
-    # Thiết lập biến dựa trên Scope
+    # 🔴 ĐIỀU KIỆN GLOBAL + ALL: Kích hoạt cờ và ép FZF tự sát (Thoát giao diện ngay lập tức)
+    if [ \"\$scope\" = \"global\" ] && [ \"\$mode\" = \"all\" ]; then
+        echo \"switch_custom\" > \"$mode_file\"
+        kill -15 \$PPID 2>/dev/null
+        exit 0
+    fi
+
+    # Thiết lập biến dựa trên Scope (Nhúng trực tiếp mã màu ANSI)
     if [ \"\$scope\" = \"local\" ]; then
         hist_file=\"$tmp_local\"
         scan_dir=\"$real_pwd\"
-        scope_text=\"LOCAL (Thư mục hiện tại)\"
+        scope_text=\"\\033[1;32mLOCAL\\033[0m (Thư mục hiện tại)\"
     else
         hist_file=\"$tmp_global\"
         scan_dir=\"\$HOME\"
-        scope_text=\"GLOBAL (Toàn hệ thống)\"
+        scope_text=\"\\033[1;31mGLOBAL\\033[0m (Toàn hệ thống)\"
     fi
 
-    # Thiết lập biến dựa trên Mode
+    # Thiết lập biến dựa trên Mode (Nhúng trực tiếp mã màu ANSI)
     if [ \"\$mode\" = \"history\" ]; then
-        mode_text=\"HISTORY (Đã mở)\"
+        mode_text=\"\\033[1;33mHISTORY\\033[0m (Đã mở)\"
     else
-        mode_text=\"ALL (Tất cả file)\"
+        mode_text=\"\\033[1;36mALL\\033[0m (Tất cả file)\"
     fi
 
-    # BƯỚC A: In Header Trạng Thái (FZF sẽ ghim dòng này lên đầu nhờ --header-lines=1)
-    printf \"\033[1;33m>>> TRẠNG THÁI: %s | %s <<<\033[0m\n\" \"\$scope_text\" \"\$mode_text\"
+    # BƯỚC A: In Header Trạng Thái bằng printf (FZF sẽ tự dịch mã màu nhờ cờ --ansi)
+    printf \"\\033[1;35m>>> TRẠNG THÁI: \\033[0m%b | %b \\033[1;35m<<<\\033[0m\n\" \"\$scope_text\" \"\$mode_text\"
 
     # BƯỚC B: Xuất dữ liệu & Lọc màu thông minh bằng AWK
     (
@@ -136,37 +143,29 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency (Alt-Sp
     BEGIN { count = 0; strip = 0 }
     {
         count++
-        # Buffer 500 dòng đầu tiên
-        if (count <= 500) {
-            buf[count] = \$0
-        }
+        if (count <= 500) { buf[count] = \$0 }
         
-        # Chạm mốc 501 -> Bật cờ xóa màu, in 500 dòng buffer ra dạng thô
         if (count == 501) {
             strip = 1
             for (i=1; i<=500; i++) {
                 line = buf[i]
-                gsub(/\033\\[[0-9;]*m/, \"\", line)
+                gsub(/\\033\\[[0-9;]*m/, \"\", line)
                 print line
             }
         }
         
-        # Từ dòng 501 trở đi xả thẳng dạng thô
         if (count > 500) {
             line = \$0
-            if (strip) gsub(/\033\\[[0-9;]*m/, \"\", line)
+            if (strip) gsub(/\\033\\[[0-9;]*m/, \"\", line)
             print line
         }
     }
     END {
-        # Nếu tổng số file < 500 (chưa chạm mốc xả trào buffer)
         if (count <= 500) {
-            # Tự động tước màu nếu đang ở Global + All (để đảm bảo tối ưu)
             if (scope == \"global\" && mode == \"all\") strip = 1
-            
             for (i=1; i<=count; i++) {
                 line = buf[i]
-                if (strip) gsub(/\033\\[[0-9;]*m/, \"\", line)
+                if (strip) gsub(/\\033\\[[0-9;]*m/, \"\", line)
                 print line
             }
         }
