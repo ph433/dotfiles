@@ -4,6 +4,12 @@ if status is-interactive
     set -l vi_modes default insert
 
     for mode in default insert
+        # Phím tắt cũ của bạn
         bind --mode $mode ctrl-shift-x '__zoxide_zi; commandline -f repaint'
+        
+        # 🎯 PHÍM TẮT MỚI: Nhấn Ctrl + H để tìm kiếm thư mục Home
+        bind --mode $mode alt-x '__fzf_search_home_custom'
+        bind --mode $mode ctrl-a 'gdiff'
+        bind --mode $mode ctrl-shift-a 'glog'
     end
 end
