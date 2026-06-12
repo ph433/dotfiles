@@ -1,4 +1,6 @@
 function __fzf_file_recent --description "Bốc danh sách file Frecency"
+    # 🎯 Nhận "gậy tiếp sức" trạng thái từ hàm Custom truyền sang
+    set -l initial_scope $argv[1] 
     set -l log_file "$HOME/.cache/yazi/file_recent.log"
 
     if not test -f "$log_file"
@@ -6,7 +8,6 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency"
         return
     end
 
-    # Khởi tạo tài nguyên tạm (Đã bỏ bớt các file rườm rà)
     set -l tmp_global (mktemp)
     set -l tmp_local (mktemp)
     set -l scope_file (mktemp)
@@ -30,7 +31,6 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency"
     set -l c_dot   (set_color 9ece6a)
     set -l c_file  (set_color 7dcfff)
 
-    # Quét dữ liệu lịch sử và tạo danh sách
     cat "$log_file" | sort -nr | while read -l score line
         if test -e "$line"
             set -l path_color $c_file 
@@ -51,14 +51,15 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency"
         end
     end
 
-    # Trạng thái ban đầu
-    if test -s "$tmp_local"
+    # 🎯 Thiết lập trạng thái ban đầu: Ưu tiên trạng thái được truyền vào
+    if test -n "$initial_scope"
+        echo "$initial_scope" > "$scope_file"
+    else if test -s "$tmp_local"
         echo "local" > "$scope_file"
     else
         echo "home" > "$scope_file"
     end
 
-    # KỊCH BẢN ĐIỀU PHỐI (Chỉ còn nhiệm vụ đọc file, không còn AWK phức tạp)
     echo "#!/bin/sh
     action=\$1
     scope=\$(cat \"$scope_file\")
@@ -80,7 +81,6 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency"
     cat \"\$hist_file\"" > "$master_script"
     chmod +x "$master_script"
 
-    # GỌI FZF
     set -l fzf_output ($master_script init | fzf \
         --ansi \
         --tiebreak=index \
@@ -94,7 +94,8 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency"
         --bind="ctrl-space:reload($master_script toggle-scope)" \
         --expect=ctrl-y,enter,alt-space)
 
-    # Dọn dẹp
+    # 🎯 Đọc lại trạng thái cuối cùng trước khi dọn file rác
+    set -l final_scope (cat "$scope_file" 2>/dev/null)
     rm -f "$tmp_global" "$tmp_local" "$scope_file" "$master_script"
 
     if test (count $fzf_output) -eq 0
@@ -105,14 +106,13 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency"
     set -l key_pressed $fzf_output[1]
     set -l selected $fzf_output[2..-1]
 
-    # 🎯 Nhảy sang hàm Custom
+    # 🎯 Chuyền "gậy tiếp sức" (final_scope) cho hàm Custom
     if test "$key_pressed" = "alt-space"
         sleep 0.05
-        __fzf_find_files_custom
+        __fzf_find_files_custom "$final_scope"
         return
     end
 
-    # --- Xử lý Mở file và Ghi điểm ---
     if test (count $selected) -gt 0
         set -l file (string replace -r "^\S+\s+" "" -- "$selected[1]")
 

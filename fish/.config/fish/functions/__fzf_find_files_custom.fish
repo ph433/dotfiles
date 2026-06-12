@@ -1,12 +1,63 @@
 function __fzf_find_files_custom
-    set -l fzf_out (fd --type f --hidden --exclude .git </dev/null 2>/dev/null | fzf \
-        --height 100% \
+    # 🎯 Nhận "gậy tiếp sức" trạng thái từ Frecency
+    set -l initial_scope $argv[1]
+    if test -z "$initial_scope"
+        set initial_scope "local"
+    end
+
+    set -l scope_file (mktemp)
+    echo "$initial_scope" > "$scope_file"
+    set -l master_script (mktemp)
+    set -l real_pwd (realpath $PWD)
+
+    # --- BẢNG MÀU TRUE COLOR HEX ---
+    set -l tc_local   (set_color 9ece6a)
+    set -l tc_global  (set_color f7768e)
+    set -l tc_dim     (set_color 565f89)
+    set -l tc_reset   (set_color normal)
+
+    # KỊCH BẢN ĐIỀU PHỐI RIÊNG CHO HÀM CUSTOM (Quản lý fd)
+    echo "#!/bin/sh
+    action=\$1
+    scope=\$(cat \"$scope_file\")
+
+    if [ \"\$action\" = \"toggle-scope\" ]; then
+        if [ \"\$scope\" = \"local\" ]; then scope=\"home\"; else scope=\"local\"; fi
+        echo \"\$scope\" > \"$scope_file\"
+    fi
+
+    if [ \"\$scope\" = \"local\" ]; then
+        scan_dir=\"$real_pwd\"
+        scope_text=\"$tc_local LOCAL $tc_reset$tc_dim(Quét toàn bộ file trong thư mục hiện tại)$tc_reset\"
+    else
+        scan_dir=\"\$HOME\"
+        scope_text=\"$tc_global HOME $tc_reset$tc_dim(Quét mọi file trên toàn hệ thống)$tc_reset\"
+    fi
+
+    printf \"%s>>> TRẠNG THÁI TÌM KIẾM: %s %s<<<%s\n\" \"$tc_dim\" \"\$scope_text\" \"$tc_dim\" \"$tc_reset\"
+
+    # Chạy lệnh fd với đường dẫn scan_dir tương ứng
+    fd --type f --type l --hidden --follow --no-ignore --exclude .git . \"\$scan_dir\" </dev/null 2>/dev/null
+    " > "$master_script"
+    chmod +x "$master_script"
+
+    # GỌI FZF
+    set -l fzf_out ($master_script init | fzf \
+        --ansi \
+        --tiebreak=index \
         --layout=reverse \
+        --border \
         --prompt="Custom Search> " \
-        --header="Enter: Dán | Alt-Space: Quay lại Frecency" \
+        --header="Enter: Dán | Ctrl-Space: Đổi phạm vi | Alt-Space: Quay lại Frecency" \
+        --header-lines=1 \
         --preview-window="bottom:50%" \
         --preview 'bat --style=numbers --color=always --line-range :100 {}' \
+        --bind="ctrl-space:reload($master_script toggle-scope)" \
         --expect=alt-space,enter)
+
+    # Đọc lại trạng thái cuối cùng và dọn dẹp
+    set -l final_scope (cat "$scope_file" 2>/dev/null)
+    rm -f "$scope_file" "$master_script"
 
     # Thoát nếu bấm ESC
     if test (count $fzf_out) -eq 0
@@ -17,10 +68,10 @@ function __fzf_find_files_custom
     set -l key_pressed $fzf_out[1]
     set -l selected_file $fzf_out[2]
 
-    # 🎯 FIX LỖI THOÁT HẲN: Thêm sleep 0.05 vào đây
+    # 🎯 Chuyền ngược trạng thái về lại Frecency
     if test "$key_pressed" = "alt-space"
-        sleep 0.05 # Nghỉ một nhịp để dọn luồng Terminal
-        __fzf_file_recent
+        sleep 0.05 
+        __fzf_file_recent "$final_scope"
         return
     end
 
