@@ -105,9 +105,9 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency"
     set -l key_pressed $fzf_output[1]
     set -l selected $fzf_output[2..-1]
 
-    # 🎯 Nếu bấm Alt-Space -> Nhảy sang hàm Custom ngay lập tức
+    # 🎯 Nhảy sang hàm Custom
     if test "$key_pressed" = "alt-space"
-        commandline -f repaint 2>/dev/null
+        sleep 0.05
         __fzf_find_files_custom
         return
     end
