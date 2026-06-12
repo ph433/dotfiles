@@ -16,7 +16,7 @@ function gdiff --description "FZF Git Diff Preview với Delta"
         --header="[Git Diff] Enter: Full màn hình | Ctrl-Y: Đẩy file ra Terminal" \
         --preview="git diff --color=always {2} | delta --width=\$FZF_PREVIEW_COLUMNS" \
         --preview-window="bottom:70%" \
-        --bind="ctrl-m:execute(env LESS=R git diff --color=always {2} | delta --paging=always)" \
+        --bind="ctrl-m:execute-silent(fish -c '__fzf_score_file \"{2}\"')+execute(env LESS=R git diff --color=always {2} | delta --paging=always)" \
         --expect=ctrl-y)
 
     # Thoát an toàn
