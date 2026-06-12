@@ -9,6 +9,7 @@ function __fzf_find_files_custom
     echo "$initial_scope" > "$scope_file"
     set -l master_script (mktemp)
     set -l real_pwd (realpath $PWD)
+    set -l log_file "$HOME/.cache/yazi/file_recent.log"
 
     # --- BẢNG MÀU TRUE COLOR HEX ---
     set -l tc_local   (set_color 9ece6a)
@@ -28,16 +29,16 @@ function __fzf_find_files_custom
 
     if [ \"\$scope\" = \"local\" ]; then
         scan_dir=\"$real_pwd\"
-        scope_text=\"$tc_local LOCAL $tc_reset$tc_dim(Quét toàn bộ file trong thư mục hiện tại)$tc_reset\"
+        scope_text=\"$tc_local LOCAL $tc_reset$tc_dim(Quét file trong thư mục hiện tại)$tc_reset\"
     else
         scan_dir=\"\$HOME\"
-        scope_text=\"$tc_global HOME $tc_reset$tc_dim(Quét mọi file trên toàn hệ thống)$tc_reset\"
+        scope_text=\"$tc_global HOME $tc_reset$tc_dim(Quét file trên toàn hệ thống)$tc_reset\"
     fi
 
     printf \"%s>>> TRẠNG THÁI TÌM KIẾM: %s %s<<<%s\n\" \"$tc_dim\" \"\$scope_text\" \"$tc_dim\" \"$tc_reset\"
 
-    # Chạy lệnh fd với đường dẫn scan_dir tương ứng
-    fd --type f --type l --hidden --follow --no-ignore --exclude .git . \"\$scan_dir\" </dev/null 2>/dev/null
+    # 🎯 TỐI ƯU HÓA LỆNH FD: Tôn trọng .gitignore và chặn thẳng các thư mục rác siêu to khổng lồ
+    fd --type f --type l --hidden --follow --exclude .git --exclude node_modules --exclude .cache --exclude .local/share --exclude target --exclude build . \"\$scan_dir\" </dev/null 2>/dev/null
     " > "$master_script"
     chmod +x "$master_script"
 
@@ -48,12 +49,12 @@ function __fzf_find_files_custom
         --layout=reverse \
         --border \
         --prompt="Custom Search> " \
-        --header="Enter: Dán | Ctrl-Space: Đổi phạm vi | Alt-Space: Quay lại Frecency" \
+        --header="Enter: Mở | Ctrl-Y: Dán | Ctrl-Space: Đổi phạm vi | Alt-Space: Quay lại Frecency" \
         --header-lines=1 \
         --preview-window="bottom:50%" \
         --preview 'bat --style=numbers --color=always --line-range :100 {}' \
         --bind="ctrl-space:reload($master_script toggle-scope)" \
-        --expect=alt-space,enter)
+        --expect=alt-space,enter,ctrl-y)
 
     # Đọc lại trạng thái cuối cùng và dọn dẹp
     set -l final_scope (cat "$scope_file" 2>/dev/null)
@@ -75,10 +76,35 @@ function __fzf_find_files_custom
         return
     end
 
-    # 🎯 Xử lý chọn file: Dán đường dẫn ra Terminal
+    # 🎯 Xử lý Mở file (Enter) và Dán (Ctrl-Y), kèm theo Ghi điểm Frecency
     if test -n "$selected_file"
         set -l absolute_file (realpath -- $selected_file)
-        commandline -i (string escape -- $absolute_file)" "
+
+        # Xử lý thao tác mở/dán
+        if test "$key_pressed" = "enter"
+            nvim $absolute_file
+        else if test "$key_pressed" = "ctrl-y"
+            commandline -i (string escape -- $absolute_file)" "
+        end
+
+        # --- BỘ MÁY CỘNG ĐIỂM FRECENCY ---
+        if test -f "$log_file"
+            set -l tmp_log (mktemp)
+            env LC_NUMERIC=C awk -v target="$absolute_file" '
+            {
+                score = $1; path = $2
+                for(i=3; i<=NF; i++) path = path " " $i 
+                gsub(",", ".", score)
+                if (path == target) { score += 5.0; found = 1 } else { score -= 0.5 }
+                printf "%.1f %s\n", score, path
+            }
+            END { if (!found) printf "5.0 %s\n", target }' "$log_file" | sort -nr | head -n 100 > "$tmp_log"
+            mv "$tmp_log" "$log_file"
+        else
+            # Tự động tạo file log nếu lỡ tay bị xóa mất
+            mkdir -p (dirname "$log_file")
+            echo "5.0 $absolute_file" > "$log_file"
+        end
     end
     
     commandline -f repaint 2>/dev/null
