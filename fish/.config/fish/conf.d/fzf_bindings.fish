@@ -9,7 +9,9 @@ if status is-interactive
         
         # 🎯 PHÍM TẮT MỚI: Nhấn Ctrl + H để tìm kiếm thư mục Home
         bind --mode $mode alt-x '__fzf_search_home_custom'
-        bind --mode $mode ctrl-a 'gdiff'
-        bind --mode $mode ctrl-shift-a 'glog'
+        bind --mode $mode ctrl-down 'gdiff'
+        bind --mode $mode ctrl-shift-down 'glog'
+        bind --mode $mode shift-down '__fzf_find_files_custom'
+        bind --mode $mode down '__fzf_file_recent'
     end
 end
