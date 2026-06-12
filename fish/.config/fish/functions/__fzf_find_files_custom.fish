@@ -80,31 +80,15 @@ function __fzf_find_files_custom
     if test -n "$selected_file"
         set -l absolute_file (realpath -- $selected_file)
 
-        # Xử lý thao tác mở/dán
+        # Mở hoặc dán
         if test "$key_pressed" = "enter"
             nvim $absolute_file
         else if test "$key_pressed" = "ctrl-y"
             commandline -i (string escape -- $absolute_file)" "
         end
 
-        # --- BỘ MÁY CỘNG ĐIỂM FRECENCY ---
-        if test -f "$log_file"
-            set -l tmp_log (mktemp)
-            env LC_NUMERIC=C awk -v target="$absolute_file" '
-            {
-                score = $1; path = $2
-                for(i=3; i<=NF; i++) path = path " " $i 
-                gsub(",", ".", score)
-                if (path == target) { score += 5.0; found = 1 } else { score -= 0.5 }
-                printf "%.1f %s\n", score, path
-            }
-            END { if (!found) printf "5.0 %s\n", target }' "$log_file" | sort -nr | head -n 100 > "$tmp_log"
-            mv "$tmp_log" "$log_file"
-        else
-            # Tự động tạo file log nếu lỡ tay bị xóa mất
-            mkdir -p (dirname "$log_file")
-            echo "5.0 $absolute_file" > "$log_file"
-        end
+        # 🎯 CHỈ CẦN GỌI ĐÚNG 1 DÒNG NÀY THAY VÌ VIẾT LẠI AWK
+        __fzf_score_file "$absolute_file"
     end
     
     commandline -f repaint 2>/dev/null
