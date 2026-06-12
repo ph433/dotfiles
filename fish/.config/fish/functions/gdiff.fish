@@ -6,7 +6,7 @@ function gdiff --description "FZF Git Diff Preview với Delta"
         return 1
     end
 
-    # Gọi FZF (Thêm ép màu cho git và cờ --ansi cho fzf)
+    # Gọi FZF (Giữ nguyên toàn bộ thuộc tính, giao diện và chức năng phím Enter)
     set -l fzf_output (git -c color.status=always status -s | fzf \
         --ansi \
         --no-sort \
@@ -33,12 +33,20 @@ function gdiff --description "FZF Git Diff Preview với Delta"
         set -l cleaned_paths
 
         for path in $selected_paths
+            set -l extracted_path ""
+            
             if test (string sub --length 1 $path) = R
                 # Xử lý file đổi tên: "R LICENSE -> LICENSE.md"
-                set --append cleaned_paths (string split -- "-> " $path)[-1]
+                set extracted_path (string split -- "-> " $path)[-1]
             else
-                set --append cleaned_paths (string sub --start=4 $path)
+                set extracted_path (string sub --start=4 $path)
             end
+            
+            set --append cleaned_paths $extracted_path
+            
+            # 🎯 GỌI HÀM CỘNG ĐIỂM Ở ĐÂY:
+            # File đã được trích xuất đường dẫn sạch sẽ, ném vào chấm điểm ngay!
+            __fzf_score_file "$extracted_path"
         end
 
         # Gộp mảng thành chuỗi và thêm 1 dấu cách ở cuối
