@@ -59,15 +59,12 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency (Alt-Sp
     end
 
     # Thiết lập trạng thái ban đầu khi vừa gọi hàm
-    set -l initial_file
     if test -s "$tmp_local"
         echo "local" > "$scope_file"
         echo "history" > "$mode_file"
-        set initial_file "$tmp_local"
     else
         echo "global" > "$scope_file"
         echo "history" > "$mode_file"
-        set initial_file "$tmp_global"
     end
 
     # 2. XÂY DỰNG BỘ ĐIỀU PHỐI DANH SÁCH (MASTER SCRIPT)
@@ -80,66 +77,112 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency (Alt-Sp
         if [ \"\$scope\" = \"local\" ]; then scope=\"global\"; else scope=\"local\"; fi
         echo \"\$scope\" > \"$scope_file\"
     elif [ \"\$action\" = \"toggle-mode\" ]; then
-        # Chuyển đổi giữa (Chỉ file lịch sử) và (Tất cả mọi file)
         if [ \"\$mode\" = \"history\" ]; then mode=\"all\"; else mode=\"history\"; fi
         echo \"\$mode\" > \"$mode_file\"
     fi
 
-    # Xác định file lịch sử cần dùng
+    # Thiết lập biến dựa trên Scope
     if [ \"\$scope\" = \"local\" ]; then
         hist_file=\"$tmp_local\"
         scan_dir=\"$real_pwd\"
+        scope_text=\"LOCAL (Thư mục hiện tại)\"
     else
         hist_file=\"$tmp_global\"
         scan_dir=\"\$HOME\"
+        scope_text=\"GLOBAL (Toàn hệ thống)\"
     fi
 
+    # Thiết lập biến dựa trên Mode
     if [ \"\$mode\" = \"history\" ]; then
-        # CHẾ ĐỘ 1: CHỈ HIỆN FILE CÓ TRONG LỊCH SỬ
-        cat \"\$hist_file\"
+        mode_text=\"HISTORY (Đã mở)\"
     else
-        # CHẾ ĐỘ 2: HIỆN TẤT CẢ (Giữ nguyên điểm lịch sử + Bổ sung file 0đ)
-        
-        # Bước 1: In ra lịch sử trước để giữ Top ưu tiên
-        cat \"\$hist_file\"
+        mode_text=\"ALL (Tất cả file)\"
+    fi
 
-        # Bước 2: Quét thư mục, ép giải mã đường dẫn thật bằng -X realpath
-        if command -v fd >/dev/null 2>&1; then
-            fd --type f --type l --hidden --exclude .git . \"\$scan_dir\" -X realpath 2>/dev/null
+    # BƯỚC A: In Header Trạng Thái (FZF sẽ ghim dòng này lên đầu nhờ --header-lines=1)
+    printf \"\033[1;33m>>> TRẠNG THÁI: %s | %s <<<\033[0m\n\" \"\$scope_text\" \"\$mode_text\"
+
+    # BƯỚC B: Xuất dữ liệu & Lọc màu thông minh bằng AWK
+    (
+        if [ \"\$mode\" = \"history\" ]; then
+            cat \"\$hist_file\"
         else
-            find \"\$scan_dir\" \\( -type f -o -type l \\) -not -path '*/.git*' -exec realpath {} + 2>/dev/null
-        fi | sort -u | env LC_NUMERIC=C awk -v lookup=\"$tmp_lookup\" -v c_score=\"$raw_score\" -v c_reset=\"$raw_reset\" -v c_file=\"$raw_file\" -v c_dot=\"$raw_dot\" '
-        BEGIN {
-            while ((getline < lookup) > 0) {
-                split(\$0, parts, \"|\")
-                # Đánh dấu những file đã in ở Bước 1
-                history_paths[parts[3]] = 1
-            }
-            close(lookup)
-        }
-        {
-            path = \$0
-            # CHỈ in ra file mới (0.0 điểm) nếu nó chưa xuất hiện trong lịch sử
-            if (!(path in history_paths)) {
-                score = \"0.0\"
-                path_color = c_file
-                if (path ~ /\/dotfiles\//) {
-                    path_color = c_dot
+            cat \"\$hist_file\"
+            if command -v fd >/dev/null 2>&1; then
+                fd --type f --type l --hidden --exclude .git . \"\$scan_dir\" -X realpath 2>/dev/null
+            else
+                find \"\$scan_dir\" \\( -type f -o -type l \\) -not -path '*/.git*' -exec realpath {} + 2>/dev/null
+            fi | sort -u | env LC_NUMERIC=C awk -v lookup=\"$tmp_lookup\" -v c_score=\"$raw_score\" -v c_reset=\"$raw_reset\" -v c_file=\"$raw_file\" -v c_dot=\"$raw_dot\" '
+            BEGIN {
+                while ((getline < lookup) > 0) {
+                    split(\$0, parts, \"|\")
+                    history_paths[parts[3]] = 1
                 }
-                printf \"%s%s%s %s%s%s\\n\", c_score, score, c_reset, path_color, path, c_reset
+                close(lookup)
             }
-        }'
-    fi" > "$master_script"
+            {
+                path = \$0
+                if (!(path in history_paths)) {
+                    score = \"0.0\"
+                    path_color = c_file
+                    if (path ~ /\/dotfiles\//) {
+                        path_color = c_dot
+                    }
+                    printf \"%s%s%s %s%s%s\\n\", c_score, score, c_reset, path_color, path, c_reset
+                }
+            }'
+        fi
+    ) | env LC_NUMERIC=C awk -v scope=\"\$scope\" -v mode=\"\$mode\" '
+    BEGIN { count = 0; strip = 0 }
+    {
+        count++
+        # Buffer 500 dòng đầu tiên
+        if (count <= 500) {
+            buf[count] = \$0
+        }
+        
+        # Chạm mốc 501 -> Bật cờ xóa màu, in 500 dòng buffer ra dạng thô
+        if (count == 501) {
+            strip = 1
+            for (i=1; i<=500; i++) {
+                line = buf[i]
+                gsub(/\033\\[[0-9;]*m/, \"\", line)
+                print line
+            }
+        }
+        
+        # Từ dòng 501 trở đi xả thẳng dạng thô
+        if (count > 500) {
+            line = \$0
+            if (strip) gsub(/\033\\[[0-9;]*m/, \"\", line)
+            print line
+        }
+    }
+    END {
+        # Nếu tổng số file < 500 (chưa chạm mốc xả trào buffer)
+        if (count <= 500) {
+            # Tự động tước màu nếu đang ở Global + All (để đảm bảo tối ưu)
+            if (scope == \"global\" && mode == \"all\") strip = 1
+            
+            for (i=1; i<=count; i++) {
+                line = buf[i]
+                if (strip) gsub(/\033\\[[0-9;]*m/, \"\", line)
+                print line
+            }
+        }
+    }'" > "$master_script"
     chmod +x "$master_script"
 
     # 3. TRIỂN KHAI CẤU TRÚC FZF
-    set -l fzf_output (cat "$initial_file" | fzf \
+    # Gọi master_script lần đầu tiên với tham số 'init' thay vì cat chay
+    set -l fzf_output ($master_script init | fzf \
         --ansi \
         --tiebreak=index \
         --layout=reverse \
         --border \
         --prompt="Frecency> " \
         --header="Enter: Mở | Ctrl-Y: Dán | Ctrl-Space: Lịch sử (Local/Global) | Alt-Space: Bật/Tắt Quét Mọi File" \
+        --header-lines=1 \
         --preview-window="bottom:50%" \
         --preview 'bat --style=numbers --color=always --line-range :100 {2..}' \
         --bind="ctrl-space:reload($master_script toggle-scope)" \
@@ -179,7 +222,6 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency (Alt-Sp
                     found = 1
                 } else {
                     score -= 0.5
-                    # if (score < -10.0) score = -10.0
                 }
                 printf "%.1f %s\n", score, path
             }

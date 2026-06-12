@@ -6,8 +6,9 @@ function gdiff --description "FZF Git Diff Preview với Delta"
         return 1
     end
 
-    # Gọi FZF
-    set -l fzf_output (git status -s | fzf \
+    # Gọi FZF (Thêm ép màu cho git và cờ --ansi cho fzf)
+    set -l fzf_output (git -c color.status=always status -s | fzf \
+        --ansi \
         --no-sort \
         --reverse \
         --tiebreak=index \
