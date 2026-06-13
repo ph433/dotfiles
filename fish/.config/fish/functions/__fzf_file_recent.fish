@@ -112,17 +112,7 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency"
             nvim $file
         else if test "$key_pressed" = "ctrl-y"
             commandline -i (string escape $file)" "
-            set -l tmp_log (mktemp)
-            env LC_NUMERIC=C awk -v target="$file" '
-            {
-                score = $1; path = $2
-                for(i=3; i<=NF; i++) path = path " " $i 
-                gsub(",", ".", score)
-                if (path == target) { score += 5.0; found = 1 } else { score -= 0.5 }
-                printf "%.1f %s\n", score, path
-            }
-            END { if (!found) printf "5.0 %s\n", target }' "$log_file" | sort -nr | head -n 100 > "$tmp_log"
-            mv "$tmp_log" "$log_file"
+            __fzf_score_file "$file"
         end
     end
     
