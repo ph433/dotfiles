@@ -20,7 +20,14 @@ function glog --description "FZF Duyệt Git Log và Preview Commit bằng Delta
     set -l enter_cmd "env LESS=R sh -c \"$stat_cmd; echo '────────────────────────────────────────'; $diff_cmd --paging=always\""
 
     # Gọi FZF và lưu output
-    set -l fzf_output (git log --graph --color=always --format="%C(auto)%h%d %s %C(#FFB86C)%cr" | fzf \
+    set -l fzf_output (git log --graph --color=always --format="%C(auto)%h%d  🚀%cr  🚀%s" | perl -pe '
+        s/  🚀(.*?)  🚀(.*)/
+            my $tg = $1; 
+            my $msg = $2;
+            $tg = length($tg) > 11 ? substr($tg, 0, 9) . ".." : sprintf("%-11s", $tg);
+            "  \e[38;2;255;184;108m" . $tg . "\e[0m  " . $msg
+        /e
+    ' | fzf \
         --ansi \
         --no-sort \
         --reverse \
