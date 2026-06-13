@@ -6,16 +6,29 @@ function glog --description "FZF Duyệt Git Log và Preview Commit bằng Delta
         return 1
     end
 
+    # --- CẤU HÌNH GIAO DIỆN PREVIEW ---
+    # 1. Trích xuất Ngày giờ và Thống kê (Đã thêm s/^\s*\n//; để xóa dòng trống dư thừa)
+    set -l stat_cmd "git show --stat --color=always --format='%C(#FFB86C)%cd' --date=format:'%d/%m/%Y %H:%M:%S' {2} | perl -0777 -pe 's/^\s*\n//m; if (\$_ =~ /\s+\|\s*(\d+\s+.*?)(?=\n)/) { my \$graph = \$1; s/^[ \t]+[^|\n]+?[ \t]+\|.*?\n//gm; s/( *\d+ files? changed.*?)(?=\n|\$)/\$1 | \$graph/g; } s/^\s+(\d+ files? changed)/\$1/gm; s/(\d+ insertions?\(\+\))/\e[38;2;166;227;161m\$1\e[0m/g; s/(\d+ deletions?\(\-\))/\e[38;2;243;139;168m\$1\e[0m/g; s/(\d+ files? changed)/\e[38;2;249;226;175m\$1\e[0m/g; s/\n+---\n+.*//s'"
+
+    # 2. Lấy Diff và ẩn hoàn toàn metadata commit cũ (Vùng đỏ)
+    set -l diff_cmd "git show --format='' --color=always {2} | delta --side-by-side"
+
+    # 3. Gộp lệnh cho FZF Preview Window
+    set -l preview_cmd "$stat_cmd; echo '────────────────────────────────────────'; $diff_cmd --width=\$FZF_PREVIEW_COLUMNS"
+    
+    # 4. Gộp lệnh cho khi bấm Enter (Ctrl-M) xem Full màn hình
+    set -l enter_cmd "env LESS=R sh -c \"$stat_cmd; echo '────────────────────────────────────────'; $diff_cmd --paging=always\""
+
     # Gọi FZF và lưu output
-    set -l fzf_output (git log --graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" | fzf \
+    set -l fzf_output (git log --graph --color=always --format="%C(auto)%h%d %s %C(#FFB86C)%cr" | fzf \
         --ansi \
         --no-sort \
         --reverse \
         --multi \
         --header="[Git Log] Enter: Full màn hình | Ctrl-Y: Đẩy commit hash ra Terminal" \
         --preview-window=bottom:70% \
-        --preview="git show --color=always {2} | delta --side-by-side --width=\$FZF_PREVIEW_COLUMNS" \
-        --bind="ctrl-m:execute(env LESS=R git show --color=always {2} | delta --side-by-side --paging=always)" \
+        --preview=$preview_cmd \
+        --bind="ctrl-m:execute($enter_cmd)" \
         --expect=ctrl-y)
 
     # Thoát an toàn nếu user ấn Esc/Ctrl-C
