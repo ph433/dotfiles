@@ -27,20 +27,12 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency"
     
     set -l c_score (set_color ff9e64)
     set -l c_reset (set_color normal)
-    set -l c_link  (set_color bb9af7)
-    set -l c_dot   (set_color 9ece6a)
-    set -l c_file  (set_color 7dcfff)
+    # Đã xóa các biến màu c_link, c_dot, c_file để đường dẫn hiển thị màu trắng mặc định
 
     cat "$log_file" | sort -nr | while read -l score line
         if test -e "$line"
-            set -l path_color $c_file 
-            if test -L "$line"
-                set path_color $c_link
-            else if string match -q "*/dotfiles/*" "$line"
-                set path_color $c_dot
-            end
-
-            set -l colored_entry "$c_score$score$c_reset $path_color$line$c_reset"
+            # Đường dẫn ($line) không bọc màu, sẽ tự lấy màu mặc định của terminal
+            set -l colored_entry "$c_score$score$c_reset $line"
             echo $colored_entry >> "$tmp_global"
 
             if string match -q "$PWD/*" "$line"; \
