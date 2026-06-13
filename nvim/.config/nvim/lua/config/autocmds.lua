@@ -70,7 +70,7 @@ vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
     -- 2. Cơ chế Giảm Điểm (Decay): Chỉ trừ điểm khi thực sự mở một file khác hẳn
     for path, score in pairs(files_score) do
       if path ~= file_path then
-        files_score[path] = score - 1
+        files_score[path] = math.max(1.0, score - 1)
       end
     end
 
