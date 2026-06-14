@@ -1,0 +1,13 @@
+
+[theme]
+name = "mycolor"
+
+[colors]
+AlertInfo = "#8be9fd"   # Cyan (Thông tin phụ)
+AlertWarn = "#ffb86c"   # Orange (Cảnh báo)
+AlertError = "#ff5555"  # Red (Lệnh lỗi)
+Annotation = "#6272a4"  # Comment Gray (Thời gian thực thi lệnh)
+Base = "#f8f8f2"        # Foreground White (Chữ thường)
+Guidance = "#50fa7b"    # Green (Thời gian phản hồi phản hồi ms)
+Important = "#ff79c6"   # Pink (Các lệnh quan trọng)
+
