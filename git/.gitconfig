@@ -9,7 +9,23 @@
     diffFilter = delta --color-only
 
 [delta]
-    navigate = true
-    light = false
-    side-by-side = true # Kích hoạt chia 2 cột song song
-    line-numbers = true # Hiện số dòng cho dễ nhìn
+    # Bắt buộc Delta luôn dùng True Color (tránh fallback về 256 màu)
+    true-color = always
+
+    # 1. Tùy chỉnh dòng Commit/Author/Date
+    commit-style = "#00FF00" bold
+    commit-decoration-style = "#FF0087" box
+
+    # 2. Tùy chỉnh dòng tên file (chữ màu Cyan chói, gạch chân)
+    file-style = "#00FFFF" bold ul
+    file-decoration-style = none
+
+    # 3. Tùy chỉnh Hunk Header (cái khung bao quanh dòng code ở dưới cùng)
+    hunk-header-style = file line-number syntax
+    hunk-header-decoration-style = "#FFD700" box
+
+    # 1. Ép True Color cho tên file bên trong khung (Ví dụ: màu Cyan rực rỡ)
+    hunk-header-file-style = "#00FFFF" bold
+
+    # 2. Ép True Color cho số dòng (Ví dụ: màu Hồng Neon)
+    hunk-header-line-number-style = "#FF0087" bold
