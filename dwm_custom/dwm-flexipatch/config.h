@@ -191,9 +191,9 @@ static char titlenormbgcolor[]           = "#222222";
 static char titlenormbordercolor[]       = "#444444";
 static char titlenormfloatcolor[]        = "#db8fd9";
 
-static char titleselfgcolor[]            = "#eeeeee";
-static char titleselbgcolor[]            = "#005577";
-static char titleselbordercolor[]        = "#005577";
+static char titleselfgcolor[]            = "#8BE9FD"; // Màu chữ bạn muốn
+static char titleselbgcolor[]            = "#222222"; // Màu nền bar
+static char titleselbordercolor[]        = "#222222"; // Màu viền
 static char titleselfloatcolor[]         = "#005577";
 
 static char tagsnormfgcolor[]            = "#bbbbbb";
