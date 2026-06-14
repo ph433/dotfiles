@@ -10,7 +10,7 @@ function glog --description "FZF Duyệt Git Log và Preview Commit bằng Delta
     set -l time_width 11
 
     # Gọi FZF và lưu output
-    set -l fzf_output (git log --graph --color=always --format="%cr|%C(cyan)%h%C(reset) %C(green)%d%C(reset) %s" --date=relative | awk -F'|' -v w=$time_width '
+    set -l fzf_output (git log --graph --color=always --format="%cr|%C(#00FFFF)%h%C(reset) %C(#00FF00)%d%C(reset) %s" --date=relative | awk -F'|' -v w=$time_width '
         BEGIN {
             # Giữ màu hồng Cyberpunk cho phần thời gian
             pink = "\033[38;5;198m";
@@ -32,13 +32,14 @@ function glog --description "FZF Duyệt Git Log và Preview Commit bằng Delta
                 time_str = substr(time_part, start_idx);
                 
                 # Cắt ngắn và thêm ... nếu chuỗi dài hơn mốc w
-                if (length(time_str) > w) {
-                    time_str = substr(time_str, 1, w - 3) "...";
-                } else {
-                    # Tự động bù khoảng trắng nếu chuỗi ngắn hơn mốc w
-                    time_str = sprintf("%-" w "s", time_str);
-                }
-                
+		if (length(time_str) > w) {
+			# Cắt ngắn chuỗi, thêm "..." và tự chèn thêm 1 khoảng trắng để sửa lỗi font chữ hẹp
+			time_str = substr(time_str, 1, w - 4) "... ";
+			} else {
+			# Dòng ngắn thì bù khoảng trắng như bình thường và cộng thêm 1 khoảng trắng cho đồng bộ
+			time_str = sprintf("%-" w "s", time_str);
+			}
+
                 # Ghép lại dòng hoàn chỉnh với màu hồng rực rỡ
                 print graph pink time_str reset " " rest_part;
             } else {
