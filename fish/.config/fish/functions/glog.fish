@@ -6,47 +6,8 @@ function glog --description "FZF Duyệt Git Log và Preview Commit bằng Delta
         return 1
     end
 
-    # Đặt mốc độ dài cố định cho cột thời gian (11 ký tự là vừa đẹp cho "2 days ago")
-    set -l time_width 11
-
     # Gọi FZF và lưu output
-    set -l fzf_output (git log --graph --color=always --format="%cr|%C(#00FFFF)%h%C(reset) %C(auto)%d%C(reset) %s" --date=relative | awk -F'|' -v w=$time_width '
-        BEGIN {
-            # Giữ màu hồng Cyberpunk cho phần thời gian
-            pink = "\033[38;5;198m";
-            reset = "\033[0m";
-        }
-        {
-            # Nếu dòng không có ký tự phân tách "|", in ra bình thường
-            if (NF < 2) { print $0; next; }
-            
-            time_part = $1;
-            rest_part = $2;
-            
-            # Tìm vị trí chữ đầu tiên của thời gian (bỏ qua ký tự graph *, |)
-            match(time_part, /[0-9a-zA-Z]/);
-            start_idx = RSTART;
-            
-            if (start_idx > 0) {
-                graph = substr(time_part, 1, start_idx - 1);
-                time_str = substr(time_part, start_idx);
-                
-                # Cắt ngắn và thêm ... nếu chuỗi dài hơn mốc w
-		if (length(time_str) > w) {
-			# Cắt ngắn chuỗi, thêm "..." và tự chèn thêm 1 khoảng trắng để sửa lỗi font chữ hẹp
-			time_str = substr(time_str, 1, w - 4) "... ";
-			} else {
-			# Dòng ngắn thì bù khoảng trắng như bình thường và cộng thêm 1 khoảng trắng cho đồng bộ
-			time_str = sprintf("%-" w "s", time_str);
-			}
-
-                # Ghép lại dòng hoàn chỉnh với màu hồng rực rỡ
-                print graph pink time_str reset " " rest_part;
-            } else {
-                print $0;
-            }
-        }
-    ' | fzf \
+    set -l fzf_output (git log --graph --color=always --format="%C(#FF0087)%<(16)%cr%C(reset) %C(#00FFFF)%h%C(reset) %C(auto)%d%C(reset) %s" --date=relative | fzf \
         --ansi \
         --no-sort \
         --reverse \
