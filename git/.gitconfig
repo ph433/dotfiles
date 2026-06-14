@@ -17,7 +17,7 @@
 
     # 1. Tùy chỉnh dòng Commit/Author/Date thông qua hệ thống decorations
     ; commit-regex = "^commit:? "
-    ; commit-style = "#00FF00" bold
+    commit-style = omit
     ; commit-decoration-style = none
     # 2. Tùy chỉnh dòng tên file (chữ màu Cyan chói, gạch chân)
     file-style = "#00FFFF" bold ul
@@ -44,6 +44,16 @@
     file-decoration-style = none
 
 [color "diff"]
-    # Lên màu True Color cho chữ của bảng stat
-    meta = "#00FFFF" bold
+    # Ép Git xuất màu True Color cho các thành phần chữ của bảng thống kê
+    meta = "#00FFFF" bold               # Toàn bộ text (tên file, số lượng dòng) sang màu Cyan bold
+    frag = "#FF0087" bold               # Các ký tự phân tách nếu có
+
+[color]
+	ui = true
+[color "decorate"]
+    HEAD = "bold #FF0000"
+    branch = "bold #00FF00"
+    remoteBranch = "bold #FF00FF"
+    tag = "bold #FFFF00"
+
 

@@ -10,7 +10,7 @@ function glog --description "FZF Duyệt Git Log và Preview Commit bằng Delta
     set -l time_width 11
 
     # Gọi FZF và lưu output
-    set -l fzf_output (git log --graph --color=always --format="%cr|%C(#00FFFF)%h%C(reset) %C(#00FF00)%d%C(reset) %s" --date=relative | awk -F'|' -v w=$time_width '
+    set -l fzf_output (git log --graph --color=always --format="%cr|%C(#00FFFF)%h%C(reset) %C(auto)%d%C(reset) %s" --date=relative | awk -F'|' -v w=$time_width '
         BEGIN {
             # Giữ màu hồng Cyberpunk cho phần thời gian
             pink = "\033[38;5;198m";
