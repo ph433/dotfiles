@@ -14,9 +14,9 @@ function gdiff --description "FZF Git Diff Preview với Delta"
         --tiebreak=index \
         --multi \
         --header="[Git Diff] Enter: Full màn hình | Ctrl-Y: Đẩy file ra Terminal" \
-        --preview="git diff --color=always {2} | delta --width=\$FZF_PREVIEW_COLUMNS" \
+	--preview='if test {1} = "??"; bat --color=always --style=numbers -- {2} 2>/dev/null || cat {2}; else; git diff --color=always -- {2} | delta --width=$FZF_PREVIEW_COLUMNS; end' \
         --preview-window="bottom:70%" \
-        --bind="ctrl-m:execute-silent(fish -c '__fzf_score_file \"{2}\"')+execute(env LESS=R git diff --color=always {2} | delta --paging=always)" \
+        --bind='ctrl-m:execute-silent(fish -c "__fzf_score_file {2}")+execute(if test {1} = "??"; env LESS=R bat --color=always --style=numbers --paging=always -- {2} 2>/dev/null || cat {2}; else; env LESS=R git diff --color=always -- {2} | delta --paging=always; end)' \
         --expect=ctrl-y)
 
     # Thoát an toàn
