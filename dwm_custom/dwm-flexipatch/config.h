@@ -517,7 +517,22 @@ static const int tagrows = 2;
  */
 
 /* Khai báo màu sắc cho 9 tags (True Color) */
+/* Màu cho tag ĐANG ĐƯỢC CHỌN (Nền màu, chữ đen cho nổi bật) */
 static const char *tagsel[][2] = {
+    /* fg (chữ/icon)    bg (nền) */
+    { "#222222",       "#FF5555" }, /* 1: Đỏ */
+    { "#222222",       "#50FA7B" }, /* 2: Xanh lá */
+    { "#222222",       "#F1FA8C" }, /* 3: Vàng */
+    { "#222222",       "#BD93F9" }, /* 4: Tím */
+    { "#222222",       "#FF79C6" }, /* 5: Hồng */
+    { "#222222",       "#8BE9FD" }, /* 6: Xanh lơ */
+    { "#222222",       "#F8F8F2" }, /* 7: Trắng */
+    { "#222222",       "#FFB86C" }, /* 8: Cam */
+    { "#222222",       "#FF5555" }, /* 9: Đỏ */
+};
+
+/* Màu cho các tag KHÔNG ĐƯỢC CHỌN (Nền đen, chữ màu) */
+static const char *tagnorm[][2] = {
     /* fg (chữ/icon)    bg (nền) */
     { "#FF5555",       "#222222" }, /* 1: Đỏ */
     { "#50FA7B",       "#222222" }, /* 2: Xanh lá */
