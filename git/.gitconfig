@@ -1,6 +1,6 @@
 [user]
-	email = aphuongu@gmail.com
-	name = phuong
+    email = aphuongu@gmail.com
+    name = phuong
 
 [core]
     pager = delta
@@ -9,13 +9,16 @@
     diffFilter = delta --color-only
 
 [delta]
+    # Kích hoạt tính năng gộp nhóm cấu hình hiển thị của Delta
+    features = decorations
+
     # Bắt buộc Delta luôn dùng True Color (tránh fallback về 256 màu)
     true-color = always
 
-    # 1. Tùy chỉnh dòng Commit/Author/Date
-    commit-style = "#00FF00" bold
-    commit-decoration-style = "#FF0087" box
-
+    # 1. Tùy chỉnh dòng Commit/Author/Date thông qua hệ thống decorations
+    ; commit-regex = "^commit:? "
+    ; commit-style = "#00FF00" bold
+    ; commit-decoration-style = none
     # 2. Tùy chỉnh dòng tên file (chữ màu Cyan chói, gạch chân)
     file-style = "#00FFFF" bold ul
     file-decoration-style = none
@@ -24,8 +27,23 @@
     hunk-header-style = file line-number syntax
     hunk-header-decoration-style = "#FFD700" box
 
-    # 1. Ép True Color cho tên file bên trong khung (Ví dụ: màu Cyan rực rỡ)
+    # Ép True Color cho thành phần bên trong khung Hunk Header
     hunk-header-file-style = "#00FFFF" bold
-
-    # 2. Ép True Color cho số dòng (Ví dụ: màu Hồng Neon)
     hunk-header-line-number-style = "#FF0087" bold
+
+    # Bắt buộc Delta phải hiển thị bảng thống kê
+    stat = true
+    stat-style = "#00FFFF"
+
+[delta "decorations"]
+    # Định dạng màu sắc cho toàn bộ chữ thông tin đi kèm (Author, Date)
+    # Nó sẽ ăn theo màu Cyan rực rỡ mà bạn muốn
+    commit-style = "#00FF00" bold
+    commit-decoration-style = "#FF0087" box
+    file-style = "#00FFFF" bold ul
+    file-decoration-style = none
+
+[color "diff"]
+    # Lên màu True Color cho chữ của bảng stat
+    meta = "#00FFFF" bold
+
