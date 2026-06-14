@@ -7,7 +7,7 @@ function glog --description "FZF Duyệt Git Log và Preview Commit bằng Delta
     end
 
     # Gọi FZF và lưu output
-    set -l fzf_output (git log --graph --color=always --format="%C(#FF0087)%<(16)%cr%C(reset) %C(#00FFFF)%h%C(reset) %C(auto)%d%C(reset) %s" --date=relative | fzf \
+    set -l fzf_output (git log --graph --color=always --format="%C(#FF0087)%<(12,trunc)%cr%C(reset) %C(#00FFFF)%h%C(reset) %C(auto)%d%C(reset) %s" --date=relative | fzf \
         --ansi \
         --no-sort \
         --reverse \
@@ -15,7 +15,7 @@ function glog --description "FZF Duyệt Git Log và Preview Commit bằng Delta
         --header="[Git Log] Enter: Full màn hình | Ctrl-Y: Đẩy commit hash ra Terminal" \
         --preview-window="bottom:70%" \
 	--preview="echo {} | grep -oE '\\b[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]+\\b' | head -1 | xargs -I HASH sh -c 'git show --stat -p --color=always --format=\"commit: %H%n%C(#00FFFF)Author: %an <%ae>%C(reset)%n%C(#FF0087)Date:   %ad%C(reset)%n%n%w(0,4,4)%B\" HASH | delta --side-by-side --width=\$FZF_PREVIEW_COLUMNS'" \
-        --bind="ctrl-m:execute(echo {} | grep -oE '\\b[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]+\\b' | head -1 | xargs -I HASH sh -c 'env LESS=R git show --stat -p --color=always --format=\"commit %H%n%C(#00FFFF)Author: %an <%ae>%C(reset)%n%C(#FF0087)Date:   %ad%C(reset)%n%n%w(0,4,4)%B\" HASH | delta --side-by-side --paging=always')" \
+        --bind="ctrl-m:execute(echo {} | grep -oE '\\b[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]+\\b' | head -1 | xargs -I HASH sh -c 'env LESS=R git show --stat -p --color=always --format=\"commit %H%n%C(#00FFFF)Author: %an <%ae>%C(reset)%n%C(#FF0087)Date:   %ad%C(reset)%n%n%w(0,4,4)%B\" HASH | env COLORTERM=truecolor delta --side-by-side --paging=always')" \
         --expect=ctrl-y)
     
 
