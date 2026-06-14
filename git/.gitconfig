@@ -1,59 +1,10 @@
+[include]
+    path = ~/dotfiles/delta/themes.gitconfig
+    path = ~/dotfiles/delta/delta.gitconfig
+
 [user]
     email = aphuongu@gmail.com
     name = phuong
 
-[core]
-    pager = delta
-
-[interactive]
-    diffFilter = delta --color-only
-
-[delta]
-    # Kích hoạt tính năng gộp nhóm cấu hình hiển thị của Delta
-    features = decorations
-
-    # Bắt buộc Delta luôn dùng True Color (tránh fallback về 256 màu)
-    true-color = always
-
-    # 1. Tùy chỉnh dòng Commit/Author/Date thông qua hệ thống decorations
-    ; commit-regex = "^commit:? "
-    commit-style = omit
-    ; commit-decoration-style = none
-    # 2. Tùy chỉnh dòng tên file (chữ màu Cyan chói, gạch chân)
-    file-style = "#00FFFF" bold ul
-    file-decoration-style = none
-
-    # 3. Tùy chỉnh Hunk Header (cái khung bao quanh dòng code ở dưới cùng)
-    hunk-header-style = file line-number syntax
-    hunk-header-decoration-style = "#FFD700" box
-
-    # Ép True Color cho thành phần bên trong khung Hunk Header
-    hunk-header-file-style = "#00FFFF" bold
-    hunk-header-line-number-style = "#FF0087" bold
-
-    # Bắt buộc Delta phải hiển thị bảng thống kê
-    stat = true
-    stat-style = "#00FFFF"
-
-[delta "decorations"]
-    # Định dạng màu sắc cho toàn bộ chữ thông tin đi kèm (Author, Date)
-    # Nó sẽ ăn theo màu Cyan rực rỡ mà bạn muốn
-    commit-style = "#00FF00" bold
-    commit-decoration-style = "#FF0087" box
-    file-style = "#00FFFF" bold ul
-    file-decoration-style = none
-
-[color "diff"]
-    # Ép Git xuất màu True Color cho các thành phần chữ của bảng thống kê
-    meta = "#00FFFF" bold               # Toàn bộ text (tên file, số lượng dòng) sang màu Cyan bold
-    frag = "#FF0087" bold               # Các ký tự phân tách nếu có
-
-[color]
-	ui = true
-[color "decorate"]
-    HEAD = "bold #FF0000"
-    branch = "bold #00FF00"
-    remoteBranch = "bold #FF00FF"
-    tag = "bold #FFFF00"
 
 

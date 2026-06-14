@@ -1,7 +1,12 @@
 -- ==========================================================================
 -- 2. ĐỊNH DẠNG FILE & ĐIỀU HƯỚNG CẤU HÌNH KANATA
 -- ==========================================================================
-vim.filetype.add({ extension = { kbd = "kanata" } })
+vim.filetype.add({
+  extension = {
+    kbd       = "kanata",
+    gitconfig = "gitconfig",
+  },
+})
 
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "kanata",

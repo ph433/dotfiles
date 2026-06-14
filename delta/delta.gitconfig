@@ -1,0 +1,30 @@
+[core]
+    pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    features = collared-trogon
+    true-color = always
+    stat = true
+    stat-style = "#00FFFF"
+
+[color "diff"]
+    # Ép Git xuất màu True Color cho các thành phần chữ của bảng thống kê
+    meta = "#00FFFF" bold               # Toàn bộ text (tên file, số lượng dòng) sang màu Cyan bold
+    frag = "#FF0087" bold               # Các ký tự phân tách nếu có
+    
+    # THÊM 2 DÒNG NÀY ĐỂ ĐỔI MÀU DẤU + VÀ - Ở BẢNG STAT
+    new = "#00FF00" bold                # Màu cho dấu + (ví dụ: Xanh lá cây)
+    old = "#FF0000" bold
+
+[color]
+	ui = true
+
+[color "decorate"]
+    HEAD = "bold #FF0000"
+    branch = "bold #00FF00"
+    remoteBranch = "bold #FF00FF"
+    tag = "bold #FFFF00"
+
