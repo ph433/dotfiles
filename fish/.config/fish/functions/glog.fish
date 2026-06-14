@@ -6,17 +6,56 @@ function glog --description "FZF Duyệt Git Log và Preview Commit bằng Delta
         return 1
     end
 
+    # Đặt mốc độ dài cố định cho cột thời gian (11 ký tự là vừa đẹp cho "2 days ago")
+    set -l time_width 11
+
     # Gọi FZF và lưu output
-    set -l fzf_output (git log --graph --color=always --format="%C(yellow)%C(bold)%cr %C(auto)%h%d %s" | fzf \
+    set -l fzf_output (git log --graph --color=always --format="%cr|%C(cyan)%h%C(reset) %C(green)%d%C(reset) %s" --date=relative | awk -F'|' -v w=$time_width '
+        BEGIN {
+            # Giữ màu hồng Cyberpunk cho phần thời gian
+            pink = "\033[38;5;198m";
+            reset = "\033[0m";
+        }
+        {
+            # Nếu dòng không có ký tự phân tách "|", in ra bình thường
+            if (NF < 2) { print $0; next; }
+            
+            time_part = $1;
+            rest_part = $2;
+            
+            # Tìm vị trí chữ đầu tiên của thời gian (bỏ qua ký tự graph *, |)
+            match(time_part, /[0-9a-zA-Z]/);
+            start_idx = RSTART;
+            
+            if (start_idx > 0) {
+                graph = substr(time_part, 1, start_idx - 1);
+                time_str = substr(time_part, start_idx);
+                
+                # Cắt ngắn và thêm ... nếu chuỗi dài hơn mốc w
+                if (length(time_str) > w) {
+                    time_str = substr(time_str, 1, w - 3) "...";
+                } else {
+                    # Tự động bù khoảng trắng nếu chuỗi ngắn hơn mốc w
+                    time_str = sprintf("%-" w "s", time_str);
+                }
+                
+                # Ghép lại dòng hoàn chỉnh với màu hồng rực rỡ
+                print graph pink time_str reset " " rest_part;
+            } else {
+                print $0;
+            }
+        }
+    ' | fzf \
         --ansi \
         --no-sort \
         --reverse \
         --multi \
         --header="[Git Log] Enter: Full màn hình | Ctrl-Y: Đẩy commit hash ra Terminal" \
-        --preview-window=bottom:70% \
-	--preview="git show --color=always {5} | delta --side-by-side --width=\$FZF_PREVIEW_COLUMNS" \
-	--bind="ctrl-m:execute(env LESS=R git show --color=always {5} | delta --side-by-side --paging=always)" \
+        --preview-window="bottom:70%" \
+        --preview="echo {} | grep -oE '\\b[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]+\\b' | head -1 | xargs -I % sh -c 'git show --color=always % | delta --side-by-side --width=\$FZF_PREVIEW_COLUMNS'" \
+        --bind="ctrl-m:execute(echo {} | grep -oE '\\b[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]+\\b' | head -1 | xargs -I % sh -c 'env LESS=R git show --color=always % | delta --side-by-side --paging=always')" \
         --expect=ctrl-y)
+    
 
     # Thoát an toàn nếu user ấn Esc/Ctrl-C
     if test (count $fzf_output) -eq 0
@@ -33,6 +72,7 @@ function glog --description "FZF Duyệt Git Log và Preview Commit bằng Delta
 
         for line in $selected_lines
             # Regex trích xuất commit hash (chuỗi hex từ 7-40 ký tự) bỏ qua các ký tự graph (*, |)
+            # Ở đoạn này là code Fish thuần, không qua FZF nên vẫn dùng {7,40} bình thường
             set -l hash (string match -r '\b[0-9a-f]{7,40}\b' $line)[1]
             if test -n "$hash"
                 set --append cleaned_hashes $hash
