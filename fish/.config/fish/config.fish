@@ -96,11 +96,14 @@ if status is-interactive
 
 	# set -gx FZF_DEFAULT_OPTS '--layout=reverse --border --preview-window=bottom:50%:hsplit:wrap'
 	# fzf_configure_bindings --directory=\cf --history=\cj --variables=\cv --git_log=\cl --git_status=\cs --processes=\cp
-	fzf_configure_bindings_custom --directory=\cx --find_files=\cy --history=\cj --variables=\cv --git_log=\cl --git_status=\ca --processes=\cp --recent=ctrl-shift-y
+	# fzf_configure_bindings_custom --directory=\cx --find_files=\cy --history=\cj --variables=\cv --git_log=\cl --git_status=\ca --processes=\cp --recent=ctrl-shift-y
 	# bind \ct __fzf_search_directory_custom
 	# bind \cf __fzf_find_files_custom
 	set -gx fzf_fd_opts --type=d --hidden --follow --exclude=.git --color=always
 	set -gx LS_COLORS (cat ~/.config/fish/.ls_colors)
+	set -g fish_color_command 50FA7B     # Lệnh hợp lệ màu xanh lá
+	set -g fish_color_error FF5555       # Lệnh gõ sai màu đỏ
+	set -g fish_color_param 8BE9FD       # Tham số màu cyan
 	# # Ép TẤT CẢ các tính năng fzf preview thư mục dùng eza lên màu + icon
 	# set -gx fzf_preview_dir_cmd "eza --all --icons=always --color=always --grid"
 	# # Ép TẤT CẢ các tính năng fzf preview file dùng bat lên màu True Color
@@ -122,97 +125,4 @@ if status is-interactive
 	if type -q starship
 		starship init fish | source
 	end
-end
-
-function glog --description "FZF Duyệt Git Log và Preview Commit bằng Delta"
-    git log --graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" | fzf \
-        --ansi \
-        --no-sort \
-        --reverse \
-        --header="[Git Log] Chọn commit để xem chi tiết" \
-        --preview="git show --color=always {2} | delta --side-by-side --width=\$FZF_PREVIEW_COLUMNS"
-end
-
-function gdiff --description "FZF Git Diff Preview với Delta"
-    # Kiểm tra xem có đang ở trong repo Git không
-    git rev-parse --is-inside-work-tree >/dev/null 2>&1
-    if test $status -ne 0
-        echo "Lỗi: Thư mục này không phải là một Git Repository!"
-        return 1
-    end
-
-    # Gọi FZF lấy danh sách file thay đổi, preview bằng git diff + delta
-    git status -s | fzf \
-        --no-sort \
-        --reverse \
-        --tiebreak=index \
-        --header="[Git Diff] Chọn file để soi code thay đổi" \
-        --preview="git diff --color=always {2} | delta --width=\$FZF_PREVIEW_COLUMNS" \
-        --bind="ctrl-m:execute(nvim -d {2}; clear)" # Sửa dòng này: Thay +refresh bằng ; clear
-end
-
-function y
-    if test (count $argv) -eq 0
-        echo "Nhập tên bài hát nữa bạn ơi! Ví dụ: y lofi chill"
-        return
-    end
-
-    echo "🔍 Đang bốc dữ liệu trực tiếp từ YouTube bằng yt-dlp..."
-
-    # 1. yt-dlp lấy data
-    # 2. jq parse thành TSV
-    # 3. awk format dữ liệu và chèn các cột "|" ngăn cách bằng Tab (OFS='\t')
-    # 4. column -t căn đều các cột theo Tab
-    yt-dlp "ytsearch20:$argv" \
-        --flat-playlist \
-        --dump-json \
-        --extractor-args "youtube:player_client=android" 2>/dev/null \
-        | jq -r '[
-            (.title // "Không rõ"), 
-            (.channel // .uploader // "Không rõ"), 
-            (.duration // 0), 
-            (.view_count // 0), 
-            .url
-          ] | @tsv' \
-        | awk -F '\t' -v OFS='\t' '
-            function commas(n) {
-                if (n == 0 || n == "null") return "N/A"
-                r = ""
-                while(length(n) > 3) {
-                    r = "," substr(n, length(n)-2) r
-                    n = substr(n, 1, length(n)-3)
-                }
-                return n r
-            }
-            {
-                title = length($1) > 55 ? substr($1, 1, 52) "..." : $1
-                channel = length($2) > 20 ? substr($2, 1, 17) "..." : $2
-                
-                m = int($3 / 60)
-                s = int($3 % 60)
-                time = sprintf("%d:%02d", m, s)
-                
-                views = commas($4)
-                
-                # In ra các trường cách nhau bởi Tab, tách riêng dấu "|" thành các cột độc lập để dễ căn lề
-                print title, "|", channel, "|", time, "|", views, "|", $5
-            }
-        ' \
-        | column -t -s (printf '\t') \
-        | fzf --ansi --reverse --prompt="🎵 Chọn bài để quẩy: " \
-        | read -l selected
-
-    if test -n "$selected"
-        # Lấy URL ở cột cuối cùng
-        set -l video_url (echo $selected | awk '{print $NF}')
-        
-        # Lấy tiêu đề trước dấu "|" đầu tiên và xóa khoảng trắng 2 đầu
-        set -l video_title (echo $selected | awk -F '\\|' '{print $1}')
-        set video_title (string trim "$video_title")
-        
-        echo "▶️ Đang phát bài: $video_title"
-        mpv --no-video "$video_url"
-    else
-        echo "Đã hủy chọn bài."
-    end
 end
