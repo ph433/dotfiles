@@ -515,6 +515,21 @@ static const int tagrows = 2;
  * Refer to the Rule struct definition for the list of available fields depending on
  * the patches you enable.
  */
+
+/* Khai báo màu sắc cho 9 tags (True Color) */
+static const char *tagsel[][2] = {
+    /* fg (chữ/icon)    bg (nền) */
+    { "#FF5555",       "#222222" }, /* 1: Đỏ */
+    { "#50FA7B",       "#222222" }, /* 2: Xanh lá */
+    { "#F1FA8C",       "#222222" }, /* 3: Vàng */
+    { "#BD93F9",       "#222222" }, /* 4: Tím */
+    { "#FF79C6",       "#222222" }, /* 5: Hồng */
+    { "#8BE9FD",       "#222222" }, /* 6: Xanh lơ */
+    { "#F8F8F2",       "#222222" }, /* 7: Trắng */
+    { "#FFB86C",       "#222222" }, /* 8: Cam */
+    { "#FF5555",       "#222222" }, /* 9: Đỏ */
+};
+
 static const Rule rules[] = {
     /* xprop(1):
      * WM_CLASS(STRING) = instance, class
