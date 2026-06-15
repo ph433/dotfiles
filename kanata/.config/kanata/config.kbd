@@ -83,13 +83,13 @@
   _       _       @nvsw   _                                       _       _                       _       _       _       _               _
 )
 
-(deflayer macro_nvim-visual
+(deflayer macro-nvim-visual
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       S-6     _       @g_     _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       C-a     S-6     _       @viW    _       _       _       A-a     @vv     S-v     _       _                       _       _       _       _
+  _       C-a     f1      f2      f3      _       _       _       A-a     @vv     S-v     _       _                       _       _       _       _
   _       _       _       @viW    @viw    _       _       _       _       _       _       _               _               _       _       _
-  _       _       _       @nvV                                    _       _                       _       _       _       _               _
+  _       _       _       @nvv                                    _       _                       _       _       _       _               _
 )
 
 (deflayer like-ctl-alt
