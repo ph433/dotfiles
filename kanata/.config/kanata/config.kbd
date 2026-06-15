@@ -35,7 +35,7 @@
   @tabii  esc     home    up      end     @pra2   _       @tabi   @tabii  @taba   _       _       _       _               _       _       _       _
   @osl_d  tab     left    down    rght    spc     @fd     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
   @sropt  C-z     _       C-c     C-v     _       v       A-c     A-v     C-a     C-y     @cmd            _               _       _       _
-  _       _       _       ent                             @nvsw           _                       _       caps    _       _               _
+  _       _       @char2  ent                             @nvsw           _                       _       caps    _       _               _
 )
 
 (deflayer pre-right-arrow2-temp
@@ -87,7 +87,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       S-6     _       @g_     _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       C-a     f1      f2      f3      _       _       _       A-a     @vv     S-v     _       _                       _       _       _       _
+  _       C-a     f1      f2      f3      _       _       f4      A-a     @vv     S-v     _       _                       _       _       _       _
   _       _       _       @viW    @viw    _       _       _       _       _       _       _               _               _       _       _
   _       _       _       @nvv                                    _       _                       _       _       _       _               _
 )
@@ -269,7 +269,7 @@
   @tabe   q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
   bks     a       r       s       t       g       m       n       e       i       o       '       _                       _       _       _       _
   @ss     x       c       d       v       z       k       h       ,       .       /       @ss             _               _       _       _
-  lctl    lmet    @char   spc                                     @colosw _                       _       _       _       _               _
+  lctl    lmet    @char2  spc                                     @colosw _                       _       _       _       _               _
 )
 
 (deflayer colemak-dh-shift-temp
@@ -381,6 +381,7 @@
 
   ns (one-shot-press 1000 (layer-toggle mod_num-shift-temp))
   char (one-shot-press 1000 (layer-toggle char-bare))
+  char2 (one-shot-press 1000 (layer-toggle char-bare2))
 
   ;; sc (one-shot 2000 lctl) ;; Sticky Ctrl
   ;; sa (one-shot 2000 lalt) ;; Sticky Alt
@@ -719,8 +720,17 @@
 (deflayer char-bare 
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       S-'     S-`     _       _       _       _       ;       S-;     _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       S-[     [       S-9     /       `       '       \       S-0     ]       S-]     _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       _       ent                                     _       _                       _       _       _       _               _
+  _       _       _       spc                                     _       _                       _       _       _       _               _
+)
+
+(deflayer char-bare2
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       S-/     S-`     S-'     S-\     _       _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       spc                                     _       _                       _       _       _       _               _
 )
