@@ -12,8 +12,8 @@ return {
 
     -- 1. Cài đặt các parser
     require("nvim-treesitter").install({
-      "fish", "toml", "lua", "vim", "vimdoc", "markdown", "bash", "commonlisp"
-    })
+          "fish", "toml", "lua", "vim", "vimdoc", "markdown", "bash", "commonlisp", "c", "cpp"
+        })
 
     -- 2. Khôi phục thói quen cấu hình cũ bằng plugin vệ tinh
     require('treesitter-modules').setup({
@@ -25,7 +25,7 @@ return {
         keymaps = {
           init_selection = "<F2>",       -- Bấm phím F2 để bắt đầu chọn vùng code
           node_incremental = "<F3>",     -- Bấm phím F3 để bôi đen rộng ra từ từ (theo node)
-          scope_incremental = "S-v",     -- Bấm Shift + v để bôi đen nhanh toàn bộ hàm/khối code
+          scope_incremental = "<F4>",     -- Bấm Shift + v để bôi đen nhanh toàn bộ hàm/khối code
           node_decremental = "<F1>",     -- Bấm phím F1 để thu hẹp vùng chọn lại
         },
       },
