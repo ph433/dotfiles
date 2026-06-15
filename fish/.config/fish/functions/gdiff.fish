@@ -6,7 +6,7 @@ function gdiff --description "FZF Git Diff Preview với Delta và Action Menu"
         return 1
     end
 
-    # Tầng 1: FZF chọn file (Enter để tiếp tục, Ctrl-F để xem full)
+    # Tầng 1: FZF chọn file
     set -l fzf_output (git -c color.status=always status -s | fzf \
         --ansi \
         --no-sort \
@@ -27,7 +27,7 @@ function gdiff --description "FZF Git Diff Preview với Delta và Action Menu"
     set -l selected_paths $fzf_output
     set -l cleaned_paths
     
-    # Tạo một file tạm để gom toàn bộ diff preview cho multi-select
+    # Tạo file tạm để gom diff
     set -l tmp_preview (mktemp)
 
     for path_line in $selected_paths
@@ -42,7 +42,7 @@ function gdiff --description "FZF Git Diff Preview với Delta và Action Menu"
         
         set --append cleaned_paths $extracted_path
         
-        # --- GOM PREVIEW CHO NHIỀU FILE (DELTA MULTI) ---
+        # Ghi nội dung vào file tạm
         echo -e "\n\033[1;33m=== $extracted_path ===\033[0m\n" >> $tmp_preview
         if test "$status_code" = "??"
             bat --color=always --style=numbers -- $extracted_path 2>/dev/null >> $tmp_preview || cat $extracted_path >> $tmp_preview
@@ -54,14 +54,14 @@ function gdiff --description "FZF Git Diff Preview với Delta và Action Menu"
     end
 
     # ---------------------------------------------------------
-    # TẦNG 2: MENU HÀNH ĐỘNG (Dùng vòng lặp để không văng khi chọn 6)
+    # TẦNG 2: MENU HÀNH ĐỘNG 
     # ---------------------------------------------------------
     set -l menu_items "1. git add\n2. git restore (Bỏ thay đổi)\n3. git restore --staged (Unstage)\n4. git commit\n5. Chèn đường dẫn ra Terminal\n6. Xem Full màn hình (Delta)"
     set -l action ""
     
     while true
         set action (echo -e $menu_items | fzf \
-            --prompt="⚡ Chọn hành động ("(count $cleaned_paths)" file) - Bấm phím 1-6 để chọn: " \
+            --prompt="⚡ Chọn hành động ("(count $cleaned_paths)" file) - Bấm 1-6 để chọn: " \
             --height=90% \
             --layout=reverse \
             --border=rounded \
@@ -72,51 +72,49 @@ function gdiff --description "FZF Git Diff Preview với Delta và Action Menu"
             --bind '3:become(echo "3")' \
             --bind '4:become(echo "4")' \
             --bind '5:become(echo "5")' \
-            --bind '6:become(echo "6")' \
+            --bind "6:execute(less -R < /dev/tty > /dev/tty $tmp_preview)" \
             --bind 'ctrl-d:preview-page-down,ctrl-u:preview-page-up')
 
-        # Nếu người dùng bấm Esc để hủy menu
+        # Nếu bấm Esc để hủy
         if test -z "$action"
             echo (set_color red)"Đã hủy thao tác."(set_color normal)
             break
         end
 
-        # Xử lý riêng tính năng 6 (Xem full màn hình)
-        if test "$action" = "6"
-            # Mở less để hiển thị full màn hình (hỗ trợ màu ANSI của Delta)
-            less -R $tmp_preview
-            # Lệnh continue đưa bạn quay lại Menu fzf ngay sau khi thoát less (bấm q)
+        # Xử lý nếu dùng "Mũi tên xuống dòng 6 + Enter" thay vì bấm phím 6
+        if string match -q "6*" "$action"
+            less -R < /dev/tty > /dev/tty $tmp_preview
             continue
         end
 
-        # Nếu chọn 1-5 thì thoát vòng lặp menu để chạy lệnh git ở dưới
+        # Bấm 1-5 thì thoát vòng lặp để thực thi lệnh
         break
     end
 
-    # Xóa file tạm ngay sau khi thoát vòng lặp để dọn rác hệ thống
+    # Xóa file tạm
     rm -f $tmp_preview
 
-    # Thực thi lệnh (chỉ chạy nếu người dùng chọn từ 1-5)
-    if test -n "$action"; and test "$action" != "6"
+    # Chạy lệnh (xử lý cả trường hợp bấm phím nóng "1" và chọn bằng Enter "1. git add")
+    if test -n "$action"; and not string match -q "6*" "$action"
         switch "$action"
-            case "1"
+            case "1" "1*"
                 git add $cleaned_paths
                 echo (set_color green)"✔ Đã thêm "(count $cleaned_paths)" file vào staging."(set_color normal)
             
-            case "2"
+            case "2" "2*"
                 git restore $cleaned_paths
                 echo (set_color yellow)"⚠ Đã loại bỏ thay đổi của "(count $cleaned_paths)" file."(set_color normal)
             
-            case "3"
+            case "3" "3*"
                 git restore --staged $cleaned_paths
                 echo (set_color cyan)"✔ Đã unstage "(count $cleaned_paths)" file."(set_color normal)
             
-            case "4"
+            case "4" "4*"
                 git add $cleaned_paths
                 commandline --replace "git commit -m \"\""
                 commandline --cursor (math (string length "git commit -m \"\"") - 1)
             
-            case "5"
+            case "5" "5*"
                 set -l output_str (string join ' ' $cleaned_paths)
                 commandline --insert -- "$output_str "
         end
