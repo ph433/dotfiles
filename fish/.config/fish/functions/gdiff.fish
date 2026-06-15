@@ -16,7 +16,7 @@ function gdiff --description "FZF Git Diff All-in-One Dashboard (Bulletproof Scr
 
     # [HÀM GIẢ] Bắt phím Left nguyên vẹn không sợ đứt gãy syntax
     function fzf
-        command fzf $argv --bind "left:execute-silent(echo {} > /tmp/glog_raw)+abort"
+        command fzf $argv --bind "ctrl-left:execute-silent(echo {} > /tmp/glog_raw)+abort"
     end
 
     # [HÀM GIẢ] Bắt Ctrl-Y từ glog cũ của bạn
