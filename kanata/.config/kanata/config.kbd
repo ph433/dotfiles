@@ -25,7 +25,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @tabii  esc     home    up      end     @pra2tt _       @tabi   @tabii  @taba   C-p     _       _       _               _       _       _       _
   @osl_d  tab     left    down    rght    spc     @fd     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
-  @sropt  C-z     C-x     C-c     C-v     _       v       A-c     A-v     C-a     C-y     @ss             _               _       _       _
+  @sropt  C-z     C-x     C-c     C-v     _       @nvv    A-c     A-v     C-a     C-y     @ss             _               _       _       _
   _       _       @numt   ent                             @colet          _                       _       caps    _       _               _
 )
 
@@ -81,6 +81,15 @@
   _       _       @wwasl  @wwasd  @wwasr  _       _       @x1     @e1     @m1     @r1     _       _                       _       _       _       _
   @pra2t  _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       @nvsw   _                                       _       _                       _       _       _       _               _
+)
+
+(deflayer macro_nvim-visual
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       S-6     _       @g_     _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       C-a     S-6     _       @viW    _       _       _       A-a     @vv     S-v     _       _                       _       _       _       _
+  _       _       _       @viW    @viw    _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       @nvV                                    _       _                       _       _       _       _               _
 )
 
 (deflayer like-ctl-alt
@@ -346,6 +355,8 @@
 
 (defalias
   sropt (one-shot-press 1000 (layer-toggle search-opt))
+  nvv (layer-toggle macro-nvim-visual)
+  nvV (layer-switch macro-nvim-visual)
 )
 
 (defalias
@@ -389,10 +400,11 @@
 
 (defalias
   viw (macro v i w)
+  viW (macro v i S-w)
   cgn (macro c g n)
-  upnv (multi up (layer-switch mod_nvim))
-  donv (multi down (layer-switch mod_nvim))
   gg (multi (macro g g) (layer-switch mod_nvim))
+  vv (multi (macro v v))
+  g_ (multi (macro g S--))
 )
 
 (defalias
