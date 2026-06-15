@@ -66,11 +66,11 @@ static const char unknown_str[] = "n/a";
  */
 static const struct arg args[] = {
     /* function         format                                      argument */
-    { cpu_perc,         "^c#FF5555^  %s%% ^d^ │  ",                NULL }, /* Text màu đỏ */
-    { ram_perc,         "^c#50FA7B^  %s%% ^d^ │  ",                NULL }, /* Text màu xanh lá (Dracula) */
-    { run_command,      "^c#F1FA8C^󰃠  %s%% ^d^ │  ",                "brightnessctl -m | cut -d, -f4 | tr -d '%'" },
-    { run_command,      "^c#BD93F9^󰕾  %s%% ^d^ │  ",                "amixer sget Master | grep -oE '[0-9]+%' | head -1 | tr -d '%'" },
+    { cpu_perc,         "^c#FF5555^  %s%% ^d^  ",                 NULL }, /* Text màu đỏ */
+    { ram_perc,         "^c#50FA7B^  %s%% ^d^  ",                 NULL }, /* Text màu xanh lá (Dracula) */
+    { run_command,      "^c#F1FA8C^󰃠  %s%% ^d^  ",                 "brightnessctl -m | cut -d, -f4 | tr -d '%'" },
+    { run_command,      "^c#BD93F9^󰕾  %s%% ^d^  ",                 "amixer sget Master | grep -oE '[0-9]+%' | head -1 | tr -d '%'" },
     { battery_perc,     "^c#FF79C6^󰁹 %s%% [",                       "BAT0" },
-    { battery_state,    "%s] ^d^ │  ",                              "BAT0" },
+    { battery_state,    "%s] ^d^  ",                                "BAT0" },
     { datetime,         "^c#8BE9FD^󰃭  %s^d^",                        "%d/%m 󱑒 %H:%M " },
 };
