@@ -2,21 +2,33 @@ return {
   "nvim-treesitter/nvim-treesitter",
   build = ":TSUpdate",
   event = { "BufReadPost", "BufNewFile" },
-
+  dependencies = {
+    -- Plugin này sẽ mang 100% tính năng spam 'v' và highlight cũ quay trở lại
+    "MeanderingProgrammer/treesitter-modules.nvim",
+  },
+  
   config = function()
     vim.opt.smartindent = true
 
-    -- 1. Cài đặt các parser ngôn ngữ (thay thế cho ensure_installed)
+    -- 1. Cài đặt các parser
     require("nvim-treesitter").install({
       "fish", "toml", "lua", "vim", "vimdoc", "markdown", "bash", "commonlisp"
     })
 
-    -- 2. BẬT HIGHLIGHT: Kích hoạt Treesitter bằng API gốc của Neovim (thay thế cho highlight = true)
-    vim.api.nvim_create_autocmd("FileType", {
-      group = vim.api.nvim_create_augroup("treesitter_highlight", { clear = true }),
-      callback = function()
-        pcall(vim.treesitter.start)
-      end,
+    -- 2. Khôi phục thói quen cấu hình cũ bằng plugin vệ tinh
+    require('treesitter-modules').setup({
+      highlight = {
+        enable = true,
+      },
+      incremental_selection = {
+        enable = true,
+        keymaps = {
+          init_selection = "<CR>",    -- Bấm Enter để bắt đầu
+          node_incremental = "v",     -- Spam phím 'v' để bôi đen rộng ra (như cũ!)
+          scope_incremental = "grc",
+          node_decremental = "grm",   -- Bấm grm để thu hẹp lại
+        },
+      },
     })
   end,
 }
