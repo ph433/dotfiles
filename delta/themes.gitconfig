@@ -211,13 +211,13 @@
     dark = true
     file-added-label = [+]
     file-copied-label = [C]
-    file-decoration-style = none
+    file-decoration-style = "#00FFFF" box
     file-modified-label = [M]
     file-removed-label = [-]
     file-renamed-label = [R]
-    file-style = 232 bold 184
+    file-style = "#00FFFF" bold
     hunk-header-decoration-style = none
-    hunk-header-file-style = "#999999"
+    hunk-header-file-style = bold "#bd93f9"
     hunk-header-line-number-style = bold "#03a4ff"
     hunk-header-style = file line-number syntax
     line-numbers = true
@@ -232,7 +232,7 @@
     plus-style = syntax "#004000"
     whitespace-error-style = "#280050" reverse
     zero-style = syntax
-    syntax-theme = Nord
+    syntax-theme = Dracula
 
 [delta "mantis-shrimp"]
     #author: https://github.com/2kabhishek

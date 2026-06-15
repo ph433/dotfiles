@@ -168,11 +168,16 @@ static void (*bartabmonfns[])(Monitor *) = { NULL /* , customlayoutfn */ };
 #endif // MONOCLE_LAYOUT
 #endif // BAR_TABGROUPS_PATCH
 #if BAR_PANGO_PATCH
-static const char font[]                 = "JetBrains Mono 10";
+static const char font[]                 = "JetBrains Mono Bold 10";
 #else
-static const char *fonts[]               = { "JetBrains Mono:size=10", "JetBrainsMono Nerd Font:size=11" };
+static const char *fonts[]               = { 
+    "JetBrains Mono:weight=bold:size=10", 
+    "JetBrainsMono Nerd Font:weight=bold:size=11" 
+};
 #endif // BAR_PANGO_PATCH
-static const char dmenufont[]            = "JetBrains Mono:size=10";
+
+/* Sửa luôn cả font hiển thị của dmenu bên dưới cho nó đồng bộ phom đậm luôn ghen */
+static const char dmenufont[]            = "JetBrains Mono:weight=bold:size=10";
 
 static char c000000[]                    = "#000000"; // placeholder value
 
@@ -478,7 +483,7 @@ static char tagicons[][NUMTAGS][MAX_TAGLEN] =
 static char *tagicons[][NUMTAGS] =
 #endif // NAMETAG_PATCH
 {
-	[DEFAULT_TAGS]        = { "", "", "", "󰊴", "󰓇", "", "󰙯", "", "⚙" },
+	[DEFAULT_TAGS]        = { "", "", "", "󰊴", "󰓇", "", "󰭹", "", "󰲆" },
 	[ALTERNATIVE_TAGS]    = { "A", "B", "C", "D", "E", "F", "G", "H", "I" },
 	[ALT_TAGS_DECORATION] = { "<1>", "<2>", "<3>", "<4>", "<5>", "<6>", "<7>", "<8>", "<9>" },
 };
