@@ -6,14 +6,14 @@ function gdiff --description "FZF Git Diff Preview với Delta và Action Menu"
         return 1
     end
 
-    # Gọi FZF (Giữ nguyên toàn bộ thuộc tính, giao diện và chức năng phím Enter)
+    # Tầng 1: Gọi FZF chọn file
     set -l fzf_output (git -c color.status=always status -s | fzf \
         --ansi \
         --no-sort \
         --reverse \
         --tiebreak=index \
         --multi \
-        --header="[Git Diff] Tab: Chọn nhiều | Enter: Xem Full | Ctrl-Y: Mở Menu Hành Động" \
+        --header="[Git Diff] Tab: Chọn file | Enter: Xem Full | Ctrl-Y: Mở Menu Hành Động" \
         --preview='if test {1} = "??"; bat --color=always --style=numbers -- {2} 2>/dev/null || cat {2}; else; git diff --color=always -- {2} | delta --width=$FZF_PREVIEW_COLUMNS; end' \
         --preview-window="bottom:70%" \
         --bind='ctrl-m:execute-silent(fish -c "__fzf_score_file {2}")+execute(if test {1} = "??"; env LESS=R bat --color=always --style=numbers --paging=always -- {2} 2>/dev/null || cat {2}; else; env LESS=R git diff --color=always -- {2} | delta --paging=always; end)' \
@@ -31,63 +31,84 @@ function gdiff --description "FZF Git Diff Preview với Delta và Action Menu"
     # Xử lý nếu bấm Ctrl-Y
     if test "$key_pressed" = "ctrl-y"; and test (count $selected_paths) -gt 0
         set -l cleaned_paths
+        
+        # Tạo một file tạm để lưu trữ toàn bộ nội dung preview của các file đã chọn
+        set -l tmp_preview (mktemp)
 
-        for path in $selected_paths
+        for path_line in $selected_paths
             set -l extracted_path ""
+            set -l status_code (string sub --length 2 $path_line)
             
-            if test (string sub --length 1 $path) = R
-                # Xử lý file đổi tên: "R LICENSE -> LICENSE.md"
-                set extracted_path (string split -- "-> " $path)[-1]
+            if test (string sub --length 1 $path_line) = R
+                set extracted_path (string split -- "-> " $path_line)[-1]
             else
-                set extracted_path (string sub --start=4 $path)
+                set extracted_path (string sub --start=4 $path_line)
             end
             
             set --append cleaned_paths $extracted_path
             
-            # GỌI HÀM CỘNG ĐIỂM Ở ĐÂY
+            # --- XÂY DỰNG NỘI DUNG PREVIEW CHO MENU TẦNG 2 ---
+            echo -e "\n\033[1;33m=== $extracted_path ===\033[0m\n" >> $tmp_preview
+            if test "$status_code" = "??"
+                # File mới chưa track
+                bat --color=always --style=numbers -- $extracted_path 2>/dev/null >> $tmp_preview || cat $extracted_path >> $tmp_preview
+            else
+                # Dùng git diff HEAD để thấy toàn bộ thay đổi (cả staged và unstaged)
+                git diff HEAD --color=always -- $extracted_path | delta >> $tmp_preview
+            end
+            
             __fzf_score_file "$extracted_path" 2>/dev/null
         end
 
         # ---------------------------------------------------------
-        # TẠO MENU HÀNH ĐỘNG (ACTION MENU) BẰNG FZF
+        # TẦNG 2: MENU HÀNH ĐỘNG VỚI PHÍM TẮT SỐ VÀ PREVIEW
         # ---------------------------------------------------------
-        set -l action (echo -e "git add\ngit restore (Bỏ thay đổi)\ngit restore --staged (Unstage)\ngit commit\nChèn đường dẫn ra Terminal" | fzf \
-            --prompt="⚡ Chọn hành động cho "(count $cleaned_paths)" file: " \
-            --height=30% \
+        set -l menu_items "1. git add\n2. git restore (Bỏ thay đổi)\n3. git restore --staged (Unstage)\n4. git commit\n5. Chèn đường dẫn ra Terminal"
+        
+        set -l action (echo -e $menu_items | fzf \
+            --prompt="⚡ Chọn hành động ("(count $cleaned_paths)" file) - Bấm phím 1-5 để chọn nhanh: " \
+            --height=90% \
             --layout=reverse \
-            --border=rounded)
+            --border=rounded \
+            --preview="cat $tmp_preview" \
+            --preview-window="right:65%,border-left" \
+            --bind '1:become(echo "1. git add")' \
+            --bind '2:become(echo "2. git restore (Bỏ thay đổi)")' \
+            --bind '3:become(echo "3. git restore --staged (Unstage)")' \
+            --bind '4:become(echo "4. git commit")' \
+            --bind '5:become(echo "5. Chèn đường dẫn ra Terminal")' \
+            --bind 'ctrl-d:preview-page-down,ctrl-u:preview-page-up')
 
-        # Xử lý hành động được chọn
+        # Dọn dẹp file tạm
+        rm -f $tmp_preview
+
+        # Thực thi hành động dựa trên chuỗi trả về
         switch "$action"
-            case "git add"
+            case "1. git add"
                 git add $cleaned_paths
                 echo (set_color green)"✔ Đã thêm "(count $cleaned_paths)" file vào staging."(set_color normal)
             
-            case "git restore (Bỏ thay đổi)"
+            case "2. git restore (Bỏ thay đổi)"
                 git restore $cleaned_paths
                 echo (set_color yellow)"⚠ Đã loại bỏ thay đổi của "(count $cleaned_paths)" file."(set_color normal)
             
-            case "git restore --staged (Unstage)"
+            case "3. git restore --staged (Unstage)"
                 git restore --staged $cleaned_paths
                 echo (set_color cyan)"✔ Đã unstage "(count $cleaned_paths)" file."(set_color normal)
             
-            case "git commit"
-                # Auto-add file đã chọn và in sẵn lệnh commit ra terminal để gõ message
+            case "4. git commit"
                 git add $cleaned_paths
                 commandline --replace "git commit -m \"\""
-                # Di chuyển con trỏ chuột vào giữa 2 dấu ngoặc kép
                 commandline --cursor (math (string length "git commit -m \"\"") - 1)
             
-            case "Chèn đường dẫn ra Terminal"
+            case "5. Chèn đường dẫn ra Terminal"
                 set -l output_str (string join ' ' $cleaned_paths)
                 commandline --insert -- "$output_str "
                 
             case '*'
-                # Bấm Esc để hủy menu
                 echo (set_color red)"Đã hủy thao tác."(set_color normal)
         end
     end
     
-    # Yêu cầu Fish vẽ lại giao diện dòng lệnh
     commandline --function repaint 2>/dev/null
 end
