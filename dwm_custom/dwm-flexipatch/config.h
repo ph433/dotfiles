@@ -168,11 +168,11 @@ static void (*bartabmonfns[])(Monitor *) = { NULL /* , customlayoutfn */ };
 #endif // MONOCLE_LAYOUT
 #endif // BAR_TABGROUPS_PATCH
 #if BAR_PANGO_PATCH
-static const char font[]                 = "monospace 10";
+static const char font[]                 = "JetBrains Mono 10";
 #else
-static const char *fonts[]               = { "monospace:size=10" };
+static const char *fonts[]               = { "JetBrains Mono:size=10", "JetBrainsMono Nerd Font:size=11" };
 #endif // BAR_PANGO_PATCH
-static const char dmenufont[]            = "monospace:size=10";
+static const char dmenufont[]            = "JetBrains Mono:size=10";
 
 static char c000000[]                    = "#000000"; // placeholder value
 
@@ -217,8 +217,8 @@ static char urgbordercolor[]             = "#ff0000";
 static char urgfloatcolor[]              = "#db8fd9";
 
 #if BAR_LTSYMBOL_SCHEME_PATCH
-static char ltsymbolfgcolor[]            = "#222222";
-static char ltsymbolbgcolor[]            = "#fe9877";
+static char ltsymbolfgcolor[]            = "#50fa7b"; /* Thay #bbbbbb thành mã màu bạn muốn */
+static char ltsymbolbgcolor[]            = "#222222"; 
 #endif // BAR_LTSYMBOL_SCHEME_PATCH
 
 #if RENAMED_SCRATCHPADS_PATCH
@@ -791,19 +791,19 @@ static const Layout layouts[] = {
 static const Layout layouts[] = {
     /* symbol     arrange function */
     #if TILE_LAYOUT
-    { "[]=",      tile },    /* VỊ TRÍ 0 - Mặc định */
+    { "",      tile },    /* Chỉ để lại icon Lưới */
     #endif
-    { "><>",      NULL },    /* VỊ TRÍ 1 - Thả nổi Floating */
-    
+    { "",      NULL },    /* Chỉ để lại icon Thả nổi */
+
     #if FIBONACCI_DWINDLE_LAYOUT
-    { "[\\]",     dwindle }, /* VỊ TRÍ 2 - Đưa Dwindle lên đây */
+    { "󰕰",      dwindle }, /* Chỉ để lại icon Dwindle */
     #endif
     #if FIBONACCI_SPIRAL_LAYOUT
-    { "(@)",      spiral },  /* VỊ TRÍ 3 - Đưa Spiral lên đây */
+    { "🌀",      spiral },  /* Chỉ để lại icon Spiral */
     #endif
 
     #if MONOCLE_LAYOUT
-    { "[M]",      monocle }, /* VỊ TRÍ 4 - Monocle lùi xuống số 4 */
+    { "󰱯",      monocle }, /* Chỉ để lại icon Monocle */
     #endif
     #if BSTACK_LAYOUT
     { "TTT",      bstack },

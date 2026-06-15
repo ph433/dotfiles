@@ -85,7 +85,7 @@
 #define BAR_LTSYMBOL_PATCH 1
 
 /* Adds a colour schme for the layout symbol */
-#define BAR_LTSYMBOL_SCHEME_PATCH 0
+#define BAR_LTSYMBOL_SCHEME_PATCH 1
 
 /* Adds powerline arrows for the status.
  * This uses statuscolors logic for choosing colors for the powerline. As these markers
