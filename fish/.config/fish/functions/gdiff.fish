@@ -24,7 +24,6 @@ function gdiff --description "FZF Git Diff Preview với Delta và Action Menu"
         return 0
     end
 
-    # Do không dùng expect nữa nên toàn bộ fzf_output là các dòng file được chọn
     set -l selected_paths $fzf_output
     set -l cleaned_paths
     
@@ -55,49 +54,72 @@ function gdiff --description "FZF Git Diff Preview với Delta và Action Menu"
     end
 
     # ---------------------------------------------------------
-    # TẦNG 2: MENU HÀNH ĐỘNG 
+    # TẦNG 2: MENU HÀNH ĐỘNG (Dùng vòng lặp để không văng khi chọn 6)
     # ---------------------------------------------------------
-    set -l menu_items "1. git add\n2. git restore (Bỏ thay đổi)\n3. git restore --staged (Unstage)\n4. git commit\n5. Chèn đường dẫn ra Terminal"
+    set -l menu_items "1. git add\n2. git restore (Bỏ thay đổi)\n3. git restore --staged (Unstage)\n4. git commit\n5. Chèn đường dẫn ra Terminal\n6. Xem Full màn hình (Delta)"
+    set -l action ""
     
-    set -l action (echo -e $menu_items | fzf \
-        --prompt="⚡ Chọn hành động ("(count $cleaned_paths)" file) - Bấm phím 1-5 để chọn: " \
-        --height=90% \
-        --layout=reverse \
-        --border=rounded \
-        --preview="cat $tmp_preview" \
-        --preview-window="right:65%,border-left" \
-        --bind '1:become(echo "1. git add")' \
-        --bind '2:become(echo "2. git restore (Bỏ thay đổi)")' \
-        --bind '3:become(echo "3. git restore --staged (Unstage)")' \
-        --bind '4:become(echo "4. git commit")' \
-        --bind '5:become(echo "5. Chèn đường dẫn ra Terminal")' \
-        --bind 'ctrl-d:preview-page-down,ctrl-u:preview-page-up')
+    while true
+        set action (echo -e $menu_items | fzf \
+            --prompt="⚡ Chọn hành động ("(count $cleaned_paths)" file) - Bấm phím 1-6 để chọn: " \
+            --height=90% \
+            --layout=reverse \
+            --border=rounded \
+            --preview="cat $tmp_preview" \
+            --preview-window="bottom:70%,border-top" \
+            --bind '1:become(echo "1")' \
+            --bind '2:become(echo "2")' \
+            --bind '3:become(echo "3")' \
+            --bind '4:become(echo "4")' \
+            --bind '5:become(echo "5")' \
+            --bind '6:become(echo "6")' \
+            --bind 'ctrl-d:preview-page-down,ctrl-u:preview-page-up')
 
-    # Xóa file tạm đi cho sạch máy
+        # Nếu người dùng bấm Esc để hủy menu
+        if test -z "$action"
+            echo (set_color red)"Đã hủy thao tác."(set_color normal)
+            break
+        end
+
+        # Xử lý riêng tính năng 6 (Xem full màn hình)
+        if test "$action" = "6"
+            # Mở less để hiển thị full màn hình (hỗ trợ màu ANSI của Delta)
+            less -R $tmp_preview
+            # Lệnh continue đưa bạn quay lại Menu fzf ngay sau khi thoát less (bấm q)
+            continue
+        end
+
+        # Nếu chọn 1-5 thì thoát vòng lặp menu để chạy lệnh git ở dưới
+        break
+    end
+
+    # Xóa file tạm ngay sau khi thoát vòng lặp để dọn rác hệ thống
     rm -f $tmp_preview
 
-    # Thực thi lệnh
-    switch "$action"
-        case "1. git add"
-            git add $cleaned_paths
-            echo (set_color green)"✔ Đã thêm "(count $cleaned_paths)" file vào staging."(set_color normal)
-        
-        case "2. git restore (Bỏ thay đổi)"
-            git restore $cleaned_paths
-            echo (set_color yellow)"⚠ Đã loại bỏ thay đổi của "(count $cleaned_paths)" file."(set_color normal)
-        
-        case "3. git restore --staged (Unstage)"
-            git restore --staged $cleaned_paths
-            echo (set_color cyan)"✔ Đã unstage "(count $cleaned_paths)" file."(set_color normal)
-        
-        case "4. git commit"
-            git add $cleaned_paths
-            commandline --replace "git commit -m \"\""
-            commandline --cursor (math (string length "git commit -m \"\"") - 1)
-        
-        case "5. Chèn đường dẫn ra Terminal"
-            set -l output_str (string join ' ' $cleaned_paths)
-            commandline --insert -- "$output_str "
+    # Thực thi lệnh (chỉ chạy nếu người dùng chọn từ 1-5)
+    if test -n "$action"; and test "$action" != "6"
+        switch "$action"
+            case "1"
+                git add $cleaned_paths
+                echo (set_color green)"✔ Đã thêm "(count $cleaned_paths)" file vào staging."(set_color normal)
+            
+            case "2"
+                git restore $cleaned_paths
+                echo (set_color yellow)"⚠ Đã loại bỏ thay đổi của "(count $cleaned_paths)" file."(set_color normal)
+            
+            case "3"
+                git restore --staged $cleaned_paths
+                echo (set_color cyan)"✔ Đã unstage "(count $cleaned_paths)" file."(set_color normal)
+            
+            case "4"
+                git add $cleaned_paths
+                commandline --replace "git commit -m \"\""
+                commandline --cursor (math (string length "git commit -m \"\"") - 1)
+            
+            case "5"
+                set -l output_str (string join ' ' $cleaned_paths)
+                commandline --insert -- "$output_str "
+        end
     end
     
     commandline --function repaint 2>/dev/null
