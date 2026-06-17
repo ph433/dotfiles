@@ -29,6 +29,7 @@ syntax match kanataFunc "\<layer-toggle\>\|\<layer-switch\>\|\<tap-hold\>\|\<tap
 syntax match kanataNumber  "\<\d\+\>"
 syntax match kanataAlias   "@[a-zA-Z0-9_-]\+"
 syntax match kanataComment ";.*$"
+syntax match kanataTemp "-temp\>\|\<temp\>"
 " (Đã xóa dòng kanataChord để C-z, S-r, A-c tự động trở về màu mặc định)
 
 
@@ -50,7 +51,11 @@ hi kanataFunc       guifg=#7AA2F7 ctermfg=Blue
 " THÊM MỚI: Tô màu Đỏ Dracula in nghiêng cho các phím Modifier
 hi kanataModifier   guifg=#FF5555 ctermfg=Red gui=italic
 
-hi def link kanataAlias   Identifier
-hi def link kanataComment Comment
+" Các nút alias (@tabii, @osl_d...) dùng màu Trắng sữa Dracula in nghiêng cho sang
+hi kanataAlias guifg=#8BE9FD ctermfg=Cyan gui=italic
+
+" Comment (;; ...) dùng màu Xanh xám bóng đêm chuẩn Dracula
+hi kanataComment guifg=#6272A4 ctermfg=DarkGray gui=italic
+hi kanataTemp guifg=#565F89 ctermfg=DarkGray gui=italic
 
 let b:current_syntax = "kanata"
