@@ -27,11 +27,9 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency"
     
     set -l c_score (set_color ff9e64)
     set -l c_reset (set_color normal)
-    # Đã xóa các biến màu c_link, c_dot, c_file để đường dẫn hiển thị màu trắng mặc định
 
     cat "$log_file" | sort -nr | while read -l score line
         if test -e "$line"
-            # Đường dẫn ($line) không bọc màu, sẽ tự lấy màu mặc định của terminal
             set -l colored_entry "$c_score$score$c_reset $line"
             echo $colored_entry >> "$tmp_global"
 
@@ -43,7 +41,7 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency"
         end
     end
 
-    # 🎯 Thiết lập trạng thái ban đầu: Ưu tiên trạng thái được truyền vào
+    # 🎯 Thiết lập trạng thái ban đầu
     if test -n "$initial_scope"
         echo "$initial_scope" > "$scope_file"
     else if test -s "$tmp_local"
@@ -79,12 +77,12 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency"
         --layout=reverse \
         --border \
         --prompt="Frecency> " \
-        --header="Enter: Mở | Ctrl-Y: Dán | Ctrl-Space: Đổi phạm vi | Alt-Space: Tìm Custom" \
+        --header="Enter: Mở | Ctrl-Y: Dán | Left: Đổi phạm vi | Right: File | Ctrl-Right: Thư mục" \
         --header-lines=1 \
         --preview-window="bottom:50%" \
         --preview 'bat --style=numbers --color=always --line-range :100 {2..}' \
-        --bind="ctrl-space:reload($master_script toggle-scope)" \
-        --expect=ctrl-y,enter,alt-space)
+        --bind="left:reload($master_script toggle-scope)" \
+        --expect=ctrl-y,enter,right,ctrl-right)
 
     # 🎯 Đọc lại trạng thái cuối cùng trước khi dọn file rác
     set -l final_scope (cat "$scope_file" 2>/dev/null)
@@ -98,10 +96,14 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency"
     set -l key_pressed $fzf_output[1]
     set -l selected $fzf_output[2..-1]
 
-    # 🎯 Chuyền "gậy tiếp sức" (final_scope) cho hàm Custom
-    if test "$key_pressed" = "alt-space"
+    # 🎯 Phân nhánh xử lý các phím chức năng gọi hàm Custom
+    if test "$key_pressed" = "right"
         sleep 0.05
         __fzf_find_files_custom "$final_scope"
+        return
+    else if test "$key_pressed" = "ctrl-right"
+        sleep 0.05
+        __fzf_search_directory_custom "$final_scope"
         return
     end
 
