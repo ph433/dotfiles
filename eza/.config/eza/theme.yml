@@ -1,44 +1,21 @@
-# Set to false to disable color output globally
-colourful: true
-
-# Color and style configurations for UI elements and metadata
-styles:
-  # File kinds
-  filekinds:
-    normal: { foreground: Normal }
-    directory: { foreground: Blue, style: Bold }
-    symlink: { foreground: Cyan }
-    executable: { foreground: Green, style: Bold }
-
-  # Permissions display
-  perms:
-    user_read: { foreground: Yellow }
-    user_write: { foreground: Red }
-    user_execute: { foreground: Green, style: Bold }
-
-  # Size column metadata
-  size:
-    major: { foreground: Green }
-    minor: { foreground: Normal }
-    number: { foreground: Purple }
-
-  # Git status columns
-  git_repo:
-    git_clean: { foreground: Green }
-    git_dirty: { foreground: Yellow }
-
 # Overrides for file icons (requires Nerd Fonts)
 filenames:
   ".bashrc":
-    name:
-      style: { foreground: "#89E051" }  # Giữ nguyên màu xanh lá của .bashrc
+    filename:
+      foreground: "#89E051"
+      is_italic: true
+      is_bold: true
     icon:
-      glyph: ""                        # Icon cấu hình mặc định
+      glyph: ""
       style: { foreground: "#89E051" }
+      is_italic: true
 
-extensions:
-  "md":
+  ".bash_aliases":
+    filename:
+      foreground: "#89E051"
+      is_italic: true
+      is_bold: true
     icon:
-      glyph: "📝"
-      style: { foreground: Blue }
-
+      glyph: ""
+      style: { foreground: "#89E051" }
+      is_italic: true
