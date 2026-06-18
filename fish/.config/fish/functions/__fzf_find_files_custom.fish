@@ -1,5 +1,5 @@
 function __fzf_find_files_custom
-    # 🎯 Nhận "gậy tiếp sức" trạng thái từ Frecency
+    # 🎯 Nhận "gậy tiếp sức" trạng thái
     set -l initial_scope $argv[1]
     if test -z "$initial_scope"
         set initial_scope "local"
@@ -49,12 +49,12 @@ function __fzf_find_files_custom
         --layout=reverse \
         --border \
         --prompt="Custom Search> " \
-        --header="Enter: Mở | Ctrl-Y: Dán | Left: Đổi phạm vi | Right: File recent | Ctrl-Right: Tìm thư mục" \
+        --header="Enter: Mở | Right: Dán | Left: Đổi phạm vi" \
         --header-lines=1 \
         --preview-window="bottom:50%" \
         --preview 'bat --style=numbers --color=always --line-range :100 {}' \
         --bind="left:reload($master_script toggle-scope)" \
-        --expect=right,ctrl-right,enter,ctrl-y)
+        --expect=right,enter)
 
     # Đọc lại trạng thái cuối cùng và dọn dẹp
     set -l final_scope (cat "$scope_file" 2>/dev/null)
@@ -69,28 +69,14 @@ function __fzf_find_files_custom
     set -l key_pressed $fzf_out[1]
     set -l selected_file $fzf_out[2]
 
-    # 🎯 Chuyền trạng thái sang hàm Frecency
-    if test "$key_pressed" = "right"
-        sleep 0.05 
-        __fzf_file_recent "$final_scope"
-        return
-    end
-
-    # 🎯 Chuyền trạng thái sang hàm tìm thư mục
-    if test "$key_pressed" = "ctrl-right"
-        sleep 0.05
-        __fzf_search_directory_custom "$final_scope"
-        return
-    end
-
-    # 🎯 Xử lý Mở file (Enter) và Dán (Ctrl-Y), kèm theo Ghi điểm Frecency
+    # 🎯 Xử lý Mở file (Enter) và Dán (Right), kèm theo Ghi điểm Frecency
     if test -n "$selected_file"
         set -l absolute_file (realpath -- $selected_file)
 
         # Mở hoặc dán
         if test "$key_pressed" = "enter"
             nvim $absolute_file
-        else if test "$key_pressed" = "ctrl-y"
+        else if test "$key_pressed" = "right"
             commandline -i (string escape -- $absolute_file)" "
         end
 

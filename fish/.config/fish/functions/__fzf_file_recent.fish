@@ -77,12 +77,12 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency"
         --layout=reverse \
         --border \
         --prompt="Frecency> " \
-        --header="Enter: Mở | Ctrl-Y: Dán | Left: Đổi phạm vi | Right: File | Ctrl-Right: Thư mục" \
+        --header="Enter: Mở | Right: Dán | Left: Đổi phạm vi" \
         --header-lines=1 \
         --preview-window="bottom:50%" \
         --preview 'bat --style=numbers --color=always --line-range :100 {2..}' \
         --bind="left:reload($master_script toggle-scope)" \
-        --expect=ctrl-y,enter,right,ctrl-right)
+        --expect=enter,right)
 
     # 🎯 Đọc lại trạng thái cuối cùng trước khi dọn file rác
     set -l final_scope (cat "$scope_file" 2>/dev/null)
@@ -96,23 +96,12 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency"
     set -l key_pressed $fzf_output[1]
     set -l selected $fzf_output[2..-1]
 
-    # 🎯 Phân nhánh xử lý các phím chức năng gọi hàm Custom
-    if test "$key_pressed" = "right"
-        sleep 0.05
-        __fzf_find_files_custom "$final_scope"
-        return
-    else if test "$key_pressed" = "ctrl-right"
-        sleep 0.05
-        __fzf_search_directory_custom "$final_scope"
-        return
-    end
-
     if test (count $selected) -gt 0
         set -l file (string replace -r "^\S+\s+" "" -- "$selected[1]")
 
         if test "$key_pressed" = "enter"
             nvim $file
-        else if test "$key_pressed" = "ctrl-y"
+        else if test "$key_pressed" = "right"
             commandline -i (string escape $file)" "
             __fzf_score_file "$file"
         end
