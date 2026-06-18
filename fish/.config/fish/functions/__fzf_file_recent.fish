@@ -100,10 +100,18 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency"
         set -l file (string replace -r "^\S+\s+" "" -- "$selected[1]")
 
         if test "$key_pressed" = "enter"
+            # Nhấn Enter: Thoát fzf và mở file bằng nvim
             nvim $file
         else if test "$key_pressed" = "right"
+            # 1. Dán đường dẫn ra dòng lệnh (cách ra 1 nhịp)
             commandline -i (string escape $file)" "
+            
+            # 2. Cập nhật điểm cho Yazi/Frecency log
             __fzf_score_file "$file"
+
+            # 3. 🎯 BẮN VÀO LOG RECENT: Lấy Unix timestamp và ghi nối vào file
+            set -l timestamp (date +%s)
+            echo "$timestamp $file" >> "$HOME/.cache/nvim_recent.log"
         end
     end
     

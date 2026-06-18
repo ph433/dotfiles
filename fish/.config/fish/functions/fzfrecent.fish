@@ -63,10 +63,17 @@ function fzfrecent -d "Tìm file dựa trên lịch sử mở trong Neovim (Dash
     switch "$key"
         case right
             # Phím Right: Dán trực tiếp đường dẫn ra dòng lệnh (prompt)
-            commandline -i "$target_path "
+            commandline -i (string escape "$target_path")" "
+            
+            # Bắn vào log recent: Ghi thời gian hiện tại và đường dẫn vào log
+            set -l timestamp (date +%s)
+            echo "$timestamp $target_path" >> "$HOME/.cache/nvim_recent.log"
             
         case enter
             # Phím Enter: Mở nvim
             nvim "$target_path"
     end
+    
+    # Refresh lại dòng lệnh để hiển thị đường dẫn vừa dán ngay lập tức
+    commandline -f repaint 2>/dev/null
 end
