@@ -5,22 +5,19 @@
     diffFilter = delta --color-only
 
 [delta]
-    features = collared-trogon
+    features = calochortus-lyallii
     true-color = always
-    stat = true
-    stat-style = "#00FFFF"
+    stat = false
+    ; stat-style = "#00FFFF"
 
 [color "diff"]
-    # Ép Git xuất màu True Color cho các thành phần chữ của bảng thống kê
-    meta = "#00FFFF" bold               # Toàn bộ text (tên file, số lượng dòng) sang màu Cyan bold
-    frag = "#FF0087" bold               # Các ký tự phân tách nếu có
-    
-    # THÊM 2 DÒNG NÀY ĐỂ ĐỔI MÀU DẤU + VÀ - Ở BẢNG STAT
-    new = "#00FF00" bold                # Màu cho dấu + (ví dụ: Xanh lá cây)
+    meta = "#00FFFF" bold               
+    frag = "#FF0087" bold               
+    new = "#00FF00" bold                
     old = "#FF0000" bold
 
 [color]
-	ui = true
+    ui = true
 
 [color "decorate"]
     HEAD = "bold #FF0000"
@@ -28,3 +25,8 @@
     remoteBranch = "bold #FF00FF"
     tag = "bold #FFFF00"
 
+[color "status"]
+    # Cấu hình màu đường dẫn file cho git status
+    added = "#00FF00" bold
+    changed = "#FF0000" bold
+    untracked = "#FF0000" bold

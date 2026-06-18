@@ -266,6 +266,15 @@ extensions:
       style:
         foreground: "#8be9fd"
 
+  "gitconfig":
+    filename:
+      foreground: "#F05032"
+      is_bold: true
+    icon:
+      glyph: ""
+      style:
+        foreground: "#F05032"
+
   "list":
     filename:
       foreground: "#ff79c6"
@@ -358,12 +367,12 @@ extensions:
 
   "sh":
     filename:
-      foreground: "#98C379"
+      foreground: "#4ADE80"
       is_bold: true
     icon:
       glyph: ""
       style:
-        foreground: "#98C379"
+        foreground: "#4ADE80"
 
   "in":
     filename:
@@ -775,6 +784,15 @@ filenames:
       style: { foreground: "#ff79c6" }
       is_bold: true
 
+  "COMMIT_EDITMSG":
+    filename:
+      foreground: "#F05032"
+      is_bold: true
+    icon:
+      glyph: ""
+      style: { foreground: "#F05032" }
+      is_bold: true
+
   ".prettierrc":
     filename:
       foreground: "#ff79c6"
@@ -783,3 +801,89 @@ filenames:
       glyph: "󱇨"
       style: { foreground: "#ff79c6" }
       is_bold: true
+
+  "config":
+    filename:
+      foreground: "#61AFEF" # Xanh dương (Cài đặt)
+    icon:
+      glyph: "⚙"          # Icon bánh răng cài đặt
+      foreground: "#61AFEF"
+
+  # Mô tả của kho lưu trữ (Mặc định chứa "Unnamed repository")
+  "description":
+    filename:
+      foreground: "#5C6370" # Xám (Ít quan trọng)
+    icon:
+      glyph: ""          # Icon tệp văn bản thông thường
+      foreground: "#5C6370"
+
+  # Con trỏ HEAD hiện tại (Vô cùng quan trọng trong Git)
+  "HEAD":
+    filename:
+      foreground: "#EF4444" # Đỏ nổi bật (Vị trí con trỏ hiện tại)
+    icon:
+      glyph: ""          # Icon tag/vị trí chính
+      foreground: "#EF4444"
+
+  # Lưu vết của lần fetch cuối cùng
+  "FETCH_HEAD":
+    filename:
+      foreground: "#E5C07B" # Vàng (Lịch sử fetch)
+    icon:
+      glyph: ""          # Icon tải xuống/đồng bộ đám mây
+      foreground: "#E5C07B"
+
+  # Bản sao lưu của HEAD trước khi thực hiện lệnh nguy hiểm (merge, rebase)
+  "ORIG_HEAD":
+    filename:
+      foreground: "#AB82FF" # Tím (Trạng thái backup)
+    icon:
+      glyph: "󰕌"          # Icon quay lại/hoàn tác (Undo)
+      foreground: "#AB82FF"
+
+  # Vùng đệm chứa các tệp đã staged (Staging Area)
+  "index":
+    filename:
+      foreground: "#10B981" # Xanh lá (Sẵn sàng commit)
+    icon:
+      glyph: ""          # Icon danh sách/chỉ mục
+      foreground: "#10B981"
+
+  # Nơi nén các tham chiếu nhánh để tối ưu tốc độ
+  "packed-refs":
+    filename:
+      foreground: "#98C379" # Xanh lá nhạt
+    icon:
+      glyph: ""          # Icon hộp lưu trữ/nén (Archive)
+      foreground: "#98C379"
+
+  # Tệp cấu hình riêng của công cụ GitUI (nếu có trong thư mục)
+  "gitui":
+    filename:
+      foreground: "#F05032" # Cam Git
+    icon:
+      glyph: "󰊢"          # Icon Git Logo
+      foreground: "#F05032"
+
+  ".stow-local-ignore":
+    filename:
+      foreground: "#5C6370" # Màu xám (tệp ẩn/bỏ qua)
+    icon:
+      glyph: ""            # Icon thùng rác/bỏ qua
+      foreground: "#5C6370"
+
+  # Quy tắc cấu hình hệ thống (Udev/Input rules)
+  "99-input.rules":
+    filename:
+      foreground: "#E5C07B" # Màu vàng cấu hình hệ thống
+    icon:
+      glyph: ""            # Icon cờ lê sửa chữa
+      foreground: "#E5C07B"
+
+  # Tệp cấu hình fzf
+  "fzf.config.bash":
+    filename:
+      foreground: "#61AFEF" # Màu xanh dương Bash script
+    icon:
+      glyph: ""            # Icon Terminal
+      foreground: "#4E9A06" # Màu xanh lá của fzf chính gốc

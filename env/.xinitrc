@@ -5,7 +5,7 @@ xinput set-prop "FTCS0038:00 2808:0106 Touchpad" "libinput Tapping Enabled" 1 &
 # --- KHỞI ĐỘNG CÁC ỨNG DỤNG CHẠY NGẦM HỆ THỐNG ---
 # 1. Bật bộ gõ tiếng Việt Fcitx5
 fcitx5 -d &
-
+slstatus &
 # 2. Bật quản lý Clipboard CopyQ
 copyq &
 

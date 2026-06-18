@@ -5,12 +5,13 @@ if status is-interactive
 
     for mode in default insert
         # Phím tắt cũ của bạn
-        bind --mode $mode ctrl-shift-x '__zoxide_zi; commandline -f repaint'
+        bind --mode $mode ctrl-shift-down '__zoxide_zi; commandline -f repaint'
         
         # 🎯 PHÍM TẮT MỚI: Nhấn Ctrl + H để tìm kiếm thư mục Home
         bind --mode $mode shift-down '__fzf_find_files_custom'
         bind --mode $mode ctrl-down '__fzf_search_directory_custom'
         bind --mode $mode down '__fzf_file_recent'
+	bind --mode $mode alt-down 'fzfrecent'
         bind --mode $mode ctrl-up 'gdiff'
 	bind --mode $mode shift-up 'glog'
 	bind --mode $mode ctrl-shift-up 'fzf_git_checkout'

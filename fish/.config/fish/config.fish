@@ -89,7 +89,8 @@ if status is-interactive
 	alias lt="eza --tree --level=2 --icons --group-directories-first"
 
 	# Gõ 'lta' để hiện cây thư mục bốc sạch cả file ẩn kịch trần
-	alias lta="eza --tree --level=2 --icons --group-directories-first -a"
+	alias lta="eza --tree --level=2 --icons --group-directories-first -a --color=always"
+	
 	alias g="git"
 	alias v="nvim"
 	set -x BAT_THEME "Dracula"
@@ -100,7 +101,9 @@ if status is-interactive
 	# bind \ct __fzf_search_directory_custom
 	# bind \cf __fzf_find_files_custom
 	set -gx fzf_fd_opts --type=d --hidden --follow --exclude=.git --color=always
-	set -gx LS_COLORS (cat ~/.config/fish/.ls_colors)
+	set -x LS_COLORS "$LS_COLORS:.ICEAuthority=38;2;255;184;108:"
+	# set -gx LS_COLORS (cat ~/.config/fish/.ls_colors)
+	set -gx EZA_CONFIG_DIR $HOME/.config/eza
 	set -g fish_color_command 50FA7B     # Lệnh hợp lệ màu xanh lá
 	set -g fish_color_error FF5555       # Lệnh gõ sai màu đỏ
 	set -g fish_color_param 8BE9FD       # Tham số màu cyan
