@@ -176,6 +176,15 @@ extensions:
       style:
         foreground: "#61AFEF"
 
+  "bak":
+    filename:
+      foreground: "#888888"
+      is_bold: true
+    icon:
+      glyph: "📦"
+      style:
+        foreground: "#888888"
+
   "dmrc":
     filename:
       foreground: "#BD93F9"
@@ -193,6 +202,15 @@ extensions:
       glyph: "󰃢"
       style:
         foreground: "#BD93F9"
+
+  "1":
+    filename:
+      foreground: "#50fa7b"
+      is_bold: true
+    icon:
+      glyph: "󱚡"
+      style:
+        foreground: "#50fa7b"
 
   "gtkrc-xfce":
     filename:
@@ -229,6 +247,168 @@ extensions:
       glyph: "󰦝"
       style:
         foreground: "#F1FA8C"
+
+  "toml":
+    filename:
+      foreground: "#D19A66"
+      is_bold: true
+    icon:
+      glyph: ""
+      style:
+        foreground: "#9C4221"
+
+  "blend":
+    filename:
+      foreground: "#8be9fd"
+      is_bold: true
+    icon:
+      glyph: ""
+      style:
+        foreground: "#8be9fd"
+
+  "list":
+    filename:
+      foreground: "#ff79c6"
+      is_bold: true
+    icon:
+      glyph: ""
+      style:
+        foreground: "#ff79c6"
+
+  "json":
+    filename:
+      foreground: "#f1fa8c"
+      is_bold: true
+    icon:
+      glyph: ""
+      style:
+        foreground: "#f1fa8c"
+
+  "yml":
+    filename:
+      foreground: "#ffb86c"
+      is_bold: true
+    icon:
+      glyph: ""
+      style:
+        foreground: "#ffb86c"
+
+  "desktop":
+    filename:
+      foreground: "#bd93f9"
+      is_bold: true
+    icon:
+      glyph: ""
+      style:
+        foreground: "#bd93f9"
+
+  "nix":
+    filename:
+      foreground: "#7EBAE4"
+      is_bold: true
+    icon:
+      glyph: ""
+      style:
+        foreground: "#7EBAE4"
+
+  "env":
+    filename:
+      foreground: "#f1fa8c"
+      is_bold: true
+    icon:
+      glyph: ""
+      style:
+        foreground: "#f1fa8c"
+
+  "log":
+    filename:
+      foreground: "#6272a4"
+      is_bold: true
+    icon:
+      glyph: ""
+      style:
+        foreground: "#6272a4"
+
+  "lock":
+    filename:
+      foreground: "#6A737D"
+      is_bold: true
+    icon:
+      glyph: ""
+      style:
+        foreground: "#6A737D"
+
+  "mk":
+    filename:
+      foreground: "#61AFEF"
+      is_bold: true
+    icon:
+      glyph: "🛠"
+      style:
+        foreground: "#61AFEF"
+
+  "o":
+    filename:
+      foreground: "#A37ACC"
+      is_bold: true
+    icon:
+      glyph: ""
+      style:
+        foreground: "#A37ACC"
+
+  "sh":
+    filename:
+      foreground: "#98C379"
+      is_bold: true
+    icon:
+      glyph: ""
+      style:
+        foreground: "#98C379"
+
+  "in":
+    filename:
+      foreground: "#f1fa8c"
+      is_bold: true
+    icon:
+      glyph: ""
+      style:
+        foreground: "#f1fa8c"
+
+  "cfg":
+    filename:
+      foreground: "#f1fa8c"
+      is_bold: true
+    icon:
+      glyph: ""
+      style:
+        foreground: "#f1fa8c"
+
+  "locale":
+    filename:
+      foreground: "#6272a4"
+      is_bold: true
+    icon:
+      glyph: "󰗊"
+      style:
+        foreground: "#6272a4"
+
+  "dirs":
+    filename:
+      foreground: "#bd93f9"
+      is_bold: true
+    icon:
+      glyph: "󰉋"
+      style:
+        foreground: "#bd93f9"
+
+  "zsh":
+    filename:
+      foreground: "#50fa7b"
+      is_bold: true
+    icon:
+      glyph: ""
+      style:
+        foreground: "#50fa7b"
 
 # Overrides for file icons (requires Nerd Fonts)
 filenames:
@@ -312,6 +492,65 @@ filenames:
       style: { foreground: "#89E051" }
       is_bold: true
 
+  ".zshrc.pre-oh-my-zsh":
+    filename:
+      foreground: "#5C6370"
+      is_italic: true
+      is_bold: true
+    icon:
+      glyph: ""
+      style: { foreground: "#5C6370" }
+      is_bold: true
+
+  ".zshrc":
+    filename:
+      foreground: "#10B981"
+      is_italic: true
+      is_bold: true
+    icon:
+      glyph: ""
+      style: { foreground: "#10B981" }
+      is_bold: true
+
+  ".zsh_history":
+    filename:
+      foreground: "#859900"
+      is_italic: true
+      is_bold: true
+    icon:
+      glyph: ""
+      style: { foreground: "#859900" }
+      is_bold: true
+
+  ".zcompdump":
+    filename:
+      foreground: "#6A737D"
+      is_italic: true
+      is_bold: true
+    icon:
+      glyph: ""
+      style: { foreground: "#6A737D" }
+      is_bold: true
+
+  ".zcompdump-Legion-5.9":
+    filename:
+      foreground: "#6A737D"
+      is_italic: true
+      is_bold: true
+    icon:
+      glyph: ""
+      style: { foreground: "#6A737D" }
+      is_bold: true
+
+  ".gitkeep":
+    filename:
+      foreground: "#6272a4"
+      is_bold: true
+    icon:
+      glyph: ""
+      style: { foreground: "#6272a4" }
+      is_bold: true
+
   ".gitignore":
     filename:
       foreground: "#F05032"
@@ -362,7 +601,7 @@ filenames:
       foreground: "#CE412B"
       is_bold: true
     icon:
-      glyph: "🦀"
+      glyph: "󱢜"
       style: { foreground: "#CE412B" }
       is_bold: true
 
@@ -428,11 +667,119 @@ filenames:
       style: { foreground: "#50FA7B" }
       is_bold: true
 
-  ".ICEAuthority":
+  ".ICEauthority":
     filename:
-      foreground: "#FFB86C"
+      foreground: "#E06C75"
       is_bold: true
     icon:
-      glyph: ""
-      style: { foreground: "#FFB86C" }
+      glyph: "🔑"
+      style: { foreground: "#E06C75" }
+      is_bold: true
+
+  ".envrc":
+    filename:
+      foreground: "#E5C07B"
+      is_bold: true
+    icon:
+      glyph: ""
+      style: { foreground: "#E5C07B" }
+      is_bold: true
+
+  "dwm":
+    filename:
+      foreground: "#E5C07B"
+      is_bold: true
+    icon:
+      glyph: ""
+      style: { foreground: "#E5C07B" }
+      is_bold: true
+
+  "CHANGELOG":
+    filename:
+      foreground: "#8be9fd"
+      is_bold: true
+    icon:
+      glyph: ""
+      style: { foreground: "#8be9fd" }
+      is_bold: true
+
+  "env":
+    filename:
+      foreground: "#f1fa8c"
+      is_bold: true
+    icon:
+      glyph: ""
+      style: { foreground: "#f1fa8c" }
+      is_bold: true
+
+  "dmenu_run":
+    filename:
+      foreground: "#f1fa8c"
+      is_bold: true
+    icon:
+      glyph: "󱐋"
+      style: { foreground: "#f1fa8c" }
+      is_bold: true
+
+  ".editorconfig":
+    filename:
+      foreground: "#6272a4"
+      is_bold: true
+    icon:
+      glyph: ""
+      style: { foreground: "#6272a4" }
+      is_bold: true
+
+  "go.sum":
+    filename:
+      foreground: "#6272a4"
+      is_bold: true
+    icon:
+      glyph: "󰟓"
+      style: { foreground: "#6272a4" }
+      is_bold: true
+
+  "go.mod":
+    filename:
+      foreground: "#8be9fd"
+      is_bold: true
+    icon:
+      glyph: "󰟓"
+      style: { foreground: "#8be9fd" }
+      is_bold: true
+
+  ".tool-versions":
+    filename:
+      foreground: "#8be9fd"
+      is_bold: true
+    icon:
+      glyph: ""
+      style: { foreground: "#8be9fd" }
+      is_bold: true
+
+  ".pylintrc":
+    filename:
+      foreground: "#ff79c6"
+      is_bold: true
+    icon:
+      glyph: ""
+      style: { foreground: "#ff79c6" }
+      is_bold: true
+
+  ".flake8":
+    filename:
+      foreground: "#ff79c6"
+      is_bold: true
+    icon:
+      glyph: "󰃢"
+      style: { foreground: "#ff79c6" }
+      is_bold: true
+
+  ".prettierrc":
+    filename:
+      foreground: "#ff79c6"
+      is_bold: true
+    icon:
+      glyph: "󱇨"
+      style: { foreground: "#ff79c6" }
       is_bold: true
