@@ -15,90 +15,102 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- Tự động chấm điểm frecency và lưu vào log (Bản fix chặn spam focus)
-vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
-  group = vim.api.nvim_create_augroup("LogRecentFiles", { clear = true }),
-  callback = function()
-    -- Cơ chế chặn spam: Nếu cửa sổ này đã tính điểm cho file này rồi thì bỏ qua
-    if vim.w.frecency_logged then
-      return
-    end
+-- Đường dẫn các file log
+local recency_log_path = vim.fn.expand('~/.cache/nvim_recent.log')
+local frecency_dir = vim.fn.expand("~/.cache/yazi/")
+vim.fn.mkdir(frecency_dir, "p")
+local frecency_log_path = frecency_dir .. "file_recent.log"
 
-    local file_path = vim.api.nvim_buf_get_name(0)
-    
-    -- Né đống file rác, file tạm, log, hoặc giao diện
-    if file_path == "" 
-       or file_path:match("toggleterm") 
-       or file_path:match("NvimTree") 
-       or vim.bo.buftype ~= "" then
-      return
-    end
+-- Tạo 1 Group chung duy nhất
+local track_files_group = vim.api.nvim_create_augroup("TrackRecentFiles", { clear = true })
 
-    -- ĐOẠN MỚI THÊM: Giải mã Symlink (Stow)
-    -- Hàm này ép Neovim quy đổi mọi đường dẫn ảo (như ~/.config/...) 
-    -- về chung một cái gốc vật lý (như ~/dotfiles/...)
-    local real_path = vim.loop.fs_realpath(file_path)
-    if real_path then
-        file_path = real_path
-    end
-
-    -- Đánh dấu cửa sổ hiện tại đã log file này...
-    vim.w.frecency_logged = true
-
-    local log_dir = vim.fn.expand("~/.cache/yazi/")
-    vim.fn.mkdir(log_dir, "p")
-    local log_file = log_dir .. "file_recent.log"
-
-    -- Đọc file log cũ và nạp vào bảng dữ liệu
-    local files_score = {}
-    local f = io.open(log_file, "r")
-    if f then
-      for line in f:lines() do
-        -- Sửa pattern thành %S+ để hốt trọn gói (bất kể chấm hay phẩy)
-        local score, path = line:match("^(%S+)%s+(.+)$")
-        if score and path then
-          -- Ép đổi dấu phẩy thành chấm (nếu có) trước khi cho Lua đọc số
-          score = score:gsub(",", ".")
-          files_score[path] = tonumber(score)
+vim.api.nvim_create_autocmd({"BufReadPost", "BufNewFile"}, {
+    group = track_files_group,
+    callback = function(args)
+        -- 1. BỘ LỌC CHUNG
+        -- Cơ chế chặn spam focus
+        if vim.w.frecency_logged then
+            return
         end
-      end
-      f:close()
-    end
 
-    -- 1. Cập nhật điểm cho file hiện tại (Chỉ cộng khi thực sự mở)
-    if files_score[file_path] then
-      files_score[file_path] = files_score[file_path] + 10 
-    else
-      files_score[file_path] = 10 
-    end
+        local file_path = vim.api.nvim_buf_get_name(args.buf)
+        
+        -- Lọc bỏ các buffer rỗng, file rác, terminal, NvimTree...
+        if file_path == "" 
+           or file_path:match("toggleterm") 
+           or file_path:match("NvimTree") 
+           or vim.bo[args.buf].buftype ~= "" then
+            return
+        end
 
-    -- 2. Cơ chế Giảm Điểm (Decay): Chỉ trừ điểm khi thực sự mở một file khác hẳn
-    for path, score in pairs(files_score) do
-      if path ~= file_path then
-        files_score[path] = math.max(1.0, score - 1)
-      end
-    end
+        -- Giải mã Symlink (Stow) về đường dẫn vật lý gốc
+        local real_path = vim.loop.fs_realpath(file_path)
+        if real_path then
+            file_path = real_path
+        end
 
-    -- 3. Sắp xếp theo điểm từ cao xuống thấp
-    local sorted_list = {}
-    for path, score in pairs(files_score) do
-      table.insert(sorted_list, { path = path, score = score })
-    end
-    table.sort(sorted_list, function(a, b) return a.score > b.score end)
+        -- Đánh dấu cửa sổ hiện tại đã xử lý xong
+        vim.w.frecency_logged = true
 
-    -- 4. Giới hạn lưu tối đa 100 file
-    while #sorted_list > 100 do
-      table.remove(sorted_list)
-    end
 
-    -- 5. Ghi đè lại vào file log
-    local f_write = io.open(log_file, "w")
-    if f_write then
-      for _, item in ipairs(sorted_list) do
-        -- Sửa định dạng %d (số nguyên) thành %.1f (1 số thập phân)
-        f_write:write(string.format("%.1f %s\n", item.score, item.path))
-      end
-      f_write:close()
-    end
-  end,
+        -- 2. TÁC VỤ 1: GHI LOG RECENCY (Thời gian thực cho fzf)
+        local timestamp = os.time()
+        local f_recency = io.open(recency_log_path, "a")
+        if f_recency then
+            f_recency:write(timestamp .. " " .. file_path .. "\n")
+            f_recency:close()
+        end
+
+
+        -- 3. TÁC VỤ 2: TÍNH ĐIỂM FRECENCY (Tần suất cho Yazi/fzf)
+        local files_score = {}
+        local f_read = io.open(frecency_log_path, "r")
+        
+        -- Đọc và nạp dữ liệu cũ
+        if f_read then
+            for line in f_read:lines() do
+                local score, path = line:match("^(%S+)%s+(.+)$")
+                if score and path then
+                    score = score:gsub(",", ".")
+                    files_score[path] = tonumber(score)
+                end
+            end
+            f_read:close()
+        end
+
+        -- Cập nhật điểm cho file hiện tại
+        if files_score[file_path] then
+            files_score[file_path] = files_score[file_path] + 10 
+        else
+            files_score[file_path] = 10 
+        end
+
+        -- Giảm điểm các file khác
+        for path, score in pairs(files_score) do
+            if path ~= file_path then
+                files_score[path] = math.max(1.0, score - 1)
+            end
+        end
+
+        -- Sắp xếp theo điểm từ cao xuống thấp
+        local sorted_list = {}
+        for path, score in pairs(files_score) do
+            table.insert(sorted_list, { path = path, score = score })
+        end
+        table.sort(sorted_list, function(a, b) return a.score > b.score end)
+
+        -- Giới hạn lưu tối đa 100 file
+        while #sorted_list > 100 do
+            table.remove(sorted_list)
+        end
+
+        -- Ghi đè lại vào file log
+        local f_write = io.open(frecency_log_path, "w")
+        if f_write then
+            for _, item in ipairs(sorted_list) do
+                f_write:write(string.format("%.1f %s\n", item.score, item.path))
+            end
+            f_write:close()
+        end
+    end,
 })
