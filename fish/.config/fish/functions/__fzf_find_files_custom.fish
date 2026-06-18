@@ -49,12 +49,12 @@ function __fzf_find_files_custom
         --layout=reverse \
         --border \
         --prompt="Custom Search> " \
-        --header="Enter: Mở | Ctrl-Y: Dán | Ctrl-Space: Đổi phạm vi | Alt-Space: Quay lại Frecency" \
+        --header="Enter: Mở | Ctrl-Y: Dán | Left: Đổi phạm vi | Right: File recent | Ctrl-Right: Tìm thư mục" \
         --header-lines=1 \
         --preview-window="bottom:50%" \
         --preview 'bat --style=numbers --color=always --line-range :100 {}' \
-        --bind="ctrl-space:reload($master_script toggle-scope)" \
-        --expect=alt-space,enter,ctrl-y)
+        --bind="left:reload($master_script toggle-scope)" \
+        --expect=right,ctrl-right,enter,ctrl-y)
 
     # Đọc lại trạng thái cuối cùng và dọn dẹp
     set -l final_scope (cat "$scope_file" 2>/dev/null)
@@ -69,10 +69,17 @@ function __fzf_find_files_custom
     set -l key_pressed $fzf_out[1]
     set -l selected_file $fzf_out[2]
 
-    # 🎯 Chuyền ngược trạng thái về lại Frecency
-    if test "$key_pressed" = "alt-space"
+    # 🎯 Chuyền trạng thái sang hàm Frecency
+    if test "$key_pressed" = "right"
         sleep 0.05 
         __fzf_file_recent "$final_scope"
+        return
+    end
+
+    # 🎯 Chuyền trạng thái sang hàm tìm thư mục
+    if test "$key_pressed" = "ctrl-right"
+        sleep 0.05
+        __fzf_search_directory_custom "$final_scope"
         return
     end
 
@@ -87,7 +94,7 @@ function __fzf_find_files_custom
             commandline -i (string escape -- $absolute_file)" "
         end
 
-        # 🎯 CHỈ CẦN GỌI ĐÚNG 1 DÒNG NÀY THAY VÌ VIẾT LẠI AWK
+        # 🎯 Ghi điểm Frecency
         __fzf_score_file "$absolute_file"
     end
     
