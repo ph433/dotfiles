@@ -562,7 +562,7 @@ static const Rule rules[] = {
     RULE(.wintype = WTYPE "TOOLBAR", .isfloating = 1)
     RULE(.wintype = WTYPE "SPLASH", .isfloating = 1)
     RULE(.class = "Gimp", .tags = 1 << 4)
-    RULE(.class = "firefox", .tags = 1 << 1) // Đã đồng bộ sang tag số 9 (1 << 8) theo block dưới của bạn
+    RULE(.class = "firefox", .tags = 1 << 8, .isfullscreen = 1)
     
     /* Bỏ CopyQ vào đây ghen */
     RULE(.class = "copyq", .isfloating = 1)
