@@ -807,7 +807,8 @@ filenames:
       foreground: "#61AFEF" # Xanh dương (Cài đặt)
     icon:
       glyph: "⚙"          # Icon bánh răng cài đặt
-      foreground: "#61AFEF"
+      style: { foreground: "#61AFEF" }
+      is_bold: true
 
   # Mô tả của kho lưu trữ (Mặc định chứa "Unnamed repository")
   "description":
@@ -815,7 +816,8 @@ filenames:
       foreground: "#5C6370" # Xám (Ít quan trọng)
     icon:
       glyph: ""          # Icon tệp văn bản thông thường
-      foreground: "#5C6370"
+      style: { foreground: "#5C6370" }
+      is_bold: true
 
   # Con trỏ HEAD hiện tại (Vô cùng quan trọng trong Git)
   "HEAD":
@@ -823,7 +825,8 @@ filenames:
       foreground: "#EF4444" # Đỏ nổi bật (Vị trí con trỏ hiện tại)
     icon:
       glyph: ""          # Icon tag/vị trí chính
-      foreground: "#EF4444"
+      style: { foreground: "#EF4444" }
+      is_bold: true
 
   # Lưu vết của lần fetch cuối cùng
   "FETCH_HEAD":
@@ -831,7 +834,8 @@ filenames:
       foreground: "#E5C07B" # Vàng (Lịch sử fetch)
     icon:
       glyph: ""          # Icon tải xuống/đồng bộ đám mây
-      foreground: "#E5C07B"
+      style: { foreground: "#E5C07B" }
+      is_bold: true
 
   # Bản sao lưu của HEAD trước khi thực hiện lệnh nguy hiểm (merge, rebase)
   "ORIG_HEAD":
@@ -839,7 +843,8 @@ filenames:
       foreground: "#AB82FF" # Tím (Trạng thái backup)
     icon:
       glyph: "󰕌"          # Icon quay lại/hoàn tác (Undo)
-      foreground: "#AB82FF"
+      style: { foreground: "#AB82FF" }
+      is_bold: true
 
   # Vùng đệm chứa các tệp đã staged (Staging Area)
   "index":
@@ -847,7 +852,8 @@ filenames:
       foreground: "#10B981" # Xanh lá (Sẵn sàng commit)
     icon:
       glyph: ""          # Icon danh sách/chỉ mục
-      foreground: "#10B981"
+      style: { foreground: "#10B981" }
+      is_bold: true
 
   # Nơi nén các tham chiếu nhánh để tối ưu tốc độ
   "packed-refs":
@@ -855,7 +861,8 @@ filenames:
       foreground: "#98C379" # Xanh lá nhạt
     icon:
       glyph: ""          # Icon hộp lưu trữ/nén (Archive)
-      foreground: "#98C379"
+      style: { foreground: "#98C379" }
+      is_bold: true
 
   # Tệp cấu hình riêng của công cụ GitUI (nếu có trong thư mục)
   "gitui":
@@ -863,14 +870,16 @@ filenames:
       foreground: "#F05032" # Cam Git
     icon:
       glyph: "󰊢"          # Icon Git Logo
-      foreground: "#F05032"
+      style: { foreground: "#F05032" }
+      is_bold: true
 
   ".stow-local-ignore":
     filename:
       foreground: "#5C6370" # Màu xám (tệp ẩn/bỏ qua)
     icon:
       glyph: ""            # Icon thùng rác/bỏ qua
-      foreground: "#5C6370"
+      style: { foreground: "#5C6370" }
+      is_bold: true
 
   # Quy tắc cấu hình hệ thống (Udev/Input rules)
   "99-input.rules":
@@ -878,7 +887,122 @@ filenames:
       foreground: "#E5C07B" # Màu vàng cấu hình hệ thống
     icon:
       glyph: ""            # Icon cờ lê sửa chữa
-      foreground: "#E5C07B"
+      style: { foreground: "#E5C07B" }
+      is_bold: true
+
+  "norun.flag":
+    filename:
+      foreground: "#E06C75" # Màu đỏ nhạt phù hợp tone với Bash của bạn
+    icon:
+      glyph: "󰈻"            # Icon cờ hiệu (hoặc thay bằng icon Nerd Font bạn thích)
+      style: { foreground: "#FF5555" }
+      is_bold: true
+
+  "copyq-commands.ini":
+    filename:
+      foreground: "#E5C07B" # Màu vàng kem dịu mắt
+    icon:
+      glyph: "⚙"            # Icon cấu hình hệ thống
+      style: { foreground: "#E5C07B" }
+      is_bold: true
+      
+  "profile":
+    filename:
+      foreground: "#61AFEF" # Màu xanh dương tươi sáng cho tên tệp
+    icon:
+      glyph: ""            # Icon dấu nhắc lệnh Terminal (Nerd Font)
+      style: { foreground: "#61AFEF" }
+      is_bold: true
+
+  "copyq.conf":
+    filename:
+      foreground: "#E5C07B" # Đồng bộ màu với file ini phía trên
+    icon:
+      glyph: "⚙"            # Icon cấu hình hệ thống
+      style: { foreground: "#E5C07B" }
+      is_bold: true
+
+  ".ls_colors":
+    filename:
+      foreground: "#98C379" # Màu xanh lá cây dịu mắt cho tên tệp
+    icon:
+      glyph: "󰽉"            # Icon bảng màu nghệ thuật
+      style: { foreground: "#98C379" } # Màu vàng ấm làm nổi bật biểu tượng
+      is_bold: true
+
+  "CACHEDIR.TAG":
+    filename:
+      foreground: "#61AFEF" # Màu xanh dương đại diện cho tệp hệ thống/tag
+    icon:
+      glyph: ""            # Icon thẻ đánh dấu (Tag)
+      style: { foreground: "#61AFEF" }
+      is_bold: true
+
+  ".global-cache":
+    filename:
+      foreground: "#D19A66" # Màu cam nhạt của hệ sinh thái Cargo/Rust
+    icon:
+      glyph: ""            # Icon bộ vi xử lý / bộ nhớ hệ thống (Nerd Font)
+      style: { foreground: "#D19A66" }
+      is_bold: true
+
+  ".package-cache":
+    filename:
+      foreground: "#E5C07B" # Màu vàng ấm đại diện cho gói thư viện (package)
+    icon:
+      glyph: "📦"            # Icon hộp kiện hàng / package
+      style: { foreground: "#E5C07B" }
+      is_bold: true
+
+  ".package-cache-mutate":
+    filename:
+      foreground: "#E06C75" # Màu đỏ nhạt cảnh báo tệp trạng thái thay đổi (mutate)
+    icon:
+      glyph: ""            # Icon mũi tên xoay vòng biểu thị sự thay đổi
+      style: { foreground: "#E06C75" }
+      is_bold: true
+
+  "event-sound-cache.tdb.d3036e88d04943d5a3a50feeafc22c28.x86_64-pc-linux-gnu":
+    filename:
+      foreground: "#707880" # Màu xám mờ cho tệp hệ thống ẩn
+    icon:
+      glyph: "🔊"            # Icon loa âm thanh
+      style: { foreground: "#61AFEF" } # Màu xanh dương
+      is_bold: true
+
+  # 2. Tệp đánh dấu thông báo hệ thống (Message of the Day)
+  "motd.legal-displayed":
+    filename:
+      foreground: "#A3BE8C" # Màu xanh lá cây dịu
+    icon:
+      glyph: ""            # Icon văn bản pháp lý/thông báo
+      style: { foreground: "#E5C07B" } # Màu vàng ấm
+      is_bold: true
+
+  # 3. Nhóm các tệp bộ nhớ đệm của Rofi Launcher
+  "rofi-3.runcache":
+    filename:
+      foreground: "#C678DD" # Màu tím đặc trưng của Rofi
+    icon:
+      glyph: ""            # Icon tên lửa đại diện cho Run app
+      style: { foreground: "#C678DD" }
+      is_bold: true
+
+  "rofi3.druncache":
+    filename:
+      foreground: "#C678DD" # Đồng bộ màu với cụm Rofi
+    icon:
+      glyph: ""            # Icon màn hình đại diện cho Desktop run (drun)
+      style: { foreground: "#C678DD" }
+      is_bold: true
+
+  "rofi3.filebrowsercache":
+    filename:
+      foreground: "#C678DD" # Đồng bộ màu với cụm Rofi
+    icon:
+      glyph: ""            # Icon thư mục đại diện cho File Browser
+      style: { foreground: "#C678DD" }
+      is_bold: true
 
   # Tệp cấu hình fzf
   "fzf.config.bash":
@@ -886,4 +1010,5 @@ filenames:
       foreground: "#61AFEF" # Màu xanh dương Bash script
     icon:
       glyph: ""            # Icon Terminal
-      foreground: "#4E9A06" # Màu xanh lá của fzf chính gốc
+      style: { foreground: "#4E9A06" }
+      is_bold: true
