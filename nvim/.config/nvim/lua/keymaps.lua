@@ -87,7 +87,7 @@ vim.keymap.set("n", "<C-A-j>", "<cmd>rightbelow split<cr>",  { desc = "Open spli
 vim.keymap.set("n", "<ESC>", "<cmd>noh<cr>",  { desc = "Open split down" })
 
 -- 1. Alt + o : Đóng tất cả trừ cửa sổ hiện tại (only)
-vim.keymap.set("n", "<S-A-k>", "<cmd>only<cr>", { desc = "Close all but current" })
+vim.keymap.set("n", "<S-A-p>", "<cmd>only<cr>", { desc = "Close all but current" })
 
 -- 2. Alt + = : Cân bằng lại kích thước tất cả cửa sổ
 vim.keymap.set("n", "<S-A-e>", "<cmd>wincmd =<cr>", { desc = "Equalize windows" })
