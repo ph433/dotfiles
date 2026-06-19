@@ -14,8 +14,26 @@ function fzfrecent -d "Tìm file dựa trên lịch sử mở trong Neovim (Dash
         printf "%s\n" $top10 > $log_file
     end
 
-    # Tạo danh sách đánh số 0-9
-    set -l list (printf "%s\n" $top10 | awk '{time=$1; sub(/^[0-9]+ /, ""); printf "%d │ %-16s │ %s\n", NR-1, strftime("%Y-%m-%d %H:%M", time), $0}')
+    # Tạo danh sách đánh số 0-9 và tính toán thời gian (relative time)
+    set -l current_time (date +%s)
+    set -l list (printf "%s\n" $top10 | awk -v now="$current_time" '{
+        time=$1; 
+        sub(/^[0-9]+ /, ""); 
+        
+        diff = now - time;
+        if (diff < 0) diff = 0; # Dự phòng lệch đồng hồ hệ thống
+        
+        if (diff < 60) { ago = diff "s ago" }
+        else if (diff < 3600) { ago = int(diff/60) "m ago" }
+        else if (diff < 86400) { ago = int(diff/3600) "h ago" }
+        else if (diff < 604800) { ago = int(diff/86400) "d ago" }
+        else if (diff < 2592000) { ago = int(diff/604800) "w ago" }
+        else if (diff < 31536000) { ago = int(diff/2592000) "mo ago" }
+        else { ago = int(diff/31536000) "y ago" }
+        
+        # Dùng %10s để căn lề phải cột thời gian, giúp chữ số thẳng hàng với nhau
+        printf "%d │ %10s │ %s\n", NR-1, ago, $0
+    }')
 
     # Cấu hình chuỗi phím tắt để nhảy con trỏ
     set -l binds "0:first"
