@@ -87,7 +87,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       S-6     _       @g_     _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       C-a     f1      f2      f3      _       _       f4      A-a     @vv     S-v     _       _                       _       _       _       _
+  _       C-a     _       _       o       _       _       f4      A-a     @vv     S-v     _       _                       _       _       _       _
   _       _       _       @viW    @viw    _       _       _       _       _       _       _               _               _       _       _
   _       _       _       @nvv                                    _       _                       _       _       _       _               _
 )
@@ -290,15 +290,6 @@
   _       _       @nvsw   S-spc                                   _       _                       _       _       _       _               _
 )
 
-(deflayer colemak-dh-dmenu
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
-  bks     a       r       s       t       g       m       n       e       i       o       del     _                       _       _       _       _
-  _       x       c       d       v       z       k       h       ,       .       /       @ss             _               _       _       _
-  _       _       @nvsw   @entbk                                  _    	  _                       _       _       _       _               _
-)
-
 (deflayer colemak-dh-f
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
@@ -332,7 +323,7 @@
   @tabe   q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
   bks     a       r       s       t       g       m       n       e       i       o       del     _                       _       _       _       _
   _       x       c       d       v       z       k       h       ,       .       /       @ss             _               _       _       _
-  lctl    lmet    @nvsw   _                                       _       _                       _       _       _       _               _
+  lctl    lmet    @nvsw   _                                       @nvsw   _                       _       _       _       _               _
 )
 
 (deflayer colemak-dh-cmd ;; shift ;
@@ -341,7 +332,7 @@
   @tabe   q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
   bks     a       r       s       t       g       m       n       e       i       o       del     _                       _       _       _       _
   _       x       c       d       v       z       k       h       ,       .       /       @ss             _               _       _       _
-  lctl    lmet    @nvsw   _                                       _       _                       _       _       _       _               _
+  lctl    lmet    @nvsw   _                                       @nvsw   _                       _       _       _       _               _
 )
 
 (defalias
@@ -422,7 +413,7 @@
   wwasr (multi lctl lalt l)
   wwasu (multi lctl lalt k)
   wwasd (multi lctl lalt j)
-  onl (multi lsft lalt o)
+  onl (multi lsft lalt k)
 )
 
 (defalias
@@ -529,7 +520,6 @@
 
 (defalias
   entcl (multi lalt ent (layer-switch colemak-dh)) ;; enter colemak-dh
-  bksdm (multi lalt bks (layer-switch colemak-dh-dmenu)) ;; backspacedmenu
   entbk (multi ent (layer-switch mod_nvim)) ;; enter back to nvim_mod
 )
 
