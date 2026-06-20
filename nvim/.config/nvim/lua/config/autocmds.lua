@@ -15,11 +15,8 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- Đường dẫn các file log
+-- Đường dẫn file log recency
 local recency_log_path = vim.fn.expand('~/.cache/nvim_recent.log')
-local frecency_dir = vim.fn.expand("~/.cache/yazi/")
-vim.fn.mkdir(frecency_dir, "p")
-local frecency_log_path = frecency_dir .. "file_recent.log"
 
 -- Tạo 1 Group chung duy nhất
 local track_files_group = vim.api.nvim_create_augroup("TrackRecentFiles", { clear = true })
@@ -62,55 +59,11 @@ vim.api.nvim_create_autocmd({"BufReadPost", "BufNewFile"}, {
         end
 
 
-        -- 3. TÁC VỤ 2: TÍNH ĐIỂM FRECENCY (Tần suất cho Yazi/fzf)
-        local files_score = {}
-        local f_read = io.open(frecency_log_path, "r")
+        -- 3. TÁC VỤ 2: TÍNH ĐIỂM FRECENCY ĐỒNG BỘ
+        -- Bắn tín hiệu sang Fish để gọi hàm trung tâm xử lý, chạy ngầm (detach)
+        local safe_path = vim.fn.shellescape(file_path)
+        local cmd = {'fish', '-c', '__fzf_score_file ' .. safe_path}
         
-        -- Đọc và nạp dữ liệu cũ
-        if f_read then
-            for line in f_read:lines() do
-                local score, path = line:match("^(%S+)%s+(.+)$")
-                if score and path then
-                    score = score:gsub(",", ".")
-                    files_score[path] = tonumber(score)
-                end
-            end
-            f_read:close()
-        end
-
-        -- Cập nhật điểm cho file hiện tại
-        if files_score[file_path] then
-            files_score[file_path] = files_score[file_path] + 10 
-        else
-            files_score[file_path] = 10 
-        end
-
-        -- Giảm điểm các file khác
-        for path, score in pairs(files_score) do
-            if path ~= file_path then
-                files_score[path] = math.max(1.0, score - 1)
-            end
-        end
-
-        -- Sắp xếp theo điểm từ cao xuống thấp
-        local sorted_list = {}
-        for path, score in pairs(files_score) do
-            table.insert(sorted_list, { path = path, score = score })
-        end
-        table.sort(sorted_list, function(a, b) return a.score > b.score end)
-
-        -- Giới hạn lưu tối đa 100 file
-        while #sorted_list > 100 do
-            table.remove(sorted_list)
-        end
-
-        -- Ghi đè lại vào file log
-        local f_write = io.open(frecency_log_path, "w")
-        if f_write then
-            for _, item in ipairs(sorted_list) do
-                f_write:write(string.format("%.1f %s\n", item.score, item.path))
-            end
-            f_write:close()
-        end
+        vim.fn.jobstart(cmd, { detach = true })
     end,
 })
