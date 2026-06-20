@@ -24,11 +24,11 @@ function __fzf_zoxide_custom --description "Zoxide fzf: Enter để CD, Right đ
     if test "$key" = "right"
         # 🎯 Nhấn Right: Dán đường dẫn ra shell (cách ra 1 dấu nhịp)
         commandline -i (string escape $target)" "
-    else if test "$key" = "enter"
-        # 🎯 Nhấn Enter: Dọn dòng lệnh và cd vào thư mục 
-        # (Dùng 'z' thay vì 'cd' để zoxide cộng thêm điểm lịch sử)
-        commandline -r "z "(string escape $target)
-        commandline -f execute
+	    else if test "$key" = "enter"
+        # 🎯 Nhấn Enter: Chạy ngầm zoxide và cd trực tiếp không in ra màn hình
+        z $target 2>/dev/null
+        # Xóa sạch văn bản dở dang đang có trên dòng lệnh (nếu có)
+        commandline -r ""
     end
 
     commandline -f repaint 2>/dev/null
