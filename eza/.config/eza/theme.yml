@@ -221,6 +221,78 @@ extensions:
       style:
         foreground: "#BD93F9"
 
+  "db":
+    filename:
+      foreground: "#5C6370" # Màu xám tối hệ thống
+    icon:
+      glyph: ""            # Icon cơ sở dữ liệu
+      style:
+        foreground: "#7F8C8D"
+
+  "bash":
+    filename:
+      foreground: "#61AFEF" # Màu xanh dương Bash script
+    icon:
+      glyph: ""            # Icon Terminal
+      style:
+        foreground: "#4E9A06"
+
+  "luac":
+    filename:
+      foreground: "#51AFEF" # Màu xanh dương (đặc trưng của ngôn ngữ Lua)
+    icon:
+      glyph: ""            # Icon đĩa tròn của Lua
+      style:
+        foreground: "#51AFEF"
+
+  "conf":
+    filename:
+      foreground: "#E5C07B" # Màu vàng hổ phách (đặc trưng cho tệp cấu hình)
+    icon:
+      glyph: ""            # Icon bánh răng cấu hình
+      style:
+        foreground: "#E5C07B"
+
+  "pmx":
+    filename:
+      foreground: "#C678DD" # Màu tím hồng (đặc trưng cho mô hình 3D/MMD)
+    icon:
+      glyph: "󰆧"            # Icon khối lập phương 3D
+      style:
+        foreground: "#D87093"
+
+  "gyp":
+    filename:
+      foreground: "#E5C07B" # Màu vàng cấu hình build
+    icon:
+      glyph: ""            # Icon bánh răng cấu hình
+      style:
+        foreground: "#E5C07B"
+
+  "pc":
+    filename:
+      foreground: "#61AFEF" # Màu xanh dương hệ thống
+    icon:
+      glyph: ""            # Icon gói thư viện/pkg-config
+      style:
+        foreground: "#4FA5E2"
+
+  "tga":
+    filename:
+      foreground: "#DF6A5E" # Màu cam hồng (nhóm tệp hình ảnh raster)
+    icon:
+      glyph: ""            # Icon bức ảnh đồ họa
+      style:
+        foreground: "#E06C75"
+
+  "fbx":
+    filename:
+      foreground: "#C678DD" # Màu tím pastel (đặc trưng cho đồ họa 3D)
+    icon:
+      glyph: ""            # Icon khối lập phương 3D
+      style:
+        foreground: "#D87093"
+
   "lesshst":
     filename:
       foreground: "#6272A4"
@@ -1002,6 +1074,163 @@ filenames:
     icon:
       glyph: ""            # Icon thư mục đại diện cho File Browser
       style: { foreground: "#C678DD" }
+      is_bold: true
+
+  "fish_plugins":
+    filename:
+      foreground: "#98C379" # Màu xanh lá cây (đặc trưng của Fisher)
+    icon:
+      glyph: ""            # Icon hộp package
+      style: { foreground: "#A3E4D7" }
+      is_bold: true
+
+# Tệp chứa biến môi trường của Fish Shell
+  "fish_variables":
+    filename:
+      foreground: "#61AFEF" # Màu xanh dương sáng
+    icon:
+      glyph: ""            # Icon biến số (V)
+      style: { foreground: "#4FA5E2" }
+      is_bold: true
+
+# Tệp câu hỏi thường gặp FAQ
+  "FAQ":
+    filename:
+      foreground: "#E5C07B" # Màu vàng hổ phách nhạt
+    icon:
+      glyph: ""            # Icon dấu chấm hỏi thông tin (Info/Question)
+      style: { foreground: "#F1C40F" }
+      is_bold: true
+
+# Tệp tài liệu cũ/di sản LEGACY
+  "LEGACY":
+    filename:
+      foreground: "#E06C75" # Màu đỏ hồng nhạt
+    icon:
+      glyph: ""            # Icon đồng hồ cát / lịch sử
+      style: { foreground: "#E74C3C" }
+      is_bold: true
+
+# Tệp thông tin terminal st.info
+  "st.info":
+    filename:
+      foreground: "#61AFEF" # Màu xanh dương sáng
+    icon:
+      glyph: ""            # Icon chữ "i" thông tin dạng code
+      style: { foreground: "#3498DB" }
+      is_bold: false
+
+# Tệp danh sách việc cần làm TODO
+  "TODO":
+    filename:
+      foreground: "#98C379" # Màu xanh lá cây dịu
+    icon:
+      glyph: ""            # Icon dấu tích hoàn thành
+      style: { foreground: "#2ECC71" }
+      is_bold: true
+
+  "bash":
+    filename:
+      foreground: "#61AFEF" # Màu xanh dương Bash script
+    icon:
+      glyph: ""            # Icon Terminal
+      style: { foreground: "#4E9A06" }
+      is_bold: true
+
+  "c":
+    filename:
+      foreground: "#55B4B4" # Màu xanh cyan đặc trưng của C
+    icon:
+      glyph: ""            # Icon ngôn ngữ C
+      style: { foreground: "#55B4B4" }
+      is_bold: true
+
+  "lua":
+    filename:
+      foreground: "#61AFEF" # Màu xanh dương nhạt
+    icon:
+      glyph: ""            # Icon đĩa tròn của Lua
+      style: { foreground: "#000080" }
+      is_bold: true
+
+  "markdown":
+    filename:
+      foreground: "#98C379" # Màu xanh lá cây dịu
+    icon:
+      glyph: ""            # Icon chữ M Markdown
+      style: { foreground: "#61AFEF" }
+      is_bold: true
+
+  "clojure":
+    filename:
+      foreground: "#E06C75" # Màu đỏ hồng Clojure
+    icon:
+      glyph: ""            # Icon con kiến / Clojure
+      style: { foreground: "#91DC47" }
+      is_bold: true
+
+  "commonlisp":
+    filename:
+      foreground: "#C678DD" # Màu tím nhạt Lisp
+    icon:
+      glyph: ""            # Icon ngôn ngữ Lisp
+      style: { foreground: "#61AFEF" }
+      is_bold: true
+
+  "fish":
+    filename:
+      foreground: "#E5C07B" # Màu vàng cam Fish shell
+    icon:
+      glyph: ""            # Icon cá Terminal
+      style: { foreground: "#4493F8" }
+      is_bold: true
+
+  "foam":
+    filename:
+      foreground: "#55B4B4" # Màu xanh ngọc Foam/OpenFOAM
+    icon:
+      glyph: "󰋁"            # Icon cấu trúc bọt/mạng lưới
+      style: { foreground: "#55B4B4" }
+      is_bold: true
+
+  "markdown_inline":
+    filename:
+      foreground: "#98C379" # Màu xanh lá cây dịu
+    icon:
+      glyph: ""            # Icon Markdown biến thể
+      style: { foreground: "#61AFEF" }
+      is_bold: true
+
+  "vimdoc":
+    filename:
+      foreground: "#E5C07B" # Màu vàng tài liệu văn bản
+    icon:
+      glyph: ""            # Icon tờ tài liệu hướng dẫn Vim
+      style: { foreground: "#019833" }
+      is_bold: true
+
+  "toml":
+    filename:
+      foreground: "#E5C07B" # Màu vàng hổ phách
+    icon:
+      glyph: ""            # Icon cấu hình TOML
+      style: { foreground: "#E5C07B" }
+      is_bold: true
+
+  "vim":
+    filename:
+      foreground: "#98C379" # Màu xanh lá cây của Vim
+    icon:
+      glyph: ""            # Icon chữ V của Vim
+      style: { foreground: "#019833" }
+      is_bold: true
+
+  "telescope_history":
+    filename:
+      foreground: "#E5C07B" # Màu vàng hổ phách (tương tự màu file log/history)
+    icon:
+      glyph: ""            # Icon đồng hồ lịch sử / Telescope history
+      style: { foreground: "#E5C07B" }
       is_bold: true
 
   # Tệp cấu hình fzf
