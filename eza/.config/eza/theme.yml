@@ -221,6 +221,351 @@ extensions:
       style:
         foreground: "#BD93F9"
 
+  "crl":
+    filename:
+      foreground: "#B3B1AD"
+    icon:
+      glyph: "󰒃"
+      style:
+        foreground: "#E06C75"
+
+  "u":
+    filename:
+      foreground: "#8a2be2"
+    icon:
+      glyph: "󰊲"
+      style:
+        foreground: "#8a2be2"
+
+  "wgsl":
+    filename:
+      foreground: "#ff5722"
+    icon:
+      glyph: ""
+      style:
+        foreground: "#ff5722"
+
+  "tact":
+    filename:
+      foreground: "#0088cc"
+    icon:
+      glyph: ""
+      style:
+        foreground: "#0088cc"
+
+  "svelte":
+    filename:
+      foreground: "#ff3e00"
+    icon:
+      glyph: ""
+      style:
+        foreground: "#ff3e00"
+
+  "tsx":
+    filename:
+      foreground: "#a0ee7c"
+    icon:
+      glyph: ""
+      style:
+        foreground: "#a0ee7c"
+
+  "yaml":
+    filename:
+      foreground: "#d22ea4"
+    icon:
+      glyph: ""
+      style:
+        foreground: "#d22ea4"
+
+  "ron":
+    filename:
+      foreground: "#51d7df"
+    icon:
+      glyph: ""
+      style:
+        foreground: "#51d7df"
+
+  "luau":
+    filename:
+      foreground: "#ed86ca"
+    icon:
+      glyph: ""
+      style:
+        foreground: "#ed86ca"
+
+  "pkl":
+    filename:
+      foreground: "#bd570a"
+    icon:
+      glyph: "󰃃"
+      style:
+        foreground: "#bd570a"
+
+  "odin":
+    filename:
+      foreground: "#6e9ef4"
+    icon:
+      glyph: "󰯙"
+      style:
+        foreground: "#6e9ef4"
+
+  "cmake":
+    filename:
+      foreground: "#C678DD"
+    icon:
+      glyph: ""
+      style:
+        foreground: "#61AFEF"
+
+  "json5":
+    filename:
+      foreground: "#82f309"
+    icon:
+      glyph: ""
+      style:
+        foreground: "#82f309"
+
+  "pyx":
+    filename:
+      foreground: "#f4712d"
+    icon:
+      glyph: ""
+      style:
+        foreground: "#f4712d"
+
+  "nu":
+    filename:
+      foreground: "#E5C07B"
+    icon:
+      glyph: ""
+      style:
+        foreground: "#56B6C2"
+
+  "just":
+    filename:
+      foreground: "#E5C07B"
+    icon:
+      glyph: ""
+      style:
+        foreground: "#98C379"
+
+  "meson":
+    filename:
+      foreground: "#43D6A3"
+    icon:
+      glyph: ""
+      style:
+        foreground: "#9B59B6"
+
+
+  "slint":
+    filename:
+      foreground: "#98C379" # Tên file màu xanh lá cây
+    icon:
+      glyph: ""
+      style:
+        foreground: "#23D160"
+
+  "ncl":
+    filename:
+      foreground: "#5e907e" # Tên file màu xám trắng
+    icon:
+      glyph: "λ"
+      style:
+        foreground: "#2ECC71"
+
+  "move":
+    filename:
+      foreground: "#64c45b" # Tên file màu xám trắng
+    icon:
+      glyph: ""
+      style:
+        foreground: "#4A90E2"
+
+  "hcl":
+    filename:
+      foreground: "#eb9212" # Tên file màu xám trắng
+    icon:
+      glyph: ""
+      style:
+        foreground: "#5C4EE5"
+
+  "glsl":
+    filename:
+      foreground: "#c66c39"
+    icon:
+      glyph: ""
+      style:
+        foreground: "#E06C75"
+
+  "html":
+    filename:
+      foreground: "#E0AF68"
+    icon:
+      glyph: ""
+      style:
+        foreground: "#E34F26"
+
+  "itermcolors":
+    filename:
+      foreground: "#B3B1AD"
+    icon:
+      glyph: ""
+      style:
+        foreground: "#73D0FF"
+
+  "vsixmanifest":
+    filename:
+      foreground: "#B3B1AD"
+    icon:
+      glyph: "󰆧"
+      style:
+        foreground: "#F0A45D"
+
+  "vue":
+    filename:
+      foreground: "#04abc5"
+    icon:
+      glyph: ""
+      style:
+        foreground: "#42B883"
+
+  "xml":
+    filename:
+      foreground: "#B3B1AD"
+    icon:
+      glyph: ""            # Icon code cho file XML
+      style:
+        foreground: "#E06C75" # Màu đỏ nhạt / hồng code
+
+  "dds":
+    filename:
+      foreground: "#C678DD" # Màu tím đại diện cho file đồ họa/texture
+    icon:
+      glyph: ""            # Icon Nerd Font hình bức ảnh (hoặc dùng "🖼️")
+      style:
+        foreground: "#C678DD"
+
+  "netrwhist":
+    filename:
+      foreground: "#87AF87" # Màu xanh lá muted đặc trưng của Vim
+    icon:
+      glyph: "󰄩"            # Icon Nerd Font hình lịch sử/đồng hồ (hoặc "📜")
+      style:
+        foreground: "#87AF87"
+
+  "shada":
+    filename:
+      foreground: "#98C379" # Màu xanh lá cây sáng của hệ thống
+    icon:
+      glyph: ""            # Icon Nerd Font hình Neovim/Vim (hoặc dùng "⚡")
+      style:
+        foreground: "#98C379"
+
+  "swm":
+    filename:
+      foreground: "#5C6370" # Màu xám tối cho file tạm/hệ thống
+    icon:
+      glyph: "󱌢"            # Icon Nerd Font hình cờ lê/bảo trì (hoặc dùng "🛠️")
+      style:
+        foreground: "#E5C07B" # Màu vàng cảnh báo nhẹ cho icon file swap
+
+  "swl":
+    filename:
+      foreground: "#5C6370" # Màu xám tối cho file tạm/hệ thống
+    icon:
+      glyph: ""            # Icon Nerd Font hình cờ lê/bảo trì (hoặc dùng "🛠️")
+      style:
+        foreground: "#E5C07B" # Màu vàng cảnh báo nhẹ cho icon file swap
+
+  "swj":
+    filename:
+      foreground: "#5C6370" # Màu xám tối cho file tạm/hệ thống
+    icon:
+      glyph: "󱠔"            # Icon Nerd Font hình cờ lê/bảo trì
+      style:
+        foreground: "#E5C07B" # Màu vàng cảnh báo nhẹ
+
+  "ini":
+    filename:
+      foreground: "#E5C07B" # Màu vàng cam đặc trưng của file cấu hình
+    icon:
+      glyph: ""            # Icon Nerd Font hình bánh răng cài đặt (hoặc dùng "⚙️")
+      style:
+        foreground: "#E5C07B"
+
+  "oso":
+    filename:
+      foreground: "#61AFEF" # Màu xanh dương đại diện cho file hệ thống/chính sách
+    icon:
+      glyph: "󰒃"            # Icon Nerd Font hình chiếc khiên bảo mật (hoặc dùng "🛡️")
+      style:
+        foreground: "#61AFEF"
+
+  "license":
+    filename:
+      foreground: "#D19A66" # Màu vàng cam/vàng cát bản quyền
+    icon:
+      glyph: "📜"            # Icon Nerd Font hình cuộn giấy bản quyền (hoặc dùng "⚖️")
+      style:
+        foreground: "#D19A66"
+
+  "swi":
+    filename:
+      foreground: "#5C6370" # Màu xám tối cho file tạm/hệ thống
+    icon:
+      glyph: "󱌣"            # Icon Nerd Font hình cờ lê/bảo trì
+      style:
+        foreground: "#E5C07B" # Màu vàng cảnh báo nhẹ
+
+  "swg":
+    filename:
+      foreground: "#5C6370" # Màu xám tối cho file tạm/hệ thống
+    icon:
+      glyph: "󱧼"            # Icon Nerd Font hình cờ lê/bảo trì
+      style:
+        foreground: "#E5C07B" # Màu vàng cảnh báo nhẹ
+
+  "swh":
+    filename:
+      foreground: "#5C6370" # Màu xám tối cho file tạm/hệ thống
+    icon:
+      glyph: "󰯠"            # Icon Nerd Font hình cờ lê/bảo trì
+      style:
+        foreground: "#E5C07B" # Màu vàng cảnh báo nhẹ
+
+  "swo":
+    filename:
+      foreground: "#5C6370" # Màu xám tối cho file tạm/hệ thống
+    icon:
+      glyph: "󰲽"            # Icon Nerd Font hình cờ lê/bảo trì (hoặc dùng "🛠️")
+      style:
+        foreground: "#E5C07B" # Màu vàng cảnh báo nhẹ cho icon file swap
+
+  "swn":
+    filename:
+      foreground: "#5C6370" # Màu xám tối cho file tạm/hệ thống
+    icon:
+      glyph: "󰖷"            # Icon Nerd Font hình cờ lê/bảo trì (hoặc dùng "🛠️")
+      style:
+        foreground: "#E5C07B" # Màu vàng cảnh báo nhẹ cho icon file swap
+
+  "swp":
+    filename:
+      foreground: "#5C6370" # Màu xám tối cho file tạm/hệ thống
+    icon:
+      glyph: ""            # Icon Nerd Font hình cờ lê/bảo trì (hoặc dùng "🛠️")
+      style:
+        foreground: "#E5C07B" # Màu vàng cảnh báo nhẹ cho icon file swap
+
+  "swk":
+    filename:
+      foreground: "#5C6370" # Màu xám tối cho file tạm/hệ thống
+    icon:
+      glyph: "󰣪"            # Icon Nerd Font hình cờ lê/bảo trì (hoặc dùng "🛠️")
+      style:
+        foreground: "#E5C07B" # Màu vàng cảnh báo nhẹ cho icon file swap
+
   "db":
     filename:
       foreground: "#5C6370" # Màu xám tối hệ thống
@@ -1232,6 +1577,198 @@ filenames:
       glyph: ""            # Icon đồng hồ lịch sử / Telescope history
       style: { foreground: "#E5C07B" }
       is_bold: true
+
+  "REQUESTED":
+    filename:
+      foreground: "#98C379" # Màu xanh lá cây
+    icon:
+      glyph: ""            # Icon mục tiêu/yêu cầu
+      style: { foreground: "#98C379" }
+      is_bold: true
+
+  "WHEEL":
+    filename:
+      foreground: "#D19A66" # Màu cam đất cho file build wheel của Python
+    icon:
+      glyph: "󰠳"            # Icon bánh xe
+      style: { foreground: "#D19A66" }
+      is_bold: true
+
+  "tutor":
+    filename:
+      foreground: "#4ECDC4" # Màu xanh lục bảo sáng
+    icon:
+      glyph: "🎓"            # Icon Nerd Font / Emoji học tập (Mũ tốt nghiệp)
+      style: { foreground: "#4ECDC4" }
+      is_bold: true
+
+  "RECORD":
+    filename:
+      foreground: "#C678DD" # Màu tím ghi chép
+    icon:
+      glyph: ""            # Icon ghi chú
+      style: { foreground: "#C678DD" }
+      is_bold: false
+
+  "METADATA":
+    filename:
+      foreground: "#ABB2BF" # Màu xám sáng cho dữ liệu ẩn
+    icon:
+      glyph: "📋"            # Icon bảng kẹp giấy
+      style: { foreground: "#61AFEF" }
+      is_bold: false
+
+  "INSTALLER":
+    filename:
+      foreground: "#E06C75" # Màu đỏ nhạt hợp với file cài đặt
+    icon:
+      glyph: "📦"            # Icon hộp package
+      style: { foreground: "#E5C07B" }
+      is_bold: true
+
+  "tags":
+    filename:
+      foreground: "#56B6C2" # Màu xanh Cyan dịu (phong cách OneDark)
+    icon:
+      glyph: ""            # Icon Nerd Font hình cái nhãn/thẻ tag (hoặc dùng "🏷️")
+      style: { foreground: "#56B6C2" }
+      is_bold: false
+
+  "log":
+    filename:
+      foreground: "#E5C07B" # Màu vàng cam đặc trưng của file log/nhật ký
+    icon:
+      glyph: ""            # Icon Nerd Font hình danh sách/nhật ký (hoặc "🪵")
+      style: { foreground: "#E5C07B" }
+      is_bold: false
+
+  "default-routes":
+    filename:
+      foreground: "#61AFEF" # Màu xanh dương đại diện cho mạng/kết nối
+    icon:
+      glyph: ""            # Icon Nerd Font hình sơ đồ tuyến đường/định hướng (hoặc dùng "🛣️")
+      style: { foreground: "#61AFEF" }
+      is_bold: false
+
+  "restore-stream":
+    filename:
+      foreground: "#E5C07B" # Màu vàng cam đại diện cho luồng khôi phục dữ liệu
+    icon:
+      glyph: ""            # Icon Nerd Font hình khôi phục/mũi tên vòng tròn (hoặc dùng "🔄")
+      style: { foreground: "#E5C07B" }
+      is_bold: false
+
+  "urls":
+    filename:
+      foreground: "#61AFEF" # Màu xanh dương sáng link web
+    icon:
+      glyph: ""            # Icon Nerd Font hình mắt xích liên kết (hoặc "🔗")
+      style: { foreground: "#61AFEF" }
+      is_bold: false
+
+  "py.typed":
+    filename:
+      foreground: "#61AFEF" # Màu xanh dương Python (phong cách OneDark)
+    icon:
+      glyph: ""            # Icon Nerd Font hình con rắn Python (hoặc "🐍")
+      style: { foreground: "#3572A5" }
+      is_bold: false
+
+  "machineid":
+    filename:
+      foreground: "#D19A66" # Màu vàng cam đại diện cho thông tin phần cứng/ID
+    icon:
+      glyph: ""            # Icon Nerd Font hình thẻ ID/mã định danh (hoặc "🪪")
+      style: { foreground: "#D19A66" }
+      is_bold: false
+
+  "SharedStorage":
+    filename:
+      foreground: "#4ECDC4" # Màu xanh lục bảo cho bộ nhớ chia sẻ
+    icon:
+      glyph: "󰨣"            # Icon Nerd Font hình ổ đĩa chia sẻ/mạng (hoặc "🗄️")
+      style: { foreground: "#4ECDC4" }
+      is_bold: false
+
+  "TransportSecurity":
+    filename:
+      foreground: "#98C379" # Màu xanh lá cây đại diện cho bảo mật/an toàn
+    icon:
+      glyph: "󰒃"            # Icon Nerd Font hình chiếc khiên bảo mật (hoặc "🛡️")
+      style: { foreground: "#98C379" }
+      is_bold: false
+
+  "Trust Tokens":
+    filename:
+      foreground: "#E5C07B" # Màu vàng cam của đồng xu/token mã hóa
+    icon:
+      glyph: ""            # Icon Nerd Font hình đồng xu token bảo mật (hoặc "🪙")
+      style: { foreground: "#E5C07B" }
+      is_bold: false
+
+  "Trust Tokens-journal":
+    filename:
+      foreground: "#5C6370" # Màu xám tối cho file nhật ký sao lưu hệ thống
+    icon:
+      glyph: "📜"            # Icon Nerd Font hình cuộn giấy nhật ký (hoặc "📝")
+      style: { foreground: "#5C6370" }
+      is_bold: false
+
+  "Preferences":
+    filename:
+      foreground: "#E5C07B" # Màu vàng cam đại diện cho tùy chỉnh/cài đặt
+    icon:
+      glyph: ""            # Icon Nerd Font hình bánh răng cấu hình (hoặc dùng "⚙️")
+      style: { foreground: "#E5C07B" }
+      is_bold: false
+
+  "Network Persistent State":
+    filename:
+      foreground: "#61AFEF" # Màu xanh dương đại diện cho trạng thái mạng mạng lưu trữ
+    icon:
+      glyph: "󰊷"            # Icon Nerd Font hình mạng lưới/toàn cầu (hoặc "🌐")
+      style: { foreground: "#61AFEF" }
+      is_bold: false
+
+  "DIPS":
+    filename:
+      foreground: "#98C379" # Màu xanh lá cây dịu cho dữ liệu cấu hình/hệ thống
+    icon:
+      glyph: ""            # Icon Nerd Font hình chìa khóa/mã hóa dữ liệu (hoặc dùng "🔑")
+      style: { foreground: "#98C379" }
+      is_bold: false
+
+  "Cookies":
+    filename:
+      foreground: "#D19A66" # Màu nâu/vàng bánh quy cho Cookies
+    icon:
+      glyph: ""            # Icon Nerd Font hình chiếc bánh quy Cookie (hoặc dùng "🍪")
+      style: { foreground: "#D19A66" }
+      is_bold: false
+
+  "Cookies-journal":
+    filename:
+      foreground: "#5C6370" # Màu xám tối cho file nhật ký sao lưu hệ thống
+    icon:
+      glyph: "📜"            # Icon Nerd Font hình cuộn giấy nhật ký (hoặc dùng "📝")
+      style: { foreground: "#5C6370" }
+      is_bold: false
+
+  "system-proxy.source":
+    filename:
+      foreground: "#E06C75" # Màu đỏ cam nổi bật cho file script hệ thống
+    icon:
+      glyph: "󰇧"            # Icon Nerd Font hình mạng địa cầu/proxy (hoặc "🌐")
+      style: { foreground: "#E06C75" }
+      is_bold: false
+
+  "quickmarks":
+    filename:
+      foreground: "#98C379" # Màu xanh lá cây sáng (phong cách OneDark)
+    icon:
+      glyph: ""            # Icon Nerd Font hình cái bookmark/đánh dấu (hoặc dùng "🔖")
+      style: { foreground: "#98C379" }
+      is_bold: false
 
   # Tệp cấu hình fzf
   "fzf.config.bash":
