@@ -15,6 +15,10 @@ if status is-interactive
         bind --mode $mode ctrl-up 'gdiff'
 	bind --mode $mode shift-up 'glog'
 	bind --mode $mode ctrl-shift-up 'fzf_git_checkout'
-	bind --mode $mode ctrl-x 'y'
+	# bind --mode $mode ctrl-x 'y'
+	# bind shift-left cdh
+	bind --mode $mode shift-left 'cdh'
+	bind --mode $mode shift-right 'cdmd'
+	
     end
 end
