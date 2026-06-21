@@ -43,16 +43,7 @@ REPOS=("dmenu" "st")
 PACKAGES=("alacritty" "fish" "nvim" "suckless" "dwm_custom" "flameshot" "copyq" "env" "eza" "fcitx5" "mpv" "delta" "services" "kanata")
 
 mkdir -p "$SUCKLESS_DIR"
-cd "$SUCKLESS_DIR"
-
-for repo in "${REPOS[@]}"; do
-    if [ -d "$repo" ]; then
-        echo "   [!] Thư mục $repo đã tồn tại"
-    else
-        echo "   [+] Đang clone $repo từ suckless.org..."
-        git clone --depth 1 "https://git.suckless.org/$repo"
-    fi
-done
+cd "$SUCKLESS_DIR" && git clone --depth 1 https://git.suckless.org/dmenu && git clone --depth 1 https://git.suckless.org/slstatus
 
 if [ ! -d "$DWM_DIR" ]; then
     echo "--> Tiến hành Shallow Clone dwm-flexipatch"
@@ -64,22 +55,8 @@ fi
 #STOW
 cd $HOME/dotfiles
 
-
-echo "--> Bắt đầu liên kết dotfiles với --no-folding..."
-
 for pkg in "${PACKAGES[@]}"; do
-    if [ -d "$pkg" ]; then
-        # Tự động tìm và xóa file lẻ trùng ngoài $HOME để tránh bị xung đột (nếu có)
-        stow -n -v "$pkg" 2>&1 | grep "conflict" | awk '{print $NF}' | while read -r conflicted_file; do
-            TARGET_PATH="$HOME/$conflicted_file"
-            if [ -e "$TARGET_PATH" ] || [ -L "$TARGET_PATH" ]; then
-                rm -rf "$TARGET_PATH"
-            fi
-        done
-        
-        # Stow tự tạo thư mục thật và link file lẻ, không cần mkdir trước
         stow --adopt --no-folding -v "$pkg"
-    fi
 done
 
 cd $HOME/dotfiles
