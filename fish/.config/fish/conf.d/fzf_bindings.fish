@@ -9,7 +9,7 @@ if status is-interactive
         
         # 🎯 PHÍM TẮT MỚI: Nhấn Ctrl + H để tìm kiếm thư mục Home
         bind --mode $mode alt-down '__fzf_find_files_custom'
-        bind --mode $mode ctrl-shift-down '__fzf_search_directory_custom'
+        bind --mode $mode alt-up '__fzf_search_directory_custom'
         bind --mode $mode shift-down '__fzf_file_recent'
 	bind --mode $mode ctrl-down 'fzfrecent'
         bind --mode $mode ctrl-up 'gdiff'

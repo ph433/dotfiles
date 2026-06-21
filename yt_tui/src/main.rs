@@ -267,8 +267,9 @@ fi
                 "--ytdl-format=bestaudio",
                 "--loop-file=inf",
                 "--cache=yes",
-                "--demuxer-max-bytes=150M",
-                "--demuxer-max-back-bytes=150M",
+                "--force-seekable=yes",         // BẮT BUỘC: Ép luồng mạng có thể tua lại
+                "--demuxer-max-bytes=1000M",    // Nâng mức này lên để tránh tràn RAM gây mất phần đầu
+                "--demuxer-max-back-bytes=1000M",
                 url
             ])
             .status()?;

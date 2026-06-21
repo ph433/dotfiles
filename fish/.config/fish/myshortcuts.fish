@@ -8,10 +8,6 @@ function cdmd --description "CD nhanh ve thu muc duoc chi dinh"
 
     cd $MY_QUICK_DIR
 
-    if type -q zoxide
-        zoxide add $MY_QUICK_DIR
-    end
-    
     commandline -f repaint
 end
 
