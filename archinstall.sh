@@ -37,20 +37,13 @@ sudo pacman -Syu --noconfirm \
     firefox \
     yt-dlp
 
-SUCKLESS_DIR="$HOME/.config/suckless"
+SUCKLESS_DIR="$HOME/.suckless"
 DWM_DIR="$HOME/dwm-flexipatch"
-REPOS=("dmenu" "st")
 PACKAGES=("alacritty" "fish" "nvim" "suckless" "dwm_custom" "flameshot" "copyq" "env" "eza" "fcitx5" "mpv" "delta" "services" "kanata")
 
 mkdir -p "$SUCKLESS_DIR"
 cd "$SUCKLESS_DIR" && git clone --depth 1 https://git.suckless.org/dmenu && git clone --depth 1 https://git.suckless.org/slstatus
-
-if [ ! -d "$DWM_DIR" ]; then
-    echo "--> Tiến hành Shallow Clone dwm-flexipatch"
-    git clone --depth 1 https://github.com/bakkeby/dwm-flexipatch.git "$DWM_DIR"
-else
-    echo "--> [!] Thư mục dwm-flexipatch đã tồn tại, bỏ qua bước clone."
-fi
+git clone --depth 1 https://github.com/bakkeby/dwm-flexipatch.git "$DWM_DIR"
 
 #STOW
 cd $HOME/dotfiles
