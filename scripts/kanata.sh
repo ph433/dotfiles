@@ -53,7 +53,7 @@ cd "$HOME/dotfiles"
 rm -f "$HOME/.config/kanata/config.kbd"
 
 # Stow tự tạo thư mục thật ngoài $HOME/.config/kanata và thả symlink vào
-stow --no-folding -v kanata
+stow --adopt --no-folding -v kanata
 
 # 4. KÍCH HOẠT SERVICE - Chạy ngầm theo User
 echo "--> 4. Kích hoạt Kanata Systemd User Service..."

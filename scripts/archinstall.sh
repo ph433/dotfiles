@@ -78,7 +78,7 @@ for pkg in "${PACKAGES[@]}"; do
         done
         
         # Stow tự tạo thư mục thật và link file lẻ, không cần mkdir trước
-        stow --no-folding -v "$pkg"
+        stow --adopt --no-folding -v "$pkg"
     fi
 done
 
@@ -96,6 +96,9 @@ cd "$DWM_DIR" && sudo make clean install && cd "$HOME"
 
 bash "$HOME/dotfiles/scripts/kanata.sh"
 bash "$HOME/dotfiles/scripts/setup_fonts.sh"
+
+cd $HOME/dotfiles
+git restore .
 
 echo "=================================================="
 echo " 🎉 CÀI ĐẶT HOÀN TẤT!"
