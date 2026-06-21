@@ -34,6 +34,7 @@ sudo pacman -Syu --noconfirm \
     fzf \
     git-delta \
     mpv \
+    firefox \
     yt-dlp
 
 SUCKLESS_DIR="$HOME/.config/suckless"
