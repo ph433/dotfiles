@@ -65,13 +65,8 @@ rm -f $HOME/.config/atuin/themes/mycolor.toml $HOME/.config/atuin/config.toml &&
 cd $HOME/dotfiles
 git restore .
 
-cd "$SUCKLESS_DIR"
-for repo in "${REPOS[@]}"; do
-    cd "$repo"
-    sudo make clean install
-    cd "$SUCKLESS_DIR"
-done
-
+cd "$SUCKLESS_DIR/dmenu" && sudo make clean install
+cd "$SUCKLESS_DIR/slstatus" && sudo make clean install
 cd "$DWM_DIR" && sudo make clean install && cd "$HOME"
 
 bash "$HOME/dotfiles/scripts/kanata.sh"
