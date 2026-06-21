@@ -26,42 +26,47 @@ fi
 
 # 2. Cấu hình Udev Rules (Cấp quyền đọc bàn phím)
 echo "--> 2. Thiết lập quy tắc udev cấp quyền hệ thống..."
-UDEV_SRC="$HOME/dotfiles/kanata/99-input.rules"
-UDEV_DST="/etc/udev/rules.d/99-input.rules"
+UDEV_SRC="$HOME/dotfiles/kanata/99-kanata.rules"
+UDEV_DST="/etc/udev/rules.d/99-kanata.rules"
 
+# Tạo nhóm quyền và thêm user trước
+sudo groupadd --force uinput
+sudo usermod -aG input $USER
+sudo usermod -aG uinput $USER
+
+# Kiểm tra và copy file thật thay vì dùng liên kết mềm (symlink)
 if [ -f "$UDEV_SRC" ]; then
-    # Tạo liên kết mềm tuyệt đối từ dotfiles vào thẳng /etc
-    sudo ln -sf "$UDEV_SRC" "$UDEV_DST"
-    
-    # Ép hệ thống nạp lại cấu hình udev ngay lập tức
-    sudo udevadm control --reload-rules && sudo udevadm trigger
-    
-    # Thêm user vào các nhóm quyền cần thiết (input, uinput)
-    sudo groupadd --force uinput
-    sudo usermod -aG input $USER
-    sudo usermod -aG uinput $USER
-    echo "   [+] Đã cấu hình xong udev và nhóm quyền."
+    # Copy file quy tắc thật vào thẳng /etc để udev nạp được lúc boot
+    sudo cp "$UDEV_SRC" "$UDEV_DST"
 else
-    echo "   [!] Cảnh báo: Không tìm thấy file $UDEV_SRC để liên kết!"
+    echo "    [!] Không tìm thấy $UDEV_SRC, tự động tạo file udev mặc định..."
+    echo 'KERNEL=="uinput", GROUP="uinput", MODE="0660", OPTIONS+="static_node=uinput"' | sudo tee "$UDEV_DST" > /dev/null
 fi
+
+# Ép hệ thống nạp lại cấu hình udev ngay lập tức
+sudo udevadm control --reload-rules && sudo udevadm trigger
+echo "   [+] Đã cấu hình xong udev và nhóm quyền."
 
 # 3. STOW - Liên kết file cấu hình config.kbd ra $HOME
 echo "--> 3. Liên kết tệp cấu hình config.kbd bằng GNU Stow..."
 cd "$HOME/dotfiles"
 
-# Xóa file trùng cũ ngoài $HOME nếu có trước khi Stow (Giống cách làm với Atuin)
-rm -f "$HOME/.config/kanata/config.kbd"
+# Dọn dẹp sạch thư mục cấu hình đích cũ để Stow làm việc chuẩn xác
+rm -rf "$HOME/.config/kanata"
+mkdir -p "$HOME/.config"
 
-# Stow tự tạo thư mục thật ngoài $HOME/.config/kanata và thả symlink vào
-stow --adopt --no-folding -v kanata
+# Dùng stow thường (không cần --adopt vì thư mục đích đã trống)
+stow --no-folding -v kanata
 
 # 4. KÍCH HOẠT SERVICE - Chạy ngầm theo User
 echo "--> 4. Kích hoạt Kanata Systemd User Service..."
-# Reload lại systemd daemon của user để nó nhận diện service từ kanata-bin
+# Reload lại systemd daemon của user để nhận diện service
 systemctl --user daemon-reload
-systemctl --user enable --now kanata.service
+
+# Mẹo nhỏ: Ép systemd chạy service bằng quyền nhóm uinput mới ngay trong phiên này
+sg uinput -c "systemctl --user enable --now kanata.service" || systemctl --user enable --now kanata.service
 
 echo "=================================================="
 echo " 🎉 CÀI ĐẶT KANATA HOÀN TẤT!"
-echo " ⚠️  LƯU Ý: Hãy Log out hoặc khởi động lại máy để quyền uinput ăn vào User nhé."
+echo " ⚠️  LƯU Ý: Vì bạn đã reboot trước đó, lần này script sẽ tự kích hoạt service ăn ngay luôn!"
 echo "=================================================="

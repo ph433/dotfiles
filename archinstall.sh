@@ -65,6 +65,8 @@ cd "$DWM_DIR" && sudo make clean install && cd "$HOME"
 bash "$HOME/dotfiles/scripts/kanata.sh"
 bash "$HOME/dotfiles/scripts/setup_fonts.sh"
 
+chsh -s /usr/bin/fish
+
 echo "=================================================="
 echo " 🎉 CÀI ĐẶT HOÀN TẤT!"
 echo "=================================================="
