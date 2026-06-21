@@ -40,7 +40,7 @@ sudo pacman -Syu --noconfirm \
 SUCKLESS_DIR="$HOME/.config/suckless"
 DWM_DIR="$HOME/dwm-flexipatch"
 REPOS=("dmenu" "st")
-PACKAGES=("alacritty" "fish" "nvim" "suckless" "dwm_custom" "flameshot" "copyq" "env" "eza" "fcitx5" "mpv" "delta" "service" "kanata")
+PACKAGES=("alacritty" "fish" "nvim" "suckless" "dwm_custom" "flameshot" "copyq" "env" "eza" "fcitx5" "mpv" "delta" "services" "kanata")
 
 mkdir -p "$SUCKLESS_DIR"
 cd "$SUCKLESS_DIR"
@@ -85,6 +85,9 @@ done
 cd $HOME/dotfiles
 rm -f $HOME/.config/atuin/themes/mycolor.toml $HOME/.config/atuin/config.toml && stow --no-folding -v atuin
 
+cd $HOME/dotfiles
+git restore .
+
 cd "$SUCKLESS_DIR"
 for repo in "${REPOS[@]}"; do
     cd "$repo"
@@ -96,9 +99,6 @@ cd "$DWM_DIR" && sudo make clean install && cd "$HOME"
 
 bash "$HOME/dotfiles/scripts/kanata.sh"
 bash "$HOME/dotfiles/scripts/setup_fonts.sh"
-
-cd $HOME/dotfiles
-git restore .
 
 echo "=================================================="
 echo " 🎉 CÀI ĐẶT HOÀN TẤT!"
