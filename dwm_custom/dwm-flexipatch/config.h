@@ -951,7 +951,7 @@ static const char *dmenucmd[] = {
 };
 static const char *termcmd[]  = { "alacritty", NULL };
 static const char *copyqcmd[] = { "copyq", "toggle", NULL };
-static const char *flameshotcmd[] = { "flameshot", "gui", NULL };
+static const char *flameshotcmd[] = { "env", "XDG_CURRENT_DESKTOP=X-Generic", "flameshot", "gui", NULL };
 static const char *firefoxcmd[]   = { "firefox", NULL };
 static const char *youtubecmd[]   = { "firefox", "https://www.youtube.com", NULL };
 

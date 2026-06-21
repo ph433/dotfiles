@@ -35,6 +35,12 @@ sudo pacman -Syu --noconfirm \
     git-delta \
     mpv \
     firefox \
+    fcitx5 \
+    fcitx5-bamboo \
+    fcitx5-configtool \
+    fcitx5-gtk \
+    fcitx5-qt \
+    xclip \
     yt-dlp
 
 SUCKLESS_DIR="$HOME/.suckless"

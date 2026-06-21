@@ -4,8 +4,7 @@ Description=Kanata Keyboard Service (User Mode)
 Documentation=https://github.com/jtroo/kanata/blob/main/parser/src/keys/mod.rs
 
 [Service]
-Environment="PATH=%h/.local/bin:/usr/local/bin:/usr/bin:/bin"
-ExecStart=kanata --cfg %h/.config/kanata/config.kbd --no-wait
+ExecStart=/usr/bin/kanata --cfg %h/.config/kanata/config.kbd --no-wait
 Restart=on-failure
 RestartSec=3
 [Install]
