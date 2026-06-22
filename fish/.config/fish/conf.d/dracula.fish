@@ -1,6 +1,8 @@
 # ~/dotfiles/fish/.config/fish/conf.d/dracula.fish
 # Module cấu hình màu Dracula True Color cho Fish Shell (Đã đồng bộ 100%)
 
+set -g fish_term24bit 1
+
 set -g fish_color_normal F8F8F2
 set -g fish_color_command 50FA7B --bold
 set -g fish_color_keyword FF79C6 --bold
@@ -25,3 +27,15 @@ set -g fish_color_host 50FA7B
 set -g fish_color_host_remote F1FA8C        # Thêm vào để đè bẹp 'yellow' cũ
 set -g fish_color_status FF5555             # Thêm vào để đè bẹp 'red' cũ
 set -g fish_color_cancel FF5555 --reverse
+
+# function custom_dracula_prompt --on-event fish_prompt
+#     # Xóa sạch cấu hình prompt cũ trước khi vẽ
+#     functions -e fish_prompt
+#
+#     # Định nghĩa lại chuẩn True Color
+#     function fish_prompt
+#         set_color 50FA7B --bold
+#         echo -n '❯❯❯ '
+#         set_color normal
+#     end
+# end
