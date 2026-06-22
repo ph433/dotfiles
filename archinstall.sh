@@ -28,7 +28,6 @@ sudo pacman -Syu --noconfirm \
     neovim \
     starship \
     yazi \
-    # flameshot \
     copyq \
     tree \
     fzf \
