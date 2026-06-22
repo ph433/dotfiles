@@ -9,7 +9,7 @@ echo "=================================================="
 
 SUCKLESS_DIR="$HOME/.suckless"
 DWM_DIR="$HOME/dwm-flexipatch"
-PACKAGES=("alacritty" "fish" "nvim" "suckless" "dwm_custom" "flameshot" "copyq" "env" "eza" "fcitx5" "mpv" "delta" "services" "kanata" "starship" ".gitignore")
+PACKAGES=("alacritty" "fish" "nvim" "suckless" "dwm_custom" "flameshot" "copyq" "env" "eza" "fcitx5" "mpv" "delta" "services" "kanata" "starship" "git")
 
 mkdir -p "$SUCKLESS_DIR"
 cd "$SUCKLESS_DIR" && git clone --depth 1 https://git.suckless.org/dmenu && git clone --depth 1 https://git.suckless.org/slstatus
