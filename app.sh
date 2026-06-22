@@ -41,4 +41,5 @@ sudo pacman -Syu --noconfirm \
     fcitx5-qt \
     xclip \
     maim \
+    ueberzugpp \
     yt-dlp
