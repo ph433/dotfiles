@@ -1,3 +1,10 @@
+## --- CẤU HÌNH BIẾN MÔI TRƯỜNG CHO FCITX5 ---
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS=@im=fcitx
+export SDL_IM_MODULE=fcitx
+export GLFW_IM_MODULE=ibus
+
 # --- Các cấu hình chạy ngầm làm nền ---
 xinput set-prop "FTCS0038:00 2808:0106 Touchpad" "libinput Tapping Enabled" 1 &
 #feh --bg-scale ~/Pictures/wallpaper.jpg &
@@ -10,7 +17,7 @@ slstatus &
 copyq &
 
 # 3. Bật công cụ chụp màn hình Flameshot
-flameshot &
+# flameshot &
 
 # --- Chọn Window Manager để quẩy ở đây ---
 

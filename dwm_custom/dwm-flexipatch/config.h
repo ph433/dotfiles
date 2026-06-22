@@ -951,7 +951,9 @@ static const char *dmenucmd[] = {
 };
 static const char *termcmd[]  = { "alacritty", NULL };
 static const char *copyqcmd[] = { "copyq", "toggle", NULL };
-static const char *flameshotcmd[] = { "env", "XDG_CURRENT_DESKTOP=X-Generic", "flameshot", "gui", NULL };
+// static const char *flameshotcmd[] = { "env", "XDG_CURRENT_DESKTOP=X-Generic", "flameshot", "gui", NULL };
+static const char *screenshot_full[] = { "sh", "-c", "maim ~/Pictures/screenshot_$(date +\\%F_\\%T).png && xclip -selection clipboard -t image/png -i ~/Pictures/screenshot_$(date +\\%F_\\%T).png", NULL };
+static const char *screenshot_select[] = { "sh", "-c", "maim -s -u | xclip -selection clipboard -t image/png", NULL };
 static const char *firefoxcmd[]   = { "firefox", NULL };
 static const char *youtubecmd[]   = { "firefox", "https://www.youtube.com", NULL };
 
@@ -1105,7 +1107,9 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_BackSpace,  spawn,                  {.v = dmenucmd } },
 	{ MODKEY,                       XK_Return,     spawn,                  {.v = termcmd } },
         { MODKEY,                       XK_v,          spawn,                  {.v = copyqcmd } },
-        { MODKEY,                       XK_c,          spawn,                  {.v = flameshotcmd } },
+        // { MODKEY,                       XK_c,          spawn,                  {.v = flameshotcmd } },
+        { MODKEY|ShiftMask,             XK_c,          spawn,                  {.v = screenshot_full } },
+        { MODKEY,                       XK_c,          spawn,                  {.v = screenshot_select } },
 	{ Mod4Mask,                     XK_f,          spawn,                  {.v = firefoxcmd } },
 	{ Mod4Mask|ShiftMask,           XK_y,          spawn,                  {.v = youtubecmd } },
 	#if RIODRAW_PATCH

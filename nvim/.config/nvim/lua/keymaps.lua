@@ -18,11 +18,27 @@ vim.keymap.set({'n', 'i', 'v'}, '<C-y>', '<Cmd>redo<CR>', { desc = 'Redo' })
 vim.keymap.set({'n', 'i', 'v'}, '<C-f>', '<Esc>/', { desc = 'Search' })
 -- vim.keymap.set({'n', 'i', 'v'}, '<C-s>', '<Cmd>w<CR>', { desc = 'Save file' })
 
--- Cuộn xuống nửa trang bằng Ctrl + Mũi tên xuống
-vim.keymap.set({'n', 'v', 'i'}, '<C-Down>', '<C-d>', { desc = 'Cuộn xuống nửa trang' })
+-- Cuộn màn hình LÊN 1/4 trang
+vim.keymap.set('n', '<C-Up>', function()
+  -- Lấy chiều cao cửa sổ chia cho 4 và làm tròn xuống
+  local quarter_screen = math.floor(vim.api.nvim_win_get_height(0) / 4)
+  local keys = vim.api.nvim_replace_termcodes(quarter_screen .. '<C-y>', true, false, true)
+  vim.api.nvim_feedkeys(keys, 'n', false)
+end, { desc = "Cuộn màn hình lên 1/4 trang" })
 
--- Cuộn lên nửa trang bằng Ctrl + Mũi tên lên
-vim.keymap.set({'n', 'v', 'i'}, '<C-Up>', '<C-u>', { desc = 'Cuộn lên nửa trang' })
+-- Cuộn màn hình XUỐNG 1/4 trang
+vim.keymap.set('n', '<C-Down>', function()
+  -- Lấy chiều cao cửa sổ chia cho 4 và làm tròn xuống
+  local quarter_screen = math.floor(vim.api.nvim_win_get_height(0) / 4)
+  local keys = vim.api.nvim_replace_termcodes(quarter_screen .. '<C-e>', true, false, true)
+  vim.api.nvim_feedkeys(keys, 'n', false)
+end, { desc = "Cuộn màn hình xuống 1/4 trang" })
+
+-- -- Cuộn xuống nửa trang bằng Ctrl + Mũi tên xuống
+-- vim.keymap.set({'n', 'v', 'i'}, '<C-Down>', '<C-d>', { desc = 'Cuộn xuống nửa trang' })
+--
+-- -- Cuộn lên nửa trang bằng Ctrl + Mũi tên lên
+-- vim.keymap.set({'n', 'v', 'i'}, '<C-Up>', '<C-u>', { desc = 'Cuộn lên nửa trang' })
 
 -- -- Cuộn xuống 100% bằng cách gọi API (Bỏ qua việc <C-f> bị map đè)
 -- vim.keymap.set({'n', 'v', 'i'}, '<D-Down>', function()

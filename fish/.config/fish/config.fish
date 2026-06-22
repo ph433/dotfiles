@@ -4,7 +4,7 @@ if status is-interactive
     alias ls="eza --icons --group-directories-first"
     alias ll="eza -lah --icons --group-directories-first"
     alias lt="eza --tree --level=2 --icons --group-directories-first"
-    alias lta="eza --tree --level=2 --icons --group-directories-first -a --color=always"
+    # alias lta="eza --tree --level=2 --icons --group-directories-first -a --color=always"
     
     alias grep="rg"
     alias find="fd"

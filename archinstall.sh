@@ -28,7 +28,7 @@ sudo pacman -Syu --noconfirm \
     neovim \
     starship \
     yazi \
-    flameshot \
+    # flameshot \
     copyq \
     tree \
     fzf \
@@ -41,6 +41,7 @@ sudo pacman -Syu --noconfirm \
     fcitx5-gtk \
     fcitx5-qt \
     xclip \
+    maim \
     yt-dlp
 
 SUCKLESS_DIR="$HOME/.suckless"

@@ -25,3 +25,10 @@ function cdh --description "CD nhanh ve thu muc Home"
     commandline -f repaint
 end
 
+function lta --description "Hien thi cay thu muc chi tiet bang eza"
+    eza --tree --level=2 --icons --group-directories-first -a --color=always $argv
+end
+
+function ll --description "Hien thi danh sach file chi tiet bang eza"
+    eza -lah --icons --group-directories-first $argv
+end
