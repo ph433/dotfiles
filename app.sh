@@ -42,5 +42,6 @@ sudo pacman -Syu --noconfirm \
     xclip \
     maim \
     ueberzugpp \
+    ttf-jetbrains-mono-nerd \
     jq \
     yt-dlp
