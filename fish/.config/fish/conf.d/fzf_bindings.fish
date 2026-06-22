@@ -19,6 +19,7 @@ if status is-interactive
 	# bind shift-left cdh
 	bind --mode $mode shift-left 'cdh'
 	bind --mode $mode shift-right 'cdmd'
+	bind --mode $mode ctrl-a 'commandline -r "pwd"; commandline -f execute'
 	bind --mode $mode ctrl-y 'commandline -r "lta"; commandline -f execute'
 	bind --mode $mode ctrl-shift-y 'commandline -r "ll"; commandline -f execute'
 
