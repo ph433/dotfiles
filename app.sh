@@ -42,4 +42,5 @@ sudo pacman -Syu --noconfirm \
     xclip \
     maim \
     ueberzugpp \
+    jq \
     yt-dlp
