@@ -566,6 +566,14 @@ extensions:
       style:
         foreground: "#E5C07B" # Màu vàng cảnh báo nhẹ cho icon file swap
 
+  "dat":
+    filename:
+      foreground: "#ABB2BF" # Màu xám tối hệ thống
+    icon:
+      glyph: ""            # Icon cơ sở dữ liệu
+      style:
+        foreground: "#E06C75"
+
   "db":
     filename:
       foreground: "#5C6370" # Màu xám tối hệ thống

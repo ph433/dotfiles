@@ -1,6 +1,8 @@
 [Hotkey]
 # Enumerate when press trigger key repeatedly
 EnumerateWithTriggerKeys=True
+# Temporally switch between first and current Input Method
+AltTriggerKeys=
 # Enumerate Input Method Forward
 EnumerateForwardKeys=
 # Enumerate Input Method Backward
@@ -9,12 +11,9 @@ EnumerateBackwardKeys=
 EnumerateSkipFirst=False
 
 [Hotkey/TriggerKeys]
-0=Control+Shift+Shift_L
+0=Alt+space
 1=Zenkaku_Hankaku
 2=Hangul
-
-[Hotkey/AltTriggerKeys]
-0=Shift_L
 
 [Hotkey/EnumerateGroupForwardKeys]
 0=Super+space

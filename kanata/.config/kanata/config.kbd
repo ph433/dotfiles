@@ -214,7 +214,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       S-esc   S-home  S-up    S-end   _       _       @stabi  _       @staba  _       _       _       _               _       _       _       _
   S-bks   S-tab   S-left  S-down  S-rght  S-spc   _       @cs     @sftn   @sw     @sa     S-del   _                       _       _       _       _
-  _       _       C-S-x   C-S-c   C-S-v   _       S-v     _       _       _       C-S-y   _               _               _       _       _
+  _       _       C-S-x   C-S-c   C-S-v   _       S-v     A-S-c   _       _       C-S-y   _               _               _       _       _
   _       _       @sftn   S-ent                                   @sfta   _                       _       _       _       _               _
 )
 
