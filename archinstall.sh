@@ -33,7 +33,6 @@ cd "$SUCKLESS_DIR/slstatus" && sudo make clean install
 cd "$DWM_DIR" && sudo make clean install && cd "$HOME"
 
 bash "$HOME/dotfiles/scripts/kanata.sh"
-bash "$HOME/dotfiles/scripts/setup_fonts.sh"
 
 chsh -s /usr/bin/fish
 
