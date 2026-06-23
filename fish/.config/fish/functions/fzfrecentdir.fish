@@ -56,7 +56,7 @@ function fzfrecentdir -d "Tìm thư mục dựa trên lịch sử di chuyển (T
         --delimiter=' │ ' \
         --nth=3 \
         --tiebreak=index \
-        --preview="command -v eza >/dev/null && eza -1 --color=always {3} 2>/dev/null || ls -A --color=always {3} 2>/dev/null" \
+        --preview="command -v eza >/dev/null && eza -1 --icons --color=always {3} 2>/dev/null || ls -A --color=always {3} 2>/dev/null" \
         --preview-window="bottom:70%" \
         --expect=right,enter \
         --bind="$binds" \

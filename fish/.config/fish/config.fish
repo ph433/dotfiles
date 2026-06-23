@@ -16,3 +16,9 @@ if status is-interactive
     atuin init fish | source
     starship init fish | source
 end
+
+# Lắng nghe sự kiện di chuyển thư mục và ghi log kèm thời gian (Unix Timestamp)
+function __log_recent_dir --on-variable PWD
+    set -l timestamp (date +%s)
+    echo "$timestamp $PWD" >> "$HOME/.cache/dir_recent.log"
+end
