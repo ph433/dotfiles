@@ -1299,27 +1299,13 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_F5,         xrdb,                   {.v = NULL } },
 	#endif // XRDB_PATCH | XRESOURCES_PATCH
 	/* modifier                     key            function                argument */
-
-	// Win + 0: Trả về layout mặc định Tile []= (layouts[0])
 	{ Mod4Mask,                    XK_0,          setlayout,               {.v = &layouts[0]} },
-
-	// Win + 1: Bật chế độ thả nổi tự do Floating ><> (layouts[1])
 	{ Mod4Mask,                    XK_1,          setlayout,               {.v = &layouts[1]} },
-
-	// Win + 2: Bật vòng xoắn ốc Fibonacci Dwindle [\\] (layouts[2] gốc chuẩn chỉ)
 	{ Mod4Mask,                    XK_2,          setlayout,               {.v = &layouts[2]} },
-
-	// Win + 3: Bật vòng xoắn ốc Fibonacci Spiral (@) (layouts[3] gốc chuẩn chỉ)
 	{ Mod4Mask,                    XK_3,          setlayout,               {.v = &layouts[3]} },
-
-	// // Win + 3: Bật chế độ Boong Tàu Deck [D] (layouts[5])
-	// { Mod4Mask,                     XK_3,          setlayout,              {.v = &layouts[5]} },
-	//
-	// // Win + 4: Bật chế độ Lưới Không Khoảng Trống Gapless Grid ::: (layouts[10])
-	// { Mod4Mask,                     XK_4,          setlayout,              {.v = &layouts[10]} },
-	//
-	// // Win + 5: Bật chế độ Tâm Điểm Giữa Màn Centered Master >M> (layouts[4])
-	// { Mod4Mask,                     XK_5,          setlayout,              {.v = &layouts[4]} },
+	{ Mod4Mask,                    XK_4,          setlayout,               {.v = &layouts[4]} },
+	{ Mod4Mask,                    XK_5,          setlayout,               {.v = &layouts[5]} },
+	{ Mod4Mask,                    XK_6,          setlayout,               {.v = &layouts[6]} },
         #if COLUMNS_LAYOUT
 	{ MODKEY,                       XK_c,          setlayout,              {.v = &layouts[3]} },
 	#endif // COLUMNS_LAYOUT
