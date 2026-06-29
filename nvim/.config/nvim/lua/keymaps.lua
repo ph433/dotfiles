@@ -65,9 +65,6 @@ vim.keymap.set({'n', 'v'}, '<S-BS>', 'Vd', { desc = "Xóa toàn bộ dòng" })
 vim.keymap.set('v', '<Insert>', 'c')
 -- vim.keymap.set('n', '<D-Insert>', 'ciw', { noremap = true })
 
-vim.keymap.set('n', '<CR>', 'o<ESC>')
-vim.keymap.set('n', '<S-CR>', 'O<ESC>')
-
 vim.keymap.set("n", "<A-Up>", "<cmd>m .-2<cr>==")
 vim.keymap.set("n", "<A-Down>", "<cmd>m .+1<cr>==")
 vim.keymap.set("v", "<A-Up>", ":m '<-2<cr>gv=gv")
@@ -168,3 +165,20 @@ vim.keymap.set('n', 'O', function()
   -- Xóa dòng hiện tại và thay bằng (thụt lề + clipboard)
   vim.api.nvim_set_current_line(indent .. clipboard_content)
 end, { desc = "Thay thế dòng giữ nguyên thụt lề" })
+
+vim.keymap.set('n', '<CR>', function()
+  -- 1. Lấy nội dung của dòng hiện tại
+  local current_line = vim.api.nvim_get_current_line()
+  
+  -- 2. Trích xuất đúng phần khoảng trắng (thụt lề) ở đầu dòng
+  local indent = current_line:match("^%s*") or ""
+  
+  -- 3. Lấy vị trí dòng hiện hành (row)
+  local row = vim.api.nvim_win_get_cursor(0)[1]
+  
+  -- 4. Tạo một dòng mới ngay bên dưới, chứa sẵn lượng khoảng trắng đã copy
+  vim.api.nvim_buf_set_lines(0, row, row, false, { indent })
+  
+  -- 5. Di chuyển con trỏ xuống dòng mới, đặt ngay sau phần khoảng trắng đó
+  vim.api.nvim_win_set_cursor(0, { row + 1, #indent })
+end, { silent = true, desc = 'Tạo dòng mới giữ nguyên thụt lề, không tự thêm comment' })
