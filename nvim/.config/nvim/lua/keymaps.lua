@@ -182,3 +182,20 @@ vim.keymap.set('n', '<CR>', function()
   -- 5. Di chuyển con trỏ xuống dòng mới, đặt ngay sau phần khoảng trắng đó
   vim.api.nvim_win_set_cursor(0, { row + 1, #indent })
 end, { silent = true, desc = 'Tạo dòng mới giữ nguyên thụt lề, không tự thêm comment' })
+
+vim.keymap.set('n', '<S-CR>', function()
+  -- 1. Lấy nội dung của dòng hiện tại
+  local current_line = vim.api.nvim_get_current_line()
+  
+  -- 2. Trích xuất đúng phần khoảng trắng (thụt lề) ở đầu dòng
+  local indent = current_line:match("^%s*") or ""
+  
+  -- 3. Lấy vị trí dòng hiện hành (1-based index)
+  local row = vim.api.nvim_win_get_cursor(0)[1]
+  
+  -- 4. Tạo một dòng mới ngay bên TRÊN (vị trí row - 1), chứa sẵn lượng khoảng trắng
+  vim.api.nvim_buf_set_lines(0, row - 1, row - 1, false, { indent })
+  
+  -- 5. Di chuyển con trỏ lên dòng mới đó, đặt ngay sau phần khoảng trắng
+  vim.api.nvim_win_set_cursor(0, { row, #indent })
+end, { silent = true, desc = 'Tạo dòng mới ở trên giữ nguyên thụt lề, không tự thêm comment' })
