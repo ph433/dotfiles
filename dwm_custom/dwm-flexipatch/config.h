@@ -1263,6 +1263,8 @@ static const Key keys[] = {
 	{ MODKEY|Mod4Mask,              XK_Left,       shiftviewclients,       { .i = -1 } },
 	{ MODKEY|Mod4Mask,              XK_Right,      shiftviewclients,       { .i = +1 } },
 	#endif // SHIFTVIEW_CLIENTS_PATCH
+	{ MODKEY|ShiftMask|Mod4Mask,    XK_Right,      shiftviewboth_ws,      {.i = +1} },
+	{ MODKEY|ShiftMask|Mod4Mask,    XK_Left,       shiftviewboth_ws,      {.i = -1} },
 	#if SHIFTBOTH_PATCH
 	{ MODKEY|ShiftMask,             XK_Left,       shiftboth,              { .i = -1 } }, // note keybinding conflict with focusadjacenttag tagandviewtoleft placedir
 	{ MODKEY|ShiftMask,             XK_Right,      shiftboth,              { .i = +1 } }, // note keybinding conflict with focusadjacenttag tagandviewtoright placedir
