@@ -16,7 +16,7 @@ function fzf_menu --description "Màn hình gọi lệnh nhanh bằng phím tắ
         --header="BẤM PHÍM TẮT ĐỂ GỌI LỆNH NGAY LẬP TỨC:" \
         --bind "tab:become(echo __fzf_find_files_custom)" \
         --bind "left:become(echo fzfrecent)" \
-        --bind "down:become(echo __smart_fzf_down)" \
+        --bind "down:become(echo __fzf_zoxide_custom)" \
         --bind "right:become(echo fzfrecentdir)" \
         --bind "up:become(echo __fzf_file_recent)" \
         --bind "space:become(echo __fzf_search_directory_custom)" \
