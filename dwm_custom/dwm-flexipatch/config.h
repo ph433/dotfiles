@@ -950,11 +950,12 @@ static const char *dmenucmd[] = {
 	NULL
 };
 static const char *termcmd[]  = { "alacritty", NULL };
+static const char *firefoxcmd[]   = { "firefox", NULL };
 static const char *copyqcmd[] = { "copyq", "toggle", NULL };
 // static const char *flameshotcmd[] = { "env", "XDG_CURRENT_DESKTOP=X-Generic", "flameshot", "gui", NULL };
 static const char *screenshot_full[] = { "sh", "-c", "maim ~/Pictures/screenshot_$(date +\\%F_\\%T).png && xclip -selection clipboard -t image/png -i ~/Pictures/screenshot_$(date +\\%F_\\%T).png", NULL };
 static const char *screenshot_select[] = { "sh", "-c", "maim -s -u | xclip -selection clipboard -t image/png", NULL };
-static const char *firefoxcmd[]   = { "firefox", NULL };
+static const char *screenshot_focus[] = { "/bin/sh", "-c", "maim -i $(xdotool getactivewindow) | tee ~/Pictures/$(date +%F_%T).png | xclip -selection clipboard -t image/png", NULL };
 static const char *youtubecmd[]   = { "firefox", "https://www.youtube.com", NULL };
 
 static const char *upvol[]           = { "amixer", "set", "Master", "5%+",    NULL };
@@ -1101,16 +1102,17 @@ static const Key keys[] = {
 	{ Mod4Mask,                     XK_equal,      spawn,                  {.v = mutevol } },
 	{ ControlMask,                  XK_minus,      spawn,                  {.v = dim_brightness } },
         { ControlMask|ShiftMask,        XK_equal,      spawn,                  {.v = raise_brightness } },
+        { Mod4Mask,                     XK_c,          spawn,                  {.v = screenshot_focus } },
 	#if KEYMODES_PATCH
 	{ MODKEY,                       XK_Escape,     setkeymode,             {.ui = COMMANDMODE} },
 	#endif // KEYMODES_PATCH
 	{ MODKEY,                       XK_BackSpace,  spawn,                  {.v = dmenucmd } },
 	{ MODKEY,                       XK_Return,     spawn,                  {.v = termcmd } },
+	{ Mod4Mask,                     XK_space,      spawn,                  {.v = firefoxcmd } },
         { MODKEY,                       XK_v,          spawn,                  {.v = copyqcmd } },
         // { MODKEY,                       XK_c,          spawn,                  {.v = flameshotcmd } },
         { MODKEY|ShiftMask,             XK_c,          spawn,                  {.v = screenshot_full } },
         { MODKEY,                       XK_c,          spawn,                  {.v = screenshot_select } },
-	{ Mod4Mask,                     XK_f,          spawn,                  {.v = firefoxcmd } },
 	{ Mod4Mask|ShiftMask,           XK_y,          spawn,                  {.v = youtubecmd } },
 	#if RIODRAW_PATCH
 	{ MODKEY|ControlMask,           XK_p,          riospawnsync,           {.v = dmenucmd } },
@@ -1262,8 +1264,8 @@ static const Key keys[] = {
 	{ MODKEY|Mod4Mask,              XK_Right,      shiftviewclients,       { .i = +1 } },
 	#endif // SHIFTVIEW_CLIENTS_PATCH
 	#if SHIFTBOTH_PATCH
-	{ MODKEY|ControlMask,           XK_Left,       shiftboth,              { .i = -1 } }, // note keybinding conflict with focusadjacenttag tagandviewtoleft placedir
-	{ MODKEY|ControlMask,           XK_Right,      shiftboth,              { .i = +1 } }, // note keybinding conflict with focusadjacenttag tagandviewtoright placedir
+	{ MODKEY|ShiftMask,             XK_Left,       shiftboth,              { .i = -1 } }, // note keybinding conflict with focusadjacenttag tagandviewtoleft placedir
+	{ MODKEY|ShiftMask,             XK_Right,      shiftboth,              { .i = +1 } }, // note keybinding conflict with focusadjacenttag tagandviewtoright placedir
 	#endif // SHIFTBOTH_PATCH
 	#if SHIFTSWAPTAGS_PATCH && SWAPTAGS_PATCH
 	{ MODKEY|Mod4Mask|ShiftMask,    XK_Left,       shiftswaptags,          { .i = -1 } },
@@ -1277,7 +1279,7 @@ static const Key keys[] = {
 	#endif // BAR_WINTITLEACTIONS_PATCH
 	{ Mod4Mask,                     XK_Escape,     killclient,             {0} }, // Win + Esc: Giết đúng 1 thằng đang chọn
 	#if KILLUNSEL_PATCH
-	{ Mod4Mask,                     XK_q,          killunsel,              {0} },
+	{ Mod4Mask,                     XK_Return,     killunsel,              {0} },
 	#endif // KILLUNSEL_PATCH
 	#if SELFRESTART_PATCH
 	// { MODKEY|ShiftMask,             XK_Escape,     self_restart,           {0} },
