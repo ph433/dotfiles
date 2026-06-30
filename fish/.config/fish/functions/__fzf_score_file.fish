@@ -1,4 +1,4 @@
-function __fzf_score_file --description "Hàm trung tâm: Tính điểm Frecency (Min 1.0)"
+function __fzf_score_file --description "Hàm trung tâm: Tính điểm Frecency (Min 0.01)"
     set -l target "$argv[1]"
     
     # Bỏ qua nếu không truyền tham số
@@ -56,12 +56,16 @@ function __fzf_score_file --description "Hàm trung tâm: Tính điểm Frecency
                 s += 5.0
                 found = 1
             } else {
-                # Giảm điểm các file khác
-                s = s * 0.98
+                # Giảm điểm các file khác theo cơ chế mới
+                if (s <= 10.0) {
+                    s -= 0.01
+                } else {
+                    s = s * 0.98
+                }
             }
             
-            # Chặn điểm đáy
-            if (s < 1.0) s = 1.0
+            # Chặn điểm đáy ở mức 0.01
+            if (s < 0.01) s = 0.01
             
             printf "%.2f %s\n", s, p
         }

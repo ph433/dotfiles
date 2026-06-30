@@ -77,15 +77,9 @@ function fzfrecentdir -d "Tìm thư mục dựa trên lịch sử di chuyển (T
     # Điều hướng hành động
     switch "$key"
         case right
-            # Phím Right: Dán đường dẫn ra prompt để chuẩn bị gõ thêm lệnh (vd: cp, mv)
             commandline -i (string escape "$target_path")" "
-            
-            # Cập nhật thời gian vào log để đẩy nó lên Top 1
-            set -l timestamp (date +%s)
-            echo "$timestamp $target_path" >> "$HOME/.cache/dir_recent.log"
-            
+	    log_recent_dir "$target_path"
         case enter
-            # Phím Enter: Nhảy thẳng vào thư mục
             cd "$target_path"
     end
     

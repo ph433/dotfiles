@@ -73,20 +73,13 @@ function __fzf_find_files_custom
     if test -n "$selected_file"
         set -l absolute_file (realpath -- $selected_file)
 
-        # Mở hoặc dán
         if test "$key_pressed" = "enter"
             nvim $absolute_file
         else if test "$key_pressed" = "right"
-            # Dán trực tiếp đường dẫn ra dòng lệnh (prompt)
             commandline -i (string escape -- $absolute_file)" "
-            
-            # 🎯 BẮN VÀO LOG RECENT: Ghi thời gian thực và đường dẫn vật lý vào log recent
-            set -l timestamp (date +%s)
-            echo "$timestamp $absolute_file" >> "$HOME/.cache/nvim_recent.log"
+	    __fzf_score_file "$absolute_file"
+	    log_recent_file "$absolute_file"
         end
-
-        # 🎯 Ghi điểm Frecency (cho Yazi)
-        __fzf_score_file "$absolute_file"
     end
     
     commandline -f repaint 2>/dev/null

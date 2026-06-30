@@ -6,13 +6,33 @@ function fzfrecent -d "Tìm file dựa trên lịch sử mở trong Neovim (Dash
         return 1
     end
 
-    # Lọc lấy tối đa 10 file mới nhất
-    set -l top10 (awk '{time=$1; sub(/^[0-9]+ /, ""); map[$0]=time} END {for (p in map) print map[p] " " p}' $log_file | sort -nr | head -n 10)
+    # 1. Sắp xếp lịch sử theo thời gian mới nhất (chưa giới hạn 10)
+    set -l sorted_log (awk '{time=$1; sub(/^[0-9]+ /, ""); map[$0]=time} END {for (p in map) print map[p] " " p}' $log_file | sort -nr)
     
-    # GHI ĐÈ LẠI LOG
-    if test -n "$top10"
-        printf "%s\n" $top10 > $log_file
+    # 2. Lọc lấy tối đa 10 file VẪN CÒN TỒN TẠI trên ổ cứng
+    set -l top10
+    for entry in $sorted_log
+        # Tách lấy phần đường dẫn (bỏ timestamp ở đầu để check path)
+        set -l file_path (string replace -r '^[0-9]+ ' '' -- "$entry")
+        
+        # Nếu file tồn tại thì mới đưa vào mảng top10
+        if test -f "$file_path"
+            set -a top10 "$entry"
+            # Dừng vòng lặp khi đã gom đủ 10 file hợp lệ
+            if test (count $top10) -ge 10
+                break
+            end
+        end
     end
+
+    # Thoát nếu tất cả các file trong lịch sử đều đã bị xoá
+    if test -z "$top10"
+        echo "Không có file nào trong lịch sử còn tồn tại."
+        return 1
+    end
+
+    # GHI ĐÈ LẠI LOG (Hành động này cũng đóng vai trò tự động dọn rác các đường dẫn đã bị rm)
+    printf "%s\n" $top10 > $log_file
 
     # Tạo danh sách đánh số 0-9 và tính toán thời gian (relative time)
     set -l current_time (date +%s)
@@ -47,12 +67,10 @@ function fzfrecent -d "Tìm file dựa trên lịch sử mở trong Neovim (Dash
     set binds "$binds,8:first+down+down+down+down+down+down+down+down"
     set binds "$binds,9:first+down+down+down+down+down+down+down+down+down"
 
-    # THÊM MỚI: Gán Ctrl-Space chạy `execute` ngầm. 
-    # Lưu ý: fzf chạy execute bằng môi trường /bin/sh (POSIX), nên cú pháp ở đây là của Bash/SH chứ không phải Fish
+    # Gán Ctrl-Space chạy `execute` ngầm. 
     set binds "$binds,ctrl-space:execute(command -v bat >/dev/null && bat --paging=always --color=always {3} || less -R {3})"
 
     # FZF Menu
-    # Đã gỡ ctrl-space khỏi --expect
     set -l fzf_out (printf "%s\n" $list | fzf \
         --prompt="🕒 Nvim Recent (0-9 nhảy | Ctrl-Space xem chi tiết)> " \
         --delimiter=' │ ' \
@@ -65,7 +83,7 @@ function fzfrecent -d "Tìm file dựa trên lịch sử mở trong Neovim (Dash
         --layout=reverse \
         --height=100%)
 
-    # Xử lý output trả về (giờ chỉ còn right và enter)
+    # Xử lý output trả về
     set -l key $fzf_out[1]
     set -l selected_line $fzf_out[2]
 
@@ -80,15 +98,10 @@ function fzfrecent -d "Tìm file dựa trên lịch sử mở trong Neovim (Dash
     # Điều hướng hành động
     switch "$key"
         case right
-            # Phím Right: Dán trực tiếp đường dẫn ra dòng lệnh (prompt)
             commandline -i (string escape "$target_path")" "
-            
-            # Bắn vào log recent: Ghi thời gian hiện tại và đường dẫn vào log
-            set -l timestamp (date +%s)
-            echo "$timestamp $target_path" >> "$HOME/.cache/nvim_recent.log"
-            
+	    __fzf_score_file "$target_path"
+	    log_recent_file "$target_path"
         case enter
-            # Phím Enter: Mở nvim
             nvim "$target_path"
     end
     

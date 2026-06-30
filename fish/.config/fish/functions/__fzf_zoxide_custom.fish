@@ -22,13 +22,12 @@ function __fzf_zoxide_custom --description "Zoxide fzf: Enter để CD, Right đ
     set -l target (string replace -r "^\s*[0-9.]+\s+" "" -- $selected)
 
     if test "$key" = "right"
-        # 🎯 Nhấn Right: Dán đường dẫn ra shell (cách ra 1 dấu nhịp)
-        commandline -i (string escape $target)" "
-	    else if test "$key" = "enter"
-        # 🎯 Nhấn Enter: Chạy ngầm zoxide và cd trực tiếp không in ra màn hình
-        z $target 2>/dev/null
-        # Xóa sạch văn bản dở dang đang có trên dòng lệnh (nếu có)
-        commandline -r ""
+	    # 🎯 Nhấn Right: Dán đường dẫn ra shell (cách ra 1 dấu nhịp)
+	    commandline -i (string escape $target)" "
+	    log_recent_dir "$target"
+    else if test "$key" = "enter"
+	    # 🎯 Nhấn Enter: Chạy ngầm zoxide và cd trực tiếp không in ra màn hình
+	    z $target 2>/dev/null
     end
 
     commandline -f repaint 2>/dev/null

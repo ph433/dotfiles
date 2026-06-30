@@ -6,7 +6,7 @@ if status is-interactive
     alias lt="eza --tree --level=2 --icons --group-directories-first"
     # alias lta="eza --tree --level=2 --icons --group-directories-first -a --color=always"
     
-    alias grep="rg"
+    # alias grep="rg"
     alias find="fd"
     alias g="git"
     alias v="nvim"
@@ -17,8 +17,23 @@ if status is-interactive
     starship init fish | source
 end
 
-# Lắng nghe sự kiện di chuyển thư mục và ghi log kèm thời gian (Unix Timestamp)
 function __log_recent_dir --on-variable PWD
-    set -l timestamp (date +%s)
-    echo "$timestamp $PWD" >> "$HOME/.cache/dir_recent.log"
+    # Tránh kích hoạt log khi đang ở trong subshell hoặc các lệnh thay đổi tạm thời
+    if status --is-command-substitution
+        return
+    end
+
+    # Kiểm tra xem hàm log_recent_dir có đang bận xử lý hay không
+    if set -q __is_logging_dir
+        return
+    end
+
+    # Đặt cờ khóa (Lock) trước khi gọi hàm xử lý
+    set -g __is_logging_dir 1
+
+    log_recent_dir
+
+    # Xóa cờ khóa sau khi xử lý xong
+    set -e __is_logging_dir
 end
+

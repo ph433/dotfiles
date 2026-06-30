@@ -27,8 +27,6 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency (Siêu 
     # 🎯 TỐI ƯU CỰC HẠN: Lược bỏ system("test -e") để tăng tốc độ lên mức 1ms
     env PWD="$PWD" REAL_PWD="$real_pwd" REL_PWD="$rel_pwd" awk '
     BEGIN {
-        c_score = "\033[38;2;255;158;100m"
-        c_reset = "\033[0m"
         pwd = ENVIRON["PWD"]
         real_pwd = ENVIRON["REAL_PWD"]
         rel_pwd = ENVIRON["REL_PWD"]
@@ -117,9 +115,7 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency (Siêu 
         else if test "$key_pressed" = "right"
             commandline -i (string escape $file)" "
             __fzf_score_file "$file"
-
-            set -l timestamp (date +%s)
-            echo "$timestamp $file" >> "$HOME/.cache/nvim_recent.log"
+	    log_recent_file "$file"
         end
     end
     
