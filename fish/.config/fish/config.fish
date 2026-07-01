@@ -142,32 +142,15 @@ function _del_or_become_lta
 	end
 end
 
-# Xử lý nâng cao cho Backspace (hoặc Ctrl+Z)
-function _escape_toggle_home
-    set -l current_cmd (commandline | string trim)
-    if test -z "$current_cmd"
-        if test "$PWD" = "$HOME"
-            # Thử cd - trước
-            if not cd - 2>/dev/null
-                set -l log_file "$HOME/.cache/dir_recent.log"
-                if test -f "$log_file"
-                    # Đọc dòng đầu tiên, dùng string split để cắt lấy cột thứ 2
-                    set -l log_line (head -n 1 "$log_file")
-                    set -l recent_dir (string split -m 1 ' ' $log_line)[2]
-
-                    # Nếu cắt thành công và thư mục hợp lệ thì cd vào
-                    if test -n "$recent_dir"; and test -d "$recent_dir"
-                        cd "$recent_dir"
-                    end
-                end
-            end
-        else
-            cd ~
-        end
-        commandline -f repaint
-    else
-        commandline -f backward-kill-word
-    end
+function _escape_handler
+	# Kiểm tra xem bảng gợi ý có đang mở không
+	if commandline --paging-mode
+		# Nếu đang ở bảng chọn, Esc có tác dụng đóng bảng/hủy chọn
+		commandline -f cancel
+	else
+		set -l current_cmd (commandline | string trim)
+		commandline -f complete-and-search
+	end
 end
 
 function fish_user_key_bindings
@@ -177,7 +160,7 @@ function fish_user_key_bindings
     bind home _home_or_fzf_search_dir
     bind end _end_or_fzf_find
     bind space _space_or_fzf_recent
-    bind escape '__fish_exec_in_main_mode_only cancel _escape_toggle_home'
+    bind escape _escape_handler
     bind backspace _backspace_become_ll
     # bind up _up_or_fzf_history
     bind delete _del_or_become_lta
