@@ -13,7 +13,7 @@ if status is-interactive
 
     # --- Khởi tạo ứng dụng (App Inits) ---
     zoxide init fish | source
-    atuin init fish | source
+    # atuin init fish | source
     starship init fish | source
 end
 
@@ -94,6 +94,19 @@ function _end_or_fzf_find
     end
 end
 
+
+# function _up_or_fzf_history
+#     set -l current_cmd (commandline | string trim)
+#     if test -z "$current_cmd"
+#         # Gọi hàm tìm kiếm lịch sử bằng fzf nếu dòng lệnh trống
+#         _fzf_search_history_custom
+#         commandline -f repaint
+#     else
+#         # Di chuyển con trỏ lên hoặc tìm lịch sử mặc định của Fish nếu đang có chữ
+#         commandline -f up-line
+#     end
+# end
+
 # Xử lý cho phím Space (Khoảng trắng)
 function _space_or_fzf_recent
     set -l current_cmd (commandline | string trim)
@@ -106,8 +119,7 @@ function _space_or_fzf_recent
     end
 end
 
-# Xử lý cho phím Esc
-function _esc_or_become_ll
+function _backspace_become_ll
     set -l current_cmd (commandline | string trim)
     if test -z "$current_cmd"
         # Thay thế dòng lệnh bằng 'll' và thực thi ngay lập tức
@@ -115,51 +127,70 @@ function _esc_or_become_ll
         commandline -f execute
     else
         # Nếu dòng lệnh đang có chữ, giữ nguyên hành vi hủy/thoát mặc định của Esc
-        commandline -f cancel
-    end
-end
-
-
-# Xử lý cho phím Esc
-function _esc_or_become_lta
-    set -l current_cmd (commandline | string trim)
-    if test -z "$current_cmd"
-        # Thay thế dòng lệnh bằng 'll' và thực thi ngay lập tức
-        commandline -r 'lta'
-        commandline -f execute
-    else
-        # Nếu dòng lệnh đang có chữ, giữ nguyên hành vi hủy/thoát mặc định của Esc
-        commandline -f cancel
-    end
-end
-
-# Xử lý nâng cao cho Backspace (hoặc Ctrl+Z)
-function _backspace_toggle_home
-    set -l current_cmd (commandline | string trim)
-    if test -z "$current_cmd"
-        # Kiểm tra xem thư mục hiện tại có phải là Home hay không
-        if test "$PWD" = "$HOME"
-            # Nếu đang ở Home, quay lại thư mục trước đó (tương đương cd -)
-            cd -
-        else
-            # Nếu đang ở thư mục khác, đi về Home
-            cd ~
-        end
-        commandline -f repaint
-    else
-        # Nếu đang có chữ, xóa ký tự như bình thường
         commandline -f backward-delete-char
     end
 end
 
+function _del_or_become_lta
+	set -l current_cmd (commandline | string trim)
+	if test -z "$current_cmd"
+		commandline -r 'lta'
+		commandline -f execute
+	else
+		# Nhánh else: đóng vai trò làm phím Del như bình thường
+		commandline -f delete-char
+	end
+end
+
+# Xử lý nâng cao cho Backspace (hoặc Ctrl+Z)
+function _escape_toggle_home
+    set -l current_cmd (commandline | string trim)
+    if test -z "$current_cmd"
+        if test "$PWD" = "$HOME"
+            cd -
+        else
+            cd ~
+        end
+        commandline -f repaint
+    else
+        commandline -f cancel
+    end
+end
+
 function fish_user_key_bindings
-    bind \r _enter_or_fzf_zoxide
-    bind \e\[C _right_or_fzf_recent
-    bind \e\[D _left_or_fzf_find
-    bind \e\[H _home_or_fzf_search_dir
-    bind \e\[F _end_or_fzf_find
-    bind ' ' _space_or_fzf_recent
-    bind \e _esc_or_become_ll
-    bind \x7f _backspace_toggle_home
-    bind \e\[3~ _esc_or_become_lta
+    bind enter _enter_or_fzf_zoxide
+    bind right _right_or_fzf_recent
+    bind left _left_or_fzf_find
+    bind home _home_or_fzf_search_dir
+    bind end _end_or_fzf_find
+    bind space _space_or_fzf_recent
+    bind escape '__fish_exec_in_main_mode_only cancel _escape_toggle_home'
+    bind backspace _backspace_become_ll
+    # bind up _up_or_fzf_history
+    bind delete _del_or_become_lta
+end
+
+function _fzf_history_format_ago
+    # Lấy timestamp hiện tại
+    set -l current_time (date +%s)
+    
+    # Đọc dữ liệu history từ stdin và xử lý bằng awk tách biệt, không bị lỗi nháy đơn
+    awk -v current_time="$current_time" -F " │ " '
+    BEGIN {  
+        # Xử lý chuỗi kết thúc bằng ký tự NULL (\0) từ history --null
+        RS="\0"; ORS="\0" 
+    } 
+    {
+        if ($1 == "") next;
+        diff = current_time - $1;
+        if (diff < 0) diff = 0;
+        
+        if (diff < 60) time_str = diff "s ago";
+        else if (diff < 3600) time_str = int(diff/60) "m ago";
+        else if (diff < 86400) time_str = int(diff/3600) "h ago";
+        else time_str = int(diff/86400) "d ago";
+        
+        # Định dạng cột thời gian rộng 12 ký tự để canh lề thẳng hàng
+        printf "%-12s │ %s\n", time_str, $2;
+    }'
 end

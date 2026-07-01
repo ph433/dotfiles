@@ -14,13 +14,13 @@ function fzf_menu --description "Màn hình gọi lệnh nhanh bằng phím tắ
         --color="header:#ff79c6:bold,info:#ffb86c" \
         --layout=reverse \
         --header="BẤM PHÍM TẮT ĐỂ GỌI LỆNH NGAY LẬP TỨC:" \
-        --bind "tab:become(echo __fzf_find_files_custom)" \
+	--bind "home:become(echo __fzf_find_files_custom)" \
         --bind "left:become(echo fzfrecent)" \
-        --bind "down:become(echo __fzf_zoxide_custom)" \
+        --bind "enter:become(echo __fzf_zoxide_custom)" \
         --bind "right:become(echo fzfrecentdir)" \
-        --bind "up:become(echo __fzf_file_recent)" \
-        --bind "space:become(echo __fzf_search_directory_custom)" \
-        --bind "enter:ignore") # Vô hiệu hóa Enter để tránh lỗi do không còn cuộn được
+        --bind "space:become(echo __fzf_file_recent)" \
+	--bind "end:become(echo __fzf_search_directory_custom)" \
+	) # Vô hiệu hóa Enter để tránh lỗi do không còn cuộn được
 
     # 3. Nếu người dùng nhấn ESC để thoát
     if test -z "$choice"
