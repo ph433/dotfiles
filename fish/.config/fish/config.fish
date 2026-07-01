@@ -13,7 +13,7 @@ if status is-interactive
 
     # --- Khởi tạo ứng dụng (App Inits) ---
     zoxide init fish | source
-    # atuin init fish | source
+    atuin init fish | source
     starship init fish | source
 end
 
@@ -147,13 +147,26 @@ function _escape_toggle_home
     set -l current_cmd (commandline | string trim)
     if test -z "$current_cmd"
         if test "$PWD" = "$HOME"
-            cd -
+            # Thử cd - trước
+            if not cd - 2>/dev/null
+                set -l log_file "$HOME/.cache/dir_recent.log"
+                if test -f "$log_file"
+                    # Đọc dòng đầu tiên, dùng string split để cắt lấy cột thứ 2
+                    set -l log_line (head -n 1 "$log_file")
+                    set -l recent_dir (string split -m 1 ' ' $log_line)[2]
+
+                    # Nếu cắt thành công và thư mục hợp lệ thì cd vào
+                    if test -n "$recent_dir"; and test -d "$recent_dir"
+                        cd "$recent_dir"
+                    end
+                end
+            end
         else
             cd ~
         end
         commandline -f repaint
     else
-        commandline -f cancel
+        commandline -f backward-kill-word
     end
 end
 

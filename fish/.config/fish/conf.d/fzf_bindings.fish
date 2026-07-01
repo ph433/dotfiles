@@ -3,7 +3,8 @@ if status is-interactive
     for mode in default insert
         # bind --mode $mode down '__fish_exec_in_main_mode_only fzf_menu'
         bind down '__fish_exec_in_main_mode_only down-line fzf_menu'
-	bind up '__fish_exec_in_main_mode_only up-line _fzf_search_history_custom'
+	bind tab complete-and-search
+	bind shift-tab complete
 	bind --mode $mode ctrl-x 'y'
 	bind --mode $mode ctrl-p 'fzf_menu_git'
 	bind --mode $mode shift-left 'prevd; commandline -f repaint'
