@@ -23,6 +23,11 @@ function __log_recent_dir --on-variable PWD
         return
     end
 
+    # Nếu thư mục hiện tại là $HOME thì bỏ qua không ghi log
+    if test "$PWD" = "$HOME"
+        return
+    end
+
     # Kiểm tra xem hàm log_recent_dir có đang bận xử lý hay không
     if set -q __is_logging_dir
         return
@@ -162,7 +167,9 @@ function _down_fzf_recent_or_menu
             # 1a. Nếu đang ở HOME -> cd vào thư mục gần nhất trong log
             set -l log_file "$HOME/.cache/dir_recent.log"
             if test -f "$log_file"
-                set -l recent_dirs (string replace -r '^[0-9]+\s+' '' < "$log_file")
+                # ĐÃ FIX TẠI ĐÂY: Thêm [-1..1] để đọc mảng từ dưới lên trên (ưu tiên thư mục mới nhất)
+                set -l recent_dirs (string replace -r '^[0-9]+\s+' '' < "$log_file")[-1..1]
+                
                 for dir in $recent_dirs
                     if test -d "$dir"; and test "$dir" != "$HOME"
                         cd "$dir"
