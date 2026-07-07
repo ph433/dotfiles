@@ -14,7 +14,7 @@ function __fish_exec_in_main_mode_only --description "Chỉ chạy lệnh custom
         commandline -f $fallback_action
     else
         # Nếu ở giao diện chính (Main Mode) thì chạy lệnh custom
-        if count $custom_command > 0
+        if test (count $custom_command) -gt 0
             $custom_command
         end
     end
