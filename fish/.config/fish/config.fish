@@ -94,19 +94,6 @@ function _end_or_fzf_find
     end
 end
 
-
-# function _up_or_fzf_history
-#     set -l current_cmd (commandline | string trim)
-#     if test -z "$current_cmd"
-#         # Gọi hàm tìm kiếm lịch sử bằng fzf nếu dòng lệnh trống
-#         _fzf_search_history_custom
-#         commandline -f repaint
-#     else
-#         # Di chuyển con trỏ lên hoặc tìm lịch sử mặc định của Fish nếu đang có chữ
-#         commandline -f up-line
-#     end
-# end
-
 # Xử lý cho phím Space (Khoảng trắng)
 function _space_or_fzf_recent
     set -l current_cmd (commandline | string trim)
@@ -153,8 +140,53 @@ function _escape_handler
 	end
 end
 
+function _crl-a_or_become_pwd
+    set -l current_cmd (commandline | string trim)
+    if test -z "$current_cmd"
+        commandline -r 'pwd'
+        commandline -f execute
+    else
+        # Nhánh else: Hoạt động như Ctrl + A mặc định (về đầu dòng)
+        commandline -f clear-screen
+    end
+end
+
+function _down_fzf_recent_or_menu
+    # Lấy nội dung dấu nhắc lệnh hiện tại (đã xóa khoảng trắng thừa 2 đầu)
+    set -l current_cmd (commandline | string trim)
+
+    # TRƯỜNG HỢP 1: Dấu nhắc lệnh đang TRỐNG
+    if test -z "$current_cmd"
+        
+        if test "$PWD" = "$HOME"
+            # 1a. Nếu đang ở HOME -> cd vào thư mục gần nhất trong log
+            set -l log_file "$HOME/.cache/dir_recent.log"
+            if test -f "$log_file"
+                set -l recent_dirs (string replace -r '^[0-9]+\s+' '' < "$log_file")
+                for dir in $recent_dirs
+                    if test -d "$dir"; and test "$dir" != "$HOME"
+                        cd "$dir"
+                        commandline -f repaint
+                        return
+                    end
+                end
+            end
+        else
+            # 1b. Nếu KHÔNG ở HOME -> trở về HOME
+            cd "$HOME"
+            commandline -f repaint
+        end
+
+    # TRƯỜNG HỢP 2: Dấu nhắc lệnh ĐANG GÕ (có chữ)
+    else
+        # Gọi menu fzf
+        fzf_menu
+    end
+end
+
 function fish_user_key_bindings
     bind enter _enter_or_fzf_zoxide
+    bind down "__fish_exec_in_main_mode_only down-line _down_fzf_recent_or_menu"
     bind right _right_or_fzf_recent
     bind left _left_or_fzf_find
     bind home _home_or_fzf_search_dir
@@ -162,31 +194,6 @@ function fish_user_key_bindings
     bind space _space_or_fzf_recent
     bind escape _escape_handler
     bind backspace _backspace_become_ll
-    # bind up _up_or_fzf_history
     bind delete _del_or_become_lta
-end
-
-function _fzf_history_format_ago
-    # Lấy timestamp hiện tại
-    set -l current_time (date +%s)
-    
-    # Đọc dữ liệu history từ stdin và xử lý bằng awk tách biệt, không bị lỗi nháy đơn
-    awk -v current_time="$current_time" -F " │ " '
-    BEGIN {  
-        # Xử lý chuỗi kết thúc bằng ký tự NULL (\0) từ history --null
-        RS="\0"; ORS="\0" 
-    } 
-    {
-        if ($1 == "") next;
-        diff = current_time - $1;
-        if (diff < 0) diff = 0;
-        
-        if (diff < 60) time_str = diff "s ago";
-        else if (diff < 3600) time_str = int(diff/60) "m ago";
-        else if (diff < 86400) time_str = int(diff/3600) "h ago";
-        else time_str = int(diff/86400) "d ago";
-        
-        # Định dạng cột thời gian rộng 12 ký tự để canh lề thẳng hàng
-        printf "%-12s │ %s\n", time_str, $2;
-    }'
+    bind ctrl-a _crl-a_or_become_pwd
 end
