@@ -28,6 +28,9 @@ syntax match kanataFunc "\<layer-toggle\>\|\<layer-switch\>\|\<tap-hold\>\|\<tap
 " =========================================================================
 syntax match kanataNumber  "\<\d\+\>"
 syntax match kanataAlias   "@[a-zA-Z0-9_-]\+"
+
+syntax match kanataAliasMod "@l\(ictl\|isft\|imet\|ialt\)\>"
+syntax match kanataFuncKey "\<\(up\|down\|left\|rght\|home\|end\|esc\|tab\|spc\|bks\|del\|ent\|grv\|caps\|bspc\)\>"
 syntax match kanataComment ";.*$"
 syntax match kanataTemp "-temp\>\|\<temp\>"
 " (Đã xóa dòng kanataChord để C-z, S-r, A-c tự động trở về màu mặc định)
@@ -53,7 +56,8 @@ hi kanataModifier   guifg=#FF5555 ctermfg=Red gui=italic
 
 " Các nút alias (@tabii, @osl_d...) dùng màu Trắng sữa Dracula in nghiêng cho sang
 hi kanataAlias guifg=#8BE9FD ctermfg=Cyan gui=italic
-
+hi kanataAliasMod guifg=#FF0000 ctermfg=Red gui=bold
+hi kanataFuncKey guifg=#F1FA8C ctermfg=Yellow gui=bold
 " Comment (;; ...) dùng màu Xanh xám bóng đêm chuẩn Dracula
 hi kanataComment guifg=#6272A4 ctermfg=DarkGray gui=italic
 hi kanataTemp guifg=#565F89 ctermfg=DarkGray gui=italic

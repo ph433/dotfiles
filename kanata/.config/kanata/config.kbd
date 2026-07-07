@@ -23,7 +23,7 @@
 (deflayer mod_nvim
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  @tabii  esc     home    up      end     @pra2tt _       @tabi   @tabii  @taba   C-p     _       _       _               _       _       _       _
+  C-bks   esc     home    up      end     @pra2tt _       @tabi   @tabii  @taba   C-p     _       _       _               _       _       _       _
   @osl_d  tab     left    down    rght    spc     @fd     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
   @sropt  C-z     C-x     C-c     C-v     _       @nvv    A-c     A-v     C-a     C-y     @ss             _               _       _       _
   _       _       @numt   ent                             @colet          _                       _       caps    _       _               _
@@ -32,7 +32,7 @@
 (deflayer mod_nvim-temp
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  @tabii  esc     home    up      end     @pra2   _       @tabi   @tabii  @taba   _       _       _       _               _       _       _       _
+  C-bks   esc     home    up      end     @pra2   _       @tabi   @tabii  @taba   _       _       _       _               _       _       _       _
   @osl_d  tab     left    down    rght    spc     @fd     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
   @sropt  C-z     _       C-c     C-v     _       v       A-c     A-v     C-a     C-y     @cmd            _               _       _       _
   _       _       @numt   ent                             @nvsw           _                       _       caps    _       _               _
@@ -266,7 +266,7 @@
 (deflayer colemak-dh-temp
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  @tabe   q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
+  C-bks   q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
   bks     a       r       s       t       g       m       n       e       i       o       '       _                       _       _       _       _
   @ss     x       c       d       v       z       k       h       ,       .       /       @ss             _               _       _       _
   lctl    lmet    @numt   spc                                     @colosw _                       _       _       _       _               _
@@ -278,7 +278,7 @@
   _       S-q     S-w     S-f     S-p     S-b     S-j     S-l     S-u     S-y     S-;     S-[     S-]     S-\             _       _       _       _
   S-bks   S-a     S-r     S-s     S-t     S-g     S-m     S-n     S-e     S-i     S-o     S-'     _                       _       _       _       _
   @sfts   S-x     S-c     S-d     S-v     S-z     S-k     S-h     S-,     S-.     S-/     _               _               _       _       _
-  _       _       _       S-ent                                   _       _                       _       _       _       _               _
+  _       _       @ns     S-ent                                   _       _                       _       _       _       _               _
 )
 
 (deflayer colemak-dh-shift
