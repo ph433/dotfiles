@@ -1,0 +1,10 @@
+[
+  {
+    "class": "(?i)alacritty",
+    "title": "\\[NVIM_ACTIVE\\].*", 
+    "layer": "mod_nvim-active"
+  },
+  {
+    "default": "mod_nvim"
+  }
+]
