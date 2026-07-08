@@ -23,6 +23,16 @@
 (deflayer mod_nvim
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  del     esc     home    up      end     @pra2tt _       ins     prtsc   pgup    pgdn    _       _       _               _       _       _       _
+  @osl_d  tab     left    down    rght    spc     @fd     @lictl  @lisft  @limet  @lialt  @f1-12  _               _       _       _       _
+  @sropt  C-z     C-x     C-c     C-v     _       @nvv    A-c     A-v     C-a     C-y     @ss             _               _       _       _
+  _       _       @numt   ent                             @colet          _                       _       caps    _       _               _
+)
+
+
+(deflayer mod_nvim-active
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   C-bks   esc     home    up      end     @pra2tt _       @tabi   @tabii  @taba   C-p     _       _       _               _       _       _       _
   @osl_d  tab     left    down    rght    spc     @fd     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
   @sropt  C-z     C-x     C-c     C-v     _       @nvv    A-c     A-v     C-a     C-y     @ss             _               _       _       _
@@ -32,7 +42,7 @@
 (deflayer mod_nvim-temp
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  C-bks   esc     home    up      end     @pra2   _       @tabi   @tabii  @taba   _       _       _       _               _       _       _       _
+  C-bks   esc     home    up      end     @pra2   _       ins     prtsc   pgup    pgdn    _       _       _               _       _       _       _
   @osl_d  tab     left    down    rght    spc     @fd     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
   @sropt  C-z     _       C-c     C-v     _       v       A-c     A-v     C-a     C-y     @cmd            _               _       _       _
   _       _       @numt   ent                             @nvsw           _                       _       caps    _       _               _
@@ -233,7 +243,7 @@
   @gg     `       -       =       S-=     /       \       [       S-9     S-0     ]       _       _       _               _       _       _       _
   bks     1       2       3       4       5       6       7       8       9       0       del     _                       _       _       _       _
   @ns     _       _       ;       '       _       _       S-'     ,       .       /       @ns             _               _       _       _
-  _       _       @ns     spc                                     @ns     _                       _       _       _       _               _
+  _       _       @ns     spc                                     @f1-12  _                       _       _       _       _               _
 )
 
 (deflayer mod_num-shift-temp
@@ -333,6 +343,7 @@
   numt (one-shot-press 1000 (layer-toggle mod_num-temp))
   colet (one-shot-press 1000 (layer-toggle colemak-dh-temp))
   coleff (layer-switch colemak-dh-ff)
+  f1-12 (layer-toggle fuction-bare)
 )
 
 (defalias
@@ -344,7 +355,7 @@
 (defalias
   del_w (macro d w)
   osl_d (multi bspc (one-shot 1000 (layer-toggle nvim_delete)))
-  tabe (multi (layer-switch mod_nvim) esc)
+  tabe (multi (layer-switch mod_nvim-active) esc)
   taba (multi (layer-switch colemak-dh) a)
   tabi (multi (layer-switch colemak-dh) i)
   tabii (multi (layer-switch colemak-dh) S-r)
@@ -655,6 +666,15 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       -       =       S-=     _       _       _       _       _       _       _       _       _               _       _       _       _
   _       1       2       3       4       5       6       7       8       9       0       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       _                                       _       _                       _       _       _       _               _
+)
+
+(deflayer fuction-bare 
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       f11     _       _       _       _       f12     _       _       _       _       _               _       _       _       _
+  _       f1      f2      f3      f4      f5      f6      f7      f8      f9      f10     _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       _       _                                       _       _                       _       _       _       _               _
 )

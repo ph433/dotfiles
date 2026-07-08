@@ -30,9 +30,12 @@ syntax match kanataNumber  "\<\d\+\>"
 syntax match kanataAlias   "@[a-zA-Z0-9_-]\+"
 
 syntax match kanataAliasMod "@l\(ictl\|isft\|imet\|ialt\)\>"
-syntax match kanataFuncKey "\<\(up\|down\|left\|rght\|home\|end\|esc\|tab\|spc\|bks\|del\|ent\|grv\|caps\|bspc\)\>"
+syntax match kanataFuncKey "\<\(up\|down\|left\|rght\|home\|end\|esc\|tab\|spc\|bks\|del\|ent\|grv\|caps\|bspc\|ins\|prtsc\|pgup\|pgdn\)\>"
 syntax match kanataComment ";.*$"
 syntax match kanataTemp "-temp\>\|\<temp\>"
+
+syntax match kanataFKeys "\<f\([1-9]\|1[0-2]\)\>"
+syntax match kanataActive "[a-zA-Z0-9_-]*\zsactive\ze[a-zA-Z0-9_-]*"
 " (Đã xóa dòng kanataChord để C-z, S-r, A-c tự động trở về màu mặc định)
 
 
@@ -61,5 +64,7 @@ hi kanataFuncKey guifg=#F1FA8C ctermfg=Yellow gui=bold
 " Comment (;; ...) dùng màu Xanh xám bóng đêm chuẩn Dracula
 hi kanataComment guifg=#6272A4 ctermfg=DarkGray gui=italic
 hi kanataTemp guifg=#565F89 ctermfg=DarkGray gui=italic
+hi kanataFKeys      guifg=#FF79C6 ctermfg=Magenta gui=bold
+hi kanataActive     guifg=#50FA7B ctermfg=Green gui=bold,italic
 
 let b:current_syntax = "kanata"

@@ -1,3 +1,17 @@
+local function set_layout(layer)
+    os.execute(string.format("echo '{\"ChangeLayer\": {\"new\": \"%s\"}}' | nc -w 1 localhost 1234 > /dev/null 2>&1 &", layer))
+end
+
+-- 1. Khi vừa vào Neovim HOẶC khi terminal chứa Neovim được focus trở lại
+vim.api.nvim_create_autocmd({ "VimEnter", "FocusGained" }, {
+    callback = function() set_layout("mod_nvim-active") end
+})
+
+-- 2. Khi thoát Neovim HOẶC khi bạn click/focus sang một terminal khác
+vim.api.nvim_create_autocmd({ "VimLeave", "FocusLost" }, {
+    callback = function() set_layout("mod_nvim") end -- Trả về layer mặc định của terminal
+})
+
 -- ==========================================================================
 -- 2. ĐỊNH DẠNG FILE & ĐIỀU HƯỚNG CẤU HÌNH KANATA
 -- ==========================================================================

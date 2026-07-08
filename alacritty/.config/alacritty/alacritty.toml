@@ -108,3 +108,8 @@ key = "End"
 mods = "Control"
 mode = "Vi"
 action = "ScrollToBottom"
+
+[[keyboard.bindings]]
+key = "Delete"
+chars = "\u001b[3~"
+

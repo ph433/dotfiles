@@ -6,8 +6,8 @@ vim.opt.smartcase = true        -- Tự nhận diện hoa thường nếu ta gõ
 vim.g.mapleader = ","           -- Phím Leader là dấu phẩy
 vim.opt.clipboard = "unnamedplus" -- Clipboard hệ thống
 vim.opt.termguicolors = true
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
+vim.opt.title = true
+vim.opt.titlestring = "[NVIM_ACTIVE] %t" -- %t sẽ hiển thị tên file đang mở
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.g.lazy_did_setup or vim.uv or vim.loop).fs_stat(lazypath) then
