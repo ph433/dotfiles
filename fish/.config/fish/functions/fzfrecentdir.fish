@@ -11,7 +11,8 @@ function fzfrecentdir -d "Tìm thư mục dựa trên lịch sử di chuyển (T
     
     # Ghi đè lại log để dọn dẹp file, tránh log bị phình to vô hạn
     if test -n "$top10"
-        printf "%s\n" $top10 > $log_file
+        # Thêm [-1..1] để ghi vào file theo chiều đảo ngược (mới nhất ở dưới cùng)
+        printf "%s\n" $top10[-1..1] > $log_file
     end
 
     # Tạo danh sách đánh số 0-9 và tính toán thời gian (relative time)
