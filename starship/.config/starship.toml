@@ -18,6 +18,7 @@ $php\
 [](fg:#212736 bg:#1d2230)\
 $time\
 [ ](fg:#1d2230)\
+${custom.recent_dir}\
 \n$character"""
 
 [directory]
@@ -82,3 +83,10 @@ format = '[[  $time ](fg:#a0a9cb bg:#1d2230)]($style)'
 # Định nghĩa ký tự hiển thị ở cuối thanh prompt
 success_symbol = "[❯](bold #50FA7B)"
 error_symbol = "[❯](bold #FF5555)"
+
+[custom.recent_dir]
+# grep -o "/.*" sẽ tự động tìm dấu "/" đầu tiên và lấy toàn bộ đường dẫn phía sau, bỏ qua mọi con số và khoảng trắng
+command = 'tail -n 1 ~/.cache/dir_recent.log | grep -o "/.*"'
+when = 'test -s ~/.cache/dir_recent.log'
+# Đưa thẳng mã màu có tiền tố fg: vào format để Starship đọc mượt mà
+format = ' [($output)](fg:#ff79c6 bold italic) '
