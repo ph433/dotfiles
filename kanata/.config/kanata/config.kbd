@@ -23,8 +23,8 @@
 (deflayer mod_nvim
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  del     esc     home    up      end     @pra2tt _       ins     prtsc   pgup    pgdn    _       _       _               _       _       _       _
-  @osl_d  tab     left    down    rght    spc     @fd     @lictl  @lisft  @limet  @lialt  @f1-12  _               _       _       _       _
+  del     esc     home    up      end     @pra2tt _       prtsc   pgup    pgdn    _       _       _       _               _       _       _       _
+  @osl_d  tab     left    down    rght    spc     ins     @lictl  @lisft  @limet  @lialt  @f1-12  _               _       _       _       _
   @sropt  C-z     C-x     C-c     C-v     _       @nvv    A-c     A-v     C-a     C-y     @ss             _               _       _       _
   _       _       @numt   ent                             @colet          _                       _       caps    _       _               _
 )

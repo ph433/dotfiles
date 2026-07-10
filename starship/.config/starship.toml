@@ -19,6 +19,7 @@ $php\
 $time\
 [ ](fg:#1d2230)\
 ${custom.recent_dir}\
+${custom.recent_file}\
 \n$character"""
 
 [directory]
@@ -90,3 +91,17 @@ command = 'tail -n 1 ~/.cache/dir_recent.log | grep -o "/.*"'
 when = 'test -s ~/.cache/dir_recent.log'
 # Đưa thẳng mã màu có tiền tố fg: vào format để Starship đọc mượt mà
 format = ' [($output)](fg:#ff79c6 bold italic) '
+
+
+[custom.recent_file]
+# Giải thích lệnh:
+# 1. sort -rn: Sắp xếp theo timestamp lớn nhất (mới nhất) lên đầu
+# 2. head -n 1: Lấy dòng đầu tiên
+# 3. grep -o "/.*": Tìm dấu "/" đầu tiên và lấy toàn bộ đường dẫn file phía sau
+command = 'sort -rn ~/.cache/nvim_recent.log | head -n 1 | grep -o "/.*"'
+
+# Module chỉ chạy khi file log tồn tại và không rỗng
+when = 'test -s ~/.cache/nvim_recent.log'
+
+# Định dạng hiển thị với màu vàng Dracula (#f1fa8c) hoặc chữ 'yellow'
+format = ' [($output)](fg:#f1fa8c bold italic) '
