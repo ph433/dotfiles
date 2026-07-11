@@ -13,7 +13,7 @@ vim.api.nvim_create_autocmd({ "VimLeave", "FocusLost" }, {
 })
 
 -- ==========================================================================
--- 2. ĐỊNH DẠNG FILE & ĐIỀU HƯỚNG CẤU HÌNH KANATA
+-- ĐỊNH DẠNG FILE & ĐIỀU HƯỚNG CẤU HÌNH KANATA (Đã xóa đoạn bị trùng lặp)
 -- ==========================================================================
 vim.filetype.add({
   extension = {
@@ -30,22 +30,8 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 -- ==========================================================================
--- 2. ĐỊNH DẠNG FILE & ĐIỀU HƯỚNG CẤU HÌNH KANATA
+-- XỬ LÝ FRECENCY LOG & CHỐNG TRÙNG LẶP CHO STARSHIP
 -- ==========================================================================
-vim.filetype.add({
-  extension = {
-    kbd       = "kanata",
-    gitconfig = "gitconfig",
-  },
-})
-
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "kanata",
-  callback = function()
-    vim.bo.commentstring = ";; %s"
-  end,
-})
-
 -- Đường dẫn file log recency
 local recency_log_path = vim.fn.expand('~/.cache/nvim_recent.log')
 local track_files_group = vim.api.nvim_create_augroup("TrackRecentFiles", { clear = true })
@@ -68,12 +54,34 @@ local function log_and_score_buffer(buf)
         file_path = real_path
     end
 
-    -- 1. GHI LOG RECENCY
+    -- 1. GHI LOG RECENCY (Đã sửa lỗi trùng lặp)
     local timestamp = os.time()
-    local f_recency = io.open(recency_log_path, "a")
-    if f_recency then
-        f_recency:write(timestamp .. " " .. file_path .. "\n")
-        f_recency:close()
+    local lines = {}
+    
+    -- Đọc file log hiện tại và lọc bỏ dòng chứa đường dẫn file này
+    local f_read = io.open(recency_log_path, "r")
+    if f_read then
+        for line in f_read:lines() do
+            if not line:match(file_path, 1, true) then
+                table.insert(lines, line)
+            end
+        end
+        f_read:close()
+    end
+
+    -- Giới hạn tối đa 500 file gần nhất để tối ưu tốc độ đọc của Starship
+    while #lines > 500 do
+        table.remove(lines, #lines)
+    end
+
+    -- Ghi đè file với thông tin mới nhất lên đầu (Dùng "w" thay vì "a")
+    local f_write = io.open(recency_log_path, "w")
+    if f_write then
+        f_write:write(timestamp .. " " .. file_path .. "\n")
+        for _, line in ipairs(lines) do
+            f_write:write(line .. "\n")
+        end
+        f_write:close()
     end
 
     -- 2. TÍNH ĐIỂM FRECENCY ĐỒNG BỘ
