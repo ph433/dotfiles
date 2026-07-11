@@ -1,7 +1,8 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 format = """
-${custom.recent_dir_parent}${custom.recent_dir_base}   ${custom.recent_file_parent}${custom.recent_file_base}
+${custom.recent_dir}\
+${custom.recent_file}
 
 [░▒▓](#a3aed2)\
 [  ](bg:#a3aed2 fg:#090c0c)\
@@ -85,34 +86,12 @@ format = '[[  $time ](fg:#a0a9cb bg:#1d2230)]($style)'
 success_symbol = "[❯](bold #50FA7B)"
 error_symbol = "[❯](bold #FF5555)"
 
-# =========================================
-# MODULE THƯ MỤC RECENT
-# =========================================
-[custom.recent_dir_parent]
-# Dùng dirname để lấy đường dẫn cha, sed để đổi $HOME thành ~
-command = 'tail -n 1 ~/.cache/dir_recent.log | grep -o "/.*" | xargs dirname | sed "s|^$HOME|~|"'
+[custom.recent_dir]
+command = 'tail -n 1 ~/.cache/dir_recent.log | grep -o "/.*" | sed "s|^$HOME|~|"'
 when = 'test -s ~/.cache/dir_recent.log'
-# In ra màu xám mờ (#6272a4) kèm icon, nối thêm dấu / ở cuối
-format = ' [ $output/](fg:#6272a4)'
+format = '[  ($output)](fg:#ff79c6 bold italic) '
 
-[custom.recent_dir_base]
-# Dùng basename để chỉ lấy tên thư mục cuối cùng
-command = 'tail -n 1 ~/.cache/dir_recent.log | grep -o "/.*" | xargs basename'
-when = 'test -s ~/.cache/dir_recent.log'
-# In ra màu hồng nổi bật, chữ in nghiêng và đậm
-format = '[$output](fg:#ff79c6 bold italic)'
-
-# =========================================
-# MODULE FILE RECENT
-# =========================================
-[custom.recent_file_parent]
-command = 'sort -rn ~/.cache/nvim_recent.log | head -n 1 | grep -o "/.*" | xargs dirname | sed "s|^$HOME|~|"'
+[custom.recent_file]
+command = 'sort -rn ~/.cache/nvim_recent.log | head -n 1 | grep -o "/.*" | sed "s|^$HOME|~|"'
 when = 'test -s ~/.cache/nvim_recent.log'
-# In ra màu xám mờ (#6272a4) kèm icon, nối thêm dấu / ở cuối
-format = '[󰈔 $output/](fg:#6272a4)'
-
-[custom.recent_file_base]
-command = 'sort -rn ~/.cache/nvim_recent.log | head -n 1 | grep -o "/.*" | xargs basename'
-when = 'test -s ~/.cache/nvim_recent.log'
-# In ra màu vàng rực, chữ in nghiêng và đậm
-format = '[$output](fg:#f1fa8c bold italic) '
+format = '[ 󰈔 ($output)](fg:#f1fa8c bold italic) '
