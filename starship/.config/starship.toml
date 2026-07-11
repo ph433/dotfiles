@@ -1,6 +1,9 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 format = """
+${custom.recent_dir}\
+${custom.recent_file}
+
 [░▒▓](#a3aed2)\
 [  ](bg:#a3aed2 fg:#090c0c)\
 [](bg:#769ff0 fg:#a3aed2)\
@@ -18,8 +21,6 @@ $php\
 [](fg:#212736 bg:#1d2230)\
 $time\
 [ ](fg:#1d2230)\
-${custom.recent_dir}\
-${custom.recent_file}\
 \n$character"""
 
 [directory]
@@ -86,22 +87,11 @@ success_symbol = "[❯](bold #50FA7B)"
 error_symbol = "[❯](bold #FF5555)"
 
 [custom.recent_dir]
-# grep -o "/.*" sẽ tự động tìm dấu "/" đầu tiên và lấy toàn bộ đường dẫn phía sau, bỏ qua mọi con số và khoảng trắng
-command = 'tail -n 1 ~/.cache/dir_recent.log | grep -o "/.*"'
+command = 'tail -n 1 ~/.cache/dir_recent.log | grep -o "/.*" | sed "s|^$HOME|~|"'
 when = 'test -s ~/.cache/dir_recent.log'
-# Đưa thẳng mã màu có tiền tố fg: vào format để Starship đọc mượt mà
-format = ' [($output)](fg:#ff79c6 bold italic) '
-
+format = '[  ($output)](fg:#ff79c6 bold italic) '
 
 [custom.recent_file]
-# Giải thích lệnh:
-# 1. sort -rn: Sắp xếp theo timestamp lớn nhất (mới nhất) lên đầu
-# 2. head -n 1: Lấy dòng đầu tiên
-# 3. grep -o "/.*": Tìm dấu "/" đầu tiên và lấy toàn bộ đường dẫn file phía sau
-command = 'sort -rn ~/.cache/nvim_recent.log | head -n 1 | grep -o "/.*"'
-
-# Module chỉ chạy khi file log tồn tại và không rỗng
+command = 'sort -rn ~/.cache/nvim_recent.log | head -n 1 | grep -o "/.*" | sed "s|^$HOME|~|"'
 when = 'test -s ~/.cache/nvim_recent.log'
-
-# Định dạng hiển thị với màu vàng Dracula (#f1fa8c) hoặc chữ 'yellow'
-format = ' [($output)](fg:#f1fa8c bold italic) '
+format = '[ 󰈔 ($output)](fg:#f1fa8c bold italic) '
