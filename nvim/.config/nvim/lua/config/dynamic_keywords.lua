@@ -52,8 +52,8 @@ function M.apply_highlight()
   end
 end
 
--- [MỚI] Hàm lấy text từ visual mode và ghi vào file
-function M.add_visual_keyword()
+-- [MỚI] Hàm bổ trợ lấy text bôi đen an toàn bằng Callback
+local function with_visual_selection(callback)
   -- Thoát visual mode để Neovim cập nhật tọa độ bôi đen ('< và '>)
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", true)
 
@@ -65,30 +65,77 @@ function M.add_visual_keyword()
     local lines = vim.fn.getline(s_row, e_row)
     if #lines == 0 then return end
 
-    local text = ""
-    -- Chỉ hỗ trợ bôi đen trên 1 dòng để tránh lỗi format file
-    if #lines == 1 then
-      text = string.sub(lines[1], s_col, e_col)
-    else
+    if #lines > 1 then
       vim.notify("Vui lòng chỉ bôi đen keyword trên 1 dòng!", vim.log.levels.WARN)
       return
     end
 
-    -- Xóa khoảng trắng thừa ở đầu/cuối
+    local text = string.sub(lines[1], s_col, e_col)
     local keyword = text:gsub("^%s*(.-)%s*$", "%1") 
-    if keyword == "" then return end
+    
+    if keyword ~= "" then
+      callback(keyword)
+    end
+  end)
+end
 
-    -- Mở file ở chế độ "a" (append - ghi nối vào cuối file)
+-- Hàm thêm từ khóa (Ctrl + x)
+function M.add_visual_keyword()
+  with_visual_selection(function(keyword)
+    -- Kiểm tra trùng lặp
+    local keywords = load_keywords()
+    for _, kw in ipairs(keywords) do
+      if string.lower(kw) == string.lower(keyword) then
+        vim.notify("Từ khóa '" .. keyword .. "' đã tồn tại!", vim.log.levels.WARN)
+        return
+      end
+    end
+
+    -- Mở file ở chế độ "a" (append)
     local f = io.open(keyword_file, "a")
     if f then
       f:write("\n" .. keyword)
       f:close()
       vim.notify("Đã thêm keyword: " .. keyword, vim.log.levels.INFO)
-      
-      -- Gọi lại hàm để highlight từ khóa mới ngay lập tức
       M.apply_highlight()
     else
       vim.notify("Lỗi: Không thể mở file keywords.txt", vim.log.levels.ERROR)
+    end
+  end)
+end
+
+-- Hàm xóa từ khóa (Ctrl + Shift + x)
+function M.remove_visual_keyword()
+  with_visual_selection(function(keyword)
+    local keywords = load_keywords()
+    local new_keywords = {}
+    local found = false
+
+    -- Lọc bỏ từ khóa trùng
+    for _, kw in ipairs(keywords) do
+      if string.lower(kw) == string.lower(keyword) then
+        found = true
+      else
+        table.insert(new_keywords, kw)
+      end
+    end
+
+    if not found then
+      vim.notify("Không tìm thấy từ khóa '" .. keyword .. "' trong list!", vim.log.levels.WARN)
+      return
+    end
+
+    -- Ghi đè file
+    local f = io.open(keyword_file, "w")
+    if f then
+      for _, kw in ipairs(new_keywords) do
+        f:write(kw .. "\n")
+      end
+      f:close()
+      vim.notify("Đã xóa keyword: " .. keyword, vim.log.levels.INFO)
+      M.apply_highlight()
+    else
+      vim.notify("Lỗi: Không thể ghi file keywords.txt", vim.log.levels.ERROR)
     end
   end)
 end
@@ -98,15 +145,31 @@ function M.setup()
   -- Thiết lập màu sắc
   vim.api.nvim_set_hl(0, 'DynamicKeywordMatch', { fg = '#000000', bg = '#FFB300', bold = true })
 
-  -- Đăng ký sự kiện tự động thay đổi
-  vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter", "BufWritePost", "TextChanged", "TextChangedI" }, {
+  -- Đăng ký sự kiện
+  vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter", "BufWritePost", "TextChanged", "TextChangedI", "FocusGained" }, {
     callback = M.apply_highlight
   })
 
-  -- [MỚI] Map phím <C-x> trong chế độ Visual (v)
-  vim.keymap.set('v', '<C-x>', M.add_visual_keyword, { noremap = true, silent = true, desc = "Bắn từ khóa bôi đen vào keywords.txt" })
+  -- Map phím
+  vim.keymap.set('v', '<C-x>', M.add_visual_keyword, { noremap = true, silent = true, desc = "Bắn từ khóa vào keywords.txt" })
+  vim.keymap.set('v', '<C-S-x>', M.remove_visual_keyword, { noremap = true, silent = true, desc = "Xóa từ khóa khỏi keywords.txt" })
 
-  -- Kích hoạt ngay lập tức sau 100ms
+  -- Tự động theo dõi sự thay đổi của file keywords.txt từ các tiến trình nvim khác
+  local uv = vim.uv or vim.loop
+  local watcher = uv.new_fs_event()
+  if watcher then
+    watcher:start(keyword_file, {}, function(err, filename, events)
+      if not err then
+        -- Thay vim.schedule_wrap bằng vim.defer_fn
+        -- Delay 50ms đảm bảo tiến trình kia đã ghi và đóng file hoàn tất
+        vim.defer_fn(function()
+          M.apply_highlight()
+          vim.cmd("redraw!") -- Thêm DẤU CHẤM THAN (!) để force redraw tuyệt đối
+        end, 50)
+      end
+    end)
+  end
+
   vim.defer_fn(M.apply_highlight, 100)
 end
 
