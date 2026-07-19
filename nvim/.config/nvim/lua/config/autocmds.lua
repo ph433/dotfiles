@@ -112,3 +112,19 @@ vim.api.nvim_create_autocmd("VimLeavePre", {
         log_and_score_buffer(current_buf)
     end,
 })
+
+-- Tự động chạy script cập nhật Dwm Bar mỗi khi mở một file mới hoặc lưu file (BufEnter, BufWritePost)
+vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost" }, {
+    group = vim.api.nvim_create_augroup("DwmBarUpdate", { clear = true }),
+    callback = function()
+        -- Kiểm tra nếu là file thật sự tồn tại trên ổ cứng (tránh các cửa sổ ẩn như NvimTree, Telescope)
+        if vim.bo.buftype == "" and vim.fn.filereadable(vim.fn.expand("%:p")) == 1 then
+            -- Chạy ngầm script sh bằng hàm uv (hoặc loop) của Neovim để không gây lag khi code
+            local vim_fn = vim.uv or vim.loop
+            vim_fn.spawn("/home/phuong/dwm-flexipatch/dwm_status_update.sh", {
+                args = {},
+                detached = true
+            }, function() end)
+        end
+    end,
+})

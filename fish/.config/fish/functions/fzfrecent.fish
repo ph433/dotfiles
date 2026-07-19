@@ -102,6 +102,7 @@ function fzfrecent -d "Tìm file dựa trên lịch sử mở trong Neovim (Dash
             commandline -i (string escape "$target_path")" "
 	    __fzf_score_file "$target_path"
 	    log_recent_file "$target_path"
+	    ~/dwm-flexipatch/dwm_status_update.sh &
         case enter
             nvim "$target_path"
     end

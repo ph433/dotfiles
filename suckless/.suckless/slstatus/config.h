@@ -65,12 +65,14 @@ static const char unknown_str[] = "n/a";
  * wifi_perc           WiFi signal in percent          interface name (wlan0)
  */
 static const struct arg args[] = {
-    /* function         format                                      argument */
-    { cpu_perc,         "^c#FF5555^󰻠  %s%% ^d^  ",                 NULL }, /* Text màu đỏ */
-    { ram_perc,         "^c#50FA7B^  %s%% ^d^  ",                 NULL }, /* Text màu xanh lá (Dracula) */
-    { run_command,      "^c#F1FA8C^󰃠  %s%% ^d^  ",                 "brightnessctl -m | cut -d, -f4 | tr -d '%'" },
-    { run_command,      "%s ",                 "status=$(wpctl get-volume @DEFAULT_AUDIO_SINK@); vol=$(echo \"$status\" | awk -F'.' '{print $2}' | sed 's/^0//'); [ -z \"$vol\" ] && vol=0; is_mute=0; echo \"$status\" | /usr/bin/grep -q '\\[MUTED\\]' && is_mute=1; is_head=0; pactl list sinks 2>/dev/null | /usr/bin/grep -q 'Active Port: analog-output-headphones' && is_head=1; if [ $is_mute -eq 1 ]; then if [ $is_head -eq 1 ]; then echo \"^c#6272A4^󰟎 ^d^\"; else echo \"^c#6272A4^󰝟 ^d^\"; fi; else color=\"^c#BD93F9^\"; [ $vol -gt 50 ] && color=\"^c#FF5555^\"; if [ $is_head -eq 1 ]; then echo \"${color}󰋋 ${vol}%^d^\"; else echo \"${color}󰕾 ${vol}%^d^\"; fi; fi" },
-    { battery_perc,     "^c#FF79C6^󰁹 %s%% [",                       "BAT0" },
-    { battery_state,    "%s] ^d^  ",                                "BAT0" },
-    { datetime,         "^c#8BE9FD^  %s^d^",                        "%d/%m 󰥔 %H:%M " },
+    /* function     format                               argument */
+    { run_command,  "%s",                                "cat /tmp/dwm_bar 2>/dev/null" },
+    
+    /* Thêm khoảng trắng sau icon , , 󰃠... để số không bị dính vào hình */
+    { cpu_perc,     " \x17   %s%% \x01",                  NULL }, 
+    { ram_perc,     " \x18   %s%% \x01",                  NULL }, 
+    { run_command,  " \x19󰃠   %s%% \x01",                  "brightnessctl -m | cut -d, -f4 | tr -d '%'" },
+    { battery_perc, " \x1A󰁹  %s%%  [",                     "BAT0" },
+    { battery_state,"%s] \x01",                          "BAT0" },
+    { datetime,     " \x1A  %s \x01",                    "%d/%m 󰥔  %H:%M " },
 };

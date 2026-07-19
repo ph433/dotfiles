@@ -37,7 +37,7 @@ function __log_recent_dir --on-variable PWD
     set -g __is_logging_dir 1
 
     log_recent_dir
-
+    ~/dwm-flexipatch/dwm_status_update.sh &
     # Xóa cờ khóa sau khi xử lý xong
     set -e __is_logging_dir
 end
