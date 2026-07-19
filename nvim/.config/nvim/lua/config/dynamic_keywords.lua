@@ -30,9 +30,15 @@ function M.apply_highlight()
       for l_idx, line in ipairs(lines) do
         local lower_line = string.lower(line)
         
-        for _, kw in ipairs(keywords) do
+        -- [ĐÃ SỬA]: Lấy thêm biến kw_idx (số thứ tự của keyword)
+        for kw_idx, kw in ipairs(keywords) do
           local lower_kw = string.lower(kw)
           local start_idx = 1
+          
+          -- [MỚI]: Tính toán nhóm màu (từ 1 đến 7) dựa trên số thứ tự
+          -- kw_idx = 1 -> màu 1, kw_idx = 8 -> màu 1
+          local color_index = ((kw_idx - 1) % 7) + 1
+          local hl_group_name = 'DynamicKeywordMatch' .. color_index
           
           while true do
             local s, e = lower_line:find(lower_kw, start_idx, true)
@@ -40,7 +46,7 @@ function M.apply_highlight()
             
             vim.api.nvim_buf_set_extmark(buf, ns_id, l_idx - 1, s - 1, {
               end_col = e,
-              hl_group = 'DynamicKeywordMatch',
+              hl_group = hl_group_name, -- Sử dụng nhóm màu đã tính
               priority = 1000,
             })
             start_idx = e + 1
@@ -52,7 +58,7 @@ function M.apply_highlight()
   end
 end
 
--- [MỚI] Hàm bổ trợ lấy text bôi đen an toàn bằng Callback
+-- Hàm bổ trợ lấy text bôi đen an toàn bằng Callback
 local function with_visual_selection(callback)
   -- Thoát visual mode để Neovim cập nhật tọa độ bôi đen ('< và '>)
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", true)
@@ -142,8 +148,21 @@ end
 
 -- Hàm setup để khởi chạy khi nạp module
 function M.setup()
-  -- Thiết lập màu sắc
-  vim.api.nvim_set_hl(0, 'DynamicKeywordMatch', { fg = '#000000', bg = '#FFB300', bold = true })
+  -- [MỚI]: Mảng chứa 7 màu nền khác nhau
+  local palette = {
+    '#FF6B6B', -- 1. Đỏ nhạt
+    '#FFD93D', -- 2. Vàng
+    '#6BCB77', -- 3. Xanh lá
+    '#4D96FF', -- 4. Xanh dương
+    '#B47AEA', -- 5. Tím
+    '#FF9A3C', -- 6. Cam
+    '#4BCFFA'  -- 7. Xanh lơ
+  }
+
+  -- [MỚI]: Tạo 7 highlight group từ DynamicKeywordMatch1 đến DynamicKeywordMatch7
+  for i, bg_color in ipairs(palette) do
+    vim.api.nvim_set_hl(0, 'DynamicKeywordMatch' .. i, { fg = '#000000', bg = bg_color, bold = true })
+  end
 
   -- Đăng ký sự kiện
   vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter", "BufWritePost", "TextChanged", "TextChangedI", "FocusGained" }, {
@@ -160,11 +179,9 @@ function M.setup()
   if watcher then
     watcher:start(keyword_file, {}, function(err, filename, events)
       if not err then
-        -- Thay vim.schedule_wrap bằng vim.defer_fn
-        -- Delay 50ms đảm bảo tiến trình kia đã ghi và đóng file hoàn tất
         vim.defer_fn(function()
           M.apply_highlight()
-          vim.cmd("redraw!") -- Thêm DẤU CHẤM THAN (!) để force redraw tuyệt đối
+          vim.cmd("redraw!") 
         end, 50)
       end
     end)
