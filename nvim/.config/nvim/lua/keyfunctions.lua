@@ -234,3 +234,40 @@ vim.keymap.set('n', '*', function()
   -- <CR> để thực thi ngay, nếu muốn sửa lại trước khi tìm thì bỏ <CR>
   vim.cmd('/' .. escaped_content)
 end, { noremap = true, silent = false, desc = "Tìm kiếm nội dung từ clipboard" })
+
+-- Biến cục bộ để lưu trữ tạm thời dòng gốc và lề của nó
+local anchor_row = 0
+local anchor_indent = ""
+
+-- Hàm thực thi việc ép lề (sẽ được gọi sau khi bạn bấm xong mũi tên)
+_G.AlignToCurrentLine = function(motion_type)
+    -- Lấy dòng bắt đầu và kết thúc dựa trên số và mũi tên bạn vừa bấm
+    local start_row = vim.fn.line("'[")
+    local end_row = vim.fn.line("']")
+    
+    -- Lặp qua tất cả các dòng trong phạm vi
+    for i = start_row, end_row do
+        -- Bỏ qua dòng gốc để không tự sửa chính nó
+        if i ~= anchor_row then
+            local line_content = vim.fn.getline(i)
+            
+            -- Xóa toàn bộ khoảng trắng ở đầu dòng hiện tại
+            local stripped_line = string.gsub(line_content, "^%s*", "")
+            
+            -- Dán lề của dòng gốc vào đầu dòng
+            vim.fn.setline(i, anchor_indent .. stripped_line)
+        end
+    end
+end
+
+-- Ghi đè phím '=' trong Normal mode
+vim.keymap.set('n', '=', function()
+    -- Ngay khi bạn bấm '=', lưu lại vị trí dòng hiện hành và lề của nó
+    anchor_row = vim.fn.line('.')
+    local current_line_content = vim.fn.getline(anchor_row)
+    anchor_indent = string.match(current_line_content, "^%s*") or ""
+    
+    -- Trả quyền lại cho Vim chờ bạn nhập tiếp (số và mũi tên), sau đó gọi hàm trên
+    vim.go.operatorfunc = "v:lua.AlignToCurrentLine"
+    return "g@"
+end, { expr = true, silent = true, desc = "Ép lề các dòng theo dòng gốc" })
