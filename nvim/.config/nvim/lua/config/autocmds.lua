@@ -62,13 +62,14 @@ local function log_and_score_buffer(buf)
     local f_read = io.open(recency_log_path, "r")
     if f_read then
         for line in f_read:lines() do
-            if not line:match(file_path, 1, true) then
+            -- Dùng string.find với tham số plain=true thay vì line:match
+            if not string.find(line, file_path, 1, true) then
                 table.insert(lines, line)
             end
         end
         f_read:close()
     end
-
+    
     -- Giới hạn tối đa 500 file gần nhất để tối ưu tốc độ đọc của Starship
     while #lines > 500 do
         table.remove(lines, #lines)

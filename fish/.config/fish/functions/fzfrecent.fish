@@ -7,7 +7,8 @@ function fzfrecent -d "Tìm file dựa trên lịch sử mở trong Neovim (Dash
     end
 
     # 1. Sắp xếp lịch sử theo thời gian mới nhất (chưa giới hạn 10)
-    set -l sorted_log (awk '{time=$1; sub(/^[0-9]+ /, ""); map[$0]=time} END {for (p in map) print map[p] " " p}' $log_file | sort -nr)
+    # Thêm điều kiện if (!($0 in map)) để giữ lại mốc thời gian mới nhất (xuất hiện đầu tiên)
+    set -l sorted_log (awk '{time=$1; sub(/^[0-9]+ /, ""); if (!($0 in map)) map[$0]=time} END {for (p in map) print map[p] " " p}' $log_file | sort -nr)
     
     # 2. Lọc lấy tối đa 10 file VẪN CÒN TỒN TẠI trên ổ cứng
     set -l top10
