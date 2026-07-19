@@ -14,7 +14,19 @@ function log_recent_file -d "Ghi log đường dẫn file vào lịch sử nvim_
         set -l timestamp (date +%s)
         set -l log_file "$HOME/.cache/nvim_recent.log"
         
-        # Ghi vào file nhật ký
-        echo "$timestamp $target_file" >> "$log_file"
+        # 1. Đọc nội dung cũ và LỌC BỎ dòng chứa file này (để chống trùng lặp)
+        set -l old_lines
+        if test -f "$log_file"
+            # Dùng grep -v -F để lọc chính xác chuỗi đường dẫn
+            set old_lines (grep -v -F "$target_file" "$log_file" 2>/dev/null)
+        end
+
+        # 2. Ghi đè: Dòng mới nhất lên đầu tiên
+        echo "$timestamp $target_file" > "$log_file"
+        
+        # 3. Nối các dòng lịch sử cũ vào phía dưới
+        if set -q old_lines[1]
+            printf "%s\n" $old_lines >> "$log_file"
+        end
     end
 end
