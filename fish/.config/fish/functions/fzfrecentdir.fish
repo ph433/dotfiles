@@ -80,7 +80,7 @@ function fzfrecentdir -d "Tìm thư mục dựa trên lịch sử di chuyển (T
         case right
             commandline -i (string escape "$target_path")" "
 	    log_recent_dir "$target_path"
-	    ~/dwm-flexipatch/dwm_status_update.sh &
+	    # ~/dwm-flexipatch/dwm_status_update.sh &
         case enter
             cd "$target_path"
     end

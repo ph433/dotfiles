@@ -66,7 +66,7 @@ static const char unknown_str[] = "n/a";
  */
 static const struct arg args[] = {
     /* function     format                               argument */
-    { run_command,  "%s",                                "cat /tmp/dwm_bar 2>/dev/null" },
+    // { run_command,  "%s",                                "cat /tmp/dwm_bar 2>/dev/null" },
     
     /* Thêm khoảng trắng sau icon , , 󰃠... để số không bị dính vào hình */
     { cpu_perc,     " \x17   %s%% \x01",                  NULL }, 

@@ -1,6 +1,9 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 format = """
+${custom.recent_dir}\
+${custom.recent_file}
+
 [░▒▓](#a3aed2)\
 [  ](bg:#a3aed2 fg:#090c0c)\
 [](bg:#769ff0 fg:#a3aed2)\
@@ -83,12 +86,12 @@ format = '[[  $time ](fg:#a0a9cb bg:#1d2230)]($style)'
 success_symbol = "[❯](bold #50FA7B)"
 error_symbol = "[❯](bold #FF5555)"
 
-# [custom.recent_dir]
-# command = 'tail -n 1 ~/.cache/dir_recent.log | grep -o "/.*" | sed "s|^$HOME|~|"'
-# when = 'test -s ~/.cache/dir_recent.log'
-# format = '[  ($output)](fg:#ff79c6 bold italic) '
-#
-# [custom.recent_file]
-# command = 'sort -rn ~/.cache/nvim_recent.log | head -n 1 | grep -o "/.*" | sed "s|^$HOME|~|"'
-# when = 'test -s ~/.cache/nvim_recent.log'
-# format = '[ 󰈔 ($output)](fg:#f1fa8c bold italic) '
+[custom.recent_dir]
+command = 'tail -n 1 ~/.cache/dir_recent.log | grep -o "/.*" | sed "s|^$HOME|~|"'
+when = 'test -s ~/.cache/dir_recent.log'
+format = '[  ($output)](fg:#ff79c6 bold italic) '
+
+[custom.recent_file]
+command = 'sort -rn ~/.cache/nvim_recent.log | head -n 1 | grep -o "/.*" | sed "s|^$HOME|~|"'
+when = 'test -s ~/.cache/nvim_recent.log'
+format = '[ 󰈔 ($output)](fg:#f1fa8c bold italic) '
