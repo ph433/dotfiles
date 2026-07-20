@@ -405,13 +405,6 @@ static char *colors[][ColCount] = {
 	[SchemeFlexSelSPRL]  = { titleselfgcolor,  selSPRLbgcolor,   selSPRLbgcolor,       c000000 },
 	[SchemeFlexSelFloat] = { titleselfgcolor,  selfloatbgcolor,  selfloatbgcolor,      c000000 },
 	#endif // BAR_FLEXWINTITLE_PATCH
-	/* SỬA CHÍNH XÁC THÀNH SỐ CỨNG NHƯ DƯỚI ĐÂY */
-	[20] = { "#ff79c6", "#222222", "#000000", "#000000" }, // Ép số 20 làm màu Hồng
-	[21] = { "#f1fa8c", "#222222", "#000000", "#000000" }, // Ép số 21 làm màu Vàng
-	[22] = { "#FF5555", "#222222", "#000000", "#000000" }, // \x17 - Đỏ (CPU)
-	[23] = { "#50FA7B", "#222222", "#000000", "#000000" }, // \x18 - Xanh lá (RAM)
-	[24] = { "#BD93F9", "#222222", "#000000", "#000000" }, // \x19 - Tím (Volume)
-	[25] = { "#8BE9FD", "#222222", "#000000", "#000000" }, // \x1A - Cyan (Date)
 };
 
 #if BAR_POWERLINE_STATUS_PATCH
@@ -960,7 +953,6 @@ static const char *termcmd[]  = { "alacritty", NULL };
 static const char *firefoxcmd[]   = { "firefox", NULL };
 static const char *copyqcmd[] = { "copyq", "toggle", NULL };
 // static const char *flameshotcmd[] = { "env", "XDG_CURRENT_DESKTOP=X-Generic", "flameshot", "gui", NULL };
-static const char *flameshotcmd[] = { "flameshot", "gui", "-c", NULL };
 static const char *screenshot_full[] = { "sh", "-c", "maim ~/Pictures/screenshot_$(date +\\%F_\\%T).png && xclip -selection clipboard -t image/png -i ~/Pictures/screenshot_$(date +\\%F_\\%T).png", NULL };
 static const char *screenshot_select[] = { "sh", "-c", "maim -s -u | xclip -selection clipboard -t image/png", NULL };
 static const char *screenshot_focus[] = { "/bin/sh", "-c", "maim -i $(xdotool getactivewindow) | tee ~/Pictures/$(date +%F_%T).png | xclip -selection clipboard -t image/png", NULL };
@@ -1118,7 +1110,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_Return,     spawn,                  {.v = termcmd } },
 	{ Mod4Mask,                     XK_space,      spawn,                  {.v = firefoxcmd } },
         { MODKEY,                       XK_v,          spawn,                  {.v = copyqcmd } },
-	{ 0,                            XK_Print,      spawn,                  {.v = flameshotcmd } },
+        // { MODKEY,                       XK_c,          spawn,                  {.v = flameshotcmd } },
         { MODKEY|ShiftMask,             XK_c,          spawn,                  {.v = screenshot_full } },
         { MODKEY,                       XK_c,          spawn,                  {.v = screenshot_select } },
 	{ Mod4Mask|ShiftMask,           XK_y,          spawn,                  {.v = youtubecmd } },
