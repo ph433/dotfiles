@@ -953,6 +953,7 @@ static const char *termcmd[]  = { "alacritty", NULL };
 static const char *firefoxcmd[]   = { "firefox", NULL };
 static const char *copyqcmd[] = { "copyq", "toggle", NULL };
 // static const char *flameshotcmd[] = { "env", "XDG_CURRENT_DESKTOP=X-Generic", "flameshot", "gui", NULL };
+static const char *rofiwindowcmd[] = { "rofi", "-show", "window", NULL };
 static const char *screenshot_full[] = { "sh", "-c", "maim ~/Pictures/screenshot_$(date +\\%F_\\%T).png && xclip -selection clipboard -t image/png -i ~/Pictures/screenshot_$(date +\\%F_\\%T).png", NULL };
 static const char *screenshot_select[] = { "sh", "-c", "maim -s -u | xclip -selection clipboard -t image/png", NULL };
 static const char *screenshot_focus[] = { "/bin/sh", "-c", "maim -i $(xdotool getactivewindow) | tee ~/Pictures/$(date +%F_%T).png | xclip -selection clipboard -t image/png", NULL };
@@ -1245,7 +1246,8 @@ static const Key keys[] = {
 	#if ALT_TAB_PATCH
 	{ Mod1Mask,                     XK_Tab,        alttabstart,            {0} },
 	#else
-	{ MODKEY,                       XK_Tab,        view,                   {0} },
+	// { MODKEY,                       XK_Tab,        view,                   {0} },
+	{ MODKEY,                       XK_Tab,        spawn,                  {.v = rofiwindowcmd } },
 	#endif // ALT_TAB_PATCH
 	#if SHIFTTAG_PATCH
 	{ MODKEY|ShiftMask,             XK_Left,       shifttag,               { .i = -1 } }, // note keybinding conflict with focusadjacenttag tagtoleft
