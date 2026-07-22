@@ -1,8 +1,8 @@
 [
   {
-    "class": "(?i)alacritty",
-    "title": "\\[NVIM_ACTIVE\\].*", 
-    "layer": "mod_nvim-active"
+    "class": "(?i)firefox",
+    "title": ".*",
+    "layer": "mod_firefox"
   },
   {
     "default": "mod_nvim"
