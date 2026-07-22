@@ -1,15 +1,22 @@
 local function set_layout(layer)
-    os.execute(string.format("echo '{\"ChangeLayer\": {\"new\": \"%s\"}}' | nc -w 1 localhost 1234 > /dev/null 2>&1 &", layer))
+    local cmd = string.format("echo '{\"ChangeLayer\": {\"new\": \"%s\"}}' | nc -w 1 localhost 1234", layer)
+    vim.fn.jobstart({"sh", "-c", cmd}, { detach = true })
 end
 
--- 1. Khi vừa vào Neovim HOẶC khi terminal chứa Neovim được focus trở lại
+-- 1. Khi vừa vào Neovim HOẶC khi focus lại
 vim.api.nvim_create_autocmd({ "VimEnter", "FocusGained" }, {
-    callback = function() set_layout("mod_nvim-active") end
+    callback = function()
+        vim.defer_fn(function()
+            set_layout("mod_nvim-active")
+        end, 20) -- Trễ 20 mili-giây để nhường đường cho FocusLost của cửa sổ trước
+    end
 })
 
--- 2. Khi thoát Neovim HOẶC khi bạn click/focus sang một terminal khác
+-- 2. Khi thoát Neovim HOẶC focus ra ngoài
 vim.api.nvim_create_autocmd({ "VimLeave", "FocusLost" }, {
-    callback = function() set_layout("mod_nvim") end -- Trả về layer mặc định của terminal
+    callback = function()
+        set_layout("mod_nvim")
+    end
 })
 
 -- ==========================================================================
