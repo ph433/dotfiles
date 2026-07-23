@@ -56,6 +56,15 @@
   _       _       @numt   ent                             @nvsw           _                       _       caps    _       _               _
 )
 
+(deflayer mod_qutebrowser
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  esc     esc     home    up      end     _       _       prtsc   pgup    pgdn    _       _       _       _               _       _       _       _
+  bks     tab     left    down    rght    spc     ins     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
+  @sropt  C-z     C-x     C-c     C-v     _       @fir    A-c     A-v     C-a     C-y     @ss             _               _       _       _
+  _       _       @numt   ent                             @colet          _                       _       caps    _       _               _
+)
+
 (deflayer mod_firefox
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
@@ -290,6 +299,15 @@
   _       _       _       _                                       _       _                       _       _       _       _               _
 )
 
+(deflayer colemak-dh-qute-active
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  esc     q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
+  bks     a       r       s       t       g       m       n       e       i       o       '       _                       _       _       _       _
+  @ss     x       c       d       v       z       k       h       ,       .       /       @ss             _               _       _       _
+  lctl    lmet    @numt   spc                                     @nvswt  _                       _       _       _       _               _
+)
+
 (deflayer colemak-dh-active
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
@@ -394,6 +412,7 @@
   del_w (macro d w)
   osl_d (multi bspc (one-shot 1000 (layer-toggle nvim_delete)))
   tabe (multi (layer-switch mod_nvim-active) esc)
+  tabee (multi (layer-switch colemak-dh-active) esc)
   taba (multi (layer-switch colemak-dh-active) a)
   tabi (multi (layer-switch colemak-dh-active) i)
   tabii (multi (layer-switch colemak-dh-active) S-r)
