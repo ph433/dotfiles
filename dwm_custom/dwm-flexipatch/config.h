@@ -563,7 +563,7 @@ static const Rule rules[] = {
     RULE(.wintype = WTYPE "SPLASH", .isfloating = 1)
     RULE(.class = "Gimp", .tags = 1 << 4)
     RULE(.class = "firefox", .tags = 1 << 8, .isfullscreen = 1)
-    RULE(.class = "floating_fzf", .isfloating = 1)
+    RULE(.class = "floating_fzf", .isfloating = 1, .iscentered = 1)
     /* Bỏ CopyQ vào đây ghen */
     RULE(.class = "copyq", .isfloating = 1)
 
