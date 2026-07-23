@@ -1,4 +1,8 @@
 (defcfg
+  ;; Thêm dòng này để cho phép Kanata thực thi lệnh cmd
+  danger-enable-cmd yes
+
+  ;; Các cấu hình defcfg khác của bạn (nếu có)...
   process-unmapped-keys yes
 )
 
@@ -59,7 +63,7 @@
 (deflayer mod_qutebrowser
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  esc     esc     home    up      end     _       _       prtsc   pgup    pgdn    _       _       _       _               _       _       _       _
+  @f13    esc     home    up      end     _       _       prtsc   pgup    pgdn    _       _       _       _               _       _       _       _
   bks     tab     left    down    rght    spc     ins     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
   @sropt  C-z     C-x     C-c     C-v     _       @fir    A-c     A-v     C-a     C-y     @ss             _               _       _       _
   _       _       @numt   ent                             @colet          _                       _       caps    _       _               _
@@ -302,7 +306,7 @@
 (deflayer colemak-dh-qute-active
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  esc     q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
+  @tabqe  q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
   bks     a       r       s       t       g       m       n       e       i       o       '       _                       _       _       _       _
   @ss     x       c       d       v       z       k       h       ,       .       /       @ss             _               _       _       _
   lctl    lmet    @numt   spc                                     @nvswt  _                       _       _       _       _               _
@@ -419,6 +423,8 @@
 
   staba (multi (layer-switch colemak-dh-active) shft a)
   stabi (multi (layer-switch colemak-dh-active) shft i)
+  f13 (multi (layer-switch colemak-dh-qute-active) ins)
+  tabqe (multi (layer-switch mod_qutebrowser) esc)
 
   fd (layer-toggle colemak-dh-ff)
   srchf (multi lctl f (layer-switch colemak-dh-search)) 

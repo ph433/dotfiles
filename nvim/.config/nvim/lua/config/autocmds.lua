@@ -1,20 +1,42 @@
+local timer = nil
+
 local function set_layout(layer)
     local cmd = string.format("echo '{\"ChangeLayer\": {\"new\": \"%s\"}}' | nc -w 1 localhost 1234", layer)
     vim.fn.jobstart({"sh", "-c", cmd}, { detach = true })
 end
 
--- 1. Khi vừa vào Neovim HOẶC khi focus lại
+-- 1. Khi VÀO Neovim HOẶC nhận lại Focus
 vim.api.nvim_create_autocmd({ "VimEnter", "FocusGained" }, {
     callback = function()
-        vim.defer_fn(function()
+        -- Nếu đang có timer chờ từ trước -> Hủy bỏ ngay
+        if timer then
+            timer:stop()
+            timer:close()
+            timer = nil
+        end
+
+        -- Tạo timer mới với uv (libuv) để có thể hủy bất cứ lúc nào
+        timer = vim.loop.new_timer()
+        timer:start(20, 0, vim.schedule_wrap(function()
             set_layout("mod_nvim-active")
-        end, 20) -- Trễ 20 mili-giây để nhường đường cho FocusLost của cửa sổ trước
+            if timer then
+                timer:close()
+                timer = nil
+            end
+        end))
     end
 })
 
--- 2. Khi thoát Neovim HOẶC focus ra ngoài
+-- 2. Khi THOÁT Neovim HOẶC mất Focus
 vim.api.nvim_create_autocmd({ "VimLeave", "FocusLost" }, {
     callback = function()
+        -- CRITICAL: Hủy ngay lệnh đổi active đang chờ (nếu có)
+        if timer then
+            timer:stop()
+            timer:close()
+            timer = nil
+        end
+
         set_layout("mod_nvim")
     end
 })

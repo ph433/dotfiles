@@ -17,13 +17,10 @@ config.bind('H', 'open -t qute://history')
 config.bind('<Ctrl-Up>', 'tab-move -')
 config.bind('<Ctrl-Down>', 'tab-move +')
 config.bind(';', 'spawn alacritty --class floating_fzf -e /home/phuong/.local/bin/qute-history.sh')
-config.bind('<Escape>', 'mode-enter insert', mode='normal')
-
+config.bind('<Insert>', 'mode-enter insert', mode='normal')
+config.bind('<Escape>', 'mode-leave', mode='insert')
+config.unbind('<Return>', mode='normal')
 c.input.insert_mode.auto_enter = False
 c.input.insert_mode.auto_leave = False
-
-# 1. Normal mode: Esc -> Insert mode + Bắn socket Colemak
-config.bind('<Escape>', 'mode-enter insert ;; spawn ~/.local/bin/qute-layer.sh colemak-dh-qute-active', mode='normal')
-
-# 2. Insert mode: Esc -> Normal mode + Bắn socket Normal
-config.bind('<Escape>', 'mode-leave ;; spawn ~/.local/bin/qute-layer.sh mod_qutebrowser', mode='insert')
+c.input.insert_mode.auto_load = False
+config.bind('<Escape>', 'clear-keychain ;; jseval --quiet document.activeElement.blur()', mode='normal')

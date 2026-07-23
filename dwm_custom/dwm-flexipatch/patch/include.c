@@ -421,4 +421,7 @@
 #if TILE_LAYOUT
 #include "layout_tile.c"
 #endif
+#if PATCH_KANATA
+#include "kanata.c"
+#endif
 #include "phuong_custom.c"

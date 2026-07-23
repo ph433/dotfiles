@@ -2233,6 +2233,9 @@ focus(Client *c)
 		XDeleteProperty(dpy, root, netatom[NetActiveWindow]);
 	}
 	selmon->sel = c;
+	#if PATCH_KANATA
+	update_kanata_layer(c);
+	#endif
 	drawbars();
 
 	#if ON_EMPTY_KEYS_PATCH
