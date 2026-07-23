@@ -563,7 +563,7 @@ static const Rule rules[] = {
     RULE(.wintype = WTYPE "SPLASH", .isfloating = 1)
     RULE(.class = "Gimp", .tags = 1 << 4)
     RULE(.class = "firefox", .tags = 1 << 8, .isfullscreen = 1)
-    
+    RULE(.class = "floating_fzf", .isfloating = 1)
     /* Bỏ CopyQ vào đây ghen */
     RULE(.class = "copyq", .isfloating = 1)
 
@@ -1246,8 +1246,8 @@ static const Key keys[] = {
 	#if ALT_TAB_PATCH
 	{ Mod1Mask,                     XK_Tab,        alttabstart,            {0} },
 	#else
-	// { MODKEY,                       XK_Tab,        view,                   {0} },
-	{ MODKEY,                       XK_Tab,        spawn,                  {.v = rofiwindowcmd } },
+	{ MODKEY,                       XK_Tab,        view,                   {0} },
+	{ ShiftMask,                    XK_Tab,        spawn,                  {.v = rofiwindowcmd } },
 	#endif // ALT_TAB_PATCH
 	#if SHIFTTAG_PATCH
 	{ MODKEY|ShiftMask,             XK_Left,       shifttag,               { .i = -1 } }, // note keybinding conflict with focusadjacenttag tagtoleft
