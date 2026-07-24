@@ -27,9 +27,9 @@
 (deflayer mod_nvim
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  M-esc   esc     home    up      end     A-ent   M-spc   prtsc   pgup    pgdn    _       _       _       _               _       _       _       _
-  bks     tab     left    down    rght    spc     ins     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
-  @sropt  C-z     C-x     C-c     C-v     _       @nvv    A-c     A-v     C-a     C-y     @ss             _               _       _       _
+  M-esc   esc     home    up      end     A-ent   M-spc   prtsc   pgup    pgdn    C-p     _       _       _               _       _       _       _
+  bks     tab     left    down    @crght  spc     ins     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
+  @sropt  C-z     C-x     C-c     C-v     @ralt_  @nvv    A-c     A-v     C-a     C-y     @ss             _               _       _       _
   _       _       @numt   ent                             @colet          _                       _       caps    _       _               _
 )
 
@@ -85,6 +85,15 @@
   bks     tab     left    down    rght    spc     ins     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
   @sropt  C-z     C-x     C-c     C-v     _       @fir    A-c     A-v     C-a     C-y     @ss             _               _       _       _
   _       _       @numt   ent                             @colet          _                       _       caps    _       _               _
+)
+
+(deflayer custom-right-ent
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @nvswac _                                       @ralt_  _                       _       _       _       _               _
 )
 
 (deflayer pre-right-arrow2-temp
@@ -348,6 +357,15 @@
   lctl    lmet    @numt   spc                                     @nvswt  _                       _       _       _       _               _
 )
 
+(deflayer colemak-dh-ent
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  @nvsw   q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
+  bks     a       r       s       t       g       m       n       e       i       o       ent     _                       _       _       _       _
+  @ss     x       c       d       v       z       k       h       ,       .       /       @ss             _               _       _       _
+  lctl    lmet    @nvswac spc                                     @nvswt  _                       _       _       _       _               _
+)
+
 (deflayer colemak-dh-temp
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
@@ -426,6 +444,7 @@
   ;; nvswa (layer-switch mod_nvim-active)
   nvswas (multi (layer-switch mod_nvim-active-after_search) ent)
   nvswa (multi (layer-switch mod_nvim-active) ent)
+  nvswac (layer-toggle mod_nvim-active)
   colosw (layer-switch colemak-dh)
   colof (layer-switch colemak-dh-firefox)
   nvswt (one-shot-press 1000 (layer-toggle mod_nvim-temp))
@@ -488,7 +507,7 @@
   viw (macro v i w)
   viW (macro v i S-w)
   cgn (macro c g n)
-  gg (multi (macro g g) (layer-switch mod_nvim))
+  gg (multi (macro g g) (layer-switch mod_nvim-active))
   vv (multi (macro v v))
   g_ (multi (macro g S--))
 )
@@ -745,6 +764,15 @@
   cswab (multi lctl lsft lmet lalt bks)
   cswade (multi lctl lsft lmet lalt del)
   cswaen (multi lctl lsft lmet lalt ent)
+)
+
+(defalias
+  ralt_ (multi (layer-toggle colemak-dh-ent) (on-release tap-virtualkey v_ent))
+  crght (multi rght (one-shot-press 1000 (layer-toggle custom-right-ent)))
+)
+
+(defvirtualkeys
+  v_ent ent
 )
 
 (deflayer qwert-bare
