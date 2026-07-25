@@ -260,14 +260,65 @@ _G.AlignToCurrentLine = function(motion_type)
     end
 end
 
--- Ghi đè phím '=' trong Normal mode
+-- 1. Hàm tính toán và điều chỉnh lề tương quan
+function _G.AlignRelativeIndent(type)
+  local start_line = vim.api.nvim_buf_get_mark(0, "[")[1]
+  local end_line = vim.api.nvim_buf_get_mark(0, "]")[1]
+
+  if start_line == 0 or end_line == 0 then return end
+
+  -- Lấy độ rộng thụt lề (indentation) của dòng mốc (dòng đầu tiên)
+  local anchor_content = vim.fn.getline(start_line)
+  local anchor_indent_str = string.match(anchor_content, "^%s*") or ""
+  local anchor_indent_len = #anchor_indent_str
+
+  -- Lấy nội dung các dòng trong vùng chọn
+  local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
+  if #lines == 0 then return end
+
+  -- Tìm độ rộng lề nhỏ nhất của các dòng sau dòng mốc để tránh bị âm lề
+  local base_indent_len = anchor_indent_len
+  for i = 2, #lines do
+    if lines[i]:match("%S") then -- Chỉ tính các dòng không rỗng
+      local line_indent = #(string.match(lines[i], "^%s*") or "")
+      base_indent_len = math.min(base_indent_len, line_indent)
+    end
+  end
+
+  local new_lines = {}
+  for i, line in ipairs(lines) do
+    if i == 1 then
+      -- Dòng đầu tiên giữ nguyên
+      table.insert(new_lines, line)
+    elseif not line:match("%S") then
+      -- Dòng rỗng giữ nguyên
+      table.insert(new_lines, line)
+    else
+      -- Các dòng còn lại điều chỉnh lề dựa theo khoảng cách tương quan với dòng mốc
+      local current_indent_str = string.match(line, "^%s*") or ""
+      local relative_diff = #current_indent_str - base_indent_len
+      local new_indent_len = math.max(0, anchor_indent_len + relative_diff)
+      local trimmed_line = line:gsub("^%s*", "")
+      table.insert(new_lines, string.rep(" ", new_indent_len) .. trimmed_line)
+    end
+  end
+
+  -- Cập nhật lại các dòng vào buffer
+  vim.api.nvim_buf_set_lines(0, start_line - 1, end_line, false, new_lines)
+end
+
+-- 2. Gán phím '=' làm operatorfunc tương quan
 vim.keymap.set('n', '=', function()
-    -- Ngay khi bạn bấm '=', lưu lại vị trí dòng hiện hành và lề của nó
-    anchor_row = vim.fn.line('.')
-    local current_line_content = vim.fn.getline(anchor_row)
-    anchor_indent = string.match(current_line_content, "^%s*") or ""
-    
-    -- Trả quyền lại cho Vim chờ bạn nhập tiếp (số và mũi tên), sau đó gọi hàm trên
-    vim.go.operatorfunc = "v:lua.AlignToCurrentLine"
+  vim.go.operatorfunc = "v:lua.AlignRelativeIndent"
+  return "g@"
+end, { expr = true, silent = true, desc = "Thụt lề tương quan theo dòng đầu" })
+
+-- 3. Gán phím <Esc>: Tắt highlight nếu có search, ngược lại chạy AlignRelativeIndent
+vim.keymap.set('n', '<Esc>', function()
+  if vim.v.hlsearch == 1 then
+    vim.cmd("nohlsearch")
+  else
+    vim.go.operatorfunc = "v:lua.AlignRelativeIndent"
     return "g@"
-end, { expr = true, silent = true, desc = "Ép lề các dòng theo dòng gốc" })
+  end
+end, { expr = true, silent = true, desc = "Smart Esc: Nohlsearch hoặc Thụt lề" })
