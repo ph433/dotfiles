@@ -239,86 +239,55 @@ end, { noremap = true, silent = false, desc = "Tìm kiếm nội dung từ clipb
 local anchor_row = 0
 local anchor_indent = ""
 
--- Hàm thực thi việc ép lề (sẽ được gọi sau khi bạn bấm xong mũi tên)
-_G.AlignToCurrentLine = function(motion_type)
-    -- Lấy dòng bắt đầu và kết thúc dựa trên số và mũi tên bạn vừa bấm
-    local start_row = vim.fn.line("'[")
-    local end_row = vim.fn.line("']")
-    
-    -- Lặp qua tất cả các dòng trong phạm vi
-    for i = start_row, end_row do
-        -- Bỏ qua dòng gốc để không tự sửa chính nó
-        if i ~= anchor_row then
-            local line_content = vim.fn.getline(i)
-            
-            -- Xóa toàn bộ khoảng trắng ở đầu dòng hiện tại
-            local stripped_line = string.gsub(line_content, "^%s*", "")
-            
-            -- Dán lề của dòng gốc vào đầu dòng
-            vim.fn.setline(i, anchor_indent .. stripped_line)
-        end
-    end
-end
-
--- 1. Hàm tính toán và điều chỉnh lề tương quan
-function _G.AlignRelativeIndent(type)
+-- Hàm căn lề: Dòng chạm đầu tiên bằng dòng Anchor, các dòng sau tịnh tiến tương quan
+function _G.AlignBlockByFirstLine(type)
   local start_line = vim.api.nvim_buf_get_mark(0, "[")[1]
   local end_line = vim.api.nvim_buf_get_mark(0, "]")[1]
 
-  if start_line == 0 or end_line == 0 then return end
+  -- Nếu không chọn vùng hoặc chỉ chọn 1 dòng thì không làm gì
+  if start_line == 0 or end_line == 0 or start_line >= end_line then return end
 
-  -- Lấy độ rộng thụt lề (indentation) của dòng mốc (dòng đầu tiên)
+  -- 1. Lấy thông tin dòng Mốc (Anchor - Dòng bắt đầu)
   local anchor_content = vim.fn.getline(start_line)
   local anchor_indent_str = string.match(anchor_content, "^%s*") or ""
   local anchor_indent_len = #anchor_indent_str
 
-  -- Lấy nội dung các dòng trong vùng chọn
+  -- 2. Lấy thông tin dòng chạm đầu tiên (Dòng ngay bên dưới Anchor)
+  local first_target_content = vim.fn.getline(start_line + 1)
+  local first_target_indent_len = #(string.match(first_target_content, "^%s*") or "")
+
+  -- 3. Tính độ lệch (shift_delta) để kéo dòng chạm đầu tiên về BẰNG dòng Anchor
+  local shift_delta = anchor_indent_len - first_target_indent_len
+
+  -- 4. Lấy tất cả các dòng trong vùng chọn
   local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
-  if #lines == 0 then return end
+  local new_lines = { lines[1] } -- Dòng mốc (Anchor) giữ nguyên không đổi
 
-  -- Tìm độ rộng lề nhỏ nhất của các dòng sau dòng mốc để tránh bị âm lề
-  local base_indent_len = anchor_indent_len
+  -- 5. Duyệt từ dòng chạm đầu tiên trở đi và tịnh tiến cùng độ lệch shift_delta
   for i = 2, #lines do
-    if lines[i]:match("%S") then -- Chỉ tính các dòng không rỗng
-      local line_indent = #(string.match(lines[i], "^%s*") or "")
-      base_indent_len = math.min(base_indent_len, line_indent)
-    end
-  end
-
-  local new_lines = {}
-  for i, line in ipairs(lines) do
-    if i == 1 then
-      -- Dòng đầu tiên giữ nguyên
-      table.insert(new_lines, line)
-    elseif not line:match("%S") then
+    local line = lines[i]
+    if not line:match("%S") then
       -- Dòng rỗng giữ nguyên
       table.insert(new_lines, line)
     else
-      -- Các dòng còn lại điều chỉnh lề dựa theo khoảng cách tương quan với dòng mốc
-      local current_indent_str = string.match(line, "^%s*") or ""
-      local relative_diff = #current_indent_str - base_indent_len
-      local new_indent_len = math.max(0, anchor_indent_len + relative_diff)
+      local current_indent_len = #(string.match(line, "^%s*") or "")
+      -- Áp dụng độ lệch chung shift_delta cho tất cả các dòng
+      local new_indent_len = math.max(0, current_indent_len + shift_delta)
       local trimmed_line = line:gsub("^%s*", "")
       table.insert(new_lines, string.rep(" ", new_indent_len) .. trimmed_line)
     end
   end
 
-  -- Cập nhật lại các dòng vào buffer
+  -- Cập nhật lại vào Buffer
   vim.api.nvim_buf_set_lines(0, start_line - 1, end_line, false, new_lines)
 end
 
--- 2. Gán phím '=' làm operatorfunc tương quan
-vim.keymap.set('n', '=', function()
-  vim.go.operatorfunc = "v:lua.AlignRelativeIndent"
-  return "g@"
-end, { expr = true, silent = true, desc = "Thụt lề tương quan theo dòng đầu" })
-
--- 3. Gán phím <Esc>: Tắt highlight nếu có search, ngược lại chạy AlignRelativeIndent
+-- Keymap Smart Esc
 vim.keymap.set('n', '<Esc>', function()
   if vim.v.hlsearch == 1 then
     vim.cmd("nohlsearch")
   else
-    vim.go.operatorfunc = "v:lua.AlignRelativeIndent"
+    vim.go.operatorfunc = "v:lua.AlignBlockByFirstLine"
     return "g@"
   end
-end, { expr = true, silent = true, desc = "Smart Esc: Nohlsearch hoặc Thụt lề" })
+end, { expr = true, silent = true, desc = "Smart Esc: Ép dòng đầu chạm bằng anchor, các dòng sau ăn theo" })
