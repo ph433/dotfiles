@@ -239,46 +239,54 @@ end, { noremap = true, silent = false, desc = "Tìm kiếm nội dung từ clipb
 local anchor_row = 0
 local anchor_indent = ""
 
--- Hàm căn lề: Dòng chạm đầu tiên bằng dòng Anchor, các dòng sau tịnh tiến tương quan
-function _G.AlignBlockByFirstLine(type)
+-- Hàm căn lề: Lấy dòng KHÔNG RỖNG đầu tiên chạm vào làm mốc để bằng dòng Anchor
+function _G.AlignBlockByFirstNonBlank(type)
   local start_line = vim.api.nvim_buf_get_mark(0, "[")[1]
   local end_line = vim.api.nvim_buf_get_mark(0, "]")[1]
 
-  -- Nếu không chọn vùng hoặc chỉ chọn 1 dòng thì không làm gì
   if start_line == 0 or end_line == 0 or start_line >= end_line then return end
 
-  -- 1. Lấy thông tin dòng Mốc (Anchor - Dòng bắt đầu)
+  -- 1. Lấy lề của dòng mốc (Anchor - Dòng start_line)
   local anchor_content = vim.fn.getline(start_line)
   local anchor_indent_str = string.match(anchor_content, "^%s*") or ""
   local anchor_indent_len = #anchor_indent_str
 
-  -- 2. Lấy thông tin dòng chạm đầu tiên (Dòng ngay bên dưới Anchor)
-  local first_target_content = vim.fn.getline(start_line + 1)
-  local first_target_indent_len = #(string.match(first_target_content, "^%s*") or "")
-
-  -- 3. Tính độ lệch (shift_delta) để kéo dòng chạm đầu tiên về BẰNG dòng Anchor
-  local shift_delta = anchor_indent_len - first_target_indent_len
-
-  -- 4. Lấy tất cả các dòng trong vùng chọn
+  -- 2. Đọc tất cả các dòng trong vùng chọn
   local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
-  local new_lines = { lines[1] } -- Dòng mốc (Anchor) giữ nguyên không đổi
+  if #lines < 2 then return end
 
-  -- 5. Duyệt từ dòng chạm đầu tiên trở đi và tịnh tiến cùng độ lệch shift_delta
+  -- 3. Tìm dòng KHÔNG RỖNG đầu tiên từ dòng thứ 2 trở đi
+  local target_indent_len = nil
+  for i = 2, #lines do
+    if lines[i]:match("%S") then -- Tìm dòng có chữ/ký tự
+      target_indent_len = #(string.match(lines[i], "^%s*") or "")
+      break
+    end
+  end
+
+  -- Nếu tất cả các dòng bên dưới đều rỗng thì không làm gì cả
+  if not target_indent_len then return end
+
+  -- 4. Tính độ lệch tịnh tiến dựa trên dòng không rỗng đầu tiên đó
+  local shift_delta = anchor_indent_len - target_indent_len
+
+  -- 5. Cập nhật lề cho toàn bộ khối
+  local new_lines = { lines[1] } -- Dòng mốc (Anchor) giữ nguyên
+
   for i = 2, #lines do
     local line = lines[i]
     if not line:match("%S") then
-      -- Dòng rỗng giữ nguyên
+      -- Dòng rỗng giữ nguyên không thêm/bớt space
       table.insert(new_lines, line)
     else
       local current_indent_len = #(string.match(line, "^%s*") or "")
-      -- Áp dụng độ lệch chung shift_delta cho tất cả các dòng
       local new_indent_len = math.max(0, current_indent_len + shift_delta)
       local trimmed_line = line:gsub("^%s*", "")
       table.insert(new_lines, string.rep(" ", new_indent_len) .. trimmed_line)
     end
   end
 
-  -- Cập nhật lại vào Buffer
+  -- Cập nhật lại buffer
   vim.api.nvim_buf_set_lines(0, start_line - 1, end_line, false, new_lines)
 end
 
@@ -287,7 +295,7 @@ vim.keymap.set('n', '<Esc>', function()
   if vim.v.hlsearch == 1 then
     vim.cmd("nohlsearch")
   else
-    vim.go.operatorfunc = "v:lua.AlignBlockByFirstLine"
+    vim.go.operatorfunc = "v:lua.AlignBlockByFirstNonBlank"
     return "g@"
   end
-end, { expr = true, silent = true, desc = "Smart Esc: Ép dòng đầu chạm bằng anchor, các dòng sau ăn theo" })
+end, { expr = true, silent = true, desc = "Smart Esc: Align block by first non-blank line" })
