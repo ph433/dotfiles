@@ -6,14 +6,32 @@ function fzfrecentdir -d "Tìm thư mục dựa trên lịch sử di chuyển (T
         return 1
     end
 
-    # Lọc lấy tối đa 10 thư mục mới nhất (Loại bỏ trùng lặp)
-    set -l top10 (awk '{time=$1; sub(/^[0-9]+ /, ""); map[$0]=time} END {for (p in map) print map[p] " " p}' $log_file | sort -nr | head -n 10)
+    # 1. Lấy danh sách các đường dẫn duy nhất kèm thời gian
+    set -l raw_top (awk '{time=$1; sub(/^[0-9]+ /, ""); map[$0]=time} END {for (p in map) print map[p] " " p}' $log_file | sort -nr)
     
-    # Ghi đè lại log để dọn dẹp file, tránh log bị phình to vô hạn
-    if test -n "$top10"
-        # Thêm [-1..1] để ghi vào file theo chiều đảo ngược (mới nhất ở dưới cùng)
-        printf "%s\n" $top10[-1..1] > $log_file
+    # 2. Lọc chỉ giữ lại những thư mục CÒN TỒN TẠI trên hệ thống (Tối đa 10)
+    set -l top10
+    for item in $raw_top
+        set -l path (string replace -r '^[0-9]+ ' '' -- "$item")
+        if test -d "$path"
+            set -a top10 "$item"
+            if test (count $top10) -eq 10
+                break
+            end
+        end
     end
+
+    # Ghi đè lại log để dọn dẹp file (loại bỏ thư mục đã xóa và giữ log gọn gàng)
+    if test -n "$top10"
+        printf "%s\n" $top10[-1..1] > $log_file
+    else
+        # Nếu không còn thư mục nào tồn tại, làm rỗng file log
+        : > $log_file
+        echo "Không tìm thấy thư mục hợp lệ nào trong lịch sử!"
+        return 0
+    end
+
+    # --- CÁC PHẦN SAU GIỮ NGUYÊN ---
 
     # Tạo danh sách đánh số 0-9 và tính toán thời gian (relative time)
     set -l current_time (date +%s)
