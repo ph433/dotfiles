@@ -81,7 +81,7 @@
 (deflayer mod_qutebrowser
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  @f13    esc     home    up      end     _       _       @gi     pgup    pgdn    ;       @fhi    _       _               _       _       _       _
+  @f13    @escc   home    up      end     _       _       @gi     pgup    pgdn    ;       @fhi    _       _               _       _       _       _
   bks     tab     left    down    rght    spc     ins     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
   @sropt  C-z     C-x     C-c     C-v     _       @fir    A-c     A-v     C-a     C-y     @ss             _               _       _       _
   _       _       @numt   ent                             @colet          _                       _       caps    _       _               _
@@ -802,6 +802,7 @@
   sh* (macro S-8)
   *marr (multi @sh* (layer-toggle shift8-modifier-arrows))
   fhi (multi (macro f) (layer-toggle colemak-dh-qute-active))
+  escc (multi (macro esc) (layer-toggle colemak-dh-qute-active))
 )
 
 (defvirtualkeys
