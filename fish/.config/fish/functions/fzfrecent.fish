@@ -79,7 +79,7 @@ function fzfrecent -d "Tìm file dựa trên lịch sử mở trong Neovim (Dash
         --tiebreak=index \
         --preview="bat --color=always {3} 2>/dev/null || cat {3}" \
         --preview-window="bottom:70%" \
-        --expect=right,enter \
+        --expect=right,enter,insert \
         --bind="$binds" \
         --layout=reverse \
         --height=100%)
@@ -96,17 +96,20 @@ function fzfrecent -d "Tìm file dựa trên lịch sử mở trong Neovim (Dash
     # Tách lấy cột đường dẫn
     set -l target_path (echo "$selected_line" | awk -F ' │ ' '{print $3}')
 
-    # Điều hướng hành động
     switch "$key"
-        case right
-            commandline -i (string escape "$target_path")" "
-	    __fzf_score_file "$target_path"
-	    log_recent_file "$target_path"
-	    # ~/dwm-flexipatch/dwm_status_update.sh &
-        case enter
-            nvim "$target_path"
-    end
-    
+           case right
+               commandline -i (string escape "$target_path")" "
+               fish -c "__fzf_score_file '$target_path'; log_recent_file '$target_path'" >/dev/null 2>&1 &
+               # log_recent_file "$target_path"
+           case enter
+               nvim "$target_path"
+           case ins insert
+               # Lấy thư mục cha chứa file và chuyển hướng cd vào đó
+               set -l dir_path (dirname -- "$target_path")
+               if test -d "$dir_path"
+                   cd "$dir_path"
+               end
+       end   
     # Refresh lại dòng lệnh để hiển thị đường dẫn vừa dán ngay lập tức
     commandline -f repaint 2>/dev/null
 end
