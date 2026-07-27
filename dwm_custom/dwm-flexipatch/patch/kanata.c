@@ -37,7 +37,7 @@ set_kanata_layer(const char *layer) {
 static void
 update_kanata_layer(Client *c) {
     if (!c) {
-        set_kanata_layer("mod_nvim");
+        set_kanata_layer("app_open");
         return;
     }
 
