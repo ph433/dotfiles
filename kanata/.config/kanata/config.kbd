@@ -866,9 +866,29 @@
 )
 
 (defalias
-  @up_s (multi (layer-toggle colemak-dh-ent) (on-release tap-virtualkey v_up))
-  @down_s (multi (layer-toggle colemak-dh-ent) (on-release tap-virtualkey v_down))
+  @1_u (multi (macro down) (layer-toggle mod_num-temp) (on-release tap-virtualkey v_up))
+  @2_u (multi (layer-toggle mod_num-temp) (on-release tap-virtualkey v_up))
+  @3_u (multi (layer-toggle mod_num-temp) (on-release tap-virtualkey v_up))
+  @4_u (multi (layer-toggle mod_num-temp) (on-release tap-virtualkey v_up))
+  @5_u (multi (layer-toggle mod_num-temp) (on-release tap-virtualkey v_up))
+  @6_u (multi (layer-toggle mod_num-temp) (on-release tap-virtualkey v_up))
+  @7_u (multi (layer-toggle mod_num-temp) (on-release tap-virtualkey v_up))
+  @8_u (multi (layer-toggle mod_num-temp) (on-release tap-virtualkey v_up))
+  @9_u (multi (layer-toggle mod_num-temp) (on-release tap-virtualkey v_up))
+  @0_u (multi (layer-toggle mod_num-temp) (on-release tap-virtualkey v_up))
+  
+  @1_d (multi (layer-toggle mod_num-temp) (on-release tap-virtualkey v_down))
+  @2_d (multi (layer-toggle mod_num-temp) (on-release tap-virtualkey v_down))
+  @3_d (multi (layer-toggle mod_num-temp) (on-release tap-virtualkey v_down))
+  @4_d (multi (layer-toggle mod_num-temp) (on-release tap-virtualkey v_down))
+  @5_d (multi (layer-toggle mod_num-temp) (on-release tap-virtualkey v_down))
+  @6_d (multi (layer-toggle mod_num-temp) (on-release tap-virtualkey v_down))
+  @7_d (multi (layer-toggle mod_num-temp) (on-release tap-virtualkey v_down))
+  @8_d (multi (layer-toggle mod_num-temp) (on-release tap-virtualkey v_down))
+  @9_d (multi (layer-toggle mod_num-temp) (on-release tap-virtualkey v_down))
+  @0_d (multi (layer-toggle mod_num-temp) (on-release tap-virtualkey v_down))
 )
+
 (defvirtualkeys
   v_ent ent
   v_up up
@@ -909,4 +929,22 @@
   @bks_   tab     left    down    @crght  spc     ins     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
   @sropt  C-z     C-x     C-c     C-v     C-y     @nvv    A-c     A-v     C-a     C-y     @ss             _               _       _       _
   _       _       @numt   ent                             @colet          _                       _       caps    _       _               _
+)
+
+(deflayer mod_num-temp-up
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  @gg     `       -       =       S-=     /       \       [       S-9     S-0     ]       _       _       _               _       _       _       _
+  bks     @1_u    @2_u    @3_u    @4_u    @5_u    @6_u    @7_u    @8_u    @9_u    @10_u   del     _                       _       _       _       _
+  @ns     _       S-;     ;       C-;     _       '       S-'     ,       .       /       @ns             _               _       _       _
+  _       _       @ns     spc                                     @f1-12  _                       _       _       _       _               _
+)
+
+(deflayer mod_num-temp-down
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  @gg     `       -       =       S-=     /       \       [       S-9     S-0     ]       _       _       _               _       _       _       _
+  bks     1       2       3       4       5       6       7       8       9       0       del     _                       _       _       _       _
+  @ns     _       S-;     ;       C-;     _       '       S-'     ,       .       /       @ns             _               _       _       _
+  _       _       @ns     spc                                     @f1-12  _                       _       _       _       _               _
 )
