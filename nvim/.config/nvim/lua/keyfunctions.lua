@@ -372,3 +372,14 @@ vim.keymap.set('x', '<Tab>', function()
   -- 6. Nhảy tới vị trí tiếp theo
   pcall(vim.cmd, 'normal! n')
 end, { desc = 'Visual select exact search on Tab' })
+
+vim.keymap.set('n', '<C-v>', function()
+  -- Kiểm tra xem hlsearch có đang bật và có từ đang được tìm kiếm không
+  if vim.v.hlsearch == 1 and vim.fn.getreg('/') ~= '' then
+    -- Jump và bôi đen cụm hlsearch
+    vim.cmd('normal! ngn')
+  else
+    -- Nếu không có highlight, paste từ clipboard hệ thống ("+)
+    vim.cmd('normal! "+p')
+  end
+end, { desc = "Jump hlsearch match or Paste from clipboard" })
