@@ -363,7 +363,8 @@ vim.keymap.set('x', '<Tab>', function()
   local escaped_text = vim.fn.escape(text, '\\/.*$^~[]<>')
 
   -- 4. Tạo pattern Strict Exact Search Very Magic
-  local exact_pattern = '\\v([a-zA-Z0-9_-])@<!' .. escaped_text .. '([a-zA-Z0-9_-])@!'
+  -- local exact_pattern = '\\v([ \\t\\n()\\[\\]])@<=' .. escaped_text .. '([ \\t\\n()\\[\\]])@='
+  local exact_pattern = '\\v([ \\t\\n()\\[\\]])@<=' .. escaped_text .. '([ \\t\\n()\\[\\]])@=' .. '([()\\[\\]]+[0-9])@!'
 
   -- 5. Cập nhật thanh ghi / và kích hoạt highlight search
   vim.fn.setreg('/', exact_pattern)

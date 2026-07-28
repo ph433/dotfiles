@@ -8,7 +8,7 @@ vim.keymap.set('v', '<C-c>', '"+y', { desc = 'Copy selection' })
 vim.keymap.set('n', '<C-c>', '^vg_"+y', { noremap = true, silent = true })
 vim.keymap.set({'n', 'v', 'i'}, '<D-C-c>', '<cmd>%y+<cr>', { noremap = true, silent = true })
 
-vim.keymap.set('n', '<C-v>', '"+p', { desc = 'Paste Normal' })
+-- vim.keymap.set('n', '<C-v>', '"+p', { desc = 'Paste Normal' })
 vim.keymap.set('v', '<C-v>', '"_c<C-r>+<Esc>', { desc = 'Paste Visual' })
 vim.keymap.set('i', '<C-v>', '<C-r>+', { desc = 'Paste Insert' })
 vim.keymap.set('n', '<C-A-v>', '^vg_"+P', { noremap = true, silent = true })
