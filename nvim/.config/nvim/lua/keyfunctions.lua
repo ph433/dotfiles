@@ -299,3 +299,31 @@ vim.keymap.set('n', '<Esc>', function()
     return "g@"
   end
 end, { expr = true, silent = true, desc = "Smart Esc: Align block by first non-blank line" })
+
+vim.keymap.set('n', '<Tab>', function()
+  if vim.v.hlsearch == 1 then
+    local pattern = vim.fn.getreg('/')
+
+    -- Kiểm tra nếu chưa được bọc bằng Negative Lookahead @!
+    if not pattern:find('@!') then
+      -- 1. Xóa sạch tất cả các flag magic (\v, \V), boundary (\c, \<, \>) do * hoặc / tạo ra
+      local clean = pattern
+        :gsub('\\[vV]', '')
+        :gsub('\\<', '')
+        :gsub('\\>', '')
+        :gsub('^%(', '')
+        :gsub('%)', '')
+
+      -- 2. Tạo pattern Very Magic mới không bị dính gạch ngang/dưới/chữ/số phía sau
+      local exact_pattern = '\\v<(' .. clean .. ')>([a-zA-Z0-9_-])@!'
+      vim.fn.setreg('/', exact_pattern)
+    end
+
+    -- 3. Nhảy tới kết quả tiếp theo
+    pcall(vim.cmd, 'normal! n')
+  else
+    -- Nếu không có hlsearch, bấm Tab trả về chức năng mặc định
+    local tab_key = vim.api.nvim_replace_termcodes('<Tab>', true, false, true)
+    vim.api.nvim_feedkeys(tab_key, 'n', false)
+  end
+end, { desc = 'Strict exact search on Tab' })
