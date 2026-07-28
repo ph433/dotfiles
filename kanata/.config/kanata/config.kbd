@@ -45,7 +45,7 @@
 (deflayer mod_nvim-active
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  A-esc   esc     home    up      end     @pra2tt @srchf  @tabi   @tabii  @taba   S-;     _       _       _               _       _       _       _
+  A-esc   esc     home    up      end     @pra2tt S-8     @tabi   @tabii  @taba   S-;     _       _       _               _       _       _       _
   bks     tab     left    down    rght    spc     @fd     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
   @sropt  C-z     C-x     C-c     C-v     C-y     @nvv    A-c     A-v     C-a     @/_     @ss             _               _       _       _
   _       _       @numt   ent                             @colnv          _                       _       caps    _       _               _
@@ -78,13 +78,22 @@
   _       _       @numt   ent                             @nvsw           _                       _       caps    _       _               _
 )
 
+(deflayer mod_nvim-temp-!c
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  C-del   esc     home    up      end     @pra2   _       ins     prtsc   pgup    pgdn    _       _       _               _       _       _       _
+  C-bks   tab     left    down    rght    spc     @fd     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
+  @sropt  C-z     _       C-c     C-v     _       v       A-c     A-v     C-a     C-y     @cmd            _               _       _       _
+  _       _       @numt   ent                             @colet          _                       _       caps    _       _               _
+)
+
 (deflayer mod_qutebrowser
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @f13    @escc   home    up      end     _       _       @gi     pgup    pgdn    ;       @fhi    _       _               _       _       _       _
   bks     tab     left    down    rght    spc     ins     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
   @sropt  C-z     C-x     C-c     C-v     _       @fir    A-c     A-v     C-a     C-y     @ss             _               _       _       _
-  _       _       @numt   ent                             @colet          _                       _       caps    _       _               _
+  _       _       @numt   @entc                           @colet          _                       _       caps    _       _               _
 )
 
 (deflayer mod_firefox
@@ -92,7 +101,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @colof  esc     home    up      end     A-ent   M-spc   prtsc   pgup    pgdn    _       _       _       _               _       _       _       _
   @bks_   tab     left    down    rght    spc     ins     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
-  @sropt  C-z     C-x     C-c     C-v     _       @fir    A-c     A-v     C-a     C-y     @ss             _               _       _       _
+  @sropt  C-z     C-x     C-c     C-v     _       @fir    A-c     A-v     C-a     C-f     @ss             _               _       _       _
   _       _       @numt   ent                             @colet          _                       _       caps    _       _               _
 )
 
@@ -174,7 +183,7 @@
   n       S-5     S-6     up      @g_     _       _       _       _       _       _       _       _       _               _       _       _       _
   _       o       b       down    e       @*marr  _       C-a     A-a     @vv     S-v     _       _                       _       _       _       _
   _       _       @viw    @viW    v       _       _       _       _       _       _       _               _               _       _       _
-  _       _       _       @nvv                                    _       _                       _       _       _       _               _
+  _       _       _       @vf3                                    _       _                       _       _       _       _               _
 )
 
 (deflayer like-ctl-alt
@@ -290,7 +299,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       C-esc   C-home  C-up    C-end   _       _       _       _       _       _       _       _       _               _       _       _       _
   C-bks   C-tab   C-left  C-down  C-rght  C-spc   _       @ctln   @cs     @cw     @ca     C-del   _                       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       _       _       _       _       _       _       _       @C-/    _               _               _       _       _
   _       _       @ctln   C-ent                                   @ctla   _                       _       _       _       _               _
 )
 
@@ -317,7 +326,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @gg     `       -       =       S-=     /       \       [       S-9     S-0     ]       _       _       _               _       _       _       _
   bks     1       2       3       4       5       6       7       8       9       0       del     _                       _       _       _       _
-  @ns     _       _       ;       '       _       _       S-'     ,       .       /       @ns             _               _       _       _
+  @ns     _       S-;     ;       C-o     _       '       S-'     ,       .       /       @ns             _               _       _       _
   _       _       @ns     spc                                     @f1-12  _                       _       _       _       _               _
 )
 
@@ -469,9 +478,9 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       @wal    A-rght  @war    _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       S-tab   A-left  A-left  A-rght  _       _       A-ent   M-spc   _       _       _       _                       _       _       _       _
+  @A-bks  @S-tab  A-left  A-left  A-rght  _       _       A-ent   M-spc   _       @lialt  _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       _       _                                       _       _                       _       _       _       _               _
+  _       _       @numt   A-ent                                   @nvswt! _                       _       _       _       _               _
 )
 
 (deflayer search-opt 
@@ -489,7 +498,7 @@
   @nvswa  q       w       f       p       b       j       l       u       y       ;       @tabe   _       _               _       _       _       _
   bks     a       r       s       t       g       m       n       e       i       o       del     _                       _       _       _       _
   _       x       c       d       v       z       k       h       ,       .       /       @ss             _               _       _       _
-  lctl    lmet    @numt   _                                       @ralt_  _                       _       _       _       _               _
+  lctl    lmet    @numt   spc                                     @ralt_  _                       _       _       _       _               _
 )
 
 (deflayer colemak-dh-cmd ;; shift ;
@@ -503,6 +512,7 @@
 
 (defalias
   nvsw (layer-switch mod_nvim)
+  nvswtg (layer-toggle mod_nvim)
   nvswff (layer-switch mod_firefox)
   ;; nvswa (layer-switch mod_nvim-active)
   nvswas (multi (layer-switch mod_nvim-active-after_search) ent)
@@ -512,6 +522,7 @@
   colof (layer-switch colemak-dh-firefox)
   ;; cols (layer-toggle colemak-dh-firefox-spacetab)
   nvswt (one-shot-press 1000 (layer-toggle mod_nvim-temp))
+  nvswt! (one-shot-press 1000 (layer-toggle mod_nvim-temp-!c))
   nvswat (one-shot-press 1000 (layer-toggle mod_nvim-active-temp))
   nvswsc (one-shot-press 1000 (layer-toggle mod_nvim-active-temp-searchorcmd))
   numt (one-shot-press 1000 (layer-toggle mod_num-temp))
@@ -841,10 +852,17 @@
   *marr (multi @sh* (layer-toggle shift8-modifier-arrows))
   fhi (multi (macro f) (layer-toggle colemak-dh-qute-active))
   escc (multi (macro esc) (layer-toggle colemak-dh-qute-active-hintmode-inquteyt))
+  entc (multi (macro ent) (layer-toggle colemak-dh-qute-active-hintmode-inquteyt))
   left_ (multi (macro left) (layer-toggle test))
   rght_ (multi (macro rght) (layer-toggle test))
-  /_ (multi (macro /) (layer-toggle colemak-dh-search))
+  /_ (multi (macro /) (layer-toggle colemak-dh-search) (on-release tap-virtualkey v_ent))
   bks_ (multi (macro bks) (layer-toggle nvim_delete))
+  S-tab (multi (macro S-tab) (layer-switch mod_nvim-rofi-!c))
+  esca (multi (macro esc) (layer-switch app_open))
+  A-bks (multi (macro A-bks) (layer-switch mod_nvim-rofi-!c))
+  C-/ (multi (macro g c))
+  vf3 (multi (macro v f) (layer-toggle colemak-dh-active))
+  ;; mark (multi (macro m) (layer-toggle colemak-dh-active))
 )
 
 (defvirtualkeys
@@ -876,4 +894,13 @@
   _       f1      f2      f3      f4      f5      f6      f7      f8      f9      f10     _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       _       _                                       _       _                       _       _       _       _               _
+)
+
+(deflayer mod_nvim-rofi-!c
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  M-esc   @esca   home    up      end     A-ent   M-spc   prtsc   pgup    pgdn    C-p     _       _       _               _       _       _       _
+  @bks_   tab     left    down    @crght  spc     ins     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
+  @sropt  C-z     C-x     C-c     C-v     C-y     @nvv    A-c     A-v     C-a     C-y     @ss             _               _       _       _
+  _       _       @numt   ent                             @colet          _                       _       caps    _       _               _
 )
