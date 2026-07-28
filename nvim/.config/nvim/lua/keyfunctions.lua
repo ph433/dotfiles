@@ -360,10 +360,10 @@ vim.keymap.set('x', '<Tab>', function()
   if text == '' then return end
 
   -- 3. Escape các ký tự đặc biệt của Regex để tìm đúng chính xác chuỗi đó
-  local escaped_text = vim.fn.escape(text, '\\/.*$^~[]')
+  local escaped_text = vim.fn.escape(text, '\\/.*$^~[]<>')
 
   -- 4. Tạo pattern Strict Exact Search Very Magic
-  local exact_pattern = '\\v<(' .. escaped_text .. ')>([a-zA-Z0-9_-])@!'
+  local exact_pattern = '\\v([a-zA-Z0-9_-])@<!' .. escaped_text .. '([a-zA-Z0-9_-])@!'
 
   -- 5. Cập nhật thanh ghi / và kích hoạt highlight search
   vim.fn.setreg('/', exact_pattern)
