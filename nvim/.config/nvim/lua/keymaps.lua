@@ -75,7 +75,9 @@ vim.keymap.set({'n', 'v'}, '{', '<cmd>q!<cr>')
 vim.keymap.set({'n', 'v'}, "<A-ESC>", '<cmd>q<cr>')
 vim.keymap.set('n', ']', '<cmd>source $MYVIMRC<cr>')
 
-vim.keymap.set('n', '<Space>', 'a<Space><Esc>', { noremap = true, silent = true })
+-- vim.keymap.set('v', '<Space>', 'a<Space><Esc>', { noremap = true, silent = true })
+-- vim.keymap.set('v', '<Space>', [[<Esc>*v//e<CR>]], { noremap = true, silent = true })
+vim.keymap.set('v', '<Space>', '*', { remap = true, silent = true })
 
 vim.keymap.set('v', 'a', 'c', { noremap = true, silent = true })
 -- vim.keymap.set('v', 'i', 'c', { noremap = true, silent = true })
@@ -199,3 +201,11 @@ vim.keymap.set('n', '<S-CR>', function()
   -- 5. Di chuyển con trỏ lên dòng mới đó, đặt ngay sau phần khoảng trắng
   vim.api.nvim_win_set_cursor(0, { row, #indent })
 end, { silent = true, desc = 'Tạo dòng mới ở trên giữ nguyên thụt lề, không tự thêm comment' })
+
+-- local picker = require("custom.my_picker")
+--
+-- -- Map phím ':' chạy command history tự chế
+-- vim.keymap.set("n", ":", picker.cmd_history, { desc = "Custom Cmd History" })
+--
+-- -- Map phím '/' chạy search history tự chế
+-- vim.keymap.set("n", "/", picker.search_history, { desc = "Custom Search History" })
