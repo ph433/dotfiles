@@ -45,8 +45,8 @@
 (deflayer mod_nvim-active
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  A-esc   esc     home    up      end     @pra2tt S-8     @tabi   @tabii  @taba   S-;     _       _       _               _       _       _       _
-  bks     tab     left    down    rght    spc     @fd     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
+  A-esc   esc     home    @up_s   end     @pra2tt S-8     @tabi   @tabii  @taba   S-;     _       _       _               _       _       _       _
+  bks     tab     left    @down_s rght    spc     @fd     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
   @sropt  C-z     C-x     C-c     C-v     C-y     @nvv    A-c     A-v     C-a     @/_     @ss             _               _       _       _
   _       _       @numt   ent                             @colnv          _                       _       caps    _       _               _
 )
@@ -326,7 +326,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @gg     `       -       =       S-=     /       \       [       S-9     S-0     ]       _       _       _               _       _       _       _
   bks     1       2       3       4       5       6       7       8       9       0       del     _                       _       _       _       _
-  @ns     _       S-;     ;       C-o     _       '       S-'     ,       .       /       @ns             _               _       _       _
+  @ns     _       S-;     ;       C-;     _       '       S-'     ,       .       /       @ns             _               _       _       _
   _       _       @ns     spc                                     @f1-12  _                       _       _       _       _               _
 )
 
@@ -865,8 +865,14 @@
   ;; mark (multi (macro m) (layer-toggle colemak-dh-active))
 )
 
+(defalias
+  @up_s (multi (layer-toggle colemak-dh-ent) (on-release tap-virtualkey v_up))
+  @down_s (multi (layer-toggle colemak-dh-ent) (on-release tap-virtualkey v_down))
+)
 (defvirtualkeys
   v_ent ent
+  v_up up
+  v_down down
 )
 
 (deflayer qwert-bare
