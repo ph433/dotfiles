@@ -9,6 +9,10 @@ function fl --description "Lọc file bằng fzf giữ nguyên True Color 100% k
         --height=100%)
 
     if test -n "$selected"
-        echo "$selected"
+        # Bỏ mã màu ANSI (nếu có) và lấy tên file/thư mục ở cột cuối cùng
+        set -l file (echo "$selected" | string replace -r '\x1b\[[0-9;]*[a-zA-Z]' '' | string match -r '\S+$')
+        
+        # Chạy lại ll trên file/thư mục được chọn
+        ll $file
     end
 end
