@@ -3,16 +3,20 @@ function history_fzf -d "Tìm history full màn hình bằng fzf"
     history merge
 
     # 2. Cấu hình fzf
+    set -l query (commandline -b)
     set -l fzf_opts \
         --layout=default \
         --border \
         --prompt="History > " \
-        --query (commandline -b) \
         --expect=right \
         --bind "left:execute-silent(echo -n {} | xclip -selection clipboard)+clear-screen"
 
     # Lấy kết quả từ fzf (trả về 2 dòng: dòng 1 là phím nhấn, dòng 2 là lệnh được chọn)
-    set -l output (history search | fzf $fzf_opts)
+    if test -n "$query"
+        set -a fzf_opts --query "$query"
+    end
+    set -l output (history | awk '!seen[$0]++' | fzf $fzf_opts)
+    # set -l output (history -R | awk '!seen[$0]++' | fzf $fzf_opts)
 
     # Nếu không chọn gì (nhấn Esc), thoát
     if test (count $output) -lt 2
@@ -25,13 +29,20 @@ function history_fzf -d "Tìm history full màn hình bằng fzf"
 
     # 3. Xử lý theo phím bấm
     if test "$pressed_key" = "right"
-        # Phím Right: Chỉ dán ra dòng lệnh hiện tại để chỉnh sửa
+        # BẮT BUỘC: Ghi trực tiếp bản ghi vào file history của Fish
+        set -l now (date +%s)
+        echo "- cmd: $selected_command" >> ~/.local/share/fish/fish_history
+        echo "  when: $now" >> ~/.local/share/fish/fish_history
+
+        # Nạp lại history để Fish nhận lệnh mới nhất lập tức
+        builtin history merge
+
+        # Dán câu lệnh ra màn hình để sửa
         commandline -r "$selected_command"
     else
         # Phím Enter (hoặc mặc định): Dán lệnh và thực thi ngay
         commandline -r "$selected_command"
         commandline -f execute
     end
-
     commandline -f repaint
 end
