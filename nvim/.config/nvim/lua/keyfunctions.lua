@@ -447,7 +447,7 @@ vim.keymap.set('n', '<C-CR>', function()
 
     local output_lines = {}
 
-    -- 2. Override hàm print
+    -- 2. Override print
     local old_print = print
     print = function(...)
         local args = {...}
@@ -458,58 +458,69 @@ vim.keymap.set('n', '<C-CR>', function()
         table.insert(output_lines, table.concat(str_args, "\t"))
     end
 
-    -- 3. MẸO XỬ LÝ CODE NHIỀU DÒNG: Tách dòng cuối để ép nó 'return'
-    local code_to_run = clipboard_content
-    local lines = {}
-    for line in clipboard_content:gmatch("[^\r\n]+") do
-        table.insert(lines, line)
-    end
-
-    -- Nếu dòng cuối có dạng "local abc = xy" -> chuyển thành "return xy" hoặc "abc = xy; return abc"
-    if #lines > 0 then
-        local last_line = lines[#lines]
-        -- Kiểm tra nếu dòng cuối có khai báo 'local x = ...'
-        if last_line:match("^%s*local%s+([%w_]+)%s*=") then
-            local var_name = last_line:match("^%s*local%s+([%w_]+)%s*=")
-            -- Bỏ 'local' ở dòng cuối để biến nó thành biến global tạm hoặc gán bình thường
-            lines[#lines] = last_line:gsub("^%s*local%s+", "")
-            table.insert(lines, "return " .. var_name)
-            code_to_run = table.concat(lines, "\n")
-        elseif not last_line:match("^%s*return%s+") then
-            -- Nếu dòng cuối không có 'local' và không có 'return', thử gắn 'return' vào dòng cuối
-            lines[#lines] = "return " .. last_line
-            code_to_run = table.concat(lines, "\n")
+    -- 3. Bọc đoạn code clipboard vào một hàm có hook Debug
+    local wrapped_code = string.format([[
+        return function()
+            %s
         end
-    end
+    ]], clipboard_content)
 
-    -- Thử load đoạn code đã được tự động thêm return ở dòng cuối
-    local f, load_err = load(code_to_run)
-    
-    -- Nếu vẫn lỗi syntax (do dòng cuối không thể return), chạy lại code gốc
-    if not f then
-        f, load_err = load(clipboard_content)
-    end
+    local outer_f, load_err = load(wrapped_code)
 
-    if f then
-        local results = { pcall(f) }
-        local success = results[1]
+    if outer_f then
+        local user_func = outer_f()
+        
+        -- Dùng debug hook để chụp snapshot của toàn bộ biến local ngay trước khi hàm kết thúc
+        local captured_locals = {}
+        debug.sethook(function(event)
+            if event == "return" then
+                local i = 1
+                while true do
+                    local name, value = debug.getlocal(2, i)
+                    if not name then break end
+                    -- Bỏ qua các biến tạm do Lua tự tạo (bắt đầu bằng '(' )
+                    if not name:match("^%(") then
+                        captured_locals[name] = value
+                    end
+                    i = i + 1
+                end
+            end
+        end, "r")
+
+        -- Chạy code người dùng
+        local success, run_err = pcall(user_func)
+        
+        -- Gỡ hook debug ngay sau khi chạy xong
+        debug.sethook()
 
         if success then
-            if #results > 1 then
-                table.insert(output_lines, "👉 Kết quả dòng cuối (Auto-Return):")
-                for i = 2, #results do
-                    local val = results[i]
-                    local formatted = type(val) == "string" and string.format("%q", val) -- Hiện rõ khoảng trắng/space nếu là chuỗi
-                                   or (type(val) == "table" and vim.inspect(val) or tostring(val))
-                    
-                    for line in formatted:gmatch("[^\r\n]+") do
+            -- Tự động in ra danh sách TẤT CẢ các biến local
+            if next(captured_locals) then
+                if #output_lines > 0 then
+                    table.insert(output_lines, "----------------------------------------")
+                end
+                table.insert(output_lines, "🐛 DANH SÁCH BIẾN LOCAL (DEBUG):")
+                
+                for var_name, var_val in pairs(captured_locals) do
+                    local formatted_val
+                    if type(var_val) == "string" then
+                        formatted_val = string.format("%q", var_val) -- Hiện rõ chuỗi (ví dụ: "" hoặc "  ")
+                    elseif type(var_val) == "table" then
+                        formatted_val = vim.inspect(var_val)
+                    else
+                        formatted_val = tostring(var_val)
+                    end
+
+                    -- Format hiển thị đẹp
+                    local log_str = string.format("  • %s = %s", var_name, formatted_val)
+                    for line in log_str:gmatch("[^\r\n]+") do
                         table.insert(output_lines, line)
                     end
                 end
             end
         else
             table.insert(output_lines, "❌ LỖI KHI CHẠY CODE:")
-            table.insert(output_lines, tostring(results[2]))
+            table.insert(output_lines, tostring(run_err))
         end
     else
         table.insert(output_lines, "❌ LỖI CÚ PHÁP (SYNTAX ERROR):")
@@ -519,7 +530,7 @@ vim.keymap.set('n', '<C-CR>', function()
     print = old_print
 
     if #output_lines == 0 then
-        table.insert(output_lines, "Code đã chạy thành công nhưng không có kết quả để hiển thị.")
+        table.insert(output_lines, "Code đã chạy thành công nhưng không có biến local nào được khởi tạo.")
     end
 
     -- 4. HIỂN THỊ CỬA SỔ NỔI
@@ -540,13 +551,13 @@ vim.keymap.set('n', '<C-CR>', function()
         height = height,
         style = 'minimal',
         border = 'rounded',
-        title = ' Kết quả chạy code Clipboard ',
+        title = ' Kết quả Debug Clipboard ',
         title_pos = 'center',
     })
 
     vim.keymap.set('n', 'q', ':q<CR>', { buffer = buf, silent = true })
     vim.keymap.set('n', '<Esc>', ':q<CR>', { buffer = buf, silent = true })
-end, { desc = "Chạy code Clipboard và tự động return dòng cuối" })
+end, { desc = "Debug tất cả biến local từ Clipboard" })
 
 
 local function match_indent_and_move(direction)
