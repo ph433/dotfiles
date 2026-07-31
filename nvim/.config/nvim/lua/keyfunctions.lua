@@ -291,14 +291,35 @@ function _G.AlignBlockByFirstNonBlank(type)
 end
 
 -- Keymap Smart Esc
+-- vim.keymap.set('n', '<Esc>', function()
+--   if vim.v.hlsearch == 1 then
+--     vim.cmd("nohlsearch")
+--   else
+--     vim.go.operatorfunc = "v:lua.AlignBlockByFirstNonBlank"
+--     return "g@"
+--   end
+-- end, { expr = true, silent = true, desc = "Smart Esc: Align block by first non-blank line" })
+
 vim.keymap.set('n', '<Esc>', function()
   if vim.v.hlsearch == 1 then
-    vim.cmd("nohlsearch")
+    -- Nếu đang bật highlight thì tắt đi
+    vim.cmd('nohlsearch')
   else
-    vim.go.operatorfunc = "v:lua.AlignBlockByFirstNonBlank"
-    return "g@"
+    -- Nếu không có highlight, chuyển sang chế độ Visual (chọn ký tự)
+    -- Sử dụng nvim_feedkeys để giả lập phím bấm 'v' một cách an toàn
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('v', true, false, true), 'n', false)
   end
-end, { expr = true, silent = true, desc = "Smart Esc: Align block by first non-blank line" })
+end, { desc = "Esc thông minh: Tắt noh hoặc chuyển sang Visual mode" })
+
+vim.keymap.set('v', '<Esc>', function()
+  -- Thoát khỏi Visual mode để về Normal mode trước
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', true, false, true), 'n', false)
+  
+  -- Kiểm tra nếu hlsearch đang bật thì tắt đi
+  if vim.v.hlsearch == 1 then
+    vim.cmd('nohlsearch')
+  end
+end, { desc = "Thoát Visual mode và tắt hlsearch" })
 
 vim.keymap.set('n', '<C-Tab>', function()
   if vim.v.hlsearch == 1 then
@@ -360,11 +381,40 @@ vim.keymap.set('x', '<Tab>', function()
   if text == '' then return end
 
   -- 3. Escape các ký tự đặc biệt của Regex để tìm đúng chính xác chuỗi đó
-  local escaped_text = vim.fn.escape(text, '\\/.*$^~[]<>')
-
+  -- local escaped_text = vim.fn.escape(text, '\\/.*$^~[]<>')
+  local escaped_text = vim.fn.escape(text, '\\/.*$^~[]<>@+?{}()|=!')
+  
   -- 4. Tạo pattern Strict Exact Search Very Magic
   -- local exact_pattern = '\\v([ \\t\\n()\\[\\]])@<=' .. escaped_text .. '([ \\t\\n()\\[\\]])@='
   local exact_pattern = '\\v([ \\t\\n()\\[\\]])@<=' .. escaped_text .. '([ \\t\\n()\\[\\]])@=' .. '([()\\[\\]]+[0-9])@!'
+
+  -- 5. Cập nhật thanh ghi / và kích hoạt highlight search
+  vim.fn.setreg('/', exact_pattern)
+  vim.opt.hlsearch = true
+
+  -- 6. Nhảy tới vị trí tiếp theo
+  pcall(vim.cmd, 'normal! n')
+end, { desc = 'Visual select exact search on Tab' })
+
+vim.keymap.set('x', '<CR>', function()
+  -- 1. Thoát Visual mode để đưa con trỏ về Normal mode
+  local esc = vim.api.nvim_replace_termcodes('<Esc>', true, false, true)
+  vim.api.nvim_feedkeys(esc, 'x', false)
+
+  -- 2. Lấy chính xác chuỗi vừa bôi đen trong vùng Visual
+  local _, srow, scol, _ = unpack(vim.fn.getpos("'<"))
+  local _, erow, ecol, _ = unpack(vim.fn.getpos("'>"))
+  
+  local lines = vim.api.nvim_buf_get_text(0, srow - 1, scol - 1, erow - 1, ecol, {})
+  local text = table.concat(lines, '\n')
+
+  if text == '' then return end
+
+  -- 3. Escape các ký tự đặc biệt của Regex để tìm đúng chính xác chuỗi đó
+  local escaped_text = vim.fn.escape(text, '\\/.*$^~[]<>')
+
+  -- 4. Tạo pattern Strict Exact Search Very Magic
+  local exact_pattern = '\\v([a-zA-Z0-9_-])@<!' .. escaped_text .. '([a-zA-Z0-9_-])@!'
 
   -- 5. Cập nhật thanh ghi / và kích hoạt highlight search
   vim.fn.setreg('/', exact_pattern)
@@ -384,3 +434,136 @@ vim.keymap.set('n', '<C-v>', function()
     vim.cmd('normal! "+p')
   end
 end, { desc = "Jump hlsearch match or Paste from clipboard" })
+
+vim.keymap.set('n', '<C-CR>', function()
+    -- 1. Lấy nội dung từ clipboard hệ thống
+    local clipboard_content = vim.fn.getreg('+')
+    if clipboard_content == "" then
+        vim.notify("Clipboard trống rỗng!", vim.log.levels.WARN)
+        return
+    end
+
+    -- 2. Tạo một bảng để hứng tất cả kết quả xuất ra (kể cả lỗi)
+    local output_lines = {}
+    
+    -- Lưu hàm print gốc của hệ thống lại
+    local old_print = print
+    -- Ghi đè hàm print để gom text vào bảng output_lines
+    print = function(...)
+        local args = {...}
+        local str_args = {}
+        for i, v in ipairs(args) do
+            str_args[i] = tostring(v)
+        end
+        table.insert(output_lines, table.concat(str_args, "\t"))
+    end
+
+    -- 3. Thực thi đoạn mã từ clipboard
+    local f, load_err = load(clipboard_content)
+    if f then
+        local success, run_err = pcall(f)
+        if not success then
+            table.insert(output_lines, "❌ LỖI KHI CHẠY CODE:")
+            table.insert(output_lines, tostring(run_err))
+        end
+    else
+        table.insert(output_lines, "❌ LỖI CÚ PHÁP (SYNTAX ERROR):")
+        table.insert(output_lines, tostring(load_err))
+    end
+
+    -- Khôi phục lại hàm print gốc cho Neovim hoạt động bình thường
+    print = old_print
+
+    -- Nếu đoạn code chạy ngầm không in ra gì, báo cho người dùng biết
+    if #output_lines == 0 then
+        table.insert(output_lines, "Code đã chạy thành công nhưng không có kết quả để hiển thị (Không dùng lệnh print).")
+    end
+
+    -- 4. TẠO CỬA SỔ NỔI (FLOATING WINDOW) ĐỂ HIỂN THỊ KẾT QUẢ
+    -- Tạo một buffer tạm thời ẩn
+    local buf = vim.api.nvim_create_buf(false, true)
+    vim.api.nvim_buf_set_lines(buf, 0, -1, false, output_lines)
+    vim.bo[buf].filetype = "lua" -- Tô màu cú pháp nếu có kết quả đặc biệt
+
+    -- Tính toán kích thước cửa sổ nổi dựa trên màn hình hiện tại
+    local width = math.min(80, vim.o.columns - 4)
+    local height = math.min(#output_lines + 2, vim.o.lines - 4)
+    local row = math.floor((vim.o.lines - height) / 2)
+    local col = math.floor((vim.o.columns - width) / 2)
+
+    -- Cấu hình giao diện cửa sổ nổi
+    local opts = {
+        relative = 'editor',
+        row = row,
+        col = col,
+        width = width,
+        height = height,
+        style = 'minimal',
+        border = 'rounded', -- Bo góc cửa sổ cho đẹp
+        title = ' Kết quả chạy code Clipboard ',
+        title_pos = 'center',
+    }
+
+    -- Mở cửa sổ nổi lên màn hình
+    local win = vim.api.nvim_open_win(buf, true, opts)
+
+    -- Tự động đóng cửa sổ nổi này bằng phím tắt q hoặc Esc khi đang focus ở trong nó
+    vim.keymap.set('n', 'q', ':q<CR>', { buffer = buf, silent = true })
+    vim.keymap.set('n', '<Esc>', ':q<CR>', { buffer = buf, silent = true })
+end, { desc = "Chạy code Clipboard và hiện cửa sổ nổi" })
+
+
+local function match_indent_and_move(direction)
+  local count = vim.v.count1
+  
+  -- 1. Lấy khoảng trắng lề (indent) của dòng hiện tại
+  local current_line_text = vim.api.nvim_get_current_line()
+  local indent_str = current_line_text:match("^(%s*)") or ""
+  
+  -- 2. Tìm dòng khác rỗng tiếp theo theo hướng chỉ định
+  local step = (direction == "down") and 1 or -1
+  local target_line = vim.fn.line(".")
+  local total_lines = vim.fn.line("$")
+  local found_count = 0
+
+  while found_count < count do
+    target_line = target_line + step
+    -- Kiểm tra nếu nhảy out-of-bounds (vượt giới hạn file)
+    if target_line < 1 or target_line > total_lines then
+      vim.notify("Đã chạm mốc đầu/cuối file!", vim.log.levels.WARN)
+      return
+    end
+
+    -- Kiểm tra nếu dòng không rỗng (chứa ký tự ngoài khoảng trắng)
+    local line_content = vim.api.nvim_buf_get_lines(0, target_line - 1, target_line, false)[1]
+    if line_content:match("%S") then
+      found_count = found_count + 1
+    end
+  end
+
+  -- 3. Di chuyển con trỏ tới dòng mục tiêu
+  vim.api.nvim_win_set_cursor(0, { target_line, 0 })
+
+  -- 4. Thay thế khoảng trắng đầu dòng mục tiêu bằng khoảng trắng đã copy
+  local target_text = vim.api.nvim_get_current_line()
+  local new_line_text = target_text:gsub("^%s*", indent_str)
+  vim.api.nvim_set_current_line(new_line_text)
+end
+
+-- Tự định nghĩa Sub-map cho `=` khi gặp `j` hoặc `k`
+local function start_indent_map()
+  local char_code = vim.fn.getchar()
+  local char = vim.fn.nr2char(char_code)
+
+  if char == "j" or char == "Down" then
+    match_indent_and_move("down")
+  elseif char == "k" or char == "Up" then
+    match_indent_and_move("up")
+  else
+    -- Nếu gõ phím khác thì hủy thao tác
+    vim.cmd("redraw")
+  end
+end
+
+-- Keymap phím `=` ở Normal mode
+vim.keymap.set("n", "=", start_indent_map, { expr = false, silent = true, desc = "Copy indent sang dòng khác rỗng" })
