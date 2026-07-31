@@ -99,7 +99,7 @@ vim.keymap.set("n", "<C-A-h>", "<cmd>leftabove vsplit<cr>", { desc = "Open split
 vim.keymap.set("n", "<C-A-l>", "<cmd>rightbelow vsplit<cr>", { desc = "Open split right" })
 vim.keymap.set("n", "<C-A-k>", "<cmd>leftabove split<cr>",   { desc = "Open split up" })
 vim.keymap.set("n", "<C-A-j>", "<cmd>rightbelow split<cr>",  { desc = "Open split down" })
-vim.keymap.set("n", "<ESC>", "<cmd>noh<cr>",  { desc = "Open split down" })
+-- vim.keymap.set("n", "<ESC>", "<cmd>noh<cr>",  { desc = "Open split down" })
 
 -- 1. Alt + o : Đóng tất cả trừ cửa sổ hiện tại (only)
 vim.keymap.set("n", "<S-A-p>", "<cmd>only<cr>", { desc = "Close all but current" })
@@ -209,3 +209,9 @@ end, { silent = true, desc = 'Tạo dòng mới ở trên giữ nguyên thụt l
 --
 -- -- Map phím '/' chạy search history tự chế
 -- vim.keymap.set("n", "/", picker.search_history, { desc = "Custom Search History" })
+
+-- Khi ở chế độ Normal: Chạy dòng hiện tại (dùng dấu chấm .)
+vim.keymap.set('n', '<C-CR>', ':.lua<CR>')
+
+-- Khi ở chế độ Visual: Chạy các dòng được bôi đen (không cần dấu .)
+vim.keymap.set('v', '<C-CR>', ':lua<CR>')
