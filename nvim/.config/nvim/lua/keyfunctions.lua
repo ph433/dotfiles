@@ -436,81 +436,117 @@ vim.keymap.set('n', '<C-v>', function()
 end, { desc = "Jump hlsearch match or Paste from clipboard" })
 
 vim.keymap.set('n', '<C-CR>', function()
-    -- 1. Lấy nội dung từ clipboard hệ thống
     local clipboard_content = vim.fn.getreg('+')
     if clipboard_content == "" then
         vim.notify("Clipboard trống rỗng!", vim.log.levels.WARN)
         return
     end
 
-    -- 2. Tạo một bảng để hứng tất cả kết quả xuất ra (kể cả lỗi)
+    -- 1. Cleaning ký tự lạ
+    clipboard_content = clipboard_content:gsub("\194\160", " "):gsub("\r\n", "\n"):gsub("\r", "\n")
+
     local output_lines = {}
-    
-    -- Lưu hàm print gốc của hệ thống lại
+
+    -- 2. Override hàm print
     local old_print = print
-    -- Ghi đè hàm print để gom text vào bảng output_lines
     print = function(...)
         local args = {...}
         local str_args = {}
         for i, v in ipairs(args) do
-            str_args[i] = tostring(v)
+            str_args[i] = type(v) == "table" and vim.inspect(v) or tostring(v)
         end
         table.insert(output_lines, table.concat(str_args, "\t"))
     end
 
-    -- 3. Thực thi đoạn mã từ clipboard
-    local f, load_err = load(clipboard_content)
+    -- 3. MẸO XỬ LÝ CODE NHIỀU DÒNG: Tách dòng cuối để ép nó 'return'
+    local code_to_run = clipboard_content
+    local lines = {}
+    for line in clipboard_content:gmatch("[^\r\n]+") do
+        table.insert(lines, line)
+    end
+
+    -- Nếu dòng cuối có dạng "local abc = xy" -> chuyển thành "return xy" hoặc "abc = xy; return abc"
+    if #lines > 0 then
+        local last_line = lines[#lines]
+        -- Kiểm tra nếu dòng cuối có khai báo 'local x = ...'
+        if last_line:match("^%s*local%s+([%w_]+)%s*=") then
+            local var_name = last_line:match("^%s*local%s+([%w_]+)%s*=")
+            -- Bỏ 'local' ở dòng cuối để biến nó thành biến global tạm hoặc gán bình thường
+            lines[#lines] = last_line:gsub("^%s*local%s+", "")
+            table.insert(lines, "return " .. var_name)
+            code_to_run = table.concat(lines, "\n")
+        elseif not last_line:match("^%s*return%s+") then
+            -- Nếu dòng cuối không có 'local' và không có 'return', thử gắn 'return' vào dòng cuối
+            lines[#lines] = "return " .. last_line
+            code_to_run = table.concat(lines, "\n")
+        end
+    end
+
+    -- Thử load đoạn code đã được tự động thêm return ở dòng cuối
+    local f, load_err = load(code_to_run)
+    
+    -- Nếu vẫn lỗi syntax (do dòng cuối không thể return), chạy lại code gốc
+    if not f then
+        f, load_err = load(clipboard_content)
+    end
+
     if f then
-        local success, run_err = pcall(f)
-        if not success then
+        local results = { pcall(f) }
+        local success = results[1]
+
+        if success then
+            if #results > 1 then
+                table.insert(output_lines, "👉 Kết quả dòng cuối (Auto-Return):")
+                for i = 2, #results do
+                    local val = results[i]
+                    local formatted = type(val) == "string" and string.format("%q", val) -- Hiện rõ khoảng trắng/space nếu là chuỗi
+                                   or (type(val) == "table" and vim.inspect(val) or tostring(val))
+                    
+                    for line in formatted:gmatch("[^\r\n]+") do
+                        table.insert(output_lines, line)
+                    end
+                end
+            end
+        else
             table.insert(output_lines, "❌ LỖI KHI CHẠY CODE:")
-            table.insert(output_lines, tostring(run_err))
+            table.insert(output_lines, tostring(results[2]))
         end
     else
         table.insert(output_lines, "❌ LỖI CÚ PHÁP (SYNTAX ERROR):")
         table.insert(output_lines, tostring(load_err))
     end
 
-    -- Khôi phục lại hàm print gốc cho Neovim hoạt động bình thường
     print = old_print
 
-    -- Nếu đoạn code chạy ngầm không in ra gì, báo cho người dùng biết
     if #output_lines == 0 then
-        table.insert(output_lines, "Code đã chạy thành công nhưng không có kết quả để hiển thị (Không dùng lệnh print).")
+        table.insert(output_lines, "Code đã chạy thành công nhưng không có kết quả để hiển thị.")
     end
 
-    -- 4. TẠO CỬA SỔ NỔI (FLOATING WINDOW) ĐỂ HIỂN THỊ KẾT QUẢ
-    -- Tạo một buffer tạm thời ẩn
+    -- 4. HIỂN THỊ CỬA SỔ NỔI
     local buf = vim.api.nvim_create_buf(false, true)
     vim.api.nvim_buf_set_lines(buf, 0, -1, false, output_lines)
-    vim.bo[buf].filetype = "lua" -- Tô màu cú pháp nếu có kết quả đặc biệt
+    vim.bo[buf].filetype = "lua"
 
-    -- Tính toán kích thước cửa sổ nổi dựa trên màn hình hiện tại
-    local width = math.min(80, vim.o.columns - 4)
+    local width = math.min(100, vim.o.columns - 4)
     local height = math.min(#output_lines + 2, vim.o.lines - 4)
     local row = math.floor((vim.o.lines - height) / 2)
     local col = math.floor((vim.o.columns - width) / 2)
 
-    -- Cấu hình giao diện cửa sổ nổi
-    local opts = {
+    local win = vim.api.nvim_open_win(buf, true, {
         relative = 'editor',
         row = row,
         col = col,
         width = width,
         height = height,
         style = 'minimal',
-        border = 'rounded', -- Bo góc cửa sổ cho đẹp
+        border = 'rounded',
         title = ' Kết quả chạy code Clipboard ',
         title_pos = 'center',
-    }
+    })
 
-    -- Mở cửa sổ nổi lên màn hình
-    local win = vim.api.nvim_open_win(buf, true, opts)
-
-    -- Tự động đóng cửa sổ nổi này bằng phím tắt q hoặc Esc khi đang focus ở trong nó
     vim.keymap.set('n', 'q', ':q<CR>', { buffer = buf, silent = true })
     vim.keymap.set('n', '<Esc>', ':q<CR>', { buffer = buf, silent = true })
-end, { desc = "Chạy code Clipboard và hiện cửa sổ nổi" })
+end, { desc = "Chạy code Clipboard và tự động return dòng cuối" })
 
 
 local function match_indent_and_move(direction)
