@@ -216,30 +216,53 @@ vim.keymap.set('n', '<C-CR>', ':.lua<CR>')
 -- Khi ở chế độ Visual: Chạy các dòng được bôi đen (không cần dấu .)
 vim.keymap.set('v', '<C-CR>', ':lua<CR>')
 
-vim.keymap.set({ 'n', 'v' }, '%', function()
-  -- Lấy dòng hiện tại và vị trí cột của con trỏ (1-indexed)
+local function get_target_action(line, col)
+  local rest_of_line = string.sub(line, col)
+  local rel_idx, _, char = string.find(rest_of_line, "([%(%)%[%]%{}'\"])")
+  
+  if not rel_idx then return nil end
+
+  local target_col = col + rel_idx - 1
+
+  -- Dấu nháy ' hoặc "
+  if char == '"' or char == "'" then
+    local prefix = string.sub(line, 1, target_col - 1)
+    local _, count = string.gsub(prefix, char, "")
+    local motion = (count % 2 == 0) and ('f' .. char) or ('F' .. char)
+    return target_col, motion
+  end
+
+  -- Dấu ngoặc ( ), [ ], { }
+  return target_col, '%'
+end
+
+-- 1. Xử lý cho Normal Mode ('n')
+vim.keymap.set('n', '%', function()
   local line = vim.fn.getline('.')
   local col = vim.fn.col('.')
-  local char = vim.fn.matchstr(line, '\\%' .. col .. 'c.')
+  local target_col, motion = get_target_action(line, col)
 
-  -- Nếu ký tự tại con trỏ là dấu nháy kép hoặc nháy đơn
-  if char == '"' or char == "'" then
-    -- Đếm xem có bao nhiêu dấu nháy cùng loại ở phía trước con trỏ trên dòng này
-    local prefix = string.sub(line, 1, col - 1)
-    local _, count = string.gsub(prefix, char, "")
-
-    -- Nếu số lượng dấu nháy phía trước là số chẵn (0, 2, 4...) -> Con trỏ đang ở dấu MỞ
-    -- Chúng ta sẽ nhảy TIẾN bằng phím 'f'
-    if count % 2 == 0 then
-      return 'f' .. char
-    -- Nếu số lượng dấu nháy phía trước là số lẻ (1, 3, 5...) -> Con trỏ đang ở dấu ĐÓNG
-    -- Chúng ta sẽ nhảy LÙI bằng phím 'F'
-    else
-      return 'F' .. char
-    end
+  if not target_col then return '%' end
+  
+  if target_col == col then
+    return motion
   else
-    -- Nếu không phải dấu nháy, trả về tính năng mặc định của phím %
-    return '%'
+    return target_col .. '|' .. motion
   end
-end, { expr = true, desc = "Nhảy tiến/lùi chính xác giữa các dấu nháy" })
+end, { expr = true, desc = "Nhảy ngoặc/nháy trong Normal mode" })
 
+-- 2. Xử lý cho Visual Mode ('v')
+vim.keymap.set('v', '%', function()
+  local line = vim.fn.getline('.')
+  local col = vim.fn.col('.')
+  local target_col, motion = get_target_action(line, col)
+
+  if not target_col then return '%' end
+
+  -- Quy trình 4 bước:
+  -- 1. \27 (<Esc>): Thoát Visual mode
+  -- 2. <target_col>|: Nhảy tới ký tự tìm thấy
+  -- 3. v: Bật lại Visual mode
+  -- 4. motion: Nhảy tiếp đến điểm đối ứng để bôi đen
+  return '\27' .. target_col .. '|v' .. motion
+end, { expr = true, desc = "Bôi đen từ ngoặc/nháy trong Visual mode" })
