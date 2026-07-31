@@ -215,3 +215,31 @@ vim.keymap.set('n', '<C-CR>', ':.lua<CR>')
 
 -- Khi ở chế độ Visual: Chạy các dòng được bôi đen (không cần dấu .)
 vim.keymap.set('v', '<C-CR>', ':lua<CR>')
+
+vim.keymap.set({ 'n', 'v' }, '%', function()
+  -- Lấy dòng hiện tại và vị trí cột của con trỏ (1-indexed)
+  local line = vim.fn.getline('.')
+  local col = vim.fn.col('.')
+  local char = vim.fn.matchstr(line, '\\%' .. col .. 'c.')
+
+  -- Nếu ký tự tại con trỏ là dấu nháy kép hoặc nháy đơn
+  if char == '"' or char == "'" then
+    -- Đếm xem có bao nhiêu dấu nháy cùng loại ở phía trước con trỏ trên dòng này
+    local prefix = string.sub(line, 1, col - 1)
+    local _, count = string.gsub(prefix, char, "")
+
+    -- Nếu số lượng dấu nháy phía trước là số chẵn (0, 2, 4...) -> Con trỏ đang ở dấu MỞ
+    -- Chúng ta sẽ nhảy TIẾN bằng phím 'f'
+    if count % 2 == 0 then
+      return 'f' .. char
+    -- Nếu số lượng dấu nháy phía trước là số lẻ (1, 3, 5...) -> Con trỏ đang ở dấu ĐÓNG
+    -- Chúng ta sẽ nhảy LÙI bằng phím 'F'
+    else
+      return 'F' .. char
+    end
+  else
+    -- Nếu không phải dấu nháy, trả về tính năng mặc định của phím %
+    return '%'
+  end
+end, { expr = true, desc = "Nhảy tiến/lùi chính xác giữa các dấu nháy" })
+
