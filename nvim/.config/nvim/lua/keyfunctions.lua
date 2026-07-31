@@ -396,45 +396,6 @@ vim.keymap.set('x', '<Tab>', function()
   pcall(vim.cmd, 'normal! n')
 end, { desc = 'Visual select exact search on Tab' })
 
-vim.keymap.set('x', '<CR>', function()
-  -- 1. Thoát Visual mode để đưa con trỏ về Normal mode
-  local esc = vim.api.nvim_replace_termcodes('<Esc>', true, false, true)
-  vim.api.nvim_feedkeys(esc, 'x', false)
-
-  -- 2. Lấy chính xác chuỗi vừa bôi đen trong vùng Visual
-  local _, srow, scol, _ = unpack(vim.fn.getpos("'<"))
-  local _, erow, ecol, _ = unpack(vim.fn.getpos("'>"))
-  
-  local lines = vim.api.nvim_buf_get_text(0, srow - 1, scol - 1, erow - 1, ecol, {})
-  local text = table.concat(lines, '\n')
-
-  if text == '' then return end
-
-  -- 3. Escape các ký tự đặc biệt của Regex để tìm đúng chính xác chuỗi đó
-  local escaped_text = vim.fn.escape(text, '\\/.*$^~[]<>')
-
-  -- 4. Tạo pattern Strict Exact Search Very Magic
-  local exact_pattern = '\\v([a-zA-Z0-9_-])@<!' .. escaped_text .. '([a-zA-Z0-9_-])@!'
-
-  -- 5. Cập nhật thanh ghi / và kích hoạt highlight search
-  vim.fn.setreg('/', exact_pattern)
-  vim.opt.hlsearch = true
-
-  -- 6. Nhảy tới vị trí tiếp theo
-  pcall(vim.cmd, 'normal! n')
-end, { desc = 'Visual select exact search on Tab' })
-
-vim.keymap.set('n', '<C-v>', function()
-  -- Kiểm tra xem hlsearch có đang bật và có từ đang được tìm kiếm không
-  if vim.v.hlsearch == 1 and vim.fn.getreg('/') ~= '' then
-    -- Jump và bôi đen cụm hlsearch
-    vim.cmd('normal! ngn')
-  else
-    -- Nếu không có highlight, paste từ clipboard hệ thống ("+)
-    vim.cmd('normal! "+p')
-  end
-end, { desc = "Jump hlsearch match or Paste from clipboard" })
-
 vim.keymap.set('n', '<C-CR>', function()
     local clipboard_content = vim.fn.getreg('+')
     if clipboard_content == "" then
@@ -442,12 +403,11 @@ vim.keymap.set('n', '<C-CR>', function()
         return
     end
 
-    -- 1. Cleaning ký tự lạ
     clipboard_content = clipboard_content:gsub("\194\160", " "):gsub("\r\n", "\n"):gsub("\r", "\n")
 
     local output_lines = {}
 
-    -- 2. Override print
+    -- Override print
     local old_print = print
     print = function(...)
         local args = {...}
@@ -458,60 +418,79 @@ vim.keymap.set('n', '<C-CR>', function()
         table.insert(output_lines, table.concat(str_args, "\t"))
     end
 
-    -- 3. Bọc đoạn code clipboard vào một hàm có hook Debug
-    local wrapped_code = string.format([[
-        return function()
-            %s
-        end
-    ]], clipboard_content)
+    local ignore_vars = {
+        ["clipboard_content"] = true,
+        ["output_lines"] = true,
+        ["old_print"] = true,
+        ["success"] = true,
+        ["run_err"] = true,
+        ["load_err"] = true,
+        ["user_func"] = true,
+        ["captured_vars"] = true,
+        ["ignore_vars"] = true,
+        ["env"] = true,
+    }
 
-    local outer_f, load_err = load(wrapped_code)
+    local env = setmetatable({}, { __index = _G })
+    -- Dùng dấu '=' ở đầu tên chunk để Lua giữ nguyên tên chính xác
+    local user_func, load_err = load(clipboard_content, "=ClipboardCode", "t", env)
 
-    if outer_f then
-        local user_func = outer_f()
-        
-        -- Dùng debug hook để chụp snapshot của toàn bộ biến local ngay trước khi hàm kết thúc
-        local captured_locals = {}
-        debug.sethook(function(event)
-            if event == "return" then
-                local i = 1
-                while true do
-                    local name, value = debug.getlocal(2, i)
-                    if not name then break end
-                    -- Bỏ qua các biến tạm do Lua tự tạo (bắt đầu bằng '(' )
-                    if not name:match("^%(") then
-                        captured_locals[name] = value
-                    end
-                    i = i + 1
-                end
+    if user_func then
+        local captured_vars = {}
+
+        debug.sethook(function(event, line)
+            -- Kiểm tra chính xác chunk nguồn
+            local info = debug.getinfo(2, "S")
+            if not info or not (info.source and info.source:match("ClipboardCode")) then
+                return
             end
-        end, "r")
 
-        -- Chạy code người dùng
+            -- Lấy biến Local
+            local i = 1
+            while true do
+                local name, value = debug.getlocal(2, i)
+                if not name then break end
+
+                if not name:match("^%(") and not ignore_vars[name] and type(value) ~= "function" and type(value) ~= "userdata" then
+                    captured_vars[name] = value
+                end
+                i = i + 1
+            end
+        end, "l")
+
         local success, run_err = pcall(user_func)
-        
-        -- Gỡ hook debug ngay sau khi chạy xong
         debug.sethook()
 
+        -- Lấy biến Global người dùng tự tạo
+        for k, v in pairs(env) do
+            if type(v) ~= "function" and type(v) ~= "userdata" and not ignore_vars[k] then
+                captured_vars["[global] " .. tostring(k)] = v
+            end
+        end
+
         if success then
-            -- Tự động in ra danh sách TẤT CẢ các biến local
-            if next(captured_locals) then
+            if next(captured_vars) then
                 if #output_lines > 0 then
                     table.insert(output_lines, "----------------------------------------")
                 end
-                table.insert(output_lines, "🐛 DANH SÁCH BIẾN LOCAL (DEBUG):")
-                
-                for var_name, var_val in pairs(captured_locals) do
+                table.insert(output_lines, "🐛 BIẾN KHỞI TẠO (DEBUG):")
+
+                for var_name, var_val in pairs(captured_vars) do
                     local formatted_val
                     if type(var_val) == "string" then
-                        formatted_val = string.format("%q", var_val) -- Hiện rõ chuỗi (ví dụ: "" hoặc "  ")
+                        if #var_val > 80 then
+                            var_val = var_val:sub(1, 77) .. "..."
+                        end
+                        formatted_val = string.format("%q", var_val)
                     elseif type(var_val) == "table" then
-                        formatted_val = vim.inspect(var_val)
+                        formatted_val = vim.inspect(var_val, { depth = 1, newline = " ", indent = "" })
+                        if #formatted_val > 100 then
+                            formatted_val = formatted_val:sub(1, 97) .. "..."
+                        end
                     else
                         formatted_val = tostring(var_val)
                     end
 
-                    -- Format hiển thị đẹp
                     local log_str = string.format("  • %s = %s", var_name, formatted_val)
                     for line in log_str:gmatch("[^\r\n]+") do
                         table.insert(output_lines, line)
@@ -530,10 +509,10 @@ vim.keymap.set('n', '<C-CR>', function()
     print = old_print
 
     if #output_lines == 0 then
-        table.insert(output_lines, "Code đã chạy thành công nhưng không có biến local nào được khởi tạo.")
+        table.insert(output_lines, "Code đã chạy thành công nhưng không tạo ra biến nào.")
     end
 
-    -- 4. HIỂN THỊ CỬA SỔ NỔI
+    -- Hiển thị Float Window
     local buf = vim.api.nvim_create_buf(false, true)
     vim.api.nvim_buf_set_lines(buf, 0, -1, false, output_lines)
     vim.bo[buf].filetype = "lua"
@@ -557,8 +536,7 @@ vim.keymap.set('n', '<C-CR>', function()
 
     vim.keymap.set('n', 'q', ':q<CR>', { buffer = buf, silent = true })
     vim.keymap.set('n', '<Esc>', ':q<CR>', { buffer = buf, silent = true })
-end, { desc = "Debug tất cả biến local từ Clipboard" })
-
+end, { desc = "Debug biến sạch từ Clipboard" })
 
 local function match_indent_and_move(direction)
   local count = vim.v.count1
@@ -602,9 +580,9 @@ local function start_indent_map()
   local char_code = vim.fn.getchar()
   local char = vim.fn.nr2char(char_code)
 
-  if char == "j" or char == "Down" then
+  if char == "j" or char_code == "<80>kd" then
     match_indent_and_move("down")
-  elseif char == "k" or char == "Up" then
+  elseif char == "k" or char_code == "<80>ku" then
     match_indent_and_move("up")
   else
     -- Nếu gõ phím khác thì hủy thao tác
