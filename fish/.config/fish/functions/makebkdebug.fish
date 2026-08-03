@@ -15,8 +15,6 @@ function makebkdebug --description "Bật/Tắt đuôi .bk cho file được ch�
         for line in $selected
             # Lấy phần tử cuối cùng trong dòng output của ll (tên file/thư mục)
             set -l item (echo $line | string match -r '\S+$')
-                breakpoint
-
 
             if test -n "$item" -a -e "$item"
                 if string match -q '*.bk' "$item"

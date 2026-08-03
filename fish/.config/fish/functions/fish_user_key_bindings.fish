@@ -10,7 +10,7 @@ function fish_user_key_bindings
     bind --mode $mode end '__smart_key_exec end'
     bind --mode $mode space '__smart_key_exec space'
     bind --mode $mode enter '__smart_key_exec enter'
-    bind --mode $mode insert '_insert_or_function'
+    bind --mode $mode insert '__smart_key_exec insert'
     bind --mode $mode 1 '__smart_key_exec 1 mkd'
     bind --mode $mode 2 '__smart_key_exec 2 fullfunc'
     bind --mode $mode 3 '__smart_key_exec 3 history_fzf'
@@ -22,6 +22,7 @@ function fish_user_key_bindings
     bind --mode $mode ctrl-p 'fzf_menu_git'
     bind --mode $mode shift-left 'prevd; commandline -f repaint'
     bind --mode $mode shift-right 'nextd; commandline -f repaint'
-    bind --mode $mode shift-tab -m mypager 'commandline -f complete-and-search'
+    bind --mode $mode tab '__smart_pager_switch mypager'
+    bind --mode $mode shift-tab '__smart_pager_switch mypager search'
     fish_user_key_bindings_mypager
 end

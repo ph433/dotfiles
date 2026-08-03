@@ -55,19 +55,7 @@ function fzfrecentdir -d "Tìm thư mục dựa trên lịch sử di chuyển (T
     }')
 
     # Cấu hình chuỗi phím tắt nhảy con trỏ
-    set -l binds "0:first"
-    set binds "$binds,1:first+down"
-    set binds "$binds,2:first+down+down"
-    set binds "$binds,3:first+down+down+down"
-    set binds "$binds,4:first+down+down+down+down"
-    set binds "$binds,5:first+down+down+down+down+down"
-    set binds "$binds,6:first+down+down+down+down+down+down"
-    set binds "$binds,7:first+down+down+down+down+down+down+down"
-    set binds "$binds,8:first+down+down+down+down+down+down+down+down"
-    set binds "$binds,9:first+down+down+down+down+down+down+down+down+down"
-
-    # Mở bảng chi tiết: Dùng eza hoặc ls -lA để xem chi tiết bên trong thư mục
-    set binds "$binds,ctrl-space:execute(command -v eza >/dev/null && eza -l --color=always {3} | less -R || ls -lA --color=always {3} | less -R)"
+    set -l binds "0:first,1:first+down,2:first+down+down,3:first+down+down+down,4:first+down+down+down+down,5:first+down+down+down+down+down,6:first+down+down+down+down+down+down,7:first+down+down+down+down+down+down+down,8:first+down+down+down+down+down+down+down+down,9:first+down+down+down+down+down+down+down+down+down,ctrl-space:execute(command -v eza >/dev/null && eza -l --color=always {3} | less -R || ls -lA --color=always {3} | less -R)"
 
     # Gọi FZF với cửa sổ Preview hiển thị nhanh nội dung thư mục
     set -l fzf_out (printf "%s\n" $list | fzf \
@@ -85,7 +73,6 @@ function fzfrecentdir -d "Tìm thư mục dựa trên lịch sử di chuyển (T
     # Xử lý kết quả trả về
     set -l key $fzf_out[1]
     set -l selected_line $fzf_out[2]
-
     if test -z "$selected_line"
         return
     end

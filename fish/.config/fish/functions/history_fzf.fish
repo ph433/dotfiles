@@ -15,8 +15,9 @@ function history_fzf -d "Tìm history full màn hình bằng fzf"
     if test -n "$query"
         set -a fzf_opts --query "$query"
     end
+    
     set -l output (history | awk '!seen[$0]++' | fzf $fzf_opts)
-    # set -l output (history -R | awk '!seen[$0]++' | fzf $fzf_opts)
+    # set -l output (history | fzf $fzf_opts)
 
     # Nếu không chọn gì (nhấn Esc), thoát
     if test (count $output) -lt 2
@@ -33,12 +34,7 @@ function history_fzf -d "Tìm history full màn hình bằng fzf"
         set -l now (date +%s)
         echo "- cmd: $selected_command" >> ~/.local/share/fish/fish_history
         echo "  when: $now" >> ~/.local/share/fish/fish_history
-
-        # Nạp lại history để Fish nhận lệnh mới nhất lập tức
-        builtin history merge
-
-        # Dán câu lệnh ra màn hình để sửa
-        commandline -r "$selected_command"
+        commandline -r (string trim -- "$selected_command")
     else
         # Phím Enter (hoặc mặc định): Dán lệnh và thực thi ngay
         commandline -r "$selected_command"

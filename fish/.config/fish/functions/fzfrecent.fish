@@ -1,6 +1,5 @@
 function fzfrecent -d "Tìm file dựa trên lịch sử mở trong Neovim (Dashboard Top 10)"
     set log_file "$HOME/.cache/nvim_recent.log"
-
     if not test -f "$log_file"
         echo "Chưa có dữ liệu lịch sử file."
         return 1
@@ -9,7 +8,6 @@ function fzfrecent -d "Tìm file dựa trên lịch sử mở trong Neovim (Dash
     # 1. Sắp xếp lịch sử theo thời gian mới nhất (chưa giới hạn 10)
     # Thêm điều kiện if (!($0 in map)) để giữ lại mốc thời gian mới nhất (xuất hiện đầu tiên)
     set -l sorted_log (awk '{time=$1; sub(/^[0-9]+ /, ""); if (!($0 in map)) map[$0]=time} END {for (p in map) print map[p] " " p}' $log_file | sort -nr)
-    
     # 2. Lọc lấy tối đa 10 file VẪN CÒN TỒN TẠI trên ổ cứng
     set -l top10
     for entry in $sorted_log
@@ -98,9 +96,10 @@ function fzfrecent -d "Tìm file dựa trên lịch sử mở trong Neovim (Dash
 
     switch "$key"
            case right
-               commandline -i (string escape "$target_path")" "
-               fish -c "__fzf_score_file '$target_path'; log_recent_file '$target_path'" >/dev/null 2>&1 &
-               # log_recent_file "$target_path"
+	       commandline -i (string escape "$target_path")" "
+	       log_recent_file "$target_path"
+	       fish -c "__fzf_score_file '$target_path'" >/dev/null 2>&1 &
+	       # commandline -f repaint
            case enter
                nvim "$target_path"
            case ins insert

@@ -844,6 +844,15 @@ extensions:
       style:
         foreground: "#50fa7b"
 
+  "kbd":
+    filename:
+      foreground: "#50fa7b"
+      is_bold: true
+    icon:
+      glyph: "󰓥"
+      style:
+        foreground: "#50fa7b"
+
 # Overrides for file icons (requires Nerd Fonts)
 filenames:
   "config.kbd":
