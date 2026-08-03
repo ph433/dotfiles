@@ -25,8 +25,7 @@ function fullfunc --description "Lọc danh sách hàm Fish Shell bằng fzf và
 
     # Xử lý theo phím bấm
     if test "$pressed_key" = "right"
-        # Mũi tên phải: Chỉ dán tên hàm ra command line để chỉnh sửa
-        commandline -r $selected_func
+        __nvim_open_func_source $selected_func
     else
         # Phím Enter: Dán tên hàm và chạy luôn
         commandline -r $selected_func
@@ -35,3 +34,5 @@ function fullfunc --description "Lọc danh sách hàm Fish Shell bằng fzf và
 
     commandline -f repaint
 end
+
+

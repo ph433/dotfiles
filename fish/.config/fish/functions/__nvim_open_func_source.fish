@@ -1,17 +1,17 @@
 function __nvim_open_func_source
-    # Lấy từ đầu tiên trên dòng lệnh (thường là tên hàm/lệnh)
-    set -l current_cmd (commandline -b | string trim | string split -m 1 ' ')[1]
+    # Lấy hàm được truyền từ tham số (hoặc từ commandline nếu không truyền)
+    set -l current_cmd $argv[1]
+    if test -z "$current_cmd"
+        set current_cmd (commandline -b | string trim | string split -m 1 ' ')[1]
+    end
 
-    # Kiểm tra xem từ đó có phải là một hàm (function) trong Fish không
     if test -n "$current_cmd"; and functions -q $current_cmd
-        # Tìm đường dẫn file chứa định nghĩa hàm này
         set -l func_file (functions --details $current_cmd)
 
-        # Nếu tìm thấy file thực tế, tiến hành mở bằng nvim
         if test -f "$func_file"
-            commandline -r "" # Xóa rác trên terminal trước khi mở
+            commandline -r "" 
             nvim $func_file
-            commandline -f repaint # Vẽ lại prompt sau khi thoát nvim
+            commandline -f repaint
         else
             echo -e "\n[Lỗi] Hàm '$current_cmd' được định nghĩa trực tiếp, không có file lưu trữ."
             commandline -f repaint
