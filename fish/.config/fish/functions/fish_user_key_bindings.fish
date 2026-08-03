@@ -1,25 +1,27 @@
 function fish_user_key_bindings
-    # 1. Các phím tắt chuẩn
-    bind enter __nvim_open_latest_recent
-    bind down "__fish_exec_in_main_mode_only down-line _down_fzf_recent_or_menu"
-    bind right _right_or_fzf_recent
-    bind insert _enter_or_fzf_zoxide
-    bind left _left_or_fzf_find
-    bind home _home_or_fzf_search_dir
-    bind end _end_or_fzf_find
-    bind space _space_or_fzf_recent
-    bind escape _escape_handler
-    bind backspace _backspace_become_ll
-    bind delete _del_or_become_lta
-    bind ctrl-a _crl-a_or_become_pwd
-    bind 1 _handle_key_1
-    bind insert '_insert_or_function'
-
-    # 2. Cấu hình phím tắt cho Vi mode (Gộp từ Ảnh 2 sang)
-    for mode in default insert
-        bind --mode $mode ctrl-x 'y'
-        bind --mode $mode ctrl-p 'fzf_menu_git'
-        bind --mode $mode shift-left 'prevd; commandline -f repaint'
-        bind --mode $mode shift-right 'nextd; commandline -f repaint'
-    end
+    set -l mode default
+    bind --mode $mode up 'history_fzf'
+    bind --mode $mode down '__smart_key_exec down'
+    bind --mode $mode left '__smart_key_exec left'
+    bind --mode $mode right '__smart_key_exec right'
+    bind --mode $mode backspace '__smart_key_exec backspace ll'
+    bind --mode $mode delete '__smart_key_exec delete lta'
+    bind --mode $mode home '__smart_key_exec home'
+    bind --mode $mode end '__smart_key_exec end'
+    bind --mode $mode space '__smart_key_exec space'
+    bind --mode $mode enter '__smart_key_exec enter'
+    bind --mode $mode insert '_insert_or_function'
+    bind --mode $mode 1 '__smart_key_exec 1 mkd'
+    bind --mode $mode 2 '__smart_key_exec 2 fullfunc'
+    bind --mode $mode 3 '__smart_key_exec 3 history_fzf'
+    bind --mode $mode 4 '__fish_fzf_complete'
+    bind --mode $mode 5 'echo_mode_pager'
+    
+    bind --mode $mode ctrl-a '__smart_key_exec ctrl-a pwd'
+    bind --mode $mode ctrl-x 'y'
+    bind --mode $mode ctrl-p 'fzf_menu_git'
+    bind --mode $mode shift-left 'prevd; commandline -f repaint'
+    bind --mode $mode shift-right 'nextd; commandline -f repaint'
+    bind --mode $mode shift-tab -m mypager 'commandline -f complete-and-search'
+    fish_user_key_bindings_mypager
 end
