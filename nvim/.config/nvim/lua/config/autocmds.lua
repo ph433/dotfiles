@@ -60,33 +60,38 @@ vim.api.nvim_create_autocmd("FileType", {
 
 local augroup = vim.api.nvim_create_augroup("LogRecentFiles", { clear = true })
 
-local function log_file(bufnr)
-  local filepath = vim.api.nvim_buf_get_name(bufnr)
-
-  -- Chỉ ghi log nếu là file thực tế trên đĩa (bỏ qua NvimTree, FZF, Terminal...)
-  if filepath ~= "" and vim.bo[bufnr].buftype == "" then
-    vim.system({ "fish", "-c", string.format("log_recent_file %s", vim.fn.shellescape(filepath)) })
-  end
+-- Hàm hỗ trợ thực thi lệnh Fish async
+local function run_fish_cmd(cmd)
+  vim.system({ "fish", "-c", cmd })
 end
 
--- 1. Bắt sự kiện khi MỞ FILE vào Buffer
+-- 1. KHI MỞ FILE (BufReadPost): Vừa ghi log vừa tính Score
 vim.api.nvim_create_autocmd("BufReadPost", {
   group = augroup,
   pattern = "*",
   callback = function(args)
-    log_file(args.buf)
+    local filepath = vim.api.nvim_buf_get_name(args.buf)
+    if filepath ~= "" and vim.bo[args.buf].buftype == "" then
+      local safe_path = vim.fn.shellescape(filepath)
+      -- Chạy cả 2 hàm khi MỞ file
+      run_fish_cmd(string.format("log_recent_file %s; __fzf_score_file %s", safe_path, safe_path))
+    end
   end,
 })
 
--- 2. Bắt sự kiện khi ĐÓNG BUFFER (Unload khỏi bộ nhớ)
+-- 2. KHI ĐÓNG FILE (BufUnload): CHỈ ghi log, KHÔNG tính Score
 vim.api.nvim_create_autocmd("BufUnload", {
   group = augroup,
   pattern = "*",
   callback = function(args)
-    log_file(args.buf)
+    local filepath = vim.api.nvim_buf_get_name(args.buf)
+    if filepath ~= "" and vim.bo[args.buf].buftype == "" then
+      local safe_path = vim.fn.shellescape(filepath)
+      -- CHỈ chạy log_recent_file khi ĐÓNG file
+      run_fish_cmd(string.format("log_recent_file %s", safe_path))
+    end
   end,
 })
-
 -- -- Tự động chạy script cập nhật Dwm Bar mỗi khi mở một file mới hoặc lưu file (BufEnter, BufWritePost)
 -- vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost" }, {
 --     group = vim.api.nvim_create_augroup("DwmBarUpdate", { clear = true }),
