@@ -15,14 +15,19 @@ function _fzfrecent_get_top10 -d "Lấy top 10 file mới nhất đã được s
     # 2. Lọc file tồn tại
     set -l valid_entries
     for entry in $candidates
-        set -l file_path (string replace -r '^[0-9]+ ' '' -- "$entry")
+        set -l file_path (string replace -r '^[0-9]+ ' '' -- "$entry" | string replace -r '^~' "$HOME")
+
         if test -f "$file_path"
             set -a valid_entries "$entry"
+            if test (count $valid_entries) -ge 10
+                break
+            end
         end
     end
-
+    
     test -n "$valid_entries"; or return 1
 
     # 3. Sắp xếp lại theo Timestamp (cột 1, số lớn nhất/mới nhất lên đầu) và lấy đúng 10 file
-    printf "%s\n" $valid_entries | sort -k1,1nr | head -n 10
+    printf "%s\n" $valid_entries
+    # printf "%s\n" $valid_entries | sort -k1,1nr | head -n 10
 end

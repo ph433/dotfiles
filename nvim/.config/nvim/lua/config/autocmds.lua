@@ -58,88 +58,33 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- ==========================================================================
--- XỬ LÝ FRECENCY LOG & CHỐNG TRÙNG LẶP CHO STARSHIP
--- ==========================================================================
--- Đường dẫn file log recency
-local recency_log_path = vim.fn.expand('~/.cache/nvim_recent.log')
-local track_files_group = vim.api.nvim_create_augroup("TrackRecentFiles", { clear = true })
+local augroup = vim.api.nvim_create_augroup("LogRecentFiles", { clear = true })
 
--- Tách logic xử lý cốt lõi ra một hàm riêng
-local function log_and_score_buffer(buf)
-    local file_path = vim.api.nvim_buf_get_name(buf)
-    
-    -- Lọc bỏ các buffer rỗng, file rác, terminal, NvimTree...
-    if file_path == "" 
-       or file_path:match("toggleterm") 
-       or file_path:match("NvimTree") 
-       or vim.bo[buf].buftype ~= "" then
-        return
-    end
+local function log_file(bufnr)
+  local filepath = vim.api.nvim_buf_get_name(bufnr)
 
-    -- Giải mã Symlink (Stow) về đường dẫn vật lý gốc
-    local real_path = vim.loop.fs_realpath(file_path)
-    if real_path then
-        file_path = real_path
-    end
-
-    -- 1. GHI LOG RECENCY (Đã sửa lỗi trùng lặp)
-    local timestamp = os.time()
-    local lines = {}
-    
-    -- Đọc file log hiện tại và lọc bỏ dòng chứa đường dẫn file này
-    local f_read = io.open(recency_log_path, "r")
-    if f_read then
-        for line in f_read:lines() do
-            -- Dùng string.find với tham số plain=true thay vì line:match
-            if not string.find(line, file_path, 1, true) then
-                table.insert(lines, line)
-            end
-        end
-        f_read:close()
-    end
-    
-    -- Giới hạn tối đa 500 file gần nhất để tối ưu tốc độ đọc của Starship
-    while #lines > 500 do
-        table.remove(lines, #lines)
-    end
-
-    -- Ghi đè file với thông tin mới nhất lên đầu (Dùng "w" thay vì "a")
-    local f_write = io.open(recency_log_path, "w")
-    if f_write then
-        f_write:write(timestamp .. " " .. file_path .. "\n")
-        for _, line in ipairs(lines) do
-            f_write:write(line .. "\n")
-        end
-        f_write:close()
-    end
-
-    -- 2. TÍNH ĐIỂM FRECENCY ĐỒNG BỘ
-    local safe_path = vim.fn.shellescape(file_path)
-    local cmd = {'fish', '-c', '__fzf_score_file ' .. safe_path}
-    vim.fn.jobstart(cmd, { detach = true })
+  -- Chỉ ghi log nếu là file thực tế trên đĩa (bỏ qua NvimTree, FZF, Terminal...)
+  if filepath ~= "" and vim.bo[bufnr].buftype == "" then
+    vim.system({ "fish", "-c", string.format("log_recent_file %s", vim.fn.shellescape(filepath)) })
+  end
 end
 
--- AUTOCMD 1: KHI MỞ FILE (Vẫn giữ cơ chế chặn spam)
-vim.api.nvim_create_autocmd({"BufReadPost", "BufNewFile"}, {
-    group = track_files_group,
-    callback = function(args)
-        if vim.w.frecency_logged then
-            return
-        end
-        vim.w.frecency_logged = true
-        log_and_score_buffer(args.buf)
-    end,
+-- 1. Bắt sự kiện khi MỞ FILE vào Buffer
+vim.api.nvim_create_autocmd("BufReadPost", {
+  group = augroup,
+  pattern = "*",
+  callback = function(args)
+    log_file(args.buf)
+  end,
 })
 
--- AUTOCMD 2: KHI THOÁT NVIM (Tính thêm 1 lần cho file đang mở cuối cùng)
-vim.api.nvim_create_autocmd("VimLeavePre", {
-    group = track_files_group,
-    callback = function()
-        -- Lấy buffer của cửa sổ đang active ngay trước khi quit
-        local current_buf = vim.api.nvim_get_current_buf()
-        log_and_score_buffer(current_buf)
-    end,
+-- 2. Bắt sự kiện khi ĐÓNG BUFFER (Unload khỏi bộ nhớ)
+vim.api.nvim_create_autocmd("BufUnload", {
+  group = augroup,
+  pattern = "*",
+  callback = function(args)
+    log_file(args.buf)
+  end,
 })
 
 -- -- Tự động chạy script cập nhật Dwm Bar mỗi khi mở một file mới hoặc lưu file (BufEnter, BufWritePost)
