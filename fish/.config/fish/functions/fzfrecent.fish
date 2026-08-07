@@ -34,8 +34,9 @@ function fzfrecent -d "Tìm file dựa trên lịch sử mở trong Neovim (Dash
     switch "$key"
         case right
             commandline -i (string escape "$target_path")" "
-            log_recent_file "$target_path"
-            fish -c "__fzf_score_file '$target_path'" >/dev/null 2>&1 &
+            # log_recent_file "$target_path"
+            # fish -c "__fzf_score_file '$target_path'" >/dev/null 2>&1 &
+            fish -c "log_recent_file '$target_path'; __fzf_score_file '$target_path'" >/dev/null 2>&1 &
         case enter
             nvim "$target_path"
         case ins insert
