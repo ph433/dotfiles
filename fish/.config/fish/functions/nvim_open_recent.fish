@@ -3,7 +3,7 @@ function nvim_open_recent --description "Mở file Neovim gần đây nhất t�
 
     if test -f "$log_file"
         # Sắp xếp cột 1 (timestamp) giảm dần, lấy dòng đầu tiên, và cắt bỏ cột timestamp để lấy đường dẫn file
-        set -l latest_file (sort -rn "$log_file" | head -n 1 | string replace -r '^\d+\s+' '')
+        set -l latest_file (tail -n 1 $log_file | string replace -r '^\d+\s+' '')
 
         if test -n "$latest_file"; and test -f "$latest_file"
             # Xóa dòng hiện tại trên terminal trước khi mở nvim để tránh rác lệnh
