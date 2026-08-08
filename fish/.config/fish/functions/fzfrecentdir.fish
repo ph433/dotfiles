@@ -15,7 +15,7 @@ function fzfrecentdir -d "Tìm thư mục dựa trên lịch sử di chuyển (T
         --delimiter=' │ ' \
         --nth=3 \
         --tiebreak=index \
-        --preview="command -v eza >/dev/null && eza -1 --icons --color=always {3} 2>/dev/null || ls -A --color=always {3} 2>/dev/null" \
+        --preview="command -v eza >/dev/null && eza -1 --icons --color=always {2} 2>/dev/null || ls -A --color=always {2} 2>/dev/null" \
         --preview-window="bottom:70%" \
         --expect=right,enter \
         --layout=reverse \
@@ -29,7 +29,7 @@ function fzfrecentdir -d "Tìm thư mục dựa trên lịch sử di chuyển (T
         return
     end
 
-    set -l target_path (echo "$selected_line" | awk -F ' │ ' '{print $3}')
+    set -l target_path (echo "$selected_line" | awk -F ' │ ' '{print $2}')
 
     switch "$key"
         case right

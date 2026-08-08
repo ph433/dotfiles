@@ -15,7 +15,7 @@ function fzfrecent -d "Tìm file dựa trên lịch sử mở trong Neovim (Dash
         --delimiter=' │ ' \
         --nth=3 \
         --tiebreak=index \
-        --preview="bat --color=always {3} 2>/dev/null || cat {3}" \
+        --preview="bat --color=always {2} 2>/dev/null || cat {2}" \
         --preview-window="bottom:70%" \
         --expect=right,enter,insert \
         --layout=reverse \
@@ -29,7 +29,7 @@ function fzfrecent -d "Tìm file dựa trên lịch sử mở trong Neovim (Dash
         return
     end
 
-    set -l target_path (echo "$selected_line" | awk -F ' │ ' '{print $3}')
+    set -l target_path (echo "$selected_line" | awk -F ' │ ' '{print $2}')
 
     switch "$key"
         case right

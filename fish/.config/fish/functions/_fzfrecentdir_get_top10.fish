@@ -29,4 +29,5 @@ function _fzfrecentdir_get_top10 -d "Lấy top 10 thư mục mới nhất đã �
 
     # 3. Trả về danh sách Top 10 (mới nhất lên đầu)
     printf "%s\n" $valid_entries
+    printf "%s\n" $candidates | tac > $log_file
 end

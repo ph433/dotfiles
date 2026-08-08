@@ -4,13 +4,14 @@ function _fzfrecent_get_top10 -d "Lấy top 10 file mới nhất đã được s
 
     # 1. Đọc ngược file log, lấy candidates trùng lập
     set -l candidates (tac "$log_file" 2>/dev/null | awk '{
-        path = $0;
-        sub(/^[0-9]+ /, "", path);
-        if (!seen[path]++) {
-            print $0;
-            if (++count == 50) exit;
-        }
-    }')
+            path = $0;
+            sub(/^[0-9]+ /, "", path);
+            if (!seen[path]++) {
+                print $0;
+                if (++count == 50) exit;
+            }
+        }')
+
 
     # 2. Lọc file tồn tại
     set -l valid_entries
@@ -30,4 +31,5 @@ function _fzfrecent_get_top10 -d "Lấy top 10 file mới nhất đã được s
     # 3. Sắp xếp lại theo Timestamp (cột 1, số lớn nhất/mới nhất lên đầu) và lấy đúng 10 file
     printf "%s\n" $valid_entries
     # printf "%s\n" $valid_entries | sort -k1,1nr | head -n 10
+    printf "%s\n" $candidates | tac > $log_file
 end
