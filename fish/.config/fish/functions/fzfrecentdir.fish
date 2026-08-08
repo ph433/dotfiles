@@ -34,7 +34,8 @@ function fzfrecentdir -d "Tìm thư mục dựa trên lịch sử di chuyển (T
     switch "$key"
         case right
             commandline -i (string escape "$target_path")" "
-            log_recent_dir "$target_path"
+            # log_recent_dir "$target_path"
+            fish -c "log_recent_dir '$target_path'" >/dev/null 2>&1 &
         case enter
             cd "$target_path"
     end

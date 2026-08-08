@@ -20,7 +20,7 @@ function _fzfrecent_get_top10 -d "Lấy top 10 file mới nhất đã được s
 
         if test -f "$file_path"
             set -a valid_entries "$entry"
-            if test (count $valid_entries) -ge 10
+            if test (count $valid_entries) -ge 50
                 break
             end
         end

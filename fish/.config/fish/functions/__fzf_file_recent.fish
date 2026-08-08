@@ -114,8 +114,9 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency (Siêu 
             nvim $file
         else if test "$key_pressed" = "right"
             commandline -i (string escape $file)" "
-            __fzf_score_file "$file"
-	    log_recent_file "$file"
+	    #        __fzf_score_file "$file"
+	    # log_recent_file "$file"
+	    fish -c "log_recent_file '$file'; __fzf_score_file '$file'" >/dev/null 2>&1 &
         end
     end
     

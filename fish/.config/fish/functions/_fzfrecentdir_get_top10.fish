@@ -19,7 +19,7 @@ function _fzfrecentdir_get_top10 -d "Lấy top 10 thư mục mới nhất đã �
 
         if test -d "$dir_path"
             set -a valid_entries "$entry"
-            if test (count $valid_entries) -ge 10
+            if test (count $valid_entries) -ge 50
                 break
             end
         end

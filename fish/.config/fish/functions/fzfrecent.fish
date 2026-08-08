@@ -13,7 +13,7 @@ function fzfrecent -d "Tìm file dựa trên lịch sử mở trong Neovim (Dash
     set -l fzf_out (printf "%s\n" $list | string split \n | fzf \
         --prompt="🕒 Nvim Recent (0-9 nhảy | Ctrl-Space xem chi tiết)> " \
         --delimiter=' │ ' \
-        --nth=3 \
+        --nth=2 \
         --tiebreak=index \
         --preview="bat --color=always {2} 2>/dev/null || cat {2}" \
         --preview-window="bottom:70%" \
