@@ -29,5 +29,11 @@ function _fzfrecentdir_get_top10 -d "Lấy top 10 thư mục mới nhất đã �
 
     # 3. Trả về danh sách Top 10 (mới nhất lên đầu)
     printf "%s\n" $valid_entries
-    printf "%s\n" $candidates | tac > $log_file
+    
+    set -l total_lines (wc -l < "$log_file")
+        if test $total_lines -gt 100
+            # Luân chuyển lại các file valid theo thứ tự thời gian cũ -> mới
+            printf "%s\n" $valid_entries | tac > "$log_file"
+        end
+
 end

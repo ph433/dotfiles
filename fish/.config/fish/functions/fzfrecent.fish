@@ -9,9 +9,10 @@ function fzfrecent -d "Tìm file dựa trên lịch sử mở trong Neovim (Dash
     # 2. Chuyển đổi mảng $top10 thành chuỗi hiển thị UI (đánh số 0-9 & relative time)
     set -l list (_fzfrecent_format_list $top10)
 
-    # 3. Hiển thị FZF Menu
+    # 3. Hiển thị FZF Menu (Thêm cờ -m / --multi)
     set -l fzf_out (printf "%s\n" $list | string split \n | fzf \
-        --prompt="🕒 Nvim Recent (0-9 nhảy | Ctrl-Space xem chi tiết)> " \
+        -m \
+        --prompt="🕒 Nvim Recent (Tab để chọn nhiều | Ctrl-Space xem chi tiết)> " \
         --delimiter=' │ ' \
         --nth=2 \
         --tiebreak=index \
@@ -23,24 +24,41 @@ function fzfrecent -d "Tìm file dựa trên lịch sử mở trong Neovim (Dash
 
     # 4. Xử lý phím bấm và kết quả trả về từ FZF
     set -l key $fzf_out[1]
-    set -l selected_line $fzf_out[2]
+    
+    # Lấy toàn bộ các dòng được chọn (từ phần tử thứ 2 trở đi)
+    set -l selected_lines $fzf_out[2..-1]
 
-    if test -z "$selected_line"
+    if test -z "$selected_lines"
         return
     end
 
-    set -l target_path (echo "$selected_line" | awk -F ' │ ' '{print $2}')
+    # Tách lấy danh sách target_path cho tất cả các file đã chọn
+    set -l target_paths
+    for line in $selected_lines
+        set -a target_paths (echo "$line" | awk -F ' │ ' '{print $2}')
+    end
 
     switch "$key"
         case right
-            commandline -i (string escape "$target_path")" "
-            # log_recent_file "$target_path"
-            # fish -c "__fzf_score_file '$target_path'" >/dev/null 2>&1 &
-            fish -c "log_recent_file '$target_path'; __fzf_score_file '$target_path'" >/dev/null 2>&1 &
+            # Chèn tất cả đường dẫn đã chọn vào commandline
+            set -l escaped_paths
+            for path in $target_paths
+                set -a escaped_paths (string escape -- "$path")
+            end
+            commandline -i (string join " " $escaped_paths)" "
+
+            # Ghi log background cho toàn bộ file
+            for path in $target_paths
+                fish -c "log_recent_file '$path'; __fzf_score_file '$path'" >/dev/null 2>&1 &
+            end
+
         case enter
-            nvim "$target_path"
+            # Mở tất cả các file đã chọn cùng lúc trong Neovim (dưới dạng buffers/tabs)
+            nvim $target_paths[1]
+
         case ins insert
-            set -l dir_path (dirname -- "$target_path")
+            # Đi tới thư mục chứa file đầu tiên trong danh sách chọn
+            set -l dir_path (dirname -- "$target_paths[1]")
             if test -d "$dir_path"
                 cd "$dir_path"
             end

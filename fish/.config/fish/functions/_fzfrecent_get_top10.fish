@@ -30,6 +30,10 @@ function _fzfrecent_get_top10 -d "Lấy top 10 file mới nhất đã được s
 
     # 3. Sắp xếp lại theo Timestamp (cột 1, số lớn nhất/mới nhất lên đầu) và lấy đúng 10 file
     printf "%s\n" $valid_entries
-    # printf "%s\n" $valid_entries | sort -k1,1nr | head -n 10
-    printf "%s\n" $candidates | tac > $log_file
+    
+    set -l total_lines (wc -l < "$log_file")
+        if test $total_lines -gt 100
+            # Luân chuyển lại các file valid theo thứ tự thời gian cũ -> mới
+            printf "%s\n" $valid_entries | tac > "$log_file"
+        end
 end
