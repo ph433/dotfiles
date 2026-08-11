@@ -24,21 +24,21 @@
   lctl    lmet    lalt    spc                                     ralt    f23                     left    down    rght    kp0             kp.
 )
 
-(deflayer mod_nvim
+(deflayer mod_nvim ;; Terminal
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   M-esc   esc     home    up      end     A-ent   M-spc   prtsc   pgup    pgdn    C-p     _       _       _               _       _       _       _
   @bks_   tab     left    down    @crght  spc     ins     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
-  @sropt  C-z     C-x     C-c     C-v     C-y     @nvv    A-c     A-v     C-a     C-y     @ss             _               _       _       _
+  @nvv    C-z     C-x     C-c     C-v     C-y     _       A-c     A-v     C-a     C-y     @ss             _               _       _       _
   _       _       @numt   ent                             @colet          _                       _       caps    _       _               _
 )
 
 (deflayer mod_nvim-active
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  A-esc   esc     home    up      end     @pra2tt S-8     @tabi   @tabii  @taba   @:_     _       _       _               _       _       _       _
+  A-esc   esc     home    up      end     @pra2tt S-8     @tabi   @tabii  @taba   @:_     @fhinv  _       _               _       _       _       _
   bks     tab     left    down    rght    spc     @fd     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
-  @sropt  C-z     C-x     C-c     C-v     C-y     @nvv    A-c     A-v     C-a     @/_     @ss             _               _       _       _
+  @nvv    C-z     C-x     C-c     C-v     C-y     @nvv    A-c     A-v     C-a     @/_     @nvv            _               _       _       _
   _       _       @numt   ent                             @colnv          _                       _       caps    _       _               _
 )
 
@@ -163,7 +163,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       S-5     S-6     up      @g_     _       _       _       @vi1    @vi2    @vi3    _       _       _               _       _       _       _
-  _       C-home  b       down    e       C-end   _       _       A-a     v       S-v     _       _                       _       _       _       _
+  _       C-home  b       down    e       C-end   _       _       A-a     v       @S-v    _       _                       _       _       _       _
   _       o       @viw    @viW    @vi4    @vi5    _       _       _       _       _       _               _               _       _       _
   _       _       _       @vf3                                    _       _                       _       _       _       _               _
 )
@@ -393,6 +393,15 @@
   lctl    lmet    _       spc                                     @nvswat _                       _       _       _       _               _
 )
 
+(deflayer colemak-dh-nvim-fhint-switch
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  A-esc   @q-hi   @w-hi   @f-hi   @p-hi   @b-hi   @j-hi   @l-hi   @u-hi   @y-hi   @;-hi   _       _       _               _       _       _       _
+  @bks_   @a-hi   @r-hi   @s-hi   @t-hi   @g-hi   @m-hi   @n-hi   @e-hi   @i-hi   @o-hi   @'-hi   _                       _       _       _       _
+  @ss     @x-hi   @c-hi   @d-hi   @v-hi   @z-hi   @k-hi   @h-hi   @,-hi   @.-hi   @/-hi   @ss             _               _       _       _
+  lctl    lmet    @numt   spc                                     @colosw _                       _       _       _       _               _
+)
+
 (deflayer colemak-dh-nvim-temp
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
@@ -423,10 +432,10 @@
 (deflayer colemak-dh-ff
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       S-5     _       S-,     _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       S-5     S-6     S-,     @g_     _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       ,       S-.     ;       _       _       _       _       _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       _       @numt                                   @colnv  _                       _       _       _       _               _
+  _       _       @numt   _                                       @colnv  _                       _       _       _       _               _
 )
 
 (deflayer app_open 
@@ -500,7 +509,7 @@
   taba (multi (layer-switch colemak-dh-active) a)
   tabi (multi (layer-switch colemak-dh-active) i)
   tabii (multi (layer-switch colemak-dh-active) S-r)
-
+  
   staba (multi (layer-switch colemak-dh-active) shft a)
   stabi (multi (layer-switch colemak-dh-active) shft i)
   f13 (multi (layer-switch colemak-dh-qute-active) ins)
@@ -536,6 +545,7 @@
 (defalias
   viw (macro i w)
   viW (macro i S-w)
+  S-v (macro esc S-v)
   vi1 (macro i S-9)
   vi2 (macro i [)
   vi3 (macro i S-[)
@@ -802,9 +812,44 @@
 )
 
 (defalias
+  a-hi (multi (macro f a) (layer-switch colemak-dh-ff))
+  b-hi (multi (macro f b) (layer-switch colemak-dh-ff))
+  c-hi (multi (macro f c) (layer-switch colemak-dh-ff))
+  d-hi (multi (macro f d) (layer-switch colemak-dh-ff))
+  e-hi (multi (macro f e) (layer-switch colemak-dh-ff))
+  f-hi (multi (macro f f) (layer-switch colemak-dh-ff))
+  g-hi (multi (macro f g) (layer-switch colemak-dh-ff))
+  h-hi (multi (macro f h) (layer-switch colemak-dh-ff))
+  i-hi (multi (macro f i) (layer-switch colemak-dh-ff))
+  j-hi (multi (macro f j) (layer-switch colemak-dh-ff))
+  k-hi (multi (macro f k) (layer-switch colemak-dh-ff))
+  l-hi (multi (macro f l) (layer-switch colemak-dh-ff))
+  m-hi (multi (macro f m) (layer-switch colemak-dh-ff))
+  n-hi (multi (macro f n) (layer-switch colemak-dh-ff))
+  o-hi (multi (macro f o) (layer-switch colemak-dh-ff))
+  p-hi (multi (macro f p) (layer-switch colemak-dh-ff))
+  q-hi (multi (macro f q) (layer-switch colemak-dh-ff))
+  r-hi (multi (macro f r) (layer-switch colemak-dh-ff))
+  s-hi (multi (macro f s) (layer-switch colemak-dh-ff))
+  t-hi (multi (macro f t) (layer-switch colemak-dh-ff))
+  u-hi (multi (macro f u) (layer-switch colemak-dh-ff))
+  v-hi (multi (macro f v) (layer-switch colemak-dh-ff))
+  w-hi (multi (macro f w) (layer-switch colemak-dh-ff))
+  x-hi (multi (macro f x) (layer-switch colemak-dh-ff))
+  y-hi (multi (macro f y) (layer-switch colemak-dh-ff))
+  z-hi (multi (macro f z) (layer-switch colemak-dh-ff))
+  ;-hi (multi (macro f ;) (layer-switch colemak-dh-ff))
+  '-hi (multi (macro f ') (layer-switch colemak-dh-ff))
+  .-hi (multi (macro f .) (layer-switch colemak-dh-ff))
+  ,-hi (multi (macro f ,) (layer-switch colemak-dh-ff))
+  /-hi (multi (macro f /) (layer-switch colemak-dh-ff))
+)
+
+(defalias
   ralt_ (multi (layer-toggle colemak-dh-ent) (on-release tap-virtualkey v_ent))
   crght (multi rght (one-shot-press 1000 (layer-toggle custom-right-ent)))
   fhi (multi (macro f) (layer-toggle colemak-dh-qute-active))
+  fhinv (multi (layer-switch colemak-dh-nvim-fhint-switch) (on-release tap-virtualkey v_nvswac))
   escc (multi (macro esc) (layer-toggle colemak-dh-qute-active-hintmode-inquteyt))
   ;; spcc (multi (macro spc) (layer-toggle colemak-dh-active))
   entc (multi (macro ent) (layer-toggle colemak-dh-qute-active-hintmode-inquteyt))
@@ -817,10 +862,12 @@
   C-/ (multi (macro g c))
   vf3 (multi (macro f) (layer-toggle colemak-dh-ff))
   ;; mark (multi (macro m) (layer-toggle colemak-dh-active))
+  
 )
 
 (defvirtualkeys
   v_ent ent
+  v_nvswac (layer-switch mod_nvim-active)
 )
 
 (deflayer qwert-bare
