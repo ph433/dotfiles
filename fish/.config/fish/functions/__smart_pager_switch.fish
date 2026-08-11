@@ -15,6 +15,5 @@ function __smart_pager_switch --description "Xử lý gợi ý và chuyển sang
     # Nếu bảng gợi ý Pager hiển thị -> Chuyển sang target_mode
     if commandline --paging-mode
         set fish_bind_mode $target_mode
-        commandline -f repaint
     end
 end

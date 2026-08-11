@@ -15,4 +15,5 @@ function fish_user_key_bindings_mypager
     bind --mode $mode left backward-char
     bind --mode $mode right forward-char
     bind --mode $mode ctrl-c -m default clear-commandline
+    bind --mode $mode tab complete
 end

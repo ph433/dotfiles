@@ -32,8 +32,10 @@ function __smart_key_exec --description "Gõ phím tắt thông minh cho Fish Sh
                 __fish_fzf_complete
             case insert
                 __fzf_zoxide_custom
-            case tab
+            case pageup
                 fdf
+            case pagedown
+                fdd
             case '*'
                 # Các phím số (1, 2, 3...): Eval trực tiếp & repaint
                 eval $target_cmd
@@ -92,10 +94,12 @@ function __smart_key_exec --description "Gõ phím tắt thông minh cho Fish Sh
                 commandline -f backward-delete-char
             case escape
                 __fish_fzf_complete
-            case tab
-                fdf
             case insert
                 __nvim_open_func_source
+            case pageup
+                fdf
+            case pagedown
+                fdd
             case '*'
                 commandline -i "$key"
         end

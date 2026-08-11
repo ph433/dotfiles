@@ -11,11 +11,15 @@ function fish_user_key_bindings
     bind --mode $mode space '__smart_key_exec space'
     bind --mode $mode enter '__smart_key_exec enter'
     bind --mode $mode insert '__smart_key_exec insert'
+    bind --mode $mode pageup '__smart_key_exec pageup'
+    bind --mode $mode pagedown '__smart_key_exec pagedown'
     bind --mode $mode 1 '__smart_key_exec 1 mkd'
     bind --mode $mode 2 '__smart_key_exec 2 fullfunc'
-    bind --mode $mode 3 '__smart_key_exec 3 history_fzf'
-    bind --mode $mode 4 '__fish_fzf_complete'
-    bind --mode $mode 5 'echo_mode_pager'
+    bind --mode $mode 3 '__smart_key_exec 3 fullbind'
+    bind --mode $mode 4 '__smart_key_exec 4 fullvar'
+    bind --mode $mode 5 '__smart_key_exec 5 __fish_fzf_complete'
+    bind --mode $mode 9 '__smart_key_exec 9 fdf'
+    bind --mode $mode 0 '__smart_key_exec 0 fdd'
     
     bind --mode $mode ctrl-a '__smart_key_exec ctrl-a pwd'
     bind --mode $mode ctrl-x 'y'
@@ -23,6 +27,8 @@ function fish_user_key_bindings
     bind --mode $mode shift-left 'prevd; commandline -f repaint'
     bind --mode $mode shift-right 'nextd; commandline -f repaint'
     bind --mode $mode tab '__smart_pager_switch mypager'
-    bind --mode $mode shift-tab '__smart_pager_switch mypager search'
+    bind --mode $mode escape '__smart_pager_switch mypager search'
     fish_user_key_bindings_mypager
+    
+    set -g fish_bind_mode default
 end

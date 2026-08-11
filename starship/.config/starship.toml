@@ -84,6 +84,10 @@ format = '[[  $time ](fg:#a0a9cb bg:#1d2230)]($style)'
 # Định nghĩa ký tự hiển thị ở cuối thanh prompt
 success_symbol = "[❯](bold #50FA7B)"
 error_symbol = "[❯](bold #FF5555)"
+vimcmd_symbol = "[<](bold #50FA7B bg:#1d2230)"
+vimcmd_replace_one_symbol = "[R](bold #FF5555 bg:#1d2230)"
+vimcmd_replace_symbol = "[R](bold #FF5555 bg:#1d2230)"
+vimcmd_visual_symbol = "[V](bold #FF79C6 bg:#1d2230)"
 
 [custom.recent_info]
 command = "/home/phuong/.local/bin/count_files.sh"
