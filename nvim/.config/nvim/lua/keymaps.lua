@@ -8,12 +8,18 @@ vim.keymap.set('v', '<C-c>', '"+y', { desc = 'Copy selection' })
 vim.keymap.set('n', '<C-c>', '^vg_"+y', { noremap = true, silent = true })
 vim.keymap.set({'n', 'v', 'i'}, '<D-C-c>', '<cmd>%y+<cr>', { noremap = true, silent = true })
 
--- vim.keymap.set('n', '<C-v>', '"+p', { desc = 'Paste Normal' })
+vim.keymap.set('n', '<C-v>', '"+p', { desc = 'Paste Normal' })
 vim.keymap.set('v', '<C-v>', '"_c<C-r>+<Esc>', { desc = 'Paste Visual' })
 vim.keymap.set('i', '<C-v>', '<C-r>+', { desc = 'Paste Insert' })
 vim.keymap.set('n', '<C-A-v>', '^vg_"+P', { noremap = true, silent = true })
 
-vim.keymap.set({'n', 'i', 'v'}, '<C-z>', '<Cmd>undo<CR>', { desc = 'Undo' })
+-- Chế độ Normal và Insert: Nhấn Ctrl + Z để HOÀN TÁC (Undo)
+vim.keymap.set('n', '<C-z>', '<Cmd>undo<CR>', { desc = 'Undo' })
+vim.keymap.set('i', '<C-z>', '<C-o>u', { desc = 'Undo trong lúc gõ' })
+
+-- Chế độ Visual (v): Nhấn Ctrl + Z để ĐỔI ĐẦU BÔI ĐEN (Giống phím o)
+vim.keymap.set('v', '<C-z>', 'o', { noremap = true, desc = 'Đổi đầu bôi đen' })
+
 vim.keymap.set({'n', 'i', 'v'}, '<C-y>', '<Cmd>redo<CR>', { desc = 'Redo' })
 vim.keymap.set({'n', 'i', 'v'}, '<C-f>', '<Esc>/', { desc = 'Search' })
 -- vim.keymap.set({'n', 'i', 'v'}, '<C-s>', '<Cmd>w<CR>', { desc = 'Save file' })
@@ -21,7 +27,7 @@ vim.keymap.set({'n', 'i', 'v'}, '<C-f>', '<Esc>/', { desc = 'Search' })
 -- Cuộn màn hình LÊN 1/4 trang
 vim.keymap.set({'n', 'i', 'v'}, '<C-Up>', function()
   -- Lấy chiều cao cửa sổ chia cho 4 và làm tròn xuống
-  local quarter_screen = math.floor(vim.api.nvim_win_get_height(0) / 8)
+  local quarter_screen = math.floor(vim.api.nvim_win_get_height(0) / 4)
   local keys = vim.api.nvim_replace_termcodes(quarter_screen .. '<C-y>', true, false, true)
   vim.api.nvim_feedkeys(keys, 'n', false)
 end, { desc = "Cuộn màn hình lên 1/4 trang" })
@@ -29,7 +35,7 @@ end, { desc = "Cuộn màn hình lên 1/4 trang" })
 -- Cuộn màn hình XUỐNG 1/4 trang
 vim.keymap.set({'n', 'i', 'v'}, '<C-Down>', function()
   -- Lấy chiều cao cửa sổ chia cho 4 và làm tròn xuống
-  local quarter_screen = math.floor(vim.api.nvim_win_get_height(0) / 8)
+  local quarter_screen = math.floor(vim.api.nvim_win_get_height(0) / 4)
   local keys = vim.api.nvim_replace_termcodes(quarter_screen .. '<C-e>', true, false, true)
   vim.api.nvim_feedkeys(keys, 'n', false)
 end, { desc = "Cuộn màn hình xuống 1/4 trang" })

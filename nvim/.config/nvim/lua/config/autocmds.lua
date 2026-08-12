@@ -62,7 +62,8 @@ local augroup = vim.api.nvim_create_augroup("LogRecentFiles", { clear = true })
 
 -- Hàm hỗ trợ thực thi lệnh Fish async
 local function run_fish_cmd(cmd)
-  vim.system({ "fish", "-c", cmd })
+  -- vim.system({ "fish", "-c", cmd })
+  vim.fn.jobstart({ "fish", "-c", cmd }, { detach = true })
 end
 
 -- 1. KHI MỞ FILE (BufReadPost): Ghi log file, tính Score file, VÀ ghi log thư mục

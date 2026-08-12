@@ -30,5 +30,5 @@ function fish_user_key_bindings
     bind --mode $mode escape '__smart_pager_switch mypager search'
     fish_user_key_bindings_mypager
     
-    set -g fish_bind_mode default
+    # set -g fish_bind_mode default
 end

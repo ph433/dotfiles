@@ -4,7 +4,8 @@ function fullfunc --description "Lọc danh sách hàm Fish Shell bằng fzf và
     set -l fzf_opts (__my_fzf_defaults) \
         --header="Gõ để tìm hàm..." \
         --prompt="> " \
-        --expect=right
+        --expect=right \
+        --bind "left:execute-silent(echo -n {} | xclip -selection clipboard)+clear-screen"
 
     if test -n "$query"
         set -a fzf_opts --query "$query"

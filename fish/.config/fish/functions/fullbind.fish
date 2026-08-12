@@ -7,6 +7,7 @@ function fullbind --description "Lọc danh sách keybinding Fish Shell bằng f
         --header="Gõ để tìm keybinding..." \
         --prompt="> " \
         --expect=right \
+        --nth=3 \
         --preview="echo {}" \
         --preview-window="down:3:wrap" \
         --bind "left:execute-silent(echo -n {} | xclip -selection clipboard)+clear-screen"

@@ -4,6 +4,7 @@
 
   ;; Các cấu hình defcfg khác của bạn (nếu có)...
   process-unmapped-keys yes
+  
 )
 
 ;; (deflayer ten_layer_cua_ban
@@ -29,8 +30,8 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   M-esc   esc     home    up      end     A-ent   M-spc   prtsc   pgup    pgdn    C-p     _       _       _               _       _       _       _
   @bks_   tab     left    down    @crght  spc     ins     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
-  @nvv    C-z     C-x     C-c     C-v     C-y     _       A-c     A-v     C-a     C-y     @ss             _               _       _       _
-  _       _       @numt   ent                             @colet          _                       _       caps    _       _               _
+  lsft    C-z     C-x     C-c     C-v     C-y     @mou    A-c     A-v     C-a     C-y     @ss             _               _       _       _
+  _       @mou    @numt   ent                             @colet          @aaa                    _       caps    _       _               _
 )
 
 (deflayer mod_nvim-active
@@ -433,9 +434,9 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       S-5     S-6     S-,     @g_     _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       ,       S-.     ;       _       _       _       _       _       _       _       _                       _       _       _       _
+  _       o       ,       S-.     ;       f       _       _       _       _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @numt   _                                       @colnv  _                       _       _       _       _               _
+  _       _       @numt   v                                       @colnv  _                       _       _       _       _               _
 )
 
 (deflayer app_open 
@@ -477,6 +478,9 @@
 (defalias
   nvsw (layer-switch mod_nvim)
   nvswtg (layer-toggle mod_nvim)
+  
+  mou (layer-toggle mouse-mode)
+  
   ;; nvswa (layer-switch mod_nvim-active)
   nvswa (multi (layer-switch mod_nvim-active) ent)
   nvswac (layer-toggle mod_nvim-active)
@@ -862,6 +866,7 @@
   C-/ (multi (macro g c))
   vf3 (multi (macro f) (layer-toggle colemak-dh-ff))
   ;; mark (multi (macro m) (layer-toggle colemak-dh-active))
+  aaa (multi (release-key lmet) (release-key lsft) @mou)
   
 )
 
@@ -895,6 +900,13 @@
   _       f1      f2      f3      f4      f5      f6      f7      f8      f9      f10     _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       _       _                                       _       _                       _       _       _       _               _
+)
+
+(deflayermap (mouse-mode)
+  e (movemouse-accel-up 1 1000 1 5)     ;; Di chuột LÊN
+  d (movemouse-accel-down 1 1000 1 5)   ;; Di chuột XUỐNG
+  s (movemouse-accel-left 1 1000 1 5)   ;; Di chuột TRÁI
+  f (movemouse-accel-right 1 1000 1 5)  ;; Di chuột PHẢI
 )
 
 (deflayer mod_nvim-rofi-!c
