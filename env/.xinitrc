@@ -15,6 +15,8 @@ fcitx5 -d &
 slstatus &
 # 2. Bật quản lý Clipboard CopyQ
 copyq &
+dunst &
+kanata-notify.sh &
 # ~/dwm-flexipatch/dwm_status_update.sh &
 # 3. Bật công cụ chụp màn hình Flameshot
 # flameshot &

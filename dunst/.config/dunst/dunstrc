@@ -1,0 +1,16 @@
+[global]
+    # Tắt hiển thị icon (tránh lỗi No icon found)
+    icon_position = off
+
+    # 📌 Đổi sang JetBrainsMono Nerd Font (cỡ 14, in đậm)
+    font = JetBrainsMono Nerd Font Bold 14
+
+    # Kích thước & Khoảng cách khung thông báo
+    width = (120, 200)
+    height = 40
+    padding = 8
+    horizontal_padding = 12
+
+[kanata-layer]
+    stack_tag = "kanata"
+    alignment = center
