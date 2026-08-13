@@ -4,6 +4,7 @@
 
   ;; Các cấu hình defcfg khác của bạn (nếu có)...
   process-unmapped-keys yes
+  
 )
 
 ;; (deflayer ten_layer_cua_ban
@@ -28,7 +29,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   M-esc   esc     home    up      end     A-ent   M-spc   prtsc   pgup    pgdn    C-p     _       _       _               _       _       _       _
-  @bks_   tab     left    down    @crght  spc     ins     @lictl  @lisft  @limet  @li-a_v del     _               _       _       _       _
+  @bks_   tab     left    down    @crght  spc     ins     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
   lsft    C-z     C-x     C-c     C-v     C-y     @mou    A-c     A-v     C-a     C-y     @ss             _               _       _       _
   _       @mou    @numt   ent                             @colet          @aaa                    _       caps    _       _               _
 )
@@ -270,10 +271,10 @@
 (deflayer like-alt
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       @Aeu    @Ahu    @Auu    @Aendu  _       _       _       _       _       _       _       _       _               _       _       _       _
-  @Abu    @Atu    @Alu    @Adu    @Adu    @Asu    _       @ca     @sa     @wa     @altn   @Adeu   _                       _       _       _       _
+  _       A-esc   A-home  A-up    A-end   _       _       _       _       _       _       _       _       _               _       _       _       _
+  A-bks   A-tab   A-left  A-down  A-rght  A-spc   _       @ca     @sa     @wa     @altn   A-del   _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @altn   @Aenu                                   @alta   _                       _       _       _       _               _
+  _       _       @altn   A-ent                                   @alta   _                       _       _       _       _               _
 )
 
 (deflayer like-ctl
@@ -866,55 +867,12 @@
   vf3 (multi (macro f) (layer-toggle colemak-dh-ff))
   ;; mark (multi (macro m) (layer-toggle colemak-dh-active))
   aaa (multi (release-key lmet) (release-key lsft) @mou)
+  
 )
 
 (defvirtualkeys
   v_ent ent
   v_nvswac (layer-switch mod_nvim-active)
-  
-  v_altqwert (multi 
-               (one-shot-press 1000 lalt)
-               (one-shot-press 1000 (layer-while-held qwert-bare))
-             )
-  v_alt_used XX
-  
-  ;; Khởi tạo Switch logic dưới dạng một Alias
-  swt (switch
-    ;; Case 1: Nếu cờ v_alt_used đang bật -> Xả cờ
-    ((input virtual v_alt_used)) (on-press release-vkey v_alt_used) break
-
-    ;; Case 2: Nếu chưa dùng -> Tap v_altqwert
-    () (on-press tap-vkey v_altqwert) break
-  )
-)
-
-(defalias
-  Alu (macro A-left @usd)
-  Aru (macro A-rght @usd)
-  Auu (macro A-up @usd)
-  Adu (macro A-down @usd)
-  Aeu (macro A-esc @usd)
-  Aenu (macro A-ent @usd)
-  Ahu (macro A-home @usd)
-  Aendu (macro A-end @usd)
-  Asu (macro A-spc @usd)
-  Adeu (macro A-del @usd)
-  Abu (macro A-bks @usd)
-  Atu (macro A-tab @usd)
-)
-
-(defalias
-  ;; Bật cờ khi bấm
-  usd (on-press press-vkey v_alt_used)
-  ;; Alu (multi (A-left) @usd)
-  Alu (macro A-left @usd)
-
-  ;; Alias chính: Đè giữ để bật layer, khi nhả ra (on-release) thì chạy logic @swt
-  li-a_v (multi 
-           (on-press release-vkey v_alt_used) 
-           (layer-toggle like-alt) 
-           (on-release press-vkey swt)
-         )
 )
 
 (deflayer qwert-bare
