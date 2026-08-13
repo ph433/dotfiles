@@ -14,3 +14,6 @@
 [kanata-layer]
     stack_tag = "kanata"
     alignment = center
+    background = "#282a36"   # Dracula Background
+    foreground = "#ff79c6"   # Dracula Pink (Chữ hồng)
+    frame_color = "#bd93f9"  # Dracula Purple (Màu viền)
