@@ -7,6 +7,33 @@
   
 )
 
+(defvar
+  ;; Gom nhóm điều kiện kiểm tra slot 2
+  has-typed-letter (or (input-history real a 2)
+                       (input-history real b 2)
+                       (input-history real c 2)
+                       (input-history real d 2)
+                       (input-history real e 2)
+                       (input-history real f 2)
+                       (input-history real g 2)
+                       (input-history real h 2)
+                       (input-history real i 2)
+                       (input-history real m 2)
+                       (input-history real n 2)
+                       (input-history real o 2)
+                       (input-history real p 2)
+                       (input-history real q 2)
+                       (input-history real r 2)
+                       (input-history real s 2)
+                       (input-history real t 2)
+                       (input-history real u 2)
+                       (input-history real v 2)
+                       (input-history real w 2)
+                       (input-history real x 2)
+                       (input-history real y 2)
+                       (input-history real z 2))
+)
+
 ;; (deflayer ten_layer_cua_ban
 ;;   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
 ;;   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
@@ -29,7 +56,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   M-esc   esc     home    up      end     A-ent   M-spc   prtsc   pgup    pgdn    C-p     _       _       _               _       _       _       _
-  @bks_   tab     left    down    @crght  spc     ins     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
+  @bks_   tab     left    down    @crght  spc     ins     @c_v-sw @lisft  @limet  @a_v-sw del     _               _       _       _       _
   lsft    C-z     C-x     C-c     C-v     C-y     @mou    A-c     A-v     C-a     C-y     @ss             _               _       _       _
   _       @mou    @numt   ent                             @colet          @aaa                    _       caps    _       _               _
 )
@@ -873,6 +900,21 @@
 (defvirtualkeys
   v_ent ent
   v_nvswac (layer-switch mod_nvim-active)
+  
+  swt-alt (switch
+    ($has-typed-letter) XX break
+    () (multi (one-shot-press 1000 lalt) (one-shot-press 1000 (layer-while-held qwert-bare))) break
+  )
+  
+  swt-ctl (switch
+    ($has-typed-letter) XX break
+    () (multi (one-shot-press 1000 lctl) (one-shot-press 1000 (layer-while-held qwert-bare))) break
+  )
+)
+
+(defalias
+  a_v-sw (multi (layer-toggle like-alt) (on-release tap-virtualkey swt-alt))
+  c_v-sw (multi (layer-toggle like-ctl) (on-release tap-virtualkey swt-ctl))
 )
 
 (deflayer qwert-bare
