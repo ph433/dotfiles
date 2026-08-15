@@ -7,32 +7,6 @@
   
 )
 
-(defvar
-  ;; Gom nhóm điều kiện kiểm tra slot 2
-  has-typed-letter (or (input-history real a 2)
-                       (input-history real b 2)
-                       (input-history real c 2)
-                       (input-history real d 2)
-                       (input-history real e 2)
-                       (input-history real f 2)
-                       (input-history real g 2)
-                       (input-history real h 2)
-                       (input-history real i 2)
-                       (input-history real m 2)
-                       (input-history real n 2)
-                       (input-history real o 2)
-                       (input-history real p 2)
-                       (input-history real q 2)
-                       (input-history real r 2)
-                       (input-history real s 2)
-                       (input-history real t 2)
-                       (input-history real u 2)
-                       (input-history real v 2)
-                       (input-history real w 2)
-                       (input-history real x 2)
-                       (input-history real y 2)
-                       (input-history real z 2))
-)
 
 ;; (deflayer ten_layer_cua_ban
 ;;   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
@@ -55,10 +29,10 @@
 (deflayer mod_nvim ;; Terminal
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  M-esc   esc     home    up      end     A-ent   M-spc   prtsc   pgup    pgdn    C-p     _       _       _               _       _       _       _
-  @bks_   tab     left    down    @crght  spc     ins     @c_v-sw @lisft  @limet  @a_v-sw del     _               _       _       _       _
-  lsft    C-z     C-x     C-c     C-v     C-y     @mou    A-c     A-v     C-a     C-y     @ss             _               _       _       _
-  _       @mou    @numt   ent                             @colet          @aaa                    _       caps    _       _               _
+  del     esc     home    up      end     A-ent   M-spc   prtsc   pgup    pgdn    C-p     _       _       _               _       _       _       _
+  @bks_   tab     left    down    rght    spc     ins     @c_v-sw @s_v-sw @m_v-sw @a_v-sw @rep-a  _               _       _       _       _
+  lsft    C-z     C-S-x   C-c     C-v     C-y     @rep    A-c     A-v     C-a     C-y     @ss             _               _       _       _
+  _       @rep-a  @numt   ent                             @colet          @aaa                    _       caps    _       _               _
 )
 
 (deflayer mod_nvim-active
@@ -894,7 +868,8 @@
   vf3 (multi (macro f) (layer-toggle colemak-dh-ff))
   ;; mark (multi (macro m) (layer-toggle colemak-dh-active))
   aaa (multi (release-key lmet) (release-key lsft) @mou)
-  
+  rep-a rpt-any
+  rep rpt
 )
 
 (defvirtualkeys
@@ -907,14 +882,28 @@
   )
   
   swt-ctl (switch
+    ($has-typed-letter-ctl-shift) (multi (one-shot-press 1000 lctl) (one-shot-press 1000 lsft) (one-shot-press 1000 (layer-while-held qwert-bare))) break
+    ($has-typed-letter-ctl-met) (multi (one-shot-press 1000 lctl) (one-shot-press 1000 lmet) (one-shot-press 1000 (layer-while-held qwert-bare))) break
     ($has-typed-letter) XX break
     () (multi (one-shot-press 1000 lctl) (one-shot-press 1000 (layer-while-held qwert-bare))) break
+  )
+  
+  swt-sft (switch
+    ($has-typed-letter) XX break
+    () (multi (one-shot-press 1000 lsft) (one-shot-press 1000 (layer-while-held qwert-bare))) break
+  )
+  
+  swt-met (switch
+    ($has-typed-letter) XX break
+    () (multi (one-shot-press 1000 lmet) (one-shot-press 1000 (layer-while-held qwert-bare))) break
   )
 )
 
 (defalias
   a_v-sw (multi (layer-toggle like-alt) (on-release tap-virtualkey swt-alt))
   c_v-sw (multi (layer-toggle like-ctl) (on-release tap-virtualkey swt-ctl))
+  s_v-sw (multi (layer-toggle like-sft) (on-release tap-virtualkey swt-sft))
+  m_v-sw (multi (layer-toggle like-met) (on-release tap-virtualkey swt-met))
 )
 
 (deflayer qwert-bare
@@ -958,4 +947,40 @@
   @bks_   tab     left    down    @crght  spc     ins     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
   @sropt  C-z     C-x     C-c     C-v     C-y     @nvv    A-c     A-v     C-a     C-y     @ss             _               _       _       _
   _       _       @numt   ent                             @colet          _                       _       caps    _       _               _
+)
+
+(defvar
+  ;; Gom nhóm điều kiện kiểm tra slot 2
+  has-typed-letter (or (input-history real a 2)
+                       (input-history real b 2)
+                       (input-history real c 2)
+                       (input-history real d 2)
+                       (input-history real e 2)
+                       (input-history real f 2)
+                       (input-history real g 2)
+                       (input-history real h 2)
+                       (input-history real i 2)
+                       (input-history real m 2)
+                       (input-history real n 2)
+                       (input-history real o 2)
+                       (input-history real p 2)
+                       (input-history real q 2)
+                       (input-history real r 2)
+                       (input-history real s 2)
+                       (input-history real t 2)
+                       (input-history real u 2)
+                       (input-history real v 2)
+                       (input-history real w 2)
+                       (input-history real x 2)
+                       (input-history real y 2)
+                       (input-history real z 2)
+                       ;; (input-history virtual swt-alt 1)
+                       (input-history real caps 2)
+                       (input-history real spc 2))
+                       
+  has-typed-letter-ctl-shift (or (input-history real k 2))
+  has-typed-letter-ctl-met (or (input-history real l 2))
+  
+  has-typed-' (and (input-history real ' 1)
+               or $has-typed-letter)
 )
