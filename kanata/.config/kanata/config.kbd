@@ -1,7 +1,7 @@
 (defcfg
   ;; Thêm dòng này để cho phép Kanata thực thi lệnh cmd
   danger-enable-cmd yes
-
+  
   ;; Các cấu hình defcfg khác của bạn (nếu có)...
   process-unmapped-keys yes
   
@@ -876,41 +876,53 @@
   v_ent ent
   v_nvswac (layer-switch mod_nvim-active)
   
-  swt-alt (switch
-    ($has-typed-letter) XX break
-    () (multi (one-shot-press 1000 lalt) (one-shot-press 1000 (layer-while-held qwert-bare))) break
-  )
+  vk-flush XX
   
-  swt-ctl (switch
-    ($has-typed-letter-ctl-shift) (multi (one-shot-press 1000 lctl) (one-shot-press 1000 lsft) (one-shot-press 1000 (layer-while-held qwert-bare))) break
+  swt (switch
+    ($has-typed-letter-ctl-sft-met-alt) (multi (one-shot-press 1000 lctl) (one-shot-press 1000 lsft) (one-shot-press 1000 lmet) (one-shot-press 1000 lalt) (one-shot-press 1000 (layer-while-held qwert-bare))) break
+    
+    ($has-typed-letter-ctl-sft-met) (multi (one-shot-press 1000 lctl) (one-shot-press 1000 lsft) (one-shot-press 1000 lmet) (one-shot-press 1000 (layer-while-held qwert-bare))) break
+    ($has-typed-letter-ctl-sft-alt) (multi (one-shot-press 1000 lctl) (one-shot-press 1000 lsft) (one-shot-press 1000 lalt) (one-shot-press 1000 (layer-while-held qwert-bare))) break
+    ($has-typed-letter-sft-met-alt) (multi (one-shot-press 1000 lsft) (one-shot-press 1000 lmet) (one-shot-press 1000 lalt) (one-shot-press 1000 (layer-while-held qwert-bare))) break
+    ($has-typed-letter-ctl-met-alt) (multi (one-shot-press 1000 lctl) (one-shot-press 1000 lmet) (one-shot-press 1000 lalt) (one-shot-press 1000 (layer-while-held qwert-bare))) break
+    
+    ($has-typed-letter-ctl-sft) (multi (one-shot-press 1000 lctl) (one-shot-press 1000 lsft) (one-shot-press 1000 (layer-while-held qwert-bare))) break
     ($has-typed-letter-ctl-met) (multi (one-shot-press 1000 lctl) (one-shot-press 1000 lmet) (one-shot-press 1000 (layer-while-held qwert-bare))) break
-    ($has-typed-letter) XX break
-    () (multi (one-shot-press 1000 lctl) (one-shot-press 1000 (layer-while-held qwert-bare))) break
-  )
-  
-  swt-sft (switch
-    ($has-typed-letter) XX break
-    () (multi (one-shot-press 1000 lsft) (one-shot-press 1000 (layer-while-held qwert-bare))) break
-  )
-  
-  swt-met (switch
-    ($has-typed-letter) XX break
-    () (multi (one-shot-press 1000 lmet) (one-shot-press 1000 (layer-while-held qwert-bare))) break
+    ($has-typed-letter-ctl-alt) (multi (one-shot-press 1000 lctl) (one-shot-press 1000 lalt) (one-shot-press 1000 (layer-while-held qwert-bare))) break
+    ($has-typed-letter-sft-met) (multi (one-shot-press 1000 lsft) (one-shot-press 1000 lmet) (one-shot-press 1000 (layer-while-held qwert-bare))) break
+    ($has-typed-letter-sft-alt) (multi (one-shot-press 1000 lsft) (one-shot-press 1000 lalt) (one-shot-press 1000 (layer-while-held qwert-bare))) break
+    ($has-typed-letter-met-alt) (multi (one-shot-press 1000 lmet) (one-shot-press 1000 lalt) (one-shot-press 1000 (layer-while-held qwert-bare))) break
+    
+    ($has-typed-letter-ctl) (multi (one-shot-press 1000 lctl) (one-shot-press 1000 (layer-while-held qwert-bare))) break
+    ($has-typed-letter-sft) (multi (one-shot-press 1000 lsft) (one-shot-press 1000 (layer-while-held qwert-bare))) break
+    ($has-typed-letter-met) (multi (one-shot-press 1000 lmet) (one-shot-press 1000 (layer-while-held qwert-bare))) break
+    ($has-typed-letter-alt) (multi (one-shot-press 1000 lalt) (one-shot-press 1000 (layer-while-held qwert-bare))) break
+    
+    () XX break
   )
 )
 
 (defalias
-  a_v-sw (multi (layer-toggle like-alt) (on-release tap-virtualkey swt-alt))
-  c_v-sw (multi (layer-toggle like-ctl) (on-release tap-virtualkey swt-ctl))
-  s_v-sw (multi (layer-toggle like-sft) (on-release tap-virtualkey swt-sft))
-  m_v-sw (multi (layer-toggle like-met) (on-release tap-virtualkey swt-met))
+
+  flush-hist (on-press tap-virtualkey vk-flush)
+  
+  jfls (multi j @flush-hist)
+  kfls (multi k @flush-hist)
+  lfls (multi l @flush-hist)
+  ;fls (multi ; @flush-hist)
+  
+  a_v-sw (multi (layer-toggle like-alt) (on-release tap-virtualkey swt))
+  c_v-sw (multi (layer-toggle like-ctl) (on-release tap-virtualkey swt))
+  s_v-sw (multi (layer-toggle like-sft) (on-release tap-virtualkey swt))
+  m_v-sw (multi (layer-toggle like-met) (on-release tap-virtualkey swt))
+  
 )
 
 (deflayer qwert-bare
   esc     f1      f2      f3      f4      f5      f6      f7      f8      f9      f10     f11     f12     ins     prtsc   del     home    end     pgup    pgdn
   grv     1       2       3       4       5       6       7       8       9       0       -       =       bspc            nlck    kp/     kp*     kp-
   tab     q       w       e       r       t       y       u       i       o       p       [       ]       \               kp7     kp8     kp9     kp+
-  caps    a       s       d       f       g       h       j       k       l       ;       '       ret                     kp4     kp5     kp6     kprt
+  caps    a       s       d       f       g       h       @jfls   @kfls   @lfls   @;fls   '       ret                     kp4     kp5     kp6     kprt
   lsft    z       x       c       v       b       n       m       ,       .       /       rsft            up              kp1     kp2     kp3 
   lctl    lmet    lalt    spc                                     ralt    f23                     left    down    rght    kp0             kp.
 )
@@ -950,37 +962,128 @@
 )
 
 (defvar
-  ;; Gom nhóm điều kiện kiểm tra slot 2
-  has-typed-letter (or (input-history real a 2)
-                       (input-history real b 2)
-                       (input-history real c 2)
-                       (input-history real d 2)
-                       (input-history real e 2)
-                       (input-history real f 2)
-                       (input-history real g 2)
-                       (input-history real h 2)
-                       (input-history real i 2)
-                       (input-history real m 2)
-                       (input-history real n 2)
-                       (input-history real o 2)
-                       (input-history real p 2)
-                       (input-history real q 2)
-                       (input-history real r 2)
-                       (input-history real s 2)
-                       (input-history real t 2)
-                       (input-history real u 2)
-                       (input-history real v 2)
-                       (input-history real w 2)
-                       (input-history real x 2)
-                       (input-history real y 2)
-                       (input-history real z 2)
-                       ;; (input-history virtual swt-alt 1)
-                       (input-history real caps 2)
-                       (input-history real spc 2))
-                       
-  has-typed-letter-ctl-shift (or (input-history real k 2))
-  has-typed-letter-ctl-met (or (input-history real l 2))
+
+  has-typed-letter-ctl (or (input-history real j 2))
+  has-typed-letter-sft (or (input-history real k 2))
+  has-typed-letter-met (or (input-history real l 2))
+  has-typed-letter-alt (or (input-history real ; 2))
   
+  has-typed-letter-ctl-sft (or
+      (and (input-history real j 2) (input-history real k 3))
+      (and (input-history real k 2) (input-history real j 3))
+    )
+  has-typed-letter-ctl-met (or
+      (and (input-history real j 2) (input-history real l 3))
+      (and (input-history real l 2) (input-history real j 3))
+    )
+  has-typed-letter-ctl-alt (or
+      (and (input-history real j 2) (input-history real ; 3))
+      (and (input-history real ; 2) (input-history real j 3))
+    )
+  has-typed-letter-sft-met (or
+      (and (input-history real l 2) (input-history real k 3))
+      (and (input-history real k 2) (input-history real l 3))
+    )
+  has-typed-letter-sft-alt (or
+      (and (input-history real ; 2) (input-history real k 3))
+      (and (input-history real k 2) (input-history real ; 3))
+    )
+  has-typed-letter-met-alt (or
+      (and (input-history real ; 2) (input-history real l 3))
+      (and (input-history real l 2) (input-history real ; 3))
+    )
+  
+  has-typed-letter-ctl-sft-met (or
+      ;; 1. j -> k -> l
+      (and (input-history real l 2) (input-history real k 3) (input-history real j 4))
+      ;; 2. j -> l -> k
+      (and (input-history real k 2) (input-history real l 3) (input-history real j 4))
+      ;; 3. k -> j -> l
+      (and (input-history real l 2) (input-history real j 3) (input-history real k 4))
+      ;; 4. k -> l -> j
+      (and (input-history real j 2) (input-history real l 3) (input-history real k 4))
+      ;; 5. l -> j -> k
+      (and (input-history real k 2) (input-history real j 3) (input-history real l 4))
+      ;; 6. l -> k -> j
+      (and (input-history real j 2) (input-history real k 3) (input-history real l 4))
+    )
+  has-typed-letter-ctl-sft-alt (or
+      ;; 1. j -> k -> ;
+      (and (input-history real ; 2) (input-history real k 3) (input-history real j 4))
+      ;; 2. j -> ; -> k
+      (and (input-history real k 2) (input-history real ; 3) (input-history real j 4))
+      ;; 3. k -> j -> ;
+      (and (input-history real ; 2) (input-history real j 3) (input-history real k 4))
+      ;; 4. k -> ; -> j
+      (and (input-history real j 2) (input-history real ; 3) (input-history real k 4))
+      ;; 5. ; -> j -> k
+      (and (input-history real k 2) (input-history real j 3) (input-history real ; 4))
+      ;; 6. ; -> k -> j
+      (and (input-history real j 2) (input-history real k 3) (input-history real ; 4))
+    )
+  has-typed-letter-sft-met-alt (or
+      ;; 1. k -> l -> ;
+      (and (input-history real ; 2) (input-history real l 3) (input-history real k 4))
+      ;; 2. k -> ; -> l
+      (and (input-history real l 2) (input-history real ; 3) (input-history real k 4))
+      ;; 3. l -> k -> ;
+      (and (input-history real ; 2) (input-history real k 3) (input-history real l 4))
+      ;; 4. l -> ; -> k
+      (and (input-history real k 2) (input-history real ; 3) (input-history real l 4))
+      ;; 5. ; -> k -> l
+      (and (input-history real l 2) (input-history real k 3) (input-history real ; 4))
+      ;; 6. ; -> l -> k
+      (and (input-history real k 2) (input-history real l 3) (input-history real ; 4))
+    )
+  has-typed-letter-ctl-met-alt (or
+      ;; 1. j -> l -> ;
+      (and (input-history real ; 2) (input-history real l 3) (input-history real j 4))
+      ;; 2. j -> ; -> l
+      (and (input-history real l 2) (input-history real ; 3) (input-history real j 4))
+      ;; 3. l -> j -> ;
+      (and (input-history real ; 2) (input-history real j 3) (input-history real l 4))
+      ;; 4. l -> ; -> j
+      (and (input-history real j 2) (input-history real ; 3) (input-history real l 4))
+      ;; 5. ; -> j -> l
+      (and (input-history real l 2) (input-history real j 3) (input-history real ; 4))
+      ;; 6. ; -> l -> j
+      (and (input-history real j 2) (input-history real l 3) (input-history real ; 4))
+    )
+    
+  has-typed-letter-ctl-sft-met-alt (or
+      ;; Bắt đầu bằng ; ở slot 2
+      (and (input-history real ; 2) (input-history real l 3) (input-history real k 4) (input-history real j 5))
+      (and (input-history real ; 2) (input-history real l 3) (input-history real j 4) (input-history real k 5))
+      (and (input-history real ; 2) (input-history real k 3) (input-history real l 4) (input-history real j 5))
+      (and (input-history real ; 2) (input-history real k 3) (input-history real j 4) (input-history real l 5))
+      (and (input-history real ; 2) (input-history real j 3) (input-history real l 4) (input-history real k 5))
+      (and (input-history real ; 2) (input-history real j 3) (input-history real k 4) (input-history real l 5))
+      
+      ;; Bắt đầu bằng l ở slot 2
+      (and (input-history real l 2) (input-history real ; 3) (input-history real k 4) (input-history real j 5))
+      (and (input-history real l 2) (input-history real ; 3) (input-history real j 4) (input-history real k 5))
+      (and (input-history real l 2) (input-history real k 3) (input-history real ; 4) (input-history real j 5))
+      (and (input-history real l 2) (input-history real k 3) (input-history real j 4) (input-history real ; 5))
+      (and (input-history real l 2) (input-history real j 3) (input-history real ; 4) (input-history real k 5))
+      (and (input-history real l 2) (input-history real j 3) (input-history real k 4) (input-history real ; 5))
+      
+      ;; Bắt đầu bằng k ở slot 2
+      (and (input-history real k 2) (input-history real ; 3) (input-history real l 4) (input-history real j 5))
+      (and (input-history real k 2) (input-history real ; 3) (input-history real j 4) (input-history real l 5))
+      (and (input-history real k 2) (input-history real l 3) (input-history real ; 4) (input-history real j 5))
+      (and (input-history real k 2) (input-history real l 3) (input-history real j 4) (input-history real ; 5))
+      (and (input-history real k 2) (input-history real j 3) (input-history real ; 4) (input-history real l 5))
+      (and (input-history real k 2) (input-history real j 3) (input-history real l 4) (input-history real ; 5))
+      
+      ;; Bắt đầu bằng j ở slot 2
+      (and (input-history real j 2) (input-history real ; 3) (input-history real l 4) (input-history real k 5))
+      (and (input-history real j 2) (input-history real ; 3) (input-history real k 4) (input-history real l 5))
+      (and (input-history real j 2) (input-history real l 3) (input-history real ; 4) (input-history real k 5))
+      (and (input-history real j 2) (input-history real l 3) (input-history real k 4) (input-history real ; 5))
+      (and (input-history real j 2) (input-history real k 3) (input-history real ; 4) (input-history real l 5))
+      (and (input-history real j 2) (input-history real k 3) (input-history real l 4) (input-history real ; 5))
+    )
+    
   has-typed-' (and (input-history real ' 1)
                or $has-typed-letter)
 )
