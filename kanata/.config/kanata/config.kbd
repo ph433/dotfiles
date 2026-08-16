@@ -30,16 +30,16 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   del     esc     home    up      end     A-ent   M-spc   prtsc   pgup    pgdn    C-p     _       _       _               _       _       _       _
-  @bks_   tab     left    down    rght    spc     ins     @c_v-sw @s_v-sw @m_v-sw @a_v-sw @rep-a  _               _       _       _       _
+  @bks_   tab     left    down    rght    spc     ins     @c_v-sw @s_v-sw @m_v-sw @a_v-sw @repa   _               _       _       _       _
   lsft    C-z     C-S-x   C-c     C-v     C-y     @rep    A-c     A-v     C-a     C-y     @ss             _               _       _       _
-  _       @rep-a  @numt   ent                             @colet          @aaa                    _       caps    _       _               _
+  _       _       @numt   ent                             @colet          @aaa                    _       caps    _       _               _
 )
 
 (deflayer mod_nvim-active
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   A-esc   esc     home    up      end     @pra2tt S-8     @tabi   @tabii  @taba   @:_     @fhinv  _       _               _       _       _       _
-  bks     tab     left    down    rght    spc     @fd     @c_v-sw @s_v-sw @m_v-sw @a_v-sw @rep-a  _               _       _       _       _
+  bks     tab     left    down    rght    spc     @fd     @c_v-sw @s_v-sw @m_v-sw @a_v-sw @repa   _               _       _       _       _
   @nvv    C-z     C-x     C-c     C-v     C-y     @nvv    A-c     A-v     C-a     @/_     @nvv            _               _       _       _
   _       _       @numt   ent                             @colnv          _                       _       caps    _       _               _
 )
@@ -84,7 +84,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @colef  esc     home    up      end     A-ent   M-spc   prtsc   pgup    pgdn    _       _       _       _               _       _       _       _
-  @bks_   tab     left    down    rght    spc     ins     @c_v-sw @s_v-sw @m_v-sw @a_v-sw @rep-a  _               _       _       _       _
+  @bks_   tab     left    down    rght    spc     ins     @c_v-sw @s_v-sw @m_v-sw @a_v-sw @repa   _               _       _       _       _
   @sropt  C-z     C-x     C-c     C-v     _       @fir    A-c     A-v     C-a     C-f     @ss             _               _       _       _
   _       _       @numt   ent                             @coleft         _                       _       caps    _       _               _
 )
@@ -869,6 +869,7 @@
   ;; mark (multi (macro m) (layer-toggle colemak-dh-active))
   aaa (multi (release-key lmet) (release-key lsft) @mou)
   rep-a rpt-any
+  repa rpt-any
   rep rpt
 )
 
@@ -916,14 +917,44 @@
   s_v-sw (multi (layer-toggle like-sft) (on-release tap-virtualkey swt))
   m_v-sw (multi (layer-toggle like-met) (on-release tap-virtualkey swt))
   
+  m-a (macro a)
+  m-b (macro b)
+  m-c (macro c)
+  m-d (macro d)
+  m-e (macro e)
+  m-f (macro f)
+  m-g (macro g)
+  m-h (macro h)
+  m-i (macro i)
+  m-j (macro j)
+  m-k (macro k)
+  m-l (macro l)
+  m-m (macro m)
+  m-n (macro n)
+  m-o (macro o)
+  m-p (macro p)
+  m-q (macro q)
+  m-r (macro r)
+  m-s (macro s)
+  m-t (macro t)
+  m-u (macro u)
+  m-v (macro v)
+  m-w (macro w)
+  m-x (macro x)
+  m-y (macro y)
+  m-z (macro z)
+  m-, (macro ,)
+  m-. (macro .)
+  m-/ (macro /)
+  
 )
 
 (deflayer qwert-bare
   esc     f1      f2      f3      f4      f5      f6      f7      f8      f9      f10     f11     f12     ins     prtsc   del     home    end     pgup    pgdn
   grv     1       2       3       4       5       6       7       8       9       0       -       =       bspc            nlck    kp/     kp*     kp-
-  tab     q       w       e       r       t       y       u       i       o       p       [       ]       \               kp7     kp8     kp9     kp+
-  caps    a       s       d       f       g       h       @jfls   @kfls   @lfls   @;fls   '       ret                     kp4     kp5     kp6     kprt
-  lsft    z       x       c       v       b       n       m       ,       .       /       rsft            up              kp1     kp2     kp3 
+  tab     @m-q    @m-w    @m-e    @m-r    @m-t    @m-y    @m-u    @m-i    @m-o    @m-p    [       ]       \               kp7     kp8     kp9     kp+
+  caps    @m-a    @m-s    @m-d    @m-f    @m-g    @m-h    @jfls   @kfls   @lfls   @;fls   @rep-a  ret                     kp4     kp5     kp6     kprt
+  lsft    @m-z    @m-x    @m-c    @m-v    @m-b    @m-n    @m-m    @m-,    @m-.    @m-/    rsft            up              kp1     kp2     kp3 
   lctl    lmet    lalt    spc                                     ralt    f23                     left    down    rght    kp0             kp.
 )
 
