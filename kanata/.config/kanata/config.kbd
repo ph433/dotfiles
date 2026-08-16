@@ -39,7 +39,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   A-esc   esc     home    up      end     @pra2tt S-8     @tabi   @tabii  @taba   @:_     @fhinv  _       _               _       _       _       _
-  bks     tab     left    down    rght    spc     @fd     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
+  bks     tab     left    down    rght    spc     @fd     @c_v-sw @s_v-sw @m_v-sw @a_v-sw @rep-a  _               _       _       _       _
   @nvv    C-z     C-x     C-c     C-v     C-y     @nvv    A-c     A-v     C-a     @/_     @nvv            _               _       _       _
   _       _       @numt   ent                             @colnv          _                       _       caps    _       _               _
 )
@@ -84,7 +84,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @colef  esc     home    up      end     A-ent   M-spc   prtsc   pgup    pgdn    _       _       _       _               _       _       _       _
-  @bks_   tab     left    down    rght    spc     ins     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
+  @bks_   tab     left    down    rght    spc     ins     @c_v-sw @s_v-sw @m_v-sw @a_v-sw @rep-a  _               _       _       _       _
   @sropt  C-z     C-x     C-c     C-v     _       @fir    A-c     A-v     C-a     C-f     @ss             _               _       _       _
   _       _       @numt   ent                             @coleft         _                       _       caps    _       _               _
 )
@@ -879,24 +879,24 @@
   vk-flush XX
   
   swt (switch
-    ($has-typed-letter-ctl-sft-met-alt) (multi (one-shot-press 1000 lctl) (one-shot-press 1000 lsft) (one-shot-press 1000 lmet) (one-shot-press 1000 lalt) (one-shot-press 1000 (layer-while-held qwert-bare))) break
+    ($has-typed-letter-ctl-sft-met-alt) (multi (one-shot-release-anchor 10000 lctl) (one-shot-release-anchor 10000 lsft) (one-shot-release-anchor 10000 lmet) (one-shot-release-anchor 10000 lalt) (one-shot-release-anchor 10000 (layer-while-held qwert-bare))) break
     
-    ($has-typed-letter-ctl-sft-met) (multi (one-shot-press 1000 lctl) (one-shot-press 1000 lsft) (one-shot-press 1000 lmet) (one-shot-press 1000 (layer-while-held qwert-bare))) break
-    ($has-typed-letter-ctl-sft-alt) (multi (one-shot-press 1000 lctl) (one-shot-press 1000 lsft) (one-shot-press 1000 lalt) (one-shot-press 1000 (layer-while-held qwert-bare))) break
-    ($has-typed-letter-sft-met-alt) (multi (one-shot-press 1000 lsft) (one-shot-press 1000 lmet) (one-shot-press 1000 lalt) (one-shot-press 1000 (layer-while-held qwert-bare))) break
-    ($has-typed-letter-ctl-met-alt) (multi (one-shot-press 1000 lctl) (one-shot-press 1000 lmet) (one-shot-press 1000 lalt) (one-shot-press 1000 (layer-while-held qwert-bare))) break
+    ($has-typed-letter-ctl-sft-met) (multi (one-shot-release-anchor 10000 lctl) (one-shot-release-anchor 10000 lsft) (one-shot-release-anchor 10000 lmet) (one-shot-release-anchor 10000 (layer-while-held qwert-bare))) break
+    ($has-typed-letter-ctl-sft-alt) (multi (one-shot-release-anchor 10000 lctl) (one-shot-release-anchor 10000 lsft) (one-shot-release-anchor 10000 lalt) (one-shot-release-anchor 10000 (layer-while-held qwert-bare))) break
+    ($has-typed-letter-sft-met-alt) (multi (one-shot-release-anchor 10000 lsft) (one-shot-release-anchor 10000 lmet) (one-shot-release-anchor 10000 lalt) (one-shot-release-anchor 10000 (layer-while-held qwert-bare))) break
+    ($has-typed-letter-ctl-met-alt) (multi (one-shot-release-anchor 10000 lctl) (one-shot-release-anchor 10000 lmet) (one-shot-release-anchor 10000 lalt) (one-shot-release-anchor 10000 (layer-while-held qwert-bare))) break
     
-    ($has-typed-letter-ctl-sft) (multi (one-shot-press 1000 lctl) (one-shot-press 1000 lsft) (one-shot-press 1000 (layer-while-held qwert-bare))) break
-    ($has-typed-letter-ctl-met) (multi (one-shot-press 1000 lctl) (one-shot-press 1000 lmet) (one-shot-press 1000 (layer-while-held qwert-bare))) break
-    ($has-typed-letter-ctl-alt) (multi (one-shot-press 1000 lctl) (one-shot-press 1000 lalt) (one-shot-press 1000 (layer-while-held qwert-bare))) break
-    ($has-typed-letter-sft-met) (multi (one-shot-press 1000 lsft) (one-shot-press 1000 lmet) (one-shot-press 1000 (layer-while-held qwert-bare))) break
-    ($has-typed-letter-sft-alt) (multi (one-shot-press 1000 lsft) (one-shot-press 1000 lalt) (one-shot-press 1000 (layer-while-held qwert-bare))) break
-    ($has-typed-letter-met-alt) (multi (one-shot-press 1000 lmet) (one-shot-press 1000 lalt) (one-shot-press 1000 (layer-while-held qwert-bare))) break
+    ($has-typed-letter-ctl-sft) (multi (one-shot-release-anchor 10000 lctl) (one-shot-release-anchor 10000 lsft) (one-shot-release-anchor 10000 (layer-while-held qwert-bare))) break
+    ($has-typed-letter-ctl-met) (multi (one-shot-release-anchor 10000 lctl) (one-shot-release-anchor 10000 lmet) (one-shot-release-anchor 10000 (layer-while-held qwert-bare))) break
+    ($has-typed-letter-ctl-alt) (multi (one-shot-release-anchor 10000 lctl) (one-shot-release-anchor 10000 lalt) (one-shot-release-anchor 10000 (layer-while-held qwert-bare))) break
+    ($has-typed-letter-sft-met) (multi (one-shot-release-anchor 10000 lsft) (one-shot-release-anchor 10000 lmet) (one-shot-release-anchor 10000 (layer-while-held qwert-bare))) break
+    ($has-typed-letter-sft-alt) (multi (one-shot-release-anchor 10000 lsft) (one-shot-release-anchor 10000 lalt) (one-shot-release-anchor 10000 (layer-while-held qwert-bare))) break
+    ($has-typed-letter-met-alt) (multi (one-shot-release-anchor 10000 lmet) (one-shot-release-anchor 10000 lalt) (one-shot-release-anchor 10000 (layer-while-held qwert-bare))) break
     
-    ($has-typed-letter-ctl) (multi (one-shot-press 1000 lctl) (one-shot-press 1000 (layer-while-held qwert-bare))) break
-    ($has-typed-letter-sft) (multi (one-shot-press 1000 lsft) (one-shot-press 1000 (layer-while-held qwert-bare))) break
-    ($has-typed-letter-met) (multi (one-shot-press 1000 lmet) (one-shot-press 1000 (layer-while-held qwert-bare))) break
-    ($has-typed-letter-alt) (multi (one-shot-press 1000 lalt) (one-shot-press 1000 (layer-while-held qwert-bare))) break
+    ($has-typed-letter-ctl) (multi (one-shot-release-anchor 10000 lctl) (one-shot-release-anchor 10000 (layer-while-held qwert-bare))) break
+    ($has-typed-letter-sft) (multi (one-shot-release-anchor 10000 lsft) (one-shot-release-anchor 10000 (layer-while-held qwert-bare))) break
+    ($has-typed-letter-met) (multi (one-shot-release-anchor 10000 lmet) (one-shot-release-anchor 10000 (layer-while-held qwert-bare))) break
+    ($has-typed-letter-alt) (multi (one-shot-release-anchor 10000 lalt) (one-shot-release-anchor 10000 (layer-while-held qwert-bare))) break
     
     () XX break
   )
