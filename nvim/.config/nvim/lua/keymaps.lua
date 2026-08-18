@@ -181,21 +181,26 @@ vim.keymap.set('n', '<CR>', function()
   local indent = line:match('^(%s*)') or ''
 
   if line_len == 0 or col >= line_len - 1 then
-    -- Đang ở cuối dòng (giống 'a' + Enter):
-    -- Thêm dòng mới có sẵn khoảng indent và chuyển con trỏ xuống đúng vị trí đó
+    -- Đang ở cuối dòng hoặc dòng trống: chèn dòng mới giữ indent
     vim.api.nvim_buf_set_lines(0, row, row, false, { indent })
     vim.api.nvim_win_set_cursor(0, { row + 1, #indent })
   else
-    -- Đang ở giữa dòng (giống 'i' + Enter):
-    -- Ngắt từ trước ký tự con trỏ đang đứng, đẩy toàn bộ phần sau xuống dòng kèm indent
+    -- Lấy đoạn trước và đoạn sau
     local before = line:sub(1, col)
     local after = line:sub(col + 1)
 
+    -- Xóa khoảng trắng thừa:
+    -- Xóa khoảng trắng cuối của dòng trên và khoảng trắng đầu của đoạn bị đẩy xuống
+    before = before:gsub('%s+$', '')
+    after = after:gsub('^%s+', '')
+
     vim.api.nvim_set_current_line(before)
     vim.api.nvim_buf_set_lines(0, row, row, false, { indent .. after })
+
+    -- Con trỏ nhảy xuống dòng mới, đặt đúng ngay chữ cái đầu tiên sau khoảng indent
     vim.api.nvim_win_set_cursor(0, { row + 1, #indent })
   end
-end, { desc = 'Ngắt dòng: theo sau con trỏ và giữ nguyên indent' })
+end, { desc = 'Ngắt dòng sạch: tự xóa khoảng trắng thừa giữa 2 từ' })
 
 vim.keymap.set('n', '<S-CR>', function()
   local row, col = unpack(vim.api.nvim_win_get_cursor(0))
