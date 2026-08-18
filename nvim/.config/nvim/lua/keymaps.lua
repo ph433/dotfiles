@@ -175,21 +175,9 @@ vim.keymap.set('n', 'O', function()
 end, { desc = "Thay thế dòng giữ nguyên thụt lề" })
 
 vim.keymap.set('n', '<CR>', function()
-  -- 1. Lấy nội dung của dòng hiện tại
-  local current_line = vim.api.nvim_get_current_line()
-  
-  -- 2. Trích xuất đúng phần khoảng trắng (thụt lề) ở đầu dòng
-  local indent = current_line:match("^%s*") or ""
-  
-  -- 3. Lấy vị trí dòng hiện hành (row)
-  local row = vim.api.nvim_win_get_cursor(0)[1]
-  
-  -- 4. Tạo một dòng mới ngay bên dưới, chứa sẵn lượng khoảng trắng đã copy
-  vim.api.nvim_buf_set_lines(0, row, row, false, { indent })
-  
-  -- 5. Di chuyển con trỏ xuống dòng mới, đặt ngay sau phần khoảng trắng đó
-  vim.api.nvim_win_set_cursor(0, { row + 1, #indent })
-end, { silent = true, desc = 'Tạo dòng mới giữ nguyên thụt lề, không tự thêm comment' })
+	  local keys = vim.api.nvim_replace_termcodes('a<CR> <BS><Esc>', true, false, true)
+	    vim.api.nvim_feedkeys(keys, 'n', false)
+    end, { desc = 'Ngắt dòng sau con trỏ và giữ vị trí thụt lề' })
 
 vim.keymap.set('n', '<S-CR>', function()
   local row, col = unpack(vim.api.nvim_win_get_cursor(0))

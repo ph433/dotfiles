@@ -350,19 +350,33 @@ vim.keymap.set('n', '<C-Tab>', function()
 end, { desc = 'Strict exact search on Tab' })
 
 vim.keymap.set('n', '<Space>', function()
-  if vim.v.hlsearch == 1 then
+  local count = vim.v.count
+
+  -- 1. Nếu có gõ số: tạo dòng mới theo thụt lề dòng N phía trên
+  if count > 0 then
+    local row = vim.api.nvim_win_get_cursor(0)[1]
+    local target_row = math.max(1, row - count)
+    local target_line = vim.api.nvim_buf_get_lines(0, target_row - 1, target_row, false)[1] or ""
+    local indent = target_line:match("^%s*") or ""
+
+    vim.api.nvim_buf_set_lines(0, row, row, false, { indent })
+    vim.api.nvim_win_set_cursor(0, { row + 1, #indent })
+
+  -- 2. Nếu đang bật hlsearch: nhảy tới kết quả tìm kiếm tiếp theo
+  elseif vim.v.hlsearch == 1 then
     pcall(vim.cmd, 'normal! n')
+
+  -- 3. Mặc định: chèn một khoảng trắng sau con trỏ
   else
-    -- Thực hiện chèn khoảng trắng rồi thoát Insert mode (a<Space><Esc>)
     vim.cmd('normal! a ')
   end
-end, { desc = 'Jump to next match on Space or insert space' })
+end, { silent = true, desc = 'Count: tạo dòng mới | hlsearch: nhảy match | Mặc định: chèn space' })
 
 vim.keymap.set('n', '<Tab>', function()
   if vim.v.hlsearch == 1 then
     return 'N'
   else
-    return 'a<Tab>'
+    return 'a<Tab><Esc>'
   end
 end, { expr = true, desc = 'Jump to previous match or insert tab' })
 
