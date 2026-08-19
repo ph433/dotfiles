@@ -309,18 +309,18 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @gg     `       -       =       S-=     /       \       [       S-9     S-0     ]       _       _       _               _       _       _       _
-  bks     1       2       3       4       5       6       7       8       9       0       del     _                       _       _       _       _
+  bks     1       2       3       4       5       6       7       8       9       0       @repa   _                       _       _       _       _
   @ns     _       S-;     ;       C-o     _       '       S-'     ,       .       /       @ns             _               _       _       _
-  _       _       @ns     spc                                     @f1-12  _                       _       _       _       _               _
+  _       _       @ns     spc                                     @nssw   _                       _       _       _       _               _
 )
 
 (deflayer mod_num-shift-temp
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @gg     S-`     S--     _       _       S-/     S-\     S-[     S-,     S-.     S-]     _       _       _               _       _       _       _
-  bks     S-1     S-2     S-3     S-4     S-5     S-6     S-7     S-8     S-9     S-0     del     _                       _       _       _       _
+  bks     S-1     S-2     S-3     S-4     S-5     S-6     S-7     S-8     S-9     S-0     @repa   _                       _       _       _       _
   _       _       _       S-;     _       _       _       _       S-,     S-.     S-/     _               _               _       _       _
-  _       _       _       _                                       _       _                       _       _       _       _               _
+  _       _       _       _                                       @nusw   _                       _       _       _       _               _
 ) 
 
 (deflayer nvim_delete
@@ -490,10 +490,9 @@
   nvswft (one-shot-press 1000 (layer-toggle mod_firefox-temp))
   colef (layer-switch colemak-dh-firefox)
   coleft (one-shot-press 1000 (layer-toggle colemak-dh-firefox-temp))
-  nvswt (one-shot-press 1000 (layer-toggle mod_nvim-temp))
+  ;; nvswt (one-shot-press 1000 (layer-toggle mod_nvim-temp))
   nvswt! (one-shot-press 1000 (layer-toggle mod_nvim-temp-!c))
   nvswat (one-shot-press 1000 (layer-toggle mod_nvim-active-temp))
-  numt (one-shot-press 1000 (layer-toggle mod_num))
   colet (one-shot-press 1000 (layer-toggle colemak-dh-temp))
   colnv (one-shot-press 1000 (layer-toggle colemak-dh-nvim-temp))
   f1-12 (layer-toggle fuction-bare)
@@ -879,6 +878,16 @@
   
   vk-flush XX
   
+  down_up_auto_complete (switch
+    ($has-typed-letter-auto-fill) ent break
+    () XX break
+  )
+  
+  sign-special (switch
+    ($has-typed-letter-num) (one-shot-release-anchor 10000 (layer-while-held mod_num-shift-temp)) break
+    () XX break
+  )
+    
   swt (switch
     ($has-typed-letter-ctl-sft-met-alt) (multi (one-shot-release-anchor 10000 lctl) (one-shot-release-anchor 10000 lsft) (one-shot-release-anchor 10000 lmet) (one-shot-release-anchor 10000 lalt) (one-shot-release-anchor 10000 (layer-while-held qwert-bare))) break
     
@@ -911,6 +920,12 @@
   kfls (multi k @flush-hist)
   lfls (multi l @flush-hist)
   ;fls (multi ; @flush-hist)
+  
+  nvswt (multi (layer-toggle mod_nvim-temp) (on-release tap-virtualkey down_up_auto_complete))
+  
+  numt (multi (layer-toggle mod_num) (on-release tap-virtualkey sign-special))
+  nssw (layer-toggle mod_num-shift-temp)
+  nusw (layer-toggle mod_num)
   
   a_v-sw (multi (layer-toggle like-alt) (on-release tap-virtualkey swt))
   c_v-sw (multi (layer-toggle like-ctl) (on-release tap-virtualkey swt))
@@ -946,7 +961,6 @@
   m-, (macro ,)
   m-. (macro .)
   m-/ (macro /)
-  
 )
 
 (deflayer qwert-bare
@@ -994,6 +1008,10 @@
 
 (defvar
 
+  has-typed-letter-num (or (input-history real lalt 2))
+  
+  has-typed-letter-auto-fill (or (input-history real d 2) (input-history real e 2))
+  
   has-typed-letter-ctl (or (input-history real j 2))
   has-typed-letter-sft (or (input-history real k 2))
   has-typed-letter-met (or (input-history real l 2))
