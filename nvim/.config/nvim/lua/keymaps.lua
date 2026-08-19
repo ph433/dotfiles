@@ -279,3 +279,7 @@ vim.keymap.set('v', '%', function()
   -- 4. motion: Nhảy tiếp đến điểm đối ứng để bôi đen
   return '\27' .. target_col .. '|v' .. motion
 end, { expr = true, desc = "Bôi đen từ ngoặc/nháy trong Visual mode" })
+
+vim.keymap.set("n", ":", function()
+  require("keyfunctions_dir").fzf.fzf_command_history()
+end, { silent = true, desc = "FZF Command History" })
