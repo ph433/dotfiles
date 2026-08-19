@@ -174,42 +174,46 @@ vim.keymap.set('n', 'O', function()
   vim.api.nvim_set_current_line(indent .. clipboard_content)
 end, { desc = "Thay thế dòng giữ nguyên thụt lề" })
 
-vim.keymap.set('n', '<CR>', function()
-  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-  local line = vim.api.nvim_get_current_line()
-  local line_len = #line
-  local indent = line:match('^(%s*)') or ''
+-- Hàm dùng chung tạo dòng mới theo khoảng thụt lề
+local function create_line_with_indent(direction)
+  local count = vim.v.count
+  local row = vim.api.nvim_win_get_cursor(0)[1]
+  local total_lines = vim.api.nvim_buf_line_count(0)
+  local target_row = row
 
-  if line_len == 0 or col >= line_len - 1 then
-    -- Đang ở cuối dòng hoặc dòng trống: chèn dòng mới giữ indent
-    vim.api.nvim_buf_set_lines(0, row, row, false, { indent })
-    vim.api.nvim_win_set_cursor(0, { row + 1, #indent })
-  else
-    -- Lấy đoạn trước và đoạn sau
-    local before = line:sub(1, col)
-    local after = line:sub(col + 1)
-
-    -- Xóa khoảng trắng thừa:
-    -- Xóa khoảng trắng cuối của dòng trên và khoảng trắng đầu của đoạn bị đẩy xuống
-    before = before:gsub('%s+$', '')
-    after = after:gsub('^%s+', '')
-
-    vim.api.nvim_set_current_line(before)
-    vim.api.nvim_buf_set_lines(0, row, row, false, { indent .. after })
-
-    -- Con trỏ nhảy xuống dòng mới, đặt đúng ngay chữ cái đầu tiên sau khoảng indent
-    vim.api.nvim_win_set_cursor(0, { row + 1, #indent })
+  if count > 0 then
+    if direction == "down" then
+      -- Lấy thụt lề từ N dòng phía DƯỚI
+      target_row = math.min(total_lines, row + count)
+    else
+      -- Mặc định: Lấy thụt lề từ N dòng phía TRÊN
+      target_row = math.max(1, row - count)
+    end
   end
-end, { desc = 'Ngắt dòng sạch: tự xóa khoảng trắng thừa giữa 2 từ' })
 
-vim.keymap.set('n', '<S-CR>', function()
-  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-  local spaces = string.rep(' ', col)
-  -- Chèn một dòng mới chứa số khoảng trắng tương ứng vào ngay dưới dòng hiện tại
-  vim.api.nvim_buf_set_lines(0, row, row, false, { spaces })
-  -- Di chuyển con trỏ xuống dòng mới tạo, ngay tại vị trí cột đó
-  vim.api.nvim_win_set_cursor(0, { row + 1, col })
-end, { desc = 'Tạo dòng mới bên dưới khớp vị trí cột (Normal mode)' })
+  local target_line = vim.api.nvim_buf_get_lines(0, target_row - 1, target_row, false)[1] or ""
+  local indent = target_line:match("^%s*") or ""
+
+  -- Chèn dòng mới ngay dưới dòng hiện tại và đưa con trỏ tới
+  vim.api.nvim_buf_set_lines(0, row, row, false, { indent })
+  vim.api.nvim_win_set_cursor(0, { row + 1, #indent })
+end
+
+-- 1. Phím tắt <CR>: Mặc định lấy dòng TRÊN (hoặc nhảy hlsearch)
+vim.keymap.set('n', '<CR>', function()
+  -- Nếu đang hlsearch và không kèm count: nhảy tới match tiếp theo
+  if vim.v.count == 0 and vim.v.hlsearch == 1 then
+    pcall(vim.cmd, 'normal! n')
+    return
+  end
+
+  create_line_with_indent("up")
+end, { silent = true, desc = 'CR: tạo dòng theo indent N dòng TRÊN (hoặc dòng hiện tại)' })
+
+-- 2. Phím tắt -<CR>: Lấy thụt lề từ N dòng DƯỚI (vd: 2-<CR>)
+vim.keymap.set('n', '-<CR>', function()
+  create_line_with_indent("down")
+end, { silent = true, desc = '-CR: tạo dòng theo indent N dòng DƯỚI' })
 
 -- local picker = require("custom.my_picker")
 --
