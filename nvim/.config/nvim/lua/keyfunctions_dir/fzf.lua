@@ -19,16 +19,17 @@ M.fzf_command_history = function()
       ["tab"] = function(_, opts)
         local query = opts.last_query
         if query and #query > 0 then
-          vim.fn.histadd("cmd", query) -- Thêm trực tiếp vào command history của Vim
-          vim.cmd(query)               -- Thực thi lệnh
+          vim.fn.histadd("cmd", query)
+          vim.cmd(query)
         end
       end,
       
-      -- 2. Khi bấm Enter: chạy dòng đang chọn và đảm bảo đưa lên đầu lịch sử
-      ["default"] = function(selected)
-        if selected and selected[1] then
-          vim.fn.histadd("cmd", selected[1])
-          vim.cmd(selected[1])
+      -- 2. Khi bấm Enter: ưu tiên dòng đang chọn, nếu không khớp thì lấy query đang gõ
+      ["default"] = function(selected, opts)
+        local cmd = (selected and selected[1]) or (opts and opts.last_query)
+        if cmd and #cmd > 0 then
+          vim.fn.histadd("cmd", cmd)
+          vim.cmd(cmd)
         end
       end,
     },
