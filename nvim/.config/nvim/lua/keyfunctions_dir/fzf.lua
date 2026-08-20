@@ -7,6 +7,7 @@ M.fzf_command_history = function()
   fzf.command_history({
     winopts = { height = 0.4, width = 0.7, border = "rounded" },
     prompt = "Cmd History> ",
+    header = ":: \27[32m<Enter>\27[0m exec | \27[33m<Tab>\27[0m run query | \27[35m<Ctrl-z>\27[0m edit | \27[36m<Ctrl-c>\27[0m copy | \27[34m<Ctrl-v>\27[0m paste",
     keymap = {
       fzf = {
         ["ctrl-z"]  = "transform-query(echo -n {})",
