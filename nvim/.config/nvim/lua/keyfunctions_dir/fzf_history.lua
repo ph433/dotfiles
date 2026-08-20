@@ -4,14 +4,17 @@ M.fzf_command_history = function()
   local ok, fzf = pcall(require, "fzf-lua")
   if not ok then return end
 
-  -- 1. Tự lấy danh sách lịch sử lệnh thô từ Neovim
-  local history_list = {}
-  local total_history = vim.fn.histnr("cmd")
-  for i = total_history, 1, -1 do
-    local cmd = vim.fn.histget("cmd", i)
-    if cmd ~= "" then
-      table.insert(history_list, cmd)
+  -- HÀM CUNG CẤP DỮ LIỆU ĐỘNG (Dynamic Callback Provider)
+  -- Thay vì gom vào 1 table, ta bắn từng dòng vào giao diện qua `fzf_cb`
+  local function history_provider(fzf_cb)
+    local total_history = vim.fn.histnr("cmd")
+    for i = total_history, 1, -1 do
+      local cmd = vim.fn.histget("cmd", i)
+      if cmd ~= "" then
+        fzf_cb(cmd) -- Bắn dòng lệnh vào FZF
+      end
     end
+    fzf_cb(nil) -- Bắn nil để báo hiệu đã tải xong dữ liệu (EOF)
   end
 
   local cheatsheet = [[
@@ -21,7 +24,7 @@ M.fzf_command_history = function()
   \27[32m<Enter>\27[0m     : Execute selected item (or query if no match)
   \27[33m<Tab>\033[0m       : [Empty] Toggle Help | [Text] Run EXACT query
   \27[35m<Ctrl-z>\033[0m    : Put selected item into input to edit
-  \27[31m<Ctrl-a>\033[0m    : Clear entire query input
+  \27[31m<Ctrl-a>\033[0m    : Delete selected item from Neovim history
 
 \27[1;33m[ 2. CLIPBOARD (COPYQ) ]\27[0m
   \27[36m<Ctrl-c>\033[0m    : Copy selected item to clipboard
@@ -48,20 +51,15 @@ M.fzf_command_history = function()
   local cmd_cheatsheet = "cat " .. cheat_file
   local cmd_hello = "cat " .. hello_file
 
-  -- 2. Dùng fzf_exec kết hợp cấu hình màu `--color` chuẩn hiệu ứng nổi bật
-  fzf.fzf_exec(history_list, {
+  local opts = {
     winopts = { height = 0.55, width = 0.8, border = "rounded" },
     prompt = "Cmd History> ",
-    header = ":: <Enter/Tab> run/help | <Ctrl-z> edit | <Ctrl-a> clear | <Ctrl-c> copy",
+    header = ":: <Enter/Tab> run/help | <Ctrl-z> edit | <Ctrl-a> delete history | <Ctrl-c> copy",
     
     fzf_opts = {
       ["--preview"] = cmd_cheatsheet,
       ["--preview-window"] = "down:60%:hidden:wrap",
-      
-      -- CẤU HÌNH MÀU MATCH NỔI BẬT: 
-      -- Thêm thuộc tính `regular` hoặc đổi màu chữ kết hợp nền cho `hl` và `hl+`
-      -- Ví dụ: chữ vàng sáng, có gạch chân hoặc đổi màu nền nổi bật
-      ["--color"] = "hl:yellow:reverse:bold,hl+:yellow:reverse:bold,pointer:#ff79c6,marker:#ff79c6,bg+:#44475a",
+      ["--color"] = "hl:yellow:reverse:bold,hl+:yellow:reverse:bold,pointer:#ff79c6,marker:#ff79c6,bg+:#44475a,spinner:#ff79c6",
     },
     
     keymap = {
@@ -70,20 +68,16 @@ M.fzf_command_history = function()
         [":"]         = string.format("change-preview(%s)+toggle-preview", cmd_cheatsheet),
         [";"]         = string.format("change-preview(%s)+toggle-preview", cmd_hello),
         
-        -- TAB thông minh: Rỗng thì toggle cheatsheet, có chữ thì chạy thẳng query
         ["tab"]       = string.format([[transform:sh -c 'if [ -z "$FZF_QUERY" ]; then echo "change-preview(%s)+toggle-preview"; else echo "become(echo; echo \"$FZF_QUERY\")"; fi']], cmd_cheatsheet),
         ["enter"]     = "accept",
         
-        ["ctrl-a"]    = "execute-action(delete_and_reload)",
         ["ctrl-z"]    = "transform-query(echo -n {})",
         ["ctrl-up"]   = "half-page-up",
         ["ctrl-down"] = "half-page-down",
         ["ctrl-v"]    = "transform-query(printf '%s%s' {q} \"$(copyq clipboard | tr -d '\\r\\n')\")",
         
-        -- Ctrl-C: Copy dòng đang chọn vào copyq
         ["ctrl-c"]    = "execute-silent(echo -n {} | copyq add - && copyq select 0)",
-        
-        -- Ctrl-X: Cuộn nửa trang xuống dưới
+        ["ctrl-x"]    = "half-page-up",
       },
     },
     
@@ -110,8 +104,32 @@ M.fzf_command_history = function()
           end)
         end
       end,
+
+      -- Phím tắt xóa: Xóa ngầm xong kích hoạt flag `reload` để fzf gọi lại `history_provider` ngay lập tức
+        ["ctrl-x"] = {
+        fn = function(selected, _)
+          local item = (selected and selected[1]) or ""
+          local trimmed = vim.trim(item)
+          if #trimmed > 0 then
+            -- 1. Copy vào clipboard hệ thống và CopyQ
+            vim.fn.setreg("+", trimmed)
+            vim.fn.setreg('"', trimmed)
+            vim.fn.system({ "copyq", "add", "-" }, trimmed)
+            vim.fn.system({ "copyq", "select", "0" })
+
+            -- 2. Xóa dòng lệnh khớp chính xác khỏi lịch sử Neovim
+            local exact_match = "^" .. vim.fn.escape(trimmed, "\\/.*$^~[]") .. "$"
+            vim.fn.histdel("cmd", exact_match)
+          end
+        end,
+        noclose = true,
+        reload = true,
+      },
     },
-  })
+  }
+
+  -- Truyền TÊN HÀM (history_provider) thay vì bảng dữ liệu, để cờ `reload` biết đường gọi lại hàm này
+  fzf.fzf_exec(history_provider, opts)
 end
 
 return M
