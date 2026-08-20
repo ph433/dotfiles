@@ -9,9 +9,12 @@ M.fzf_command_history = function()
     prompt = "Cmd History> ",
     keymap = {
       fzf = {
-        ["right"]  = "transform-query(echo -n {})",
-        ["ctrl-u"] = "half-page-up",
-        ["ctrl-d"] = "half-page-down",
+        ["ctrl-z"]  = "transform-query(echo -n {})",
+        ["ctrl-up"] = "half-page-up",
+        ["ctrl-down"] = "half-page-down",
+        -- Lấy clipboard hiện tại từ CopyQ và nối vào query đang nhập
+        ["ctrl-v"] = "transform-query(printf '%s%s' {q} \"$(copyq clipboard | tr -d '\\r\\n')\")",
+        ["ctrl-c"] = "execute-silent(echo -n {} | copyq add - && copyq select 0)",
       },
     },
     actions = {
@@ -23,7 +26,7 @@ M.fzf_command_history = function()
           vim.cmd(query)
         end
       end,
-      
+
       -- 2. Khi bấm Enter: ưu tiên dòng đang chọn, nếu không khớp thì lấy query đang gõ
       ["default"] = function(selected, opts)
         local cmd = (selected and selected[1]) or (opts and opts.last_query)
