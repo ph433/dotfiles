@@ -4,7 +4,7 @@ M.fzf_command_history = function()
   local ok, fzf = pcall(require, "fzf-lua")
   if not ok then return end
 
-  -- Thu thập toàn bộ lịch sử lệnh từ Neovim một cách an toàn
+  -- 1. Tự lấy danh sách lịch sử lệnh thô từ Neovim
   local history_list = {}
   local total_history = vim.fn.histnr("cmd")
   for i = total_history, 1, -1 do
@@ -24,11 +24,11 @@ M.fzf_command_history = function()
   \27[31m<Ctrl-a>\033[0m    : Clear entire query input
 
 \27[1;33m[ 2. CLIPBOARD (COPYQ) ]\27[0m
-  \27[36m<Ctrl-x>\033[0m    : Scroll half page down (Cleaned from hardcode)
+  \27[36m<Ctrl-c>\033[0m    : Copy selected item to clipboard
   \27[34m<Ctrl-v>\033[0m    : Paste from Clipboard to input
 
 \27[1;33m[ 3. NAVIGATION ]\27[0m
-  \27[31m<Ctrl-u/d>\033[0m  : Scroll list (half page up/down)
+  \27[31m<Ctrl-x>\033[0m    : Scroll half page down
   \27[33m<?>\033[0m         : Toggle this Cheatsheet
   \27[36m<;>\033[0m         : Toggle Hello Preview
 ]]
@@ -48,15 +48,20 @@ M.fzf_command_history = function()
   local cmd_cheatsheet = "cat " .. cheat_file
   local cmd_hello = "cat " .. hello_file
 
-  -- Sử dụng giao diện fzf-lua thông qua bảng dữ liệu thuần túy, hoàn toàn không dính hàm gốc hardcode
+  -- 2. Dùng fzf_exec kết hợp cấu hình màu `--color` chuẩn hiệu ứng nổi bật
   fzf.fzf_exec(history_list, {
     winopts = { height = 0.55, width = 0.8, border = "rounded" },
     prompt = "Cmd History> ",
-    header = ":: <Enter/Tab> run/help | <Ctrl-z> edit | <Ctrl-a> clear | <Ctrl-x> page down",
+    header = ":: <Enter/Tab> run/help | <Ctrl-z> edit | <Ctrl-a> clear | <Ctrl-c> copy",
     
     fzf_opts = {
       ["--preview"] = cmd_cheatsheet,
       ["--preview-window"] = "down:60%:hidden:wrap",
+      
+      -- CẤU HÌNH MÀU MATCH NỔI BẬT: 
+      -- Thêm thuộc tính `regular` hoặc đổi màu chữ kết hợp nền cho `hl` và `hl+`
+      -- Ví dụ: chữ vàng sáng, có gạch chân hoặc đổi màu nền nổi bật
+      ["--color"] = "hl:yellow:reverse:bold,hl+:yellow:reverse:bold,pointer:#ff79c6,marker:#ff79c6,bg+:#44475a",
     },
     
     keymap = {
@@ -69,15 +74,16 @@ M.fzf_command_history = function()
         ["tab"]       = string.format([[transform:sh -c 'if [ -z "$FZF_QUERY" ]; then echo "change-preview(%s)+toggle-preview"; else echo "become(echo; echo \"$FZF_QUERY\")"; fi']], cmd_cheatsheet),
         ["enter"]     = "accept",
         
-        ["ctrl-a"]    = "clear-query",
+        ["ctrl-a"]    = "execute-action(delete_and_reload)",
         ["ctrl-z"]    = "transform-query(echo -n {})",
         ["ctrl-up"]   = "half-page-up",
         ["ctrl-down"] = "half-page-down",
         ["ctrl-v"]    = "transform-query(printf '%s%s' {q} \"$(copyq clipboard | tr -d '\\r\\n')\")",
+        
+        -- Ctrl-C: Copy dòng đang chọn vào copyq
         ["ctrl-c"]    = "execute-silent(echo -n {} | copyq add - && copyq select 0)",
         
-        -- GIỜ THÌ PHÍM CTRL-X SẼ HOẠT ĐỘNG CHUẨN XÁC LÀ CUỘN TRANG, KHÔNG CÒN BỊ XÓA BẬY BẠ NỮA
-        ["ctrl-x"]    = "half-page-down",
+        -- Ctrl-X: Cuộn nửa trang xuống dưới
       },
     },
     
