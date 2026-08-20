@@ -18,13 +18,14 @@ M.fzf_command_history = function()
   \27[34m<Ctrl-v>\27[0m    : Paste from Clipboard to input
 
 \27[1;33m[ 3. NAVIGATION ]\27[0m
-  \27[31m<Ctrl-u/d>\033[0m  : Scroll list (half page up/down)
-  \27[33m<?>\033[0m         : Toggle this Cheatsheet
-  \27[36m<;>\033[0m         : Toggle Hello Preview
+  \27[31m<Ctrl-u/d>\27[0m  : Scroll list (half page up/down)
+  \27[33m<?>\27[0m         : Toggle this Cheatsheet
+  \27[36m<;>\27[0m         : Toggle Hello Preview
 ]]
 
   local hello_txt = "\\27[1;32m=== HELLO ===\\27[0m\n\nHello! This is a sample preview."
 
+  -- Ghi file tạm để shell đọc mượt mà không dính lỗi cú pháp nháy kép
   local cache_dir = vim.fn.stdpath("cache")
   local cheat_file = cache_dir .. "/fzf_cheat.txt"
   local hello_file = cache_dir .. "/fzf_hello.txt"
@@ -54,8 +55,11 @@ M.fzf_command_history = function()
         [":"]         = string.format("change-preview(%s)+toggle-preview", cmd_cheatsheet),
         [";"]         = string.format("change-preview(%s)+toggle-preview", cmd_hello),
         
-        -- Nếu query rỗng -> Toggle Cheatsheet. Nếu có chữ -> Bắn tín hiệu accept ra ngoài.
-        ["tab"]       = string.format([[transform:sh -c 'if [ -z "$FZF_QUERY" ]; then echo "change-preview(%s)+toggle-preview"; else echo "accept"; fi']], cmd_cheatsheet),
+        -- XỬ LÝ LÕI TẠI ĐÂY:
+        -- Nếu rỗng (-z): Bật cheatsheet (không đóng GUI).
+        -- Nếu có chữ: Dùng "become" ép FZF in ra 1 dòng trống (làm giả tín hiệu accept) và dòng 2 là biến $FZF_QUERY.
+        -- fzf-lua sẽ tưởng đó chính là kết quả selected[1].
+        ["tab"]       = string.format([[transform:sh -c 'if [ -z "$FZF_QUERY" ]; then echo "change-preview(%s)+toggle-preview"; else echo "become(echo; echo \"$FZF_QUERY\")"; fi']], cmd_cheatsheet),
         
         ["ctrl-a"]    = "clear-query",
         ["ctrl-z"]    = "transform-query(echo -n {})",
@@ -67,20 +71,14 @@ M.fzf_command_history = function()
     },
     
     actions = {
-      ["default"] = function(selected, opts)
-        local cmd = ""
-        
-        -- PHÂN BIỆT RÕ RÀNG:
-        -- 1. Nếu bấm Enter: Lấy dòng đang được bôi sáng trong danh sách (selected[1])
-        -- 2. Nếu bấm Tab (khi có query): Lấy chính xác nội dung trong ô nhập (opts.query / opts.last_query)
-        local query = opts.query or opts.last_query or ""
-        if #vim.trim(query) > 0 and selected and selected[1] ~= query then
-          cmd = query
-        else
-          cmd = (selected and selected[1]) or query
-        end
-
+      -- Lúc này hàm default trở nên cực kỳ đơn giản và sạch sẽ, không cần check loằng ngoằng nữa
+      ["default"] = function(selected, _)
+        -- Nhờ Trick "become" bên trên:
+        -- Khi bấm Enter -> selected[1] là dòng bôi sáng.
+        -- Khi bấm Tab   -> selected[1] sẽ là chính xác nội dung ô Query.
+        local cmd = selected and selected[1] or ""
         local trimmed = vim.trim(cmd)
+
         if #trimmed > 0 then
           vim.schedule(function()
             vim.fn.histadd("cmd", trimmed)
