@@ -17,23 +17,23 @@ M.fzf_command_history = function()
     fzf_cb(nil) -- Bắn nil để báo hiệu đã tải xong dữ liệu (EOF)
   end
 
-  local cheatsheet = [[
+local cheatsheet = [[
 \27[1;34m=== FZF COMMAND HISTORY CHEATSHEET ===\27[0m
 
 \27[1;33m[ 1. BASIC SHORTCUTS ]\27[0m
   \27[32m<Enter>\27[0m     : Execute selected item (or query if no match)
-  \27[33m<Tab>\033[0m       : [Empty] Toggle Help | [Text] Run EXACT query
-  \27[35m<Ctrl-z>\033[0m    : Put selected item into input to edit
-  \27[31m<Ctrl-a>\033[0m    : Delete selected item from Neovim history
+  \27[33m<Tab>\27[0m       : [Empty] Toggle Help | [Text] Run EXACT query
+  \27[35m<Ctrl-z>\27[0m    : Put selected item into input to edit
+  \27[31m<Ctrl-a>\27[0m    : Delete selected item from Neovim history
 
 \27[1;33m[ 2. CLIPBOARD (COPYQ) ]\27[0m
-  \27[36m<Ctrl-c>\033[0m    : Copy selected item to clipboard
-  \27[34m<Ctrl-v>\033[0m    : Paste from Clipboard to input
+  \27[36m<Ctrl-c>\27[0m    : Copy selected item to clipboard
+  \27[34m<Ctrl-v>\27[0m    : Paste from Clipboard to input
 
 \27[1;33m[ 3. NAVIGATION ]\27[0m
-  \27[31m<Ctrl-x>\033[0m    : Scroll half page down
-  \27[33m<?>\033[0m         : Toggle this Cheatsheet
-  \27[36m<;>\033[0m         : Toggle Hello Preview
+  \27[31m<Ctrl-x>\27[0m    : Scroll half page down
+  \27[33m<?>\27[0m         : Toggle this Cheatsheet
+  \27[36m<;>\27[0m         : Toggle Hello Preview
 ]]
 
   local hello_txt = "\\27[1;32m=== HELLO ===\\27[0m\n\nHello! This is a sample preview."
@@ -77,7 +77,6 @@ M.fzf_command_history = function()
         ["ctrl-v"]    = "transform-query(printf '%s%s' {q} \"$(copyq clipboard | tr -d '\\r\\n')\")",
         
         ["ctrl-c"]    = "execute-silent(echo -n {} | copyq add - && copyq select 0)",
-        ["ctrl-x"]    = "half-page-up",
       },
     },
     
@@ -105,21 +104,29 @@ M.fzf_command_history = function()
         end
       end,
 
-      -- Phím tắt xóa: Xóa ngầm xong kích hoạt flag `reload` để fzf gọi lại `history_provider` ngay lập tức
-        ["ctrl-x"] = {
+      -- Sửa lại: Dùng Ctrl-a để xóa lịch sử
+      ["ctrl-x"] = {
         fn = function(selected, _)
           local item = (selected and selected[1]) or ""
           local trimmed = vim.trim(item)
           if #trimmed > 0 then
-            -- 1. Copy vào clipboard hệ thống và CopyQ
+            -- 1. Copy vào clipboard (CopyQ)
             vim.fn.setreg("+", trimmed)
             vim.fn.setreg('"', trimmed)
             vim.fn.system({ "copyq", "add", "-" }, trimmed)
             vim.fn.system({ "copyq", "select", "0" })
 
-            -- 2. Xóa dòng lệnh khớp chính xác khỏi lịch sử Neovim
-            local exact_match = "^" .. vim.fn.escape(trimmed, "\\/.*$^~[]") .. "$"
-            vim.fn.histdel("cmd", exact_match)
+            -- 2. Xóa triệt để bằng cách duyệt index (Thay vì dùng regex)
+            local total_history = vim.fn.histnr("cmd")
+            for i = total_history, 1, -1 do
+              local hist_cmd = vim.fn.histget("cmd", i)
+              if vim.trim(hist_cmd) == trimmed then
+                vim.fn.histdel("cmd", i)
+              end
+            end
+            
+            -- Ép ghi lưu lịch sử xuống đĩa cứng ngay lập tức
+            vim.cmd("wshada!")
           end
         end,
         noclose = true,
