@@ -861,7 +861,12 @@
 
 (defvirtualkeys
   v_ent ent
-  v_nvswac (layer-switch mod_nvim-active)
+  ;; v_nvswac (layer-switch mod_nvim-active)
+  
+  v_nvswac (switch
+    ($has-typed-letter-[) (multi [ (layer-switch mod_nvim-active)) break
+    () (layer-switch mod_nvim-active) break
+  )
   
   vk-flush XX
   
@@ -1032,6 +1037,7 @@
   has-typed-letter-ralt_toggle_nvim-active (or (input-history real ralt 2))
   
   has-typed-letter-auto-fill (or (input-history real d 2) (input-history real e 2))
+  has-typed-letter-[ (or (input-history real [ 2))
   
   has-typed-letter-ctl (or (input-history real j 2))
   has-typed-letter-sft (or (input-history real k 2))
