@@ -92,19 +92,10 @@
 (deflayer mod_firefox
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  @colef  esc     home    up      end     A-ent   M-spc   prtsc   pgup    pgdn    _       _       _       _               _       _       _       _
+  del     esc     home    up      end     A-ent   M-spc   prtsc   pgup    pgdn    _       _       _       _               _       _       _       _
   @bks_   tab     left    down    rght    spc     ins     @c_v-sw @s_v-sw @m_v-sw @a_v-sw @repa   _               _       _       _       _
   @sropt  C-z     C-x     C-c     C-v     _       @fir    A-c     A-v     C-a     C-f     @ss             _               _       _       _
   _       _       @numt   ent                             @coleft         _                       _       caps    _       _               _
-)
-
-(deflayer mod_firefox-temp
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  @colef  esc     home    up      end     A-ent   M-spc   prtsc   pgup    pgdn    _       _       _       _               _       _       _       _
-  @bks_   tab     left    down    rght    spc     ins     @lictl  @lisft  @limet  @lialt  del     _               _       _       _       _
-  @sropt  C-z     C-x     C-c     C-v     _       @fir    A-c     A-v     C-a     C-f     @ss             _               _       _       _
-  _       _       @numt   ent                             @nvswff         _                       _       caps    _       _               _
 )
 
 (deflayer custom-right-ent
@@ -371,19 +362,10 @@
 (deflayer colemak-dh-firefox
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  @nvswff q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
+  del     q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
   bks     a       r       s       t       g       m       n       e       i       o       ent     _                       _       _       _       _
   @ss     x       c       d       v       z       k       h       ,       .       /       @ss             _               _       _       _
-  lctl    lmet    @numt   spc                                     @nvswft _                       _       _       _       _               _
-)
-
-(deflayer colemak-dh-firefox-temp
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  @nvswff q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
-  bks     a       r       s       t       g       m       n       e       i       o       ent     _                       _       _       _       _
-  @ss     x       c       d       v       z       k       h       ,       .       /       @ss             _               _       _       _
-  lctl    lmet    @numt   spc                                     @colef  _                       _       _       _       _               _
+  lctl    lmet    @numt   spc                                     @coleft- _                       _       _       _       _               _
 )
 
 (deflayer colemak-dh
@@ -495,10 +477,6 @@
   nvswa (multi (layer-switch mod_nvim-active) ent)
   nvswac (layer-toggle mod_nvim-active)
   colosw (layer-switch colemak-dh)
-  nvswff (layer-switch mod_firefox)
-  nvswft (one-shot-press 1000 (layer-toggle mod_firefox-temp))
-  colef (layer-switch colemak-dh-firefox)
-  coleft (one-shot-press 1000 (layer-toggle colemak-dh-firefox-temp))
   ;; nvswt (one-shot-press 1000 (layer-toggle mod_nvim-temp))
   nvswt! (one-shot-press 1000 (layer-toggle mod_nvim-temp-!c))
   nvswat (one-shot-press 1000 (layer-toggle mod_nvim-active-temp))
@@ -892,9 +870,21 @@
     () XX break
   )
   
+  switch_to_colemak-dh_firefox (switch
+    ($has-typed-letter-ralt_toggle_colemak-dh) (multi (layer-switch colemak-dh-firefox)) break
+    ;; ($has-typed-letter-ralt_toggle_colemak-dh_replace) (multi (layer-switch mod_nvim-colemak-dh-active)) break
+    () XX break
+  )
+  
+  switch_to_firefox (switch
+    ($has-typed-letter-ralt_toggle_colemak-dh) (multi (layer-switch mod_firefox)) break
+    ;; ($has-typed-letter-ralt_toggle_colemak-dh_replace) (multi (layer-switch mod_nvim-colemak-dh-active)) break
+    () XX break
+  )
+  
   switch_to_colemak-dh_nvim (switch
-    ($has-typed-letter-ralt_toggle_colemak-dh) (multi i (layer-switch mod_nvim-colemak-dh-active)) break
-    ($has-typed-letter-ralt_toggle_colemak-dh_replace) (multi (layer-switch mod_nvim-colemak-dh-active)) break
+    ($has-typed-letter-ralt_toggle_colemak-dh) (multi a (layer-switch mod_nvim-colemak-dh-active)) break
+    ;; ($has-typed-letter-ralt_toggle_colemak-dh_replace) (multi (layer-switch mod_nvim-colemak-dh-active)) break
     () XX break
   )
   
@@ -943,6 +933,10 @@
   
   colnv (multi (layer-toggle mod_nvim-colemak-dh-active) (on-release tap-virtualkey switch_to_colemak-dh_nvim))
   colnv- (multi (layer-toggle mod_nvim-active) (on-release tap-virtualkey switch_to_nvim-active))
+  
+  
+  coleft (multi (layer-toggle colemak-dh-firefox) (on-release tap-virtualkey switch_to_colemak-dh_firefox))
+  coleft- (multi (layer-toggle mod_firefox) (on-release tap-virtualkey switch_to_firefox))
   
   nvswt (multi (layer-toggle mod_nvim-temp) (on-release tap-virtualkey down_up_auto_complete))
   numt (multi (layer-toggle mod_num) (on-release tap-virtualkey sign-special))
@@ -1033,7 +1027,7 @@
   has-typed-letter-num (or (input-history real lalt 2))
   
   has-typed-letter-ralt_toggle_colemak-dh (or (input-history real ralt 2))
-  has-typed-letter-ralt_toggle_colemak-dh_replace (or (input-history real s 2))
+  ;; has-typed-letter-ralt_toggle_colemak-dh_replace (or (input-history real s 2))
       
   has-typed-letter-ralt_toggle_nvim-active (or (input-history real ralt 2))
   
