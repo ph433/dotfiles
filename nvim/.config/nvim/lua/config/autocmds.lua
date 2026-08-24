@@ -18,7 +18,7 @@ vim.api.nvim_create_autocmd({ "VimEnter", "FocusGained" }, {
         -- Tạo timer mới với uv (libuv) để có thể hủy bất cứ lúc nào
         timer = vim.loop.new_timer()
         timer:start(40, 0, vim.schedule_wrap(function()
-            set_layout("mod_nvim-active")
+            set_layout("mod_nvim")
             if timer then
                 timer:close()
                 timer = nil
@@ -37,7 +37,7 @@ vim.api.nvim_create_autocmd({ "VimLeave", "FocusLost" }, {
             timer = nil
         end
 
-        set_layout("mod_nvim")
+        set_layout("base")
     end
 })
 
