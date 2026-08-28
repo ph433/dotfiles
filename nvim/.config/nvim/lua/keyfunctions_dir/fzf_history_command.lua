@@ -11,7 +11,6 @@ M.fzf_command_history = function()
   local function history_provider(fzf_cb)
     if vim.fn.filereadable(history_file) == 1 then
       local lines = vim.fn.readfile(history_file)
-      -- Đọc ngược từ dưới lên để lệnh mới nhất nằm trên cùng
       for i = #lines, 1, -1 do
         local cmd = vim.trim(lines[i])
         if cmd ~= "" then
@@ -29,7 +28,6 @@ M.fzf_command_history = function()
       lines = vim.fn.readfile(history_file)
     end
     
-    -- Xóa các dòng cũ bị trùng với lệnh mới (để đẩy lệnh này lên đầu)
     local new_lines = {}
     for _, line in ipairs(lines) do
       if vim.trim(line) ~= cmd_str then
@@ -41,12 +39,44 @@ M.fzf_command_history = function()
     vim.fn.writefile(new_lines, history_file)
   end
 
-  -- [GIỮ NGUYÊN PHẦN CHEATSHEET & TẠO FILE HELLO/CHEAT]
-  local cheatsheet = [[...]] -- (Giữ nguyên text của bạn)
-  local hello_txt = "..."    -- (Giữ nguyên)
-  -- ... (Phần tạo file /tmp/fzf_cheat.txt giữ nguyên)
-  local cmd_cheatsheet = "cat " .. vim.fn.stdpath("cache") .. "/fzf_cheat.txt"
-  local cmd_hello = "cat " .. vim.fn.stdpath("cache") .. "/fzf_hello.txt"
+  local cheatsheet = [[
+\27[1;34m=== FZF COMMAND HISTORY CHEATSHEET ===\27[0m
+
+\27[1;33m[ 1. BASIC SHORTCUTS ]\27[0m
+  \27[32m<Enter>\27[0m     : Execute selected item
+  \27[33m<Tab>\27[0m       : [Empty] Toggle Help | [Text] Run EXACT query
+  \27[35m<Ctrl-z>\27[0m    : Clear query
+  \27[31m<Ctrl-x>\27[0m    : Delete selected item from history
+
+\27[1;33m[ 2. CLIPBOARD (COPYQ) ]\27[0m
+  \27[36m<Ctrl-c>\27[0m    : Copy selected item to clipboard
+  \27[34m<Ctrl-v>\27[0m    : Paste from Clipboard to input
+
+\27[1;33m[ 3. NAVIGATION ]\27[0m
+  \27[33m<?>\27[0m         : Toggle this Cheatsheet
+  \27[36m<;>\27[0m         : Toggle Hello Preview
+]]
+
+  local hello_txt = "\\27[1;32m=== HELLO ===\\27[0m\n\nHello! This is a sample preview."
+
+  local cache_dir = vim.fn.stdpath("cache")
+  local cheat_file = cache_dir .. "/fzf_cheat.txt"
+  local hello_file = cache_dir .. "/fzf_hello.txt"
+
+  local f1 = io.open(cheat_file, "w")
+  if f1 then f1:write((cheatsheet:gsub("\\27", string.char(27)))); f1:close() end
+
+  local f2 = io.open(hello_file, "w")
+  if f2 then f2:write((hello_txt:gsub("\\27", string.char(27)))); f2:close() end
+
+  local cmd_cheatsheet = "cat '" .. cheat_file .. "'"
+  local cmd_hello = "cat '" .. hello_file .. "'"
+
+  -- GÁN PHÍM ẢO: Dùng alt-enter để fzf-lua không chặn phím Tab
+  local tab_bind = string.format(
+    [[transform:if [ -z "$FZF_QUERY" ]; then echo "change-preview(%s)+toggle-preview"; else echo 'become(echo alt-enter; printf "%%s\n" "$FZF_QUERY")'; fi]],
+    cmd_cheatsheet
+  )
 
   local opts = {
     winopts = { height = 0.55, width = 0.8, border = "rounded" },
@@ -64,6 +94,10 @@ M.fzf_command_history = function()
         ["?"]         = string.format("change-preview(%s)+toggle-preview", cmd_cheatsheet),
         [":"]         = string.format("change-preview(%s)+toggle-preview", cmd_cheatsheet),
         [";"]         = string.format("change-preview(%s)+toggle-preview", cmd_hello),
+        
+        -- Mapping Tab chỉ được đăng ký ở đây, KHÔNG xuất hiện trong bảng actions
+        ["tab"]       = tab_bind,
+        
         ["enter"]     = "accept",
         ["ctrl-y"]    = "transform-query(echo -n {})",
         ["ctrl-up"]   = "half-page-up",
@@ -82,21 +116,22 @@ M.fzf_command_history = function()
         local trimmed = vim.trim(cmd)
 
         if #trimmed > 0 then
-          append_to_file(trimmed) -- Ghi vào file chung
+          append_to_file(trimmed)
           vim.schedule(function()
-            vim.fn.histadd("cmd", trimmed) -- Cập nhật nhẹ vào RAM Neovim hiện tại
+            vim.fn.histadd("cmd", trimmed)
             local keys = vim.api.nvim_replace_termcodes(":" .. trimmed .. "<CR>", true, false, true)
             vim.api.nvim_feedkeys(keys, "n", true)
           end)
         end
       end,
 
-      ["tab"] = function(_, act_opts)
-        local query = (act_opts and (act_opts.last_query or act_opts.query)) or ""
+      -- FIX: Bắt tín hiệu "alt-enter" được bắn ra từ become() khi Tab có chứa chữ
+      ["alt-enter"] = function(selected, _)
+        local query = (selected and selected[1]) or ""
         local trimmed = vim.trim(query)
 
         if #trimmed > 0 then
-          append_to_file(trimmed) -- Ghi vào file chung
+          append_to_file(trimmed)
           vim.schedule(function()
             vim.fn.histadd("cmd", trimmed)
             local keys = vim.api.nvim_replace_termcodes(":" .. trimmed .. "<CR>", true, false, true)
@@ -117,7 +152,7 @@ M.fzf_command_history = function()
           vim.fn.system({ "copyq", "add", "-" }, trimmed)
           vim.fn.system({ "copyq", "select", "0" })
 
-          -- CHỈ CẦN XÓA DÒNG TRONG FILE
+          -- Xóa dòng trong file
           if vim.fn.filereadable(history_file) == 1 then
             local lines = vim.fn.readfile(history_file)
             local new_lines = {}
@@ -129,7 +164,7 @@ M.fzf_command_history = function()
             vim.fn.writefile(new_lines, history_file)
           end
 
-          -- Dọn rác tạm trong RAM của Neovim hiện tại (để nó không hiện lại nếu dùng phím mũi tên)
+          -- Dọn rác tạm trong RAM
           local total_history = vim.fn.histnr("cmd")
           for i = total_history, 1, -1 do
             if vim.trim(vim.fn.histget("cmd", i)) == trimmed then
@@ -138,7 +173,7 @@ M.fzf_command_history = function()
           end
         end,
         noclose = true,
-        reload = true, -- Sẽ gọi lại history_provider để load lại từ file ngay lập tức
+        reload = true, 
       },
     },
   }
