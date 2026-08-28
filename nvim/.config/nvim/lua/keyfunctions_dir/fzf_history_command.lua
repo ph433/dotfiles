@@ -68,30 +68,33 @@ local cheatsheet = [[
         [":"]         = string.format("change-preview(%s)+toggle-preview", cmd_cheatsheet),
         [";"]         = string.format("change-preview(%s)+toggle-preview", cmd_hello),
         
-        ["tab"]       = string.format([[transform:sh -c 'if [ -z "$FZF_QUERY" ]; then echo "change-preview(%s)+toggle-preview"; else echo "become(echo; echo \"$FZF_QUERY\")"; fi']], cmd_cheatsheet),
+        -- ["tab"]       = string.format([[transform:sh -c 'if [ -z "$FZF_QUERY" ]; then echo "change-preview(%s)+toggle-preview"; else echo "become(echo; echo \"$FZF_QUERY\")"; fi']], cmd_cheatsheet),
+        ["tab"] = string.format([[transform:sh -c 'if [ -z "$FZF_QUERY" ]; then echo "change-preview(%s)+toggle-preview"; else echo "accept"; fi']], cmd_cheatsheet),
         ["enter"]     = "accept",
         
-        ["ctrl-z"]    = "transform-query(echo -n {})",
+        ["ctrl-y"]    = "transform-query(echo -n {})",
         ["ctrl-up"]   = "half-page-up",
         ["ctrl-down"] = "half-page-down",
         ["ctrl-v"]    = "transform-query(printf '%s%s' {q} \"$(copyq clipboard | tr -d '\\r\\n')\")",
         
         ["ctrl-c"]    = "execute-silent(echo -n {} | copyq add - && copyq select 0)",
+        ["ctrl-z"] = "clear-query",
       },
     },
-    
     actions = {
-      ["default"] = function(selected, opts)
-        local cmd = ""
+      ["default"] = function(selected, act_opts)
+        local query = (act_opts and (act_opts.last_query or act_opts.query)) or ""
         local selected_item = (selected and selected[1]) or ""
-        local query = opts.query or opts.last_query or ""
+        local cmd = ""
 
-        if selected and selected[2] and selected[2] ~= "" then
-          cmd = selected[2]
-        elseif selected_item ~= "" then
-          cmd = selected_item
-        else
+        -- Ưu tiên 1: Chạy query nếu người dùng có nhập text
+        if query ~= "" then
           cmd = query
+        -- Ưu tiên 2: Chạy item được chọn trong danh sách
+        elseif selected and selected[2] and selected[2] ~= "" then
+          cmd = selected[2]
+        else
+          cmd = selected_item
         end
 
         local trimmed = vim.trim(cmd)
@@ -103,7 +106,7 @@ local cheatsheet = [[
           end)
         end
       end,
-
+      
       -- Sửa lại: Dùng Ctrl-a để xóa lịch sử
       ["ctrl-x"] = {
         fn = function(selected, _)
