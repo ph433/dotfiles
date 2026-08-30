@@ -309,6 +309,7 @@
   f1-12 (layer-toggle fuction-bare)
   fir (layer-toggle macro_firefox)
   fd (layer-toggle colemak-dh-ff)
+  numtg (layer-toggle number-bare)
 )
 
 (defalias
@@ -696,6 +697,11 @@
   lfls (multi l @flush-hist)
   ;fls (multi ; @flush-hist)
   
+  7- (multi 7 @flush-hist)
+  8- (multi 8 @flush-hist)
+  9- (multi 9 @flush-hist)
+  0- (multi 0 @flush-hist)
+  
   nvv (multi (macro v) (layer-toggle macro_nvim_vi) (on-release tap-virtualkey switch_to_macro_nvim_va))
   
   colnv (multi (layer-toggle mod_nvim_colemak-dh) (on-release tap-virtualkey switch_to_colemak-dh_nvim))
@@ -753,14 +759,14 @@
   tab     @m-q    @m-w    @m-e    @m-r    @m-t    @m-y    @m-u    @m-i    @m-o    @m-p    [       ]       \               kp7     kp8     kp9     kp+
   caps    @m-a    @m-s    @m-d    @m-f    @m-g    @m-h    @jfls   @kfls   @lfls   @;fls   @rep-a  ret                     kp4     kp5     kp6     kprt
   lsft    @m-z    @m-x    @m-c    @m-v    @m-b    @m-n    @m-m    @m-,    @m-.    @m-/    rsft            up              kp1     kp2     kp3 
-  lctl    lmet    lalt    spc                                     ralt    f23                     left    down    rght    kp0             kp.
+  lctl    lmet    @numtg  spc                                     ralt    f23                     left    down    rght    kp0             kp.
 )
 
 (deflayer number-bare 
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       1       2       3       4       5       6       7       8       9       0       _       _                       _       _       _       _
+  _       1       2       3       4       5       6       @7-     @8-     @9-     @0-     _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       _       _                                       _       _                       _       _       _       _               _
 )
@@ -777,6 +783,9 @@
 (defvar
 
   has-typed-letter-n (or (input-history real n 2))
+  has-typed-letter-a-i-r (or (input-history real a 2)
+                             (input-history real l 2)
+                             (input-history real s 2))
   
   has-typed-letter-lalt (or (input-history real lalt 2))
   
