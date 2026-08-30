@@ -119,7 +119,9 @@ M.fzf_command_history = function()
           append_to_file(trimmed)
           vim.schedule(function()
             vim.fn.histadd("cmd", trimmed)
-            local keys = vim.api.nvim_replace_termcodes(":" .. trimmed .. "<CR>", true, false, true)
+            -- Chỉ dịch đúng phím <CR> ở cuối câu
+            local cr = vim.api.nvim_replace_termcodes("<CR>", true, false, true)
+            local keys = ":" .. trimmed .. cr
             vim.api.nvim_feedkeys(keys, "n", true)
           end)
         end
@@ -134,9 +136,12 @@ M.fzf_command_history = function()
           append_to_file(trimmed)
           vim.schedule(function()
             vim.fn.histadd("cmd", trimmed)
-            local keys = vim.api.nvim_replace_termcodes(":" .. trimmed .. "<CR>", true, false, true)
+            -- Chỉ dịch đúng phím <CR> ở cuối câu
+            local cr = vim.api.nvim_replace_termcodes("<CR>", true, false, true)
+            local keys = ":" .. trimmed .. cr
             vim.api.nvim_feedkeys(keys, "n", true)
           end)
+
         end
       end,
       
