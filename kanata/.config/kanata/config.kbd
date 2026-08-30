@@ -313,7 +313,7 @@
 )
 
 (defalias
-  ss (multi lsft (layer-toggle base_colemak-dh))
+  ;; ss (multi lsft (layer-toggle base_colemak-dh))
   
   ;; sc (one-shot 2000 lctl) ;; Sticky Ctrl
   ;; sa (one-shot 2000 lalt) ;; Sticky Alt
@@ -624,6 +624,11 @@
   
   vk-flush XX
   
+  switch_to_function_bare (switch
+    ($has-typed-letter-shift) (one-shot-press 1000 (layer-toggle fuction_bare_hold)) break
+    () XX break
+  )
+  
   switch_to_macro_nvim_va (switch
     ($has-typed-letter-n) (one-shot-press 1000 (layer-toggle macro_nvim_va)) break
     () XX break
@@ -707,7 +712,23 @@
   f9- (multi f9 @flush-hist)
   f10- (multi f10 @flush-hist)
   
+  f1+ (multi (macro f1) (layer-toggle fuction_bare))
+  f2+ (multi (macro f2) (layer-toggle fuction_bare))
+  f3+ (multi (macro f3) (layer-toggle fuction_bare))
+  f4+ (multi (macro f4) (layer-toggle fuction_bare))
+  f5+ (multi (macro f5) (layer-toggle fuction_bare))
+  f6+ (multi (macro f6) (layer-toggle fuction_bare))
+  f7+  (multi (macro f7)  (layer-toggle fuction_bare))
+  f8+  (multi (macro f8)  (layer-toggle fuction_bare))
+  f9+  (multi (macro f9)  (layer-toggle fuction_bare))
+  f10+ (multi (macro f10) (layer-toggle fuction_bare))
+  f11+ (multi (macro f11) (layer-toggle fuction_bare))
+  f12+ (multi (macro f12) (layer-toggle fuction_bare))
+  
+  
   nvv (multi (macro v) (layer-toggle macro_nvim_vi) (on-release tap-virtualkey switch_to_macro_nvim_va))
+  
+  ss (multi lsft (layer-toggle base_colemak-dh) (on-release tap-virtualkey switch_to_function_bare))
   
   colnv (multi (layer-toggle mod_nvim_colemak-dh) (on-release tap-virtualkey switch_to_colemak-dh_nvim))
   colnv- (multi (layer-toggle mod_nvim) (on-release tap-virtualkey switch_to_nvim))
@@ -768,7 +789,7 @@
   lctl    lmet    @fbsw   spc                                     ralt    f23                     left    down    rght    kp0             kp.
 )
 
-(deflayer number-bare 
+(deflayer number-bare
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
@@ -777,7 +798,16 @@
   _       _       _       _                                       _       _                       _       _       _       _               _
 )
 
-(deflayer fuction_bare 
+(deflayer fuction_bare_hold
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       @f11+   _       _       _       _       @f12+   _       _       _       _       _               _       _       _       _
+  _       @f1+    @f2+    @f3+    @f4+    @f5+    @f6+    @f7+    @f8+    @f9+    @f10+   _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       _                                       _       _                       _       _       _       _               _
+)
+
+(deflayer fuction_bare
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       _       f11     _       _       _       _       f12     _       _       _       _       _               _       _       _       _
@@ -789,6 +819,9 @@
 (defvar
 
   has-typed-letter-n (or (input-history real n 2))
+  has-typed-letter-shift (or (input-history real lsft 2)
+                             (input-history real rsft 2))
+                             
   has-typed-letter-a-i-r (or (input-history real a 2)
                              (input-history real l 2)
                              (input-history real s 2))
