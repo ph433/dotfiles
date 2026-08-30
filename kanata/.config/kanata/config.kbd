@@ -246,7 +246,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @gg     `       -       =       S-=     /       \       [       S-9     S-0     ]       _       _       _               _       _       _       _
-  bks     1       2       3       4       5       6       7       8       9       0       @repa   _                       _       _       _       _
+  bks     1       2       3       4       5       6       @7-     @8-     @9-     @0-     @repa   _                       _       _       _       _
   _       _       S-;     ;       C-o     _       '       S-'     ,       .       /       _               _               _       _       _
   _       _       _       spc                                     @nssw   _                       _       _       _       _               _
 )
@@ -306,7 +306,7 @@
 )
 
 (defalias
-  f1-12 (layer-toggle fuction-bare)
+  f1-12 (layer-toggle fuction_bare)
   fir (layer-toggle macro_firefox)
   fd (layer-toggle colemak-dh-ff)
   numtg (layer-toggle number-bare)
@@ -702,6 +702,11 @@
   9- (multi 9 @flush-hist)
   0- (multi 0 @flush-hist)
   
+  f7- (multi f7 @flush-hist)
+  f8- (multi f8 @flush-hist)
+  f9- (multi f9 @flush-hist)
+  f10- (multi f10 @flush-hist)
+  
   nvv (multi (macro v) (layer-toggle macro_nvim_vi) (on-release tap-virtualkey switch_to_macro_nvim_va))
   
   colnv (multi (layer-toggle mod_nvim_colemak-dh) (on-release tap-virtualkey switch_to_colemak-dh_nvim))
@@ -715,6 +720,7 @@
   
   numt (multi (layer-toggle mod_num) (on-release tap-virtualkey sign-special))
   nssw (layer-toggle mod_num_shift)
+  fbsw (layer-toggle fuction_bare)
   nusw (layer-toggle mod_num)
   
   a_v-sw (multi (layer-toggle like-alt) (on-release tap-virtualkey swt))
@@ -759,7 +765,7 @@
   tab     @m-q    @m-w    @m-e    @m-r    @m-t    @m-y    @m-u    @m-i    @m-o    @m-p    [       ]       \               kp7     kp8     kp9     kp+
   caps    @m-a    @m-s    @m-d    @m-f    @m-g    @m-h    @jfls   @kfls   @lfls   @;fls   @rep-a  ret                     kp4     kp5     kp6     kprt
   lsft    @m-z    @m-x    @m-c    @m-v    @m-b    @m-n    @m-m    @m-,    @m-.    @m-/    rsft            up              kp1     kp2     kp3 
-  lctl    lmet    @numtg  spc                                     ralt    f23                     left    down    rght    kp0             kp.
+  lctl    lmet    @fbsw   spc                                     ralt    f23                     left    down    rght    kp0             kp.
 )
 
 (deflayer number-bare 
@@ -771,11 +777,11 @@
   _       _       _       _                                       _       _                       _       _       _       _               _
 )
 
-(deflayer fuction-bare 
+(deflayer fuction_bare 
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       _       f11     _       _       _       _       f12     _       _       _       _       _               _       _       _       _
-  _       f1      f2      f3      f4      f5      f6      f7      f8      f9      f10     _       _                       _       _       _       _
+  _       f1      f2      f3      f4      f5      f6      @f7-    @f8-    @f9-    @f10-   _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       _       _                                       _       _                       _       _       _       _               _
 )
