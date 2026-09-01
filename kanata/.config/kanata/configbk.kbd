@@ -26,17 +26,13 @@
   lctl    lmet    lalt                       spc                  ralt    f23                     left    down    rght    kp0             kp.
 )
 
-(defalias
-  m_n (layer-toggle modifier_number)
-)
-
 (deflayer base
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   del     esc     home    up      end     A-ent   _       _       M-spc   prtsc   pgup    pgdn    ;       /               _       _       _       _
   bks     tab     left    down    rght    spc     _       _       ins     @c_v-sw @s_v-sw @m_v-sw @a_v-sw @repa           _       _       _       _
-  @ss     C-z     C-x     C-c     C-v     C-y     _       _       A-c     A-v     C-a     /       @ss                     _       _       _       _
-  _       _       _       spc     _       _       _       _       ent     _       _       _               _               _       _       _
-  _       _       @numt                     @m_n                  @cole   _                       _       _       _       _               _
+  @ss     C-z     C-x     C-c     C-v     C-y     _       _       _       A-c     A-v     C-a     @ss                     _       _       _       _
+  _       _       _       _       _       _       _       _       @m_n    _       _       _               _               _       _       _
+  _       _       @numt                     ent                   @cole   _                       _       _       _       _               _
 )
 
 (deflayer base_colemak-dh
@@ -44,8 +40,8 @@
   del     q       w       f       p       b       _       _       j       l       u       y       ;       /               _       _       _       _
   bks     a       r       s       t       g       _       _       m       n       e       i       o       _               _       _       _       _
   @ss     x       c       d       v       z       _       _       k       h       ,       .       @ss                     _       _       _       _
-  _       _       _       spc     _       _       _       _       ent     _       _       _               _               _       _       _
-  _       _       @numt                     @m_n                  @cole-  _                       _       _       _       _               _
+  _       _       _       _       _       _       _       _       @m_n    _       _       _               _               _       _       _
+  _       _       @numt                     spc                   @cole-  _                       _       _       _       _               _
 )
 
 (deflayer modifier_number
@@ -53,6 +49,15 @@
   _       C-1     C-2     C-3     C-4     C-5     _       _       C-6     C-7     C-8     C-9     C-0     _               _       _       _       _
   _       A-1     A-2     A-3     A-4     A-5     _       _       A-6     A-7     A-8     A-9     A-0     _               _       _       _       _
   _       M-1     M-2     M-3     M-4     M-5     _       _       M-6     M-7     M-8     M-9     M-0                     _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _       _                                       _       _                       _       _       _       _               _
+)
+
+(deflayer modifier_function
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  _       C-f1    C-f2    C-f3    C-f4    C-f5    C-f11   C-f12   C-f6    C-f7    C-f8    C-f9    C-f10   _               _       _       _       _
+  _       A-f1    A-f2    A-f3    A-f4    A-f5    A-f11   A-f12   A-f6    A-f7    A-f8    A-f9    A-f10   _               _       _       _       _
+  _       M-f1    M-f2    M-f3    M-f4    M-f5    M-f11   M-f12   M-f6    M-f7    M-f8    M-f9    M-f10                   _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       _       _                                       _       _                       _       _       _       _               _
 )
@@ -222,19 +227,19 @@
 (deflayer like-alt
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   A-del   A-esc   A-home  A-up    A-end   _       _       _       _       _       _       _       _       _               _       _       _       _
-  A-bks   A-tab   A-left  A-down  A-rght  _       _       _       _       @ca     @sa     @wa     @altn   _               _       _       _       _
+  A-bks   A-tab   A-left  A-down  A-rght  A-spc   _       _       _       @ca     @sa     @wa     @altn   _               _       _       _       _
   A-prtsc A-ins   A-pgup  A-pgdn  _       _       _       _       _       _       _       _       _                       _       _       _       _
-  _       _       _       A-spc   _       _       _       _       A-ent   _       _       _               _               _       _       _
-  _       _       @altn                     _                     @alta   _                       _       _       _       _               _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @altn                     A-ent                 @alta   _                       _       _       _       _               _
 )
 
 (deflayer like-ctl
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   C-del   C-esc   C-home  C-up    C-end   _       _       _       _       _       _       _       _       _               _       _       _       _
-  C-bks   C-tab   C-left  C-down  C-rght  _       _       _       _       @ctln   @cs     @cw     @ca     _               _       _       _       _
+  C-bks   C-tab   C-left  C-down  C-rght  C-spc   _       _       _       @ctln   @cs     @cw     @ca     _               _       _       _       _
   C-prtsc C-ins   C-pgup  C-pgdn  _       _       _       _       _       _       _       _       _                       _       _       _       _
-  _       _       _       C-spc   _       _       _       _       C-ent   _       _       _               _               _       _       _
-  _       _       @ctln                     _                     @ctla   _                       _       _       _       _               _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @ctln                     C-ent                 @ctla   _                       _       _       _       _               _
 )
 
 (deflayer like-sft
@@ -242,8 +247,8 @@
   S-del   S-esc   S-home  S-up    S-end   _       _       _       _       _       _       _       _       _               _       _       _       _
   S-bks   S-tab   S-left  S-down  S-rght  _       _       _       _       @cs     @sftn   @sw     @sa     _               _       _       _       _
   S-prtsc S-ins   S-pgup  S-pgdn  _       _       _       _       _       _       _       _       _                       _       _       _       _
-  _       _       _       S-spc   _       _       _       _       S-ent   _       _       _               _               _       _       _
-  _       _       @sftn                     _                     @sfta   _                       _       _       _       _               _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @sftn                     S-ent                 @sfta   _                       _       _       _       _               _
 )
 
 (deflayer like-met
@@ -251,27 +256,27 @@
   M-del   M-esc   M-home  M-up    M-end   _       _       _       _       _       _       _       _       _               _       _       _       _
   M-bks   M-tab   M-left  M-down  M-rght  _       _       _       _       @cw     @sw     @metn   @wa     _               _       _       _       _
   M-prtsc M-ins   M-pgup  M-pgdn  _       _       _       _       _       _       _       _       _                       _       _       _       _
-  _       _       _       M-spc   _       _       _       _       M-ent   _       _       _               _               _       _       _
-  _       _       @metn                     _                     @meta   _                       _       _       _       _               _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       @metn                     M-ent                 @meta   _                       _       _       _       _               _
 )
 
 (deflayer mod_num
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  @gg     `       -       =       S-=     /       \       [       S-9     S-0     ]       _       _       _               _       _       _       _
-  bks     1       2       3       4       5       6       @7-     @8-     @9-     @0-     @repa   _                       _       _       _       _
-  _       _       S-;     ;       C-o     _       '       S-'     ,       .       /       _               _               _       _       _
-  _       _       _       spc                                     @nssw   _                       _       _       _       _               _
+  @gg     `       -       =       S-=     /       _       _       \       [       S-9     S-0     ]       _               _       _       _       _
+  bks     1       2       3       4       5       _       _       6       @7-     @8-     @9-     @0-     @repa           _       _       _       _
+  _       _       S-;     ;       C-o     _       _       _       '       S-'     ,       .       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _                         spc                   _       _                       _       _       _       _               _
 )
 
 (deflayer mod_num_shift
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  @gg     S-`     S--     _       _       S-/     S-\     S-[     S-,     S-.     S-]     _       _       _               _       _       _       _
-  bks     S-1     S-2     S-3     S-4     S-5     S-6     S-7     S-8     S-9     S-0     @repa   _                       _       _       _       _
-  _       _       _       S-;     _       _       _       _       S-,     S-.     S-/     _               _               _       _       _
-  _       _       _       _                                       @nusw   _                       _       _       _       _               _
-) 
+  @gg     S-`     S--     _       _       S-/     _       _       S-\     S-[     S-,     S-.     S-]     _               _       _       _       _
+  bks     S-1     S-2     S-3     S-4     S-5     _       _       S-6     S-7     S-8     S-9     S-0     @repa           _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
+  _       _       _                         spc                   _       _                       _       _       _       _               _
+)
 
 (deflayer nvim_delete
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
@@ -637,6 +642,11 @@
   
   vk-flush XX
   
+  switch_to_modifier_function (switch
+    ($has-typed-letter-,) (one-shot-press 1000 (layer-toggle modifier_function)) break
+    () XX break
+  )
+  
   switch_to_function_bare (switch
     ($has-typed-letter-shift) (one-shot-press 1000 (layer-toggle fuction_bare_hold)) break
     () XX break
@@ -738,8 +748,9 @@
   f11+ (multi (macro f11) (layer-toggle fuction_bare))
   f12+ (multi (macro f12) (layer-toggle fuction_bare))
   
-  
   nvv (multi (macro v) (layer-toggle macro_nvim_vi) (on-release tap-virtualkey switch_to_macro_nvim_va))
+  
+  m_n (multi (layer-toggle modifier_number) (on-release tap-virtualkey switch_to_modifier_function))
   
   ss (multi lsft (layer-toggle base_colemak-dh) (on-release tap-virtualkey switch_to_function_bare))
   
@@ -791,6 +802,7 @@
   m-, (macro ,)
   m-. (macro .)
   m-/ (macro /)
+  m-spc (macro spc)
 )
 
 (deflayer qwert-bare
@@ -799,173 +811,168 @@
   _       @m-a    @m-s    @m-d    @m-f    @m-g    _       _       @m-h    @jfls   @kfls   @lfls   @;fls   @rep-a          _       _       _       _
   _       @m-z    @m-x    @m-c    @m-v    @m-b    _       _       @m-n    @m-m    @m-,    @m-.    @m-/                    _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @fbsw                     _                     _       _                       _       _       _       _               _
+  _       _       @fbsw                    @m-spc                 _       _                       _       _       _       _               _
 )
 
 (deflayer number-bare
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       1       2       3       4       5       6       @7-     @8-     @9-     @0-     _       _                       _       _       _       _
+  _       1       2       3       4       5       _       _       6       @7-     @8-     @9-     @0-     _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       _       _                                       _       _                       _       _       _       _               _
+  _       _       _                          _                    _       _                       _       _       _       _               _
 )
 
 (deflayer fuction_bare_hold
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       _       @f11+   _       _       _       _       @f12+   _       _       _       _       _               _       _       _       _
-  _       @f1+    @f2+    @f3+    @f4+    @f5+    @f6+    @f7+    @f8+    @f9+    @f10+   _       _                       _       _       _       _
+  _       _       _       @f11+   _       _       _       _       _       _       @f12+   _       _       _               _       _       _       _
+  _       @f1+    @f2+    @f3+    @f4+    @f5+    _       _       @f6+    @f7+    @f8+    @f9+    @f10+   _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       _       _                                       _       _                       _       _       _       _               _
+  _       _       _                          _                    _       _                       _       _       _       _               _
 )
 
 (deflayer fuction_bare
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       _       _       f11     _       _       _       _       f12     _       _       _       _       _               _       _       _       _
-  _       f1      f2      f3      f4      f5      f6      @f7-    @f8-    @f9-    @f10-   _       _                       _       _       _       _
+  _       _       _       f11     _       _       _       _       _       _       f12     _       _       _               _       _       _       _
+  _       f1      f2      f3      f4      f5      _       _       f6      @f7-    @f8-    @f9-    @f10-   _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       _       _                                       _       _                       _       _       _       _               _
+  _       _       _                          _                    _       _                       _       _       _       _               _
 )
 
 (defvar
 
-  has-typed-letter-n (or (input-history real n 2))
-  has-typed-letter-shift (or (input-history real lsft 2)
-                             (input-history real rsft 2))
-                             
-  has-typed-letter-a-i-r (or (input-history real a 2)
-                             (input-history real l 2)
-                             (input-history real s 2))
+  has-typed-letter-n (or (input-history real i 2))
+  has-typed-letter-, (or (input-history real , 2))
+  has-typed-letter-shift (or (input-history real caps 2)
+                             (input-history real ent 2))
   
   has-typed-letter-lalt (or (input-history real lalt 2))
   
   has-typed-letter-ralt (or (input-history real ralt 2))
   
-  has-typed-letter-auto-fill (or (input-history real d 2) (input-history real e 2))
-  
   has-typed-letter-[ (or (input-history real [ 2))
   
   has-typed-letter-ctl (or (input-history real o 2))
   has-typed-letter-sft (or (input-history real p 2))
-  has-typed-letter-met (or (input-history real p 2))
-  has-typed-letter-alt (or (input-history real [ 2))
+  has-typed-letter-met (or (input-history real [ 2))
+  has-typed-letter-alt (or (input-history real ] 2))
   
   has-typed-letter-ctl-sft (or
       (and (input-history real o 2) (input-history real p 3))
       (and (input-history real p 2) (input-history real o 3))
     )
   has-typed-letter-ctl-met (or
-      (and (input-history real o 2) (input-history real p 3))
-      (and (input-history real p 2) (input-history real o 3))
-    )
-  has-typed-letter-ctl-alt (or
       (and (input-history real o 2) (input-history real [ 3))
       (and (input-history real [ 2) (input-history real o 3))
     )
+  has-typed-letter-ctl-alt (or
+      (and (input-history real o 2) (input-history real ] 3))
+      (and (input-history real ] 2) (input-history real o 3))
+    )
   has-typed-letter-sft-met (or
-      (and (input-history real p 2) (input-history real p 3))
-      (and (input-history real p 2) (input-history real p 3))
+      (and (input-history real [ 2) (input-history real p 3))
+      (and (input-history real p 2) (input-history real [ 3))
     )
   has-typed-letter-sft-alt (or
-      (and (input-history real [ 2) (input-history real p 3))
-      (and (input-history real p 2) (input-history real [ 3))
+      (and (input-history real ] 2) (input-history real p 3))
+      (and (input-history real p 2) (input-history real ] 3))
     )
   has-typed-letter-met-alt (or
-      (and (input-history real [ 2) (input-history real p 3))
-      (and (input-history real p 2) (input-history real [ 3))
+      (and (input-history real ] 2) (input-history real [ 3))
+      (and (input-history real [ 2) (input-history real ] 3))
     )
   
   has-typed-letter-ctl-sft-met (or
       ;; 1. j -> k -> l
-      (and (input-history real p 2) (input-history real p 3) (input-history real o 4))
+      (and (input-history real [ 2) (input-history real p 3) (input-history real o 4))
       ;; 2. j -> l -> k
-      (and (input-history real p 2) (input-history real p 3) (input-history real o 4))
+      (and (input-history real p 2) (input-history real [ 3) (input-history real o 4))
       ;; 3. k -> j -> l
-      (and (input-history real p 2) (input-history real o 3) (input-history real p 4))
+      (and (input-history real [ 2) (input-history real o 3) (input-history real p 4))
       ;; 4. k -> l -> j
-      (and (input-history real o 2) (input-history real p 3) (input-history real p 4))
+      (and (input-history real o 2) (input-history real [ 3) (input-history real p 4))
       ;; 5. l -> j -> k
-      (and (input-history real p 2) (input-history real o 3) (input-history real p 4))
+      (and (input-history real p 2) (input-history real o 3) (input-history real [ 4))
       ;; 6. l -> k -> j
-      (and (input-history real o 2) (input-history real p 3) (input-history real p 4))
+      (and (input-history real o 2) (input-history real p 3) (input-history real [ 4))
     )
   has-typed-letter-ctl-sft-alt (or
       ;; 1. j -> k -> ;
-      (and (input-history real [ 2) (input-history real p 3) (input-history real o 4))
+      (and (input-history real ] 2) (input-history real p 3) (input-history real o 4))
       ;; 2. j -> ; -> k
-      (and (input-history real p 2) (input-history real [ 3) (input-history real o 4))
+      (and (input-history real p 2) (input-history real ] 3) (input-history real o 4))
       ;; 3. k -> j -> ;
-      (and (input-history real [ 2) (input-history real o 3) (input-history real p 4))
+      (and (input-history real ] 2) (input-history real o 3) (input-history real p 4))
       ;; 4. k -> ; -> j
-      (and (input-history real o 2) (input-history real [ 3) (input-history real p 4))
+      (and (input-history real o 2) (input-history real ] 3) (input-history real p 4))
       ;; 5. ; -> j -> k
-      (and (input-history real p 2) (input-history real o 3) (input-history real [ 4))
+      (and (input-history real p 2) (input-history real o 3) (input-history real ] 4))
       ;; 6. ; -> k -> j
-      (and (input-history real o 2) (input-history real p 3) (input-history real [ 4))
+      (and (input-history real o 2) (input-history real p 3) (input-history real ] 4))
     )
   has-typed-letter-sft-met-alt (or
       ;; 1. k -> l -> ;
-      (and (input-history real [ 2) (input-history real p 3) (input-history real p 4))
+      (and (input-history real ] 2) (input-history real [ 3) (input-history real p 4))
       ;; 2. k -> ; -> l
-      (and (input-history real p 2) (input-history real [ 3) (input-history real p 4))
+      (and (input-history real [ 2) (input-history real ] 3) (input-history real p 4))
       ;; 3. l -> k -> ;
-      (and (input-history real [ 2) (input-history real p 3) (input-history real p 4))
+      (and (input-history real ] 2) (input-history real p 3) (input-history real [ 4))
       ;; 4. l -> ; -> k
-      (and (input-history real p 2) (input-history real [ 3) (input-history real p 4))
+      (and (input-history real p 2) (input-history real ] 3) (input-history real [ 4))
       ;; 5. ; -> k -> l
-      (and (input-history real p 2) (input-history real p 3) (input-history real [ 4))
+      (and (input-history real [ 2) (input-history real p 3) (input-history real ] 4))
       ;; 6. ; -> l -> k
-      (and (input-history real p 2) (input-history real p 3) (input-history real [ 4))
+      (and (input-history real p 2) (input-history real [ 3) (input-history real ] 4))
     )
   has-typed-letter-ctl-met-alt (or
       ;; 1. j -> l -> ;
-      (and (input-history real [ 2) (input-history real p 3) (input-history real o 4))
+      (and (input-history real ] 2) (input-history real [ 3) (input-history real o 4))
       ;; 2. j -> ; -> l
-      (and (input-history real p 2) (input-history real [ 3) (input-history real o 4))
+      (and (input-history real [ 2) (input-history real ] 3) (input-history real o 4))
       ;; 3. l -> j -> ;
-      (and (input-history real [ 2) (input-history real o 3) (input-history real p 4))
+      (and (input-history real ] 2) (input-history real o 3) (input-history real [ 4))
       ;; 4. l -> ; -> j
-      (and (input-history real o 2) (input-history real [ 3) (input-history real p 4))
+      (and (input-history real o 2) (input-history real ] 3) (input-history real [ 4))
       ;; 5. ; -> j -> l
-      (and (input-history real p 2) (input-history real o 3) (input-history real [ 4))
+      (and (input-history real [ 2) (input-history real o 3) (input-history real ] 4))
       ;; 6. ; -> l -> j
-      (and (input-history real o 2) (input-history real p 3) (input-history real [ 4))
+      (and (input-history real o 2) (input-history real [ 3) (input-history real ] 4))
     )
     
   has-typed-letter-ctl-sft-met-alt (or
       ;; Bắt đầu bằng ; ở slot 2
-      (and (input-history real [ 2) (input-history real p 3) (input-history real p 4) (input-history real o 5))
-      (and (input-history real [ 2) (input-history real p 3) (input-history real o 4) (input-history real p 5))
-      (and (input-history real [ 2) (input-history real p 3) (input-history real p 4) (input-history real o 5))
-      (and (input-history real [ 2) (input-history real p 3) (input-history real o 4) (input-history real p 5))
-      (and (input-history real [ 2) (input-history real o 3) (input-history real p 4) (input-history real p 5))
-      (and (input-history real [ 2) (input-history real o 3) (input-history real p 4) (input-history real p 5))
+      (and (input-history real ] 2) (input-history real [ 3) (input-history real p 4) (input-history real o 5))
+      (and (input-history real ] 2) (input-history real [ 3) (input-history real o 4) (input-history real p 5))
+      (and (input-history real ] 2) (input-history real p 3) (input-history real [ 4) (input-history real o 5))
+      (and (input-history real ] 2) (input-history real p 3) (input-history real o 4) (input-history real [ 5))
+      (and (input-history real ] 2) (input-history real o 3) (input-history real [ 4) (input-history real p 5))
+      (and (input-history real ] 2) (input-history real o 3) (input-history real p 4) (input-history real [ 5))
       
       ;; Bắt đầu bằng l ở slot 2
-      (and (input-history real p 2) (input-history real [ 3) (input-history real p 4) (input-history real o 5))
-      (and (input-history real p 2) (input-history real [ 3) (input-history real o 4) (input-history real p 5))
-      (and (input-history real p 2) (input-history real p 3) (input-history real [ 4) (input-history real o 5))
-      (and (input-history real p 2) (input-history real p 3) (input-history real o 4) (input-history real [ 5))
-      (and (input-history real p 2) (input-history real o 3) (input-history real [ 4) (input-history real p 5))
-      (and (input-history real p 2) (input-history real o 3) (input-history real p 4) (input-history real [ 5))
+      (and (input-history real [ 2) (input-history real ] 3) (input-history real p 4) (input-history real o 5))
+      (and (input-history real [ 2) (input-history real ] 3) (input-history real o 4) (input-history real p 5))
+      (and (input-history real [ 2) (input-history real p 3) (input-history real ] 4) (input-history real o 5))
+      (and (input-history real [ 2) (input-history real p 3) (input-history real o 4) (input-history real ] 5))
+      (and (input-history real [ 2) (input-history real o 3) (input-history real ] 4) (input-history real p 5))
+      (and (input-history real [ 2) (input-history real o 3) (input-history real p 4) (input-history real ] 5))
       
       ;; Bắt đầu bằng k ở slot 2
-      (and (input-history real p 2) (input-history real [ 3) (input-history real p 4) (input-history real o 5))
-      (and (input-history real p 2) (input-history real [ 3) (input-history real o 4) (input-history real p 5))
-      (and (input-history real p 2) (input-history real p 3) (input-history real [ 4) (input-history real o 5))
-      (and (input-history real p 2) (input-history real p 3) (input-history real o 4) (input-history real [ 5))
-      (and (input-history real p 2) (input-history real o 3) (input-history real [ 4) (input-history real p 5))
-      (and (input-history real p 2) (input-history real o 3) (input-history real p 4) (input-history real [ 5))
+      (and (input-history real p 2) (input-history real ] 3) (input-history real [ 4) (input-history real o 5))
+      (and (input-history real p 2) (input-history real ] 3) (input-history real o 4) (input-history real [ 5))
+      (and (input-history real p 2) (input-history real [ 3) (input-history real ] 4) (input-history real o 5))
+      (and (input-history real p 2) (input-history real [ 3) (input-history real o 4) (input-history real ] 5))
+      (and (input-history real p 2) (input-history real o 3) (input-history real ] 4) (input-history real [ 5))
+      (and (input-history real p 2) (input-history real o 3) (input-history real [ 4) (input-history real ] 5))
       
       ;; Bắt đầu bằng j ở slot 2
-      (and (input-history real o 2) (input-history real [ 3) (input-history real p 4) (input-history real p 5))
-      (and (input-history real o 2) (input-history real [ 3) (input-history real p 4) (input-history real p 5))
-      (and (input-history real o 2) (input-history real p 3) (input-history real [ 4) (input-history real p 5))
-      (and (input-history real o 2) (input-history real p 3) (input-history real p 4) (input-history real [ 5))
-      (and (input-history real o 2) (input-history real p 3) (input-history real [ 4) (input-history real p 5))
-      (and (input-history real o 2) (input-history real p 3) (input-history real p 4) (input-history real [ 5))
+      (and (input-history real o 2) (input-history real ] 3) (input-history real [ 4) (input-history real p 5))
+      (and (input-history real o 2) (input-history real ] 3) (input-history real p 4) (input-history real [ 5))
+      (and (input-history real o 2) (input-history real [ 3) (input-history real ] 4) (input-history real p 5))
+      (and (input-history real o 2) (input-history real [ 3) (input-history real p 4) (input-history real ] 5))
+      (and (input-history real o 2) (input-history real p 3) (input-history real ] 4) (input-history real [ 5))
+      (and (input-history real o 2) (input-history real p 3) (input-history real [ 4) (input-history real ] 5))
     )
     
   has-typed-' (and (input-history real ' 1)
