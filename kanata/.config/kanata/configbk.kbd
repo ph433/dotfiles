@@ -64,38 +64,38 @@
 
 (deflayer mod_nvim
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  del     esc     home    up      end     _       _       prtsc   pgup    pgdn    @:_     @fhinv  _       _               _       _       _       _
-  bks     tab     left    down    rght    spc     @fd     @c_v-sw @s_v-sw @m_v-sw @a_v-sw @repa   _               _       _       _       _
-  @ss     C-z     C-x     C-c     C-v     C-y     @nvv    A-c     A-v     C-a     @/_     @ss             _               _       _       _
-  _       _       @numt   ent                                     @colnv  _                       _       _       _       _               _
+  del     esc     home    up      end     _       _       _       _       prtsc   pgup    pgdn    @:_     @/_             _       _       _       _
+  bks     tab     left    down    rght    spc     _       _       @fd     @c_v-sw @s_v-sw @m_v-sw @a_v-sw @repa           _       _       _       _
+  @ss     C-z     C-x     C-c     C-v     C-y     _       _       @nvv    A-c     A-v     C-a     @ss                     _       _       _       _
+  _       _       _       _       _       _       _       _       @m_n    _       _       _               _               _       _       _
+  _       _       @numt                     ent                   @colnv  _                       _       _       _       _               _
 )
 
 (deflayer mod_nvim_colemak-dh
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  A-esc   q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
-  @bks_   a       r       s       t       g       m       n       e       i       o       '       _                       _       _       _       _
-  @ss     x       c       d       v       z       k       h       ,       .       /       @ss             _               _       _       _
-  lctl    lmet    @numt   spc                                     @colnv- _                       _       _       _       _               _
+  del     q       w       f       p       b       _       _       j       l       u       y       ;       /               _       _       _       _
+  bks     a       r       s       t       g       _       _       m       n       e       i       o       '               _       _       _       _
+  @ss     x       c       d       v       z       _       _       k       h       ,       .       @ss                     _       _       _       _
+  _       _       _       _       _       _       _       _       @m_n    _       _       _               _               _       _       _
+  _       _       @numt                     spc                   @colnv- _                       _       _       _       _               _
 )
 
 (deflayer macro_nvim_vi
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       S-5     S-6     up      @g_     _       _       _       @vi1    @vi2    @vi3    _       _       _               _       _       _       _
-  _       C-home  b       down    e       C-end   _       _       A-a     v       @S-v    _       _                       _       _       _       _
-  _       o       @viw    @viW    @vi4    @vi5    _       _       _       _       _       _               _               _       _       _
-  _       _       _       _                                       _       _                       _       _       _       _               _
+  del     S-5     S-6     up      @g_     _       _       _       _       _       @vi1    @vi2    @vi3    _               _       _       _       _
+  _       C-home  b       down    e       C-end   _       _       _       _       A-a     v       @S-v    _               _       _       _       _
+  _       o       @viw    @viW    @vi4    @vi5    _       _       k       h       ,       .       @ss                     _       _       _       _
+  _       _       _       _       _       _       _       _       @m_n    _       _       _               _               _       _       _
+  _       _       _                         _                     _       _                       _       _       _       _               _
 )
 
 (deflayer macro_nvim_va
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       S-5     S-6     up      @g_     _       _       _       @va1    @va2    @va3    _       _       _               _       _       _       _
-  _       C-home  b       down    e       C-end   _       _       A-a     v       @S-v    _       _                       _       _       _       _
-  _       o       @viw    @viW    @va4    @va5    _       _       _       _       _       _               _               _       _       _
-  _       _       _       _                                       _       _                       _       _       _       _               _
+  _       S-5     S-6     up      @g_     _       _       _       _       _       @va1    @va2    @va3    _               _       _       _       _
+  _       C-home  b       down    e       C-end   _       _       _       _       A-a     v       @S-v    _               _       _       _       _
+  _       o       @viw    @viW    @va4    @va5    _       _       _       _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       @m_n    _       _       _               _               _       _       _
+  _       _       _                         _                     _       _                       _       _       _       _               _
 )
 
 (deflayer mod_firefox
@@ -127,101 +127,101 @@
 
 (deflayer like-ctl-alt
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @cade   @caes   @cah    @cau    @cae    _       _       _       _       _       _       _       _       _               _       _       _       _
-  @cab    @cat    @cal    @cad    @car    @casp   _       _       @csa    @cwa    _       _       _                       _       _       _       _
+  @cab    @cat    @cal    @cad    @car    @casp   _       _       _       @csa    @cwa    _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @can    @caen                                   @caa    _                       _       _       _       _               _
-) ;; altn1
+  _       _       @can                      @caen                 @caa    _                       _       _       _       _               _
+)
 
 (deflayer like-sft-alt
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @sade   @saes   @sah    @sau    @sae    _       _       _       _       _       _       _       _       _               _       _       _       _
-  @sab    @sat    @sal    @sad    @sar    @sasp   _       @csa    _       @swa    _       _       _                       _       _       _       _
+  @sab    @sat    @sal    @sad    @sar    @sasp   _       _       _       @csa    _       @swa    _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @san    @saen                                   @saa    _                       _       _       _       _               _
+  _       _       @san                      @saen                 @saa    _                       _       _       _       _               _
 )
 
 (deflayer like-win-alt
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @wade   @waes   @wah    @wau    @wae    _       _       _       _       _       _       _       _       _               _       _       _       _
-  @wab    @wat    @wal    @wad    @war    @wasp   _       @cwa    @swa    _       _       _       _                       _       _       _       _
+  @wab    @wat    @wal    @wad    @war    @wasp   _       _       _       @cwa    @swa    _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @wan    @waen                                   @waa    _                       _       _       _       _               _
+  _       _       @wan                      @waen                 @waa    _                       _       _       _       _               _
 )
 
 (deflayer like-sft-win
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @swde   @swes   @swh    @swu    @swe    _       _       _       _       _       _       _       _       _               _       _       _       _
-  @swb    @swt    @swl    @swd    @swr    @swsp   _       @csw    _       _       @swa    _       _                       _       _       _       _
+  @swb    @swt    @swl    @swd    @swr    @swsp   _       _       _       @csw    _       _       @swa    _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @swn    @swen                                   @swa-   _                       _       _       _       _               _
+  _       _       @swn                      @swen                 @swa-   _                       _       _       _       _               _
 )
 
 (deflayer like-ctl-win
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @cwde   @cwes   @cwh    @cwu    @cwe    _       _       _       _       _       _       _       _       _               _       _       _       _
-  @cwb    @cwt    @cwl    @cwd    @cwr    @cwsp   _       _       @csw    _       @cwa    _       _                       _       _       _       _
+  @cwb    @cwt    @cwl    @cwd    @cwr    @cwsp   _       _       _       _       @csw    _       @cwa    _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @cwn    @cwen                                   @cwa-   _                       _       _       _       _               _
+  _       _       @cwn                      @cwen                 @cwa-   _                       _       _       _       _               _
 )
 
 (deflayer like-ctl-sft
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @csde   @cses   @csh    @csu    @cse    _       _       _       _       _       _       _       _       _               _       _       _       _
-  @csb    @cst    @csl    @csd    @csr    @cssp   _       _       _       @csw    @csa    _       _                       _       _       _       _
+  @csb    @cst    @csl    @csd    @csr    @cssp   _       _       _       _       _       @csw    @csa    _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @csn    @csen                                   @csa-   _                       _       _       _       _               _
+  _       _       @csn                      @csen                 @csa-   _                       _       _       _       _               _
 )
 
 (deflayer like-ctl-sft-win
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @cswde  @cswes  @cswh   @cswu   @cswe   _       _       _       _       _       _       _       _       _               _       _       _       _
-  @cswb   @cswt   @cswl   @cswd   @cswr   @cswsp  _       _       _       _       @cswa   _       _                       _       _       _       _
+  @cswb   @cswt   @cswl   @cswd   @cswr   @cswsp  _       _       _       _       _       _       @cswa   _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @cswn   @cswen                                  @cswa-  _                       _       _       _       _               _
+  _       _       @cswn                     @cswen                @cswa-  _                       _       _       _       _               _
 )
 
 (deflayer like-ctl-sft-alt
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @csade  @csaes  @csah   @csau   @csae   _       _       _       _       _       _       _       _       _               _       _       _       _
-  @csab   @csat   @csal   @csad   @csar   @csasp  _       _       _       @cswa   _       _       _                       _       _       _       _
+  @csab   @csat   @csal   @csad   @csar   @csasp  _       _       _       _       _       @cswa   _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @csan   @csaen                                  @csaa   _                       _       _       _       _               _
+  _       _       @csan                     @csaen                @csaa   _                       _       _       _       _               _
 )
 
 (deflayer like-sft-win-alt
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @swade  @swaes  @swah   @swau   @swae   _       _       _       _       _       _       _       _       _               _       _       _       _
-  @swab   @swat   @swal   @swad   @swar   @swasp  _       @cswa   _       _       _       _       _                       _       _       _       _
+  @swab   @swat   @swal   @swad   @swar   @swasp  _       _       _       @cswa   _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @swan   @swaen                                  @swaa   _                       _       _       _       _               _
+  _       _       @csan                     @csaen                @csaa   _                       _       _       _       _               _
 )
 
 (deflayer like-ctl-win-alt
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @cwade  @cwaes  @cwah   @cwau   @cwae   _       _       _       _       _       _       _       _       _               _       _       _       _
-  @cwab   @cwat   @cwal   @cwad   @cwar   @cwasp  _       _       @cswa   _       _       _       _                       _       _       _       _
+  @cwab   @cwat   @cwal   @cwad   @cwar   @cwasp  _       _       _       _       @cswa   _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @cwan   @cwaen                                  @cwaa   _                       _       _       _       _               _
+  _       _       @cwan                     @cwaen                @cwaa   _                       _       _       _       _               _
 )
 
 (deflayer like-ctl-sft-win-alt
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   @cswade @cswaes @cswah  @cswau  @cswae  _       _       _       _       _       _       _       _       _               _       _       _       _
-  @cswab  @cswat  @cswal  @cswad  @cswar  @cswasp _       _       _       _       _       _       _                       _       _       _       _
+  @cswab  @cswat  @cswal  @cswad  @cswar  @cswasp _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @cswan  @cswaen                                 @cswaa  _                       _       _       _       _               _
+  _       _       @cswan                    @cswaen               @cswaa  _                       _       _       _       _               _
 )
 
 (deflayer like-alt
@@ -653,7 +653,7 @@
   )
   
   switch_to_macro_nvim_va (switch
-    ($has-typed-letter-n) (one-shot-press 1000 (layer-toggle macro_nvim_va)) break
+    ($has-typed-letter-k) (one-shot-press 1000 (layer-toggle macro_nvim_va)) break
     () XX break
   )
   
@@ -843,7 +843,7 @@
 
 (defvar
 
-  has-typed-letter-n (or (input-history real i 2))
+  has-typed-letter-k (or (input-history real k 2))
   has-typed-letter-, (or (input-history real , 2))
   has-typed-letter-shift (or (input-history real caps 2)
                              (input-history real ent 2))
