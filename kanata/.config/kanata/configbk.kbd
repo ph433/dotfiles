@@ -67,7 +67,7 @@
   del     esc     home    up      end     _       _       _       _       prtsc   pgup    pgdn    @:_     @/_             _       _       _       _
   bks     tab     left    down    rght    spc     _       _       @fd     @c_v-sw @s_v-sw @m_v-sw @a_v-sw @repa           _       _       _       _
   @ss     C-z     C-x     C-c     C-v     C-y     _       _       @nvv    A-c     A-v     C-a     @ss                     _       _       _       _
-  _       _       _       _       _       _       _       _       @m_n    _       _       _               _               _       _       _
+  _       _       _       _       _       _       _       _       @m_n    @fhinv  _       _               _               _       _       _
   _       _       @numt                     ent                   @colnv  _                       _       _       _       _               _
 )
 
@@ -76,6 +76,15 @@
   del     q       w       f       p       b       _       _       j       l       u       y       ;       /               _       _       _       _
   bks     a       r       s       t       g       _       _       m       n       e       i       o       '               _       _       _       _
   @ss     x       c       d       v       z       _       _       k       h       ,       .       @ss                     _       _       _       _
+  _       _       _       _       _       _       _       _       @m_n    _       _       _               _               _       _       _
+  _       _       @numt                     spc                   @colnv- _                       _       _       _       _               _
+)
+
+(deflayer mod_nvim_colemak-dh_toggle
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  del     @q-tg   @w-tg   @f-tg   @p-tg   @b-tg   _       _       @j-tg   @l-tg   @u-tg   @y-tg   ;       /               _       _       _       _
+  bks     @a-tg   @r-tg   @s-tg   @t-tg   @g-tg   _       _       @m-tg   @n-tg   @e-tg   @i-tg   @o-tg   '               _       _       _       _
+  @ss     @x-tg   @c-tg   @d-tg   @v-tg   @z-tg   _       _       @k-tg   @h-tg   ,       .       @ss                     _       _       _       _
   _       _       _       _       _       _       _       _       @m_n    _       _       _               _               _       _       _
   _       _       @numt                     spc                   @colnv- _                       _       _       _       _               _
 )
@@ -100,29 +109,20 @@
 
 (deflayer mod_firefox
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  del     esc     home    up      end     A-ent   M-spc   prtsc   pgup    pgdn    _       S-bks   _       _               _       _       _       _
-  @bks_   tab     left    down    rght    spc     ins     @c_v-sw @s_v-sw @m_v-sw @a_v-sw @repa   _               _       _       _       _
-  @ss     C-z     C-x     C-c     C-v     _       @fir    A-c     A-v     C-a     C-f     @ss             _               _       _       _
-  _       _       @numt   ent                                     @colef  _                       _       caps    _       _               _
+  del     esc     home    up      end     A-ent   _       _       M-spc   prtsc   pgup    pgdn    ;       C-f             _       _       _       _
+  @bks_   tab     left    down    rght    spc     _       _       ins     @c_v-sw @s_v-sw @m_v-sw @a_v-sw @repa           _       _       _       _
+  @ss     C-z     C-x     C-c     C-v     C-y     _       _       _       A-c     A-v     C-a     @ss                     _       _       _       _
+  _       _       _       _       _       _       _       _       @m_n    _       _       _               _               _       _       _
+  _       _       @numt                     ent                   @colef  _                       _       _       _       _               _
 )
 
 (deflayer colemak-dh_firefox
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  del     q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
-  @bks_   a       r       s       t       g       m       n       e       i       o       ent     _                       _       _       _       _
-  @ss     x       c       d       v       z       k       h       ,       .       /       @ss             _               _       _       _
-  lctl    lmet    @numt   spc                                     @colef- _                       _       _       _       _               _
-)
-
-(deflayer macro_firefox
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       S-h     S-6     up      @g_     h       _       _       _       _       _       _       _       _               _       _       _       _
-  _       C-home  left    down    rght    C-end   _       C-a     A-a     @vv     S-v     _       _                       _       _       _       _
-  _       _       @viw    @viW    v       _       _       _       _       _       _       _               _               _       _       _
-  _       _       _       @nvv                                    _       _                       _       _       _       _               _
+  del     q       w       f       p       b       _       _       j       l       u       y       ;       /               _       _       _       _
+  @bks_   a       r       s       t       g       _       _       m       n       e       i       o       _               _       _       _       _
+  @ss     x       c       d       v       z       _       _       k       h       ,       .       @ss                     _       _       _       _
+  _       _       _       _       _       _       _       _       @m_n    _       _       _               _               _       _       _
+  _       _       @numt                     spc                   @colef- _                       _       _       _       _               _
 )
 
 (deflayer like-ctl-alt
@@ -289,43 +289,42 @@
 
 (deflayer colemak-dh-nvim-fhint-switch
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       @q-hi   @w-hi   @f-hi   @p-hi   @b-hi   @j-hi   @l-hi   @u-hi   @y-hi   @;-hi   _       _       _               _       _       _       _
-  @bks_   @a-hi   @r-hi   @s-hi   @t-hi   @g-hi   @m-hi   @n-hi   @e-hi   @i-hi   @o-hi   @'-hi   _                       _       _       _       _
-  @ss     @x-hi   @c-hi   @d-hi   @v-hi   @z-hi   @k-hi   @h-hi   @,-hi   @.-hi   @/-hi   @ss             _               _       _       _
-  lctl    lmet    _       spc                                     _       _                       _       _       _       _               _
+  _       @q-hi   @w-hi   @f-hi   @p-hi   @b-hi   _       _       @j-hi   @l-hi   @u-hi   @y-hi   @;-hi   @/-hi           _       _       _       _
+  _       @a-hi   @r-hi   @s-hi   @t-hi   @g-hi   _       _       @m-hi   @n-hi   @e-hi   @i-hi   @o-hi   @'-hi           _       _       _       _
+  _       @x-hi   @c-hi   @d-hi   @v-hi   @z-hi   _       _       @k-hi   @h-hi   @,-hi   @.-hi   _                       _       _       _       _
+  _       _       _       _       _       _       _       _       XX      _       _       _               _               _       _       _
+  _       _       XX                        XX                    XX      _                       _       _       _       _               _
 )
 
 (deflayer colemak-dh-ff
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       S-5     S-6     S-,     @g_     _       _       _       _       _       _       _       _       _               _       _       _       _
-  _       o       ,       S-.     ;       f       _       _       _       _       _       _       _                       _       _       _       _
+  _       S-8     ,       S-.     ;       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @numt   v                                       @colnv  _                       _       _       _       _               _
+  _       _       _                         _                     _       _                       _       _       _       _               _
 )
 
-(deflayer app_open 
+(deflayer app_open
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
   _       _       @wal    @war    @war    _       _       _       _       _       _       _       _       _               _       _       _       _
-  A-bks   S-bks   A-left  @wal    A-rght  _       _       A-ent   M-spc   _       @lialt  _       _                       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
-  _       _       @altn   A-ent                                   _       _                       _       _       _       _               _
+  A-bks   S-bks   A-left  @wal    A-rght  _       _       _       _       A-ent   M-spc   _       @lialt  _               _       _       _       _
+  _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
+  _       _       _       _       _       _       _       _       @m_n    _       _       _               _               _       _       _
+  _       _       @m_n                      A-ent                 _       _                       _       _       _       _               _
 )
 
 (deflayer colemak-dh_search_cmd ;; ctrl f
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
-  del     q       w       f       p       b       j       l       u       y       ;       _       _       _               _       _       _       _
-  bks     a       r       s       t       g       m       n       e       i       o       _       _                       _       _       _       _
-  @ss     x       c       d       v       z       k       h       ,       .       /       @ss             _               _       _       _
-  lctl    lmet    @numt   spc                                     @ralt_  _                       _       _       _       _               _
+  del     q       w       f       p       b       _       _       j       l       u       y       ;       /               _       _       _       _
+  bks     a       r       s       t       g       _       _       m       n       e       i       o       _               _       _       _       _
+  @ss     x       c       d       v       z       _       _       k       h       ,       .       @ss                     _       _       _       _
+  _       _       _       _       _       _       _       _       @m_n    _       _       _               _               _       _       _
+  _       _       @numt                     spc                   @ralt_  _                       _       _       _       _               _
 )
 
 (defalias
   f1-12 (layer-toggle fuction_bare)
-  fir (layer-toggle macro_firefox)
   fd (layer-toggle colemak-dh-ff)
   numtg (layer-toggle number-bare)
 )
@@ -584,6 +583,35 @@
 )
 
 (defalias
+  a-tg (multi (macro a) (layer-toggle colemak-dh_bare))
+  b-tg (multi (macro b) (layer-toggle colemak-dh_bare))
+  c-tg (multi (macro c) (layer-toggle colemak-dh_bare))
+  d-tg (multi (macro d) (layer-toggle colemak-dh_bare))
+  e-tg (multi (macro e) (layer-toggle colemak-dh_bare))
+  f-tg (multi (macro f) (layer-toggle colemak-dh_bare))
+  g-tg (multi (macro g) (layer-toggle colemak-dh_bare))
+  h-tg (multi (macro h) (layer-toggle colemak-dh_bare))
+  i-tg (multi (macro i) (layer-toggle colemak-dh_bare))
+  j-tg (multi (macro j) (layer-toggle colemak-dh_bare))
+  k-tg (multi (macro k) (layer-toggle colemak-dh_bare))
+  l-tg (multi (macro l) (layer-toggle colemak-dh_bare))
+  m-tg (multi (macro m) (layer-toggle colemak-dh_bare))
+  n-tg (multi (macro n) (layer-toggle colemak-dh_bare))
+  o-tg (multi (macro o) (layer-toggle colemak-dh_bare))
+  p-tg (multi (macro p) (layer-toggle colemak-dh_bare))
+  q-tg (multi (macro q) (layer-toggle colemak-dh_bare))
+  r-tg (multi (macro r) (layer-toggle colemak-dh_bare))
+  s-tg (multi (macro s) (layer-toggle colemak-dh_bare))
+  t-tg (multi (macro t) (layer-toggle colemak-dh_bare))
+  u-tg (multi (macro u) (layer-toggle colemak-dh_bare))
+  v-tg (multi (macro v) (layer-toggle colemak-dh_bare))
+  w-tg (multi (macro w) (layer-toggle colemak-dh_bare))
+  x-tg (multi (macro x) (layer-toggle colemak-dh_bare))
+  y-tg (multi (macro y) (layer-toggle colemak-dh_bare))
+  z-tg (multi (macro z) (layer-toggle colemak-dh_bare))
+)
+
+(defalias
   a-hi (multi (macro f a) (layer-switch colemak-dh-ff))
   b-hi (multi (macro f b) (layer-switch colemak-dh-ff))
   c-hi (multi (macro f c) (layer-switch colemak-dh-ff))
@@ -754,7 +782,7 @@
   
   ss (multi lsft (layer-toggle base_colemak-dh) (on-release tap-virtualkey switch_to_function_bare))
   
-  colnv (multi (layer-toggle mod_nvim_colemak-dh) (on-release tap-virtualkey switch_to_colemak-dh_nvim))
+  colnv (multi (layer-toggle mod_nvim_colemak-dh_toggle) (on-release tap-virtualkey switch_to_colemak-dh_nvim))
   colnv- (multi (layer-toggle mod_nvim) (on-release tap-virtualkey switch_to_nvim))
   
   cole (multi (layer-toggle base_colemak-dh) (on-release tap-virtualkey switch_to_base_colemak-dh))
@@ -803,6 +831,15 @@
   m-. (macro .)
   m-/ (macro /)
   m-spc (macro spc)
+)
+
+(deflayer colemak-dh_bare
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  del     q       w       f       p       b       _       _       j       l       u       y       ;       /               _       _       _       _
+  bks     a       r       s       t       g       _       _       m       n       e       i       o       _               _       _       _       _
+  @ss     x       c       d       v       z       _       _       k       h       ,       .       @ss                     _       _       _       _
+  _       _       _       _       _       _       _       _       @m_n    _       _       _               _               _       _       _
+  _       _       XX                        spc                   XX      _                       _       _       _       _               _
 )
 
 (deflayer qwert-bare
