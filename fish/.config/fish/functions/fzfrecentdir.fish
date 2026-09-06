@@ -1,13 +1,13 @@
 function fzfrecentdir -d "Tìm thư mục dựa trên lịch sử di chuyển (Top 10)"
     # 1. Lấy danh sách 10 thư mục gần nhất hợp lệ
-    set -l top10 (_fzfrecentdir_get_top10)
-    if test $status -ne 0
-        echo "Chưa có dữ liệu hoặc không có thư mục nào trong lịch sử còn tồn tại."
+    set -l top_files (_fzfrecent_get_top_generic "$HOME/.cache/dir_recent.log")
+    if test (count $top_files) -eq 0
+        echo "Chưa có dữ liệu hoặc không có file nào trong lịch sử còn tồn tại."
         return 1
     end
 
     # 2. Tái sử dụng hàm format chung
-    set -l list (_fzfrecent_format_list $top10)
+    set -l list (_fzfrecent_format_list $top_files)
 
     # 3. Hiển thị FZF Menu với preview danh sách file trong thư mục (Thêm cờ -m / --multi)
     set -l fzf_out (printf "%s\n" $list | string split \n | fzf \
