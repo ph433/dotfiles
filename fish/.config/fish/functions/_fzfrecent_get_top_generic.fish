@@ -18,5 +18,5 @@ function _fzfrecent_get_top_generic -d "Lấy top gần đây từ log, deduplic
     printf "%s\n" $entries
 
     # Đẩy tác vụ dọn dẹp ra background
-    fish -c '_fzfrecent_cleanup_log $argv[1] $argv[2..]' "$log_file" $entries &
+    fish -c '_fzfrecent_cleanup_dead $argv[1] $argv[2..]' "$log_file" $entries &
 end
