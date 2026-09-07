@@ -1,7 +1,10 @@
 function fzfrecent -d "Tìm file dựa trên lịch sử mở trong Neovim (Dashboard Top 10)"
 
+    set -l log_file "$HOME/.cache/nvim_recent.log"
+    test -f "$log_file"; or return 1
+    
     # 1. Lấy danh sách 10 file gần nhất hợp lệ (dạng thô: <timestamp> <path>)
-    set -l top_files (_fzfrecent_get_top_generic "$HOME/.cache/nvim_recent.log")
+    set -l top_files (_fzfrecent_get_top_generic "$log_file")
     if test (count $top_files) -eq 0
         echo "Chưa có dữ liệu hoặc không có file nào trong lịch sử còn tồn tại."
         return 1
@@ -11,7 +14,7 @@ function fzfrecent -d "Tìm file dựa trên lịch sử mở trong Neovim (Dash
     set -l list (_fzfrecent_format_list $top_files)
 
     # 3. Hiển thị FZF Menu (Thêm cờ -m / --multi)
-    set -l fzf_out (printf "%s\n" $list | string split \n | fzf \
+    set -l fzf_out (printf "%s\n" $list | fzf \
         -m \
         --prompt="🕒 Nvim Recent (Tab để chọn nhiều | Ctrl-Space xem chi tiết)> " \
         --delimiter=' │ ' \
@@ -20,6 +23,7 @@ function fzfrecent -d "Tìm file dựa trên lịch sử mở trong Neovim (Dash
         --preview="bat --color=always {2} 2>/dev/null || cat {2}" \
         --preview-window="bottom:70%" \
         --expect=right,enter,insert \
+        --bind="ctrl-x:reload(fish -c '_fzfrecent_feed \"$log_file\"')" \
         --layout=reverse \
         --height=100%)
 
