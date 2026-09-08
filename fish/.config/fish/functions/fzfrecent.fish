@@ -12,7 +12,7 @@ function fzfrecent -d "Tìm file dựa trên lịch sử mở trong Neovim (Dash
     
     # 2. Chuyển đổi mảng $top10 thành chuỗi hiển thị UI (đánh số 0-9 & relative time)
     set -l list (_fzfrecent_format_list $top_files)
-
+    
     # 3. Hiển thị FZF Menu (Thêm cờ -m / --multi)
     set -l fzf_out (printf "%s\n" $list | fzf \
         -m \
@@ -53,9 +53,14 @@ function fzfrecent -d "Tìm file dựa trên lịch sử mở trong Neovim (Dash
             commandline -i (string join " " $escaped_paths)" "
 
             # Ghi log background cho toàn bộ file
-            for path in $target_paths
-                fish -c "log_recent_file '$path'; __fzf_score_file '$path'" >/dev/null 2>&1 &
-            end
+            # Đẩy toàn bộ vòng lặp vào chạy nền 1 lần duy nhất
+            # Truyền mảng $target_paths vào 1 instance fish duy nhất
+            fish -c '
+                for p in $argv
+                    log_recent_file "$p"
+                    fzf_score_file.sh "$p"
+                end
+            ' -- $target_paths >/dev/null 2>&1 &
 
         case enter
             # Mở tất cả các file đã chọn cùng lúc trong Neovim (dưới dạng buffers/tabs)
