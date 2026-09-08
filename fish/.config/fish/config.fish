@@ -6,7 +6,8 @@ if status is-interactive
     function ls --wraps eza; eza --icons --group-directories-first $argv; end
     function lt --wraps eza; eza --tree --level=2 --icons --group-directories-first $argv; end
     function find --wraps fd; fd $argv; end
-
+    # abbr -a debug_vars --position anywhere 'for _v in (set -l | string match -rv \'^(_.*|argv)$\' | string replace -r \'\s.*$\' \'\'); set -l _sc (set -S $_v 2>/dev/null | string match -m1 \'*scope*\' | string replace -r \'^[^:]*:\s*\' \'\' | string replace -a "\x27" ""); set -l _c (count $$_v); set -l _t "List ($_c elements)"; set -l _f ""; if test $_c -eq 0; set _t "Empty"; set _f "(empty)"; else if test $_c -eq 1; set _t "String / Single"; set _f (string trim -c "\x27\x22" -- "$$_v"); else; set -l _i 1; set -l _parts; for _it in $$_v; set -l _clean (string trim -c "\x27\x22" -- "$_it"); if string match -q "*|*" -- "$_clean"; set -l _split (string split -m1 "|" -- "$_clean"); set -l _tm (string trim -- "$_split[1]"); set -l _pt (string trim -l -- "$_split[2]"); set -a _parts (printf "\\033[0;33m[%2d]\\033[0m  %8s | %s" $_i "$_tm" "$_pt"); else; set -a _parts (printf "\\033[0;33m[%2d]\\033[0m  %s" $_i "$_clean"); end; set _i (math $_i + 1); end; set _f (string join \'\\n\' -- $_parts); end; printf "%s\t%s\t%s\t%s\t%s\n" "$_v" "$_sc" "$_t" "$_c" "$_f"; end | fzf --delimiter=\'\t\' --with-nth=1 --ansi --preview=\'printf "\\033[1;36mVariable:\\033[0m \\\$%s\\n\\033[1;35mScope:\\033[0m    %s\\n\\033[1;34mType:\\033[0m     %s\\n\\033[1;33mLength:\\033[0m   %s\\n\\n\\033[1;32mValue:\\033[0m\\n%b\\n" {1} {2} {3} {4} {5}\' --preview-window=\'right:65%:wrap\' --prompt="Local Vars > "'
+    abbr -a debug_vars --position anywhere 'eval (string collect < ~/.config/fish/functions/__debug_vars.fish)'
     # Tạo thư mục cache nếu chưa có
     if not test -d ~/.cache/fish
         mkdir -p ~/.cache/fish

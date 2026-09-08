@@ -9,6 +9,7 @@ function history_fzf -d "Tìm history full màn hình bằng fzf"
         --border \
         --prompt="History > " \
         --expect=right \
+        --tiebreak=index \
         --bind "left:execute-silent(echo -n {} | xclip -selection clipboard)+clear-screen"
 
     # Lấy kết quả từ fzf (trả về 2 dòng: dòng 1 là phím nhấn, dòng 2 là lệnh được chọn)
