@@ -1,125 +1,59 @@
 local M = {}
 local fzf = require("fzf-lua")
+local fmt = require("keyfunctions_dir.format")
 
 local LOG_FILE = vim.fs.normalize("~/.cache/nvim_recent.log")
+local LOG_DIR  = vim.fs.normalize("~/.cache/dir_recent.log")
 
--- 1. FORMAT CHUỖI UI
-function M._format_entry(raw_entry, now)
-  local ts_str, path = raw_entry:match("^(%d+)%s+(.+)$")
-  if not ts_str then
-    return string.format("%8s │ %s", "unknown", vim.fs.normalize(raw_entry))
-  end
-
-  local diff = math.max(0, now - tonumber(ts_str))
-  local raw_ago
-  if diff < 60 then
-    raw_ago = string.format("%ds ago", diff)
-  elseif diff < 3600 then
-    raw_ago = string.format("%dm ago", math.floor(diff / 60))
-  elseif diff < 86400 then
-    raw_ago = string.format("%dh ago", math.floor(diff / 3600))
-  elseif diff < 604800 then
-    raw_ago = string.format("%dd ago", math.floor(diff / 86400))
-  elseif diff < 2592000 then
-    raw_ago = string.format("%dw ago", math.floor(diff / 604800))
-  elseif diff < 31536000 then
-    raw_ago = string.format("%dmo ago", math.floor(diff / 2592000))
-  else
-    raw_ago = string.format("%dy ago", math.floor(diff / 31536000))
-  end
-
-  return string.format("\27[1;36m%8s\27[0m │ %s", raw_ago, vim.fs.normalize(path))
+local function extract_path(line)
+  if not line then return nil end
+  local p = line:match("│%s*(.+)$")
+  return p or line
 end
 
--- 2. ĐỌC FILE SYNC
-local function get_recent_entries()
-  local f = io.open(LOG_FILE, "r")
-  if not f then return {} end
+-- ==========================================
+-- 1. HÀM CORE GENERIC DÙNG CHUNG TOÀN BỘ LOGIC
+-- ==========================================
+local function create_picker(cfg)
+  local file_path = vim.fs.normalize(cfg.log_file)
 
-  local content = f:read("*a")
-  f:close()
-  if not content or content == "" then return {} end
+  local function provider(fzf_cb)
+    local f = io.open(file_path, "r")
+    if f then
+      local content = f:read("*a")
+      f:close()
 
-  local lines = vim.split(content, "\n", { trimempty = true })
-  local total_lines = #lines
-  if total_lines == 0 then return {} end
+      if content and content ~= "" then
+        local lines = vim.split(content, "\n", { trimempty = true })
+        local seen = {}
+        local count = 0
+        local limit = cfg.limit or 50
+        local now = os.time()
 
-  local seen = {}
-  local items = {}
-  local count = 0
-  local limit = 50
-  local now = os.time()
-
-  for i = total_lines, 1, -1 do
-    local entry = lines[i]
-    local path = entry:match("^%d+%s+(.+)$") or entry
-    if not seen[path] then
-      seen[path] = true
-      count = count + 1
-      table.insert(items, M._format_entry(entry, now))
-      if count >= limit then break end
+        for i = #lines, 1, -1 do
+          local entry = lines[i]
+          local path = entry:match("^%d+%s+(.+)$") or entry
+          if not seen[path] then
+            seen[path] = true
+            count = count + 1
+            fzf_cb(fmt.format_log_entry(entry, now, cfg.ansi_color))
+            if count >= limit then break end
+          end
+        end
+      end
     end
+    fzf_cb(nil)
   end
 
-  return items
-end
+  local tab_bind = string.format(
+    [[transform:if [ -z "$FZF_QUERY" ]; then echo "change-preview(%s)+toggle-preview"; else echo 'become(echo alt-enter; printf "%%s\n" "$FZF_QUERY")'; fi]],
+    cfg.cmd_cheat
+  )
 
--- 3. ACTIONS
-local function extract_paths(selected)
-  local paths = {}
-  for _, line in ipairs(selected) do
-    local p = line:match("│%s*(.+)$")
-    if p then table.insert(paths, p) end
-  end
-  return paths
-end
-
-M.actions = {
-  ["default"] = function(selected)
-    local paths = extract_paths(selected)
-    if #paths == 0 then return end
-    for _, path in ipairs(paths) do
-      vim.cmd.badd(vim.fn.fnameescape(path))
-    end
-    vim.cmd.edit(vim.fn.fnameescape(paths[1]))
-  end,
-}
-
--- 4. HÀM ĐIỀU PHỐI CHÍNH
-function M.fzfrecent()
-  local items = get_recent_entries()
-  if #items == 0 then return end
-
-  -- Cheatsheet preview (đồng bộ style fzf_buffers)
-  local cheatsheet = [[
-\27[1;34m=== FZF RECENT PICKER CHEATSHEET ===\27[0m
-
-\27[1;33m[ 1. NAVIGATION & ACTIONS ]\27[0m
-  \27[32m<Enter>\27[0m     : Mở file đã chọn
-  \27[33m<Tab>\27[0m       : Đóng / mở cheatsheet trợ giúp
-  \27[35m<Ctrl-z>\27[0m     : Xóa nhanh query tìm kiếm
-
-\27[1;33m[ 2. CLIPBOARD (COPYQ) ]\27[0m
-  \27[36m<Ctrl-c>\27[0m     : Sao chép đường dẫn file vào CopyQ
-  \27[34m<Ctrl-v>\27[0m     : Dán nội dung Clipboard vào ô tìm kiếm
-]]
-
-  local cache_dir = vim.fn.stdpath("cache")
-  local cheat_file = cache_dir .. "/fzf_recent_cheat.txt"
-
-  local f1 = io.open(cheat_file, "w")
-  if f1 then
-    f1:write((cheatsheet:gsub("\\27", string.char(27))))
-    f1:close()
-  end
-
-  local cmd_cheatsheet = "cat '" .. cheat_file .. "'"
-  local tab_bind = string.format("change-preview(%s)+toggle-preview", cmd_cheatsheet)
-
-  fzf.fzf_exec(items, {
+  fzf.fzf_exec(provider, {
     winopts = { height = 0.55, width = 0.8, border = "rounded" },
-    prompt = "Recent> ",
-    header = ":: <Enter> open | <Tab> help | <Ctrl-c> copy path | <Ctrl-v> paste",
+    prompt = cfg.prompt,
+    header = ":: <Enter> select | <Tab> run query/help | <Ctrl-x> delete | <Ctrl-c> copy",
 
     fzf_opts = {
       ["--multi"] = true,
@@ -127,7 +61,7 @@ function M.fzfrecent()
       ["--delimiter"] = "│",
       ["--nth"] = "2..",
       ["--tiebreak"] = "index",
-      ["--preview"] = cmd_cheatsheet,
+      ["--preview"] = cfg.cmd_cheat,
       ["--preview-window"] = "right:55%:hidden:wrap",
       ["--color"] = "hl:yellow:reverse:bold,hl+:yellow:reverse:bold,pointer:#ff79c6,marker:#ff79c6,bg+:#44475a,spinner:#ff79c6",
     },
@@ -144,7 +78,99 @@ function M.fzfrecent()
       },
     },
 
-    actions = M.actions,
+    actions = {
+      ["default"] = function(selected, act_opts)
+        local query = (act_opts and (act_opts.last_query or act_opts.query)) or ""
+        local paths = {}
+        if selected and #selected > 0 then
+          for _, item in ipairs(selected) do
+            local p = extract_path(item)
+            if p and p ~= "" then table.insert(paths, p) end
+          end
+        elseif query ~= "" then
+          table.insert(paths, vim.trim(query))
+        end
+        cfg.on_select(paths)
+      end,
+
+      ["alt-enter"] = function(selected, _)
+        local query = (selected and selected[1]) or ""
+        local trimmed = vim.trim(query)
+        if trimmed ~= "" then
+          cfg.on_select({ trimmed })
+        end
+      end,
+
+      ["ctrl-x"] = {
+        fn = function(selected, _)
+          local item = (selected and selected[1]) or ""
+          local target = extract_path(item)
+          if not target or target == "" then return end
+
+          -- Copy vào Clipboard & CopyQ
+          vim.fn.setreg("+", target)
+          vim.fn.setreg('"', target)
+          vim.fn.system({ "copyq", "add", "-" }, target)
+          vim.fn.system({ "copyq", "select", "0" })
+
+          -- Xóa entry khỏi file log tương ứng
+          if vim.fn.filereadable(file_path) == 1 then
+            local lines = vim.fn.readfile(file_path)
+            local new_lines = {}
+            for _, line in ipairs(lines) do
+              local line_path = line:match("^%d+%s+(.+)$") or line
+              if vim.fs.normalize(line_path) ~= vim.fs.normalize(target) then
+                table.insert(new_lines, line)
+              end
+            end
+            vim.fn.writefile(new_lines, file_path)
+          end
+        end,
+        noclose = true,
+        reload = true,
+      },
+    },
+  })
+end
+
+-- ==========================================
+-- 2. ĐỊNH NGHĨA PICKER CỤ THỂ (GỌN GÀNG)
+-- ==========================================
+
+-- Mở File gần đây
+function M.fzfrecent_file()
+  create_picker({
+    log_file = LOG_FILE,
+    prompt = "Recent Files> ",
+    ansi_color = "\27[1;36m", -- Cyan
+    cmd_cheat = "cat '" .. vim.fn.stdpath("cache") .. "/fzf_recent_cheat.txt'",
+    on_select = function(paths)
+      if not paths or #paths == 0 then return end
+      for _, path in ipairs(paths) do
+        vim.cmd.badd(vim.fn.fnameescape(path))
+      end
+      vim.cmd.edit(vim.fn.fnameescape(paths[1]))
+    end,
+  })
+end
+
+-- Mở / Nhảy thư mục gần đây
+function M.fzfrecent_dir()
+  create_picker({
+    log_file = LOG_DIR,
+    prompt = "Recent Dirs> ",
+    ansi_color = "\27[1;33m", -- Yellow
+    cmd_cheat = "cat '" .. vim.fn.stdpath("cache") .. "/fzf_recent_cheat.txt'",
+    on_select = function(paths)
+      if not paths or #paths == 0 then return end
+      local target_dir = vim.fs.normalize(paths[1])
+
+      -- Đổi thư mục làm việc (CWD)
+      vim.cmd.cd(vim.fn.fnameescape(target_dir))
+
+      -- Mở thư mục -> Neovim tự kích hoạt Netrw Directory Listing
+      vim.cmd.edit(vim.fn.fnameescape(target_dir))
+    end,
   })
 end
 

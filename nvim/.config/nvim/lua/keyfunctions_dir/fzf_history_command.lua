@@ -91,9 +91,9 @@ M.fzf_command_history = function()
     
     keymap = {
       fzf = {
-        ["?"]         = string.format("change-preview(%s)+toggle-preview", cmd_cheatsheet),
-        [":"]         = string.format("change-preview(%s)+toggle-preview", cmd_cheatsheet),
-        [";"]         = string.format("change-preview(%s)+toggle-preview", cmd_hello),
+        -- ["?"]         = string.format("change-preview(%s)+toggle-preview", cmd_cheatsheet),
+        -- [":"]         = string.format("change-preview(%s)+toggle-preview", cmd_cheatsheet),
+        -- [";"]         = string.format("change-preview(%s)+toggle-preview", cmd_hello),
         
         -- Mapping Tab chỉ được đăng ký ở đây, KHÔNG xuất hiện trong bảng actions
         ["tab"]       = tab_bind,

@@ -8,7 +8,7 @@ vim.keymap.set('v', '<C-c>', '"+y', { desc = 'Copy selection' })
 vim.keymap.set('n', '<C-c>', '^vg_"+y', { noremap = true, silent = true })
 vim.keymap.set({'n', 'v', 'i'}, '<D-C-c>', '<cmd>%y+<cr>', { noremap = true, silent = true })
 
-vim.keymap.set('n', '<C-v>', '"+p', { desc = 'Paste Normal' })
+-- vim.keymap.set('n', '<C-v>', '"+p', { desc = 'Paste Normal' })
 vim.keymap.set('v', '<C-v>', '"_c<C-r>+<Esc>', { desc = 'Paste Visual' })
 vim.keymap.set('i', '<C-v>', '<C-r>+', { desc = 'Paste Insert' })
 vim.keymap.set('n', '<C-A-v>', '^vg_"+P', { noremap = true, silent = true })
@@ -78,14 +78,14 @@ vim.keymap.set("v", "<A-Down>", ":m '>+1<cr>gv=gv")
 
 vim.keymap.set({'n', 'v'}, '[', '<cmd>w<cr>')
 vim.keymap.set({'n', 'v'}, '{', '<cmd>q!<cr>')
-vim.keymap.set({'n', 'v'}, "<A-ESC>", '<cmd>q<cr>')
+-- vim.keymap.set({'n', 'v'}, "<A-ESC>", '<cmd>bd<cr>', { desc = 'Close buffer' })
 vim.keymap.set('n', ']', '<cmd>source $MYVIMRC<cr>')
 
 -- vim.keymap.set('v', '<Space>', 'a<Space><Esc>', { noremap = true, silent = true })
 -- vim.keymap.set('v', '<Space>', [[<Esc>*v//e<CR>]], { noremap = true, silent = true })
 vim.keymap.set('v', '<Space>', '*', { remap = true, silent = true })
 
-vim.keymap.set('v', 'a', 'c', { noremap = true, silent = true })
+-- vim.keymap.set('v', 'a', 'c', { noremap = true, silent = true })
 -- vim.keymap.set('v', 'i', 'c', { noremap = true, silent = true })
 vim.keymap.set('v', 'R', 'c<C-o>R', { noremap = true, silent = true })
 vim.keymap.set({'n', 'v', 'i', 'x'}, '<A-a>', '<C-v>', { desc = 'Visual Block' })
@@ -223,11 +223,6 @@ end, { silent = true, desc = '-CR: tạo dòng theo indent N dòng DƯỚI' })
 -- -- Map phím '/' chạy search history tự chế
 -- vim.keymap.set("n", "/", picker.search_history, { desc = "Custom Search History" })
 
--- Khi ở chế độ Normal: Chạy dòng hiện tại (dùng dấu chấm .)
-vim.keymap.set('n', '<C-CR>', ':.lua<CR>')
-
--- Khi ở chế độ Visual: Chạy các dòng được bôi đen (không cần dấu .)
-vim.keymap.set('v', '<C-CR>', ':lua<CR>')
 
 local function get_target_action(line, col)
   local rest_of_line = string.sub(line, col)
@@ -280,6 +275,45 @@ vim.keymap.set('v', '%', function()
   return '\27' .. target_col .. '|v' .. motion
 end, { expr = true, desc = "Bôi đen từ ngoặc/nháy trong Visual mode" })
 
-vim.keymap.set("n", ":", function()
+vim.keymap.set("n", "<C-p>", function()
   require("keyfunctions_dir").fzf.fzf_command_history()
 end, { silent = true, desc = "FZF Command History" })
+
+vim.keymap.set("n", '<S-p>', function()
+  require("keyfunctions_dir").fzf_search.fzf_search_history()
+end, { silent = true, desc = "FZF Command History" })
+
+vim.keymap.set("n", '<C-Tab>', function()
+  require("keyfunctions_dir").fzf_buffers.fzf_buffers()
+end, { desc = "FZF Listed Buffers" })
+
+-- Chạy hàm fzfrecent ở Normal mode
+vim.keymap.set("n", "<S-Left>", function()
+  require("keyfunctions_dir").fzfrecent.fzfrecent_file() -- Thay bằng đúng đường dẫn module của bạn
+end, { desc = "FZF Recent Files", silent = true })
+
+-- Chạy hàm fzfrecent ở Normal mode
+vim.keymap.set("n", "<S-Right>", function()
+  require("keyfunctions_dir").fzfrecent.fzfrecent_dir() -- Thay bằng đúng đường dẫn module của bạn
+end, { desc = "FZF Recent Files", silent = true })
+
+vim.keymap.set('n', '<D-v>', function()
+  require('utils.clipboard_indent').paste_with_indent('+')
+end, { desc = 'Paste with current indent' })
+
+vim.keymap.set({'n', 'v'}, "<A-ESC>", function()
+  -- Lấy danh sách tất cả các buffer đang mở (buflisted)
+  local valid_buffers = vim.tbl_filter(function(buf)
+    return vim.api.nvim_buf_is_valid(buf) and vim.bo[buf].buflisted
+  end, vim.api.nvim_list_bufs())
+
+  -- Nếu còn 1 buffer hoặc ít hơn: thoát Neovim
+  if #valid_buffers <= 1 then
+    vim.cmd("q")
+  else
+    -- Nếu còn nhiều buffer: đóng buffer hiện tại
+    vim.cmd("bd")
+  end
+end, { desc = "Close buffer or exit if last" })
+
+vim.keymap.set('n', '<S-Tab>', '<cmd>b#<cr>', { silent = true, desc = 'Toggle alternate buffer' })
