@@ -3,7 +3,7 @@ function fdf --description "Mở fzf chọn file: Enter để mở nvim, Right �
         --header="Enter: nvim | Right: paste file | Tab: chọn nhiều" \
         --height=70% \
         --preview="bat --color=always {} 2>/dev/null || cat {}" \
-        --preview-window="down:50%" \
+        --preview-window="bottom:70%:hidden" \
         --multi \
         --expect=right
 

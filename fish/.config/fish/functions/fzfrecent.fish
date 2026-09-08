@@ -21,7 +21,7 @@ function fzfrecent -d "Tìm file dựa trên lịch sử mở trong Neovim (Dash
         --nth=2 \
         --tiebreak=index \
         --preview="bat --color=always {2} 2>/dev/null || cat {2}" \
-        --preview-window="bottom:70%" \
+        --preview-window="bottom:70%:hidden" \
         --expect=right,enter,insert \
         --bind="ctrl-x:reload(fish -c '_fzfrecent_feed \"$log_file\"')" \
         --layout=reverse \

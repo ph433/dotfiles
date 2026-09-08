@@ -91,7 +91,7 @@ function __fzf_file_recent --description "Bốc danh sách file Frecency (Siêu 
         --prompt="Frecency> " \
         --header="Enter: Mở | Right: Dán | Left: Đổi phạm vi" \
         --header-lines=1 \
-        --preview-window="bottom:50%" \
+        --preview-window="bottom:70%:hidden" \
         --preview 'bat --style=numbers --color=always --line-range :100 {2..}' \
         --bind="left:reload($master_script toggle-scope)" \
         --expect=enter,right)

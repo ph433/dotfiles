@@ -21,7 +21,7 @@ function fzfrecentdir -d "Tìm thư mục dựa trên lịch sử di chuyển (T
         --nth=2 \
         --tiebreak=index \
         --preview="command -v eza >/dev/null && eza -1 --icons --color=always {2} 2>/dev/null || ls -A --color=always {2} 2>/dev/null" \
-        --preview-window="bottom:70%" \
+        --preview-window="bottom:70%:hidden" \
         --expect=right,enter \
         --bind="ctrl-x:reload(fish -c '_fzfrecent_feed \"$log_file\"')" \
         --layout=reverse \

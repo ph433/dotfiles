@@ -3,7 +3,7 @@ function fdd --description "Mở fzf chọn thư mục: Enter để cd, Right đ
         --header="Enter: cd | Right: paste dir | Tab: chọn nhiều" \
         --height=70% \
         --preview="ll {}" \
-        --preview-window="down:50%" \
+        --preview-window="bottom:70%:hidden" \
         --multi \
         --expect=right
 
