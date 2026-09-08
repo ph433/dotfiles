@@ -17,6 +17,8 @@ end
 local function create_picker(cfg)
   local file_path = vim.fs.normalize(cfg.log_file)
 
+  vim.system({ "fish", "-c", string.format('_fzfrecent_feed "%s"', file_path) })
+  
   local function provider(fzf_cb)
     local f = io.open(file_path, "r")
     if f then
@@ -100,34 +102,11 @@ local function create_picker(cfg)
           cfg.on_select({ trimmed })
         end
       end,
-
+      
       ["ctrl-x"] = {
-        fn = function(selected, _)
-          local item = (selected and selected[1]) or ""
-          local target = extract_path(item)
-          if not target or target == "" then return end
-
-          -- Copy vào Clipboard & CopyQ
-          vim.fn.setreg("+", target)
-          vim.fn.setreg('"', target)
-          vim.fn.system({ "copyq", "add", "-" }, target)
-          vim.fn.system({ "copyq", "select", "0" })
-
-          -- Xóa entry khỏi file log tương ứng
-          if vim.fn.filereadable(file_path) == 1 then
-            local lines = vim.fn.readfile(file_path)
-            local new_lines = {}
-            for _, line in ipairs(lines) do
-              local line_path = line:match("^%d+%s+(.+)$") or line
-              if vim.fs.normalize(line_path) ~= vim.fs.normalize(target) then
-                table.insert(new_lines, line)
-              end
-            end
-            vim.fn.writefile(new_lines, file_path)
-          end
-        end,
-        noclose = true,
+        fn = function() end,
         reload = true,
+        noclose = true,
       },
     },
   })
