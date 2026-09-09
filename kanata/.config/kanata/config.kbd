@@ -31,14 +31,14 @@
   del     esc     home    up      end     A-ent   _       _       M-spc   prtsc   pgup    pgdn    ;       /               _       _       _       _
   bks     tab     left    down    rght    spc     _       _       ins     @c_v-sw @s_v-sw @m_v-sw @a_v-sw @repa           _       _       _       _
   @ss     C-z     C-x     C-c     C-v     C-y     _       _       _       A-c     A-v     C-a     @ss                     _       _       _       _
-  _       _       _       _       _       _       _       _       @m_n    _       _       _               _               _       _       _
+  _       _       _       _       _       _       _       _       @m_n    @cole+  _       _               _               _       _       _
   _       _       @numt                     ent                   @cole   i                       _       _       _       _               _
 )
 
 (deflayer base_colemak-dh
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   del     q       w       f       p       b       _       _       j       l       u       y       ;       /               _       _       _       _
-  bks     a       r       s       t       g       _       _       m       n       e       i       o       _               _       _       _       _
+  bks     a       r       s       t       g       _       _       m       n       e       i       o       '               _       _       _       _
   @ss     x       c       d       v       z       _       _       k       h       ,       .       @ss                     _       _       _       _
   _       _       _       _       _       _       _       _       @m_n    _       _       _               _               _       _       _
   _       _       @numt                     spc                   @cole-  _                       _       _       _       _               _
@@ -67,7 +67,7 @@
   del     esc     home    up      end     _       _       _       _       prtsc   pgup    pgdn    @:_     @/_             _       _       _       _
   bks     tab     left    down    rght    spc     _       _       @fd     @c_v-sw @s_v-sw @m_v-sw @a_v-sw @repa           _       _       _       _
   @ss     C-z     C-x     C-c     C-v     C-y     _       _       @nvv    A-c     A-v     C-a     @ss                     _       _       _       _
-  _       _       _       _       _       _       _       _       @m_n    @cole_  @fhinv  _               _               _       _       _
+  _       _       _       _       _       _       _       @colnvr @m_n    @cole_  @fhinv  _               _               _       _       _
   _       _       @numt                     ent                   @colnv  _                       _       _       _       _               _
 )
 
@@ -77,7 +77,7 @@
   bks     a       r       s       t       g       _       _       m       n       e       i       o       '               _       _       _       _
   @ss     x       c       d       v       z       _       _       k       h       ,       .       @ss                     _       _       _       _
   _       _       _       _       _       _       _       _       @m_n    _       _       _               _               _       _       _
-  _       _       @numt                     spc                   @colnv- _                       _       _       _       _               _
+  _       @nvtg   @numt                     spc                   @colnv- _                       _       _       _       _               _
 )
 
 (deflayer mod_nvim_colemak-dh_toggle
@@ -337,7 +337,7 @@
   del     q       w       f       p       b       _       _       j       l       u       y       ;       /               _       _       _       _
   bks     a       r       s       t       g       _       _       m       n       e       i       o       _               _       _       _       _
   @ss     x       c       d       v       z       _       _       k       h       ,       .       @ss                     _       _       _       _
-  _       _       _       _       _       _       _       _       @m_n    _       _       _               _               _       _       _
+  _       _       _       _       _       _       _       _       @m_n    @cole_  _       _               _               _       _       _
   _       _       @numt                     spc                   @ralt_  _                       _       _       _       _               _
 )
 
@@ -721,12 +721,14 @@
   ralt_ (multi (layer-toggle base_colemak-dh) (on-release tap-virtualkey v_ent))
   fhinv (multi (layer-switch colemak-dh-nvim-fhint-switch) (on-release tap-virtualkey v_nvswac))
   cole_ (layer-toggle mod_nvim_colemak-dh)
+  cole+ (layer-toggle base_colemak-dh)
   ;; spcc (multi (macro spc) (layer-toggle colemak-dh-active))
   /_ (multi (macro /) (layer-toggle colemak-dh_search_cmd))
   :_ (multi (macro S-;) (layer-toggle colemak-dh_search_cmd))
   bks_ (multi (macro bks) (layer-toggle nvim_delete))
   esca (multi (macro esc) (layer-switch app_open))
   C-/ (multi (macro g c))
+  nvtg (multi (layer-toggle mod_nvim) (on-release tap-virtualkey v_ent))
   
   rep-a rpt-any
   repa rpt-any
@@ -758,12 +760,12 @@
   )
   
   switch_to_base_colemak-dh (switch
-    ($has-typed-letter-ralt) (multi (layer-switch base_colemak-dh)) break
-    () XX break
+    ($has-typed-letter-ralt) (layer-switch base_colemak-dh) break
+    () esc break
   )
   
   switch_to_base (switch
-    ($has-typed-letter-ralt) (multi (layer-switch base)) break
+    ($has-typed-letter-ralt) (multi esc (layer-switch base)) break
     () XX break
   )
   
@@ -860,9 +862,10 @@
   ss (multi lsft (layer-toggle base_colemak-dh) (on-release tap-virtualkey switch_to_function_bare))
   
   colnv (multi (macro a) (layer-toggle mod_nvim_colemak-dh) (on-release tap-virtualkey switch_to_colemak-dh_nvim))
+  colnvr (multi (macro S-r) (layer-toggle mod_nvim_colemak-dh) (on-release tap-virtualkey switch_to_colemak-dh_nvim))
   colnv- (multi (layer-toggle mod_nvim) (on-release tap-virtualkey switch_to_nvim))
   
-  cole (multi (layer-toggle base_colemak-dh) (on-release tap-virtualkey switch_to_base_colemak-dh))
+  cole (multi (macro i) (layer-toggle base_colemak-dh) (on-release tap-virtualkey switch_to_base_colemak-dh))
   cole- (multi (layer-toggle base) (on-release tap-virtualkey switch_to_base))
   
   colef (multi (layer-toggle colemak-dh_firefox) (on-release tap-virtualkey switch_to_colemak-dh_firefox))
@@ -931,9 +934,9 @@
 
 (deflayer number-bare
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _       _               _       _       _       _
+  _       `       -       =       S-=     /       _       _       \       [       S-9     S-0     ]       _               _       _       _       _
   _       1       2       3       4       5       _       _       6       @7-     @8-     @9-     @0-     _               _       _       _       _
-  _       _       _       _       _       _       _       _       _       _       _       _       _                       _       _       _       _
+  _       _       _       ;       _       _       _       _       '       _       ,       .       _                       _       _       _       _
   _       _       _       _       _       _       _       _       _       _       _       _               _               _       _       _
   _       _       _                          _                    _       _                       _       _       _       _               _
 )
