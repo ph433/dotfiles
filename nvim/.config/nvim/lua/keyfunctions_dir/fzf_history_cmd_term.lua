@@ -23,11 +23,22 @@ M.fzf_fish_history = function()
     fzf_cb(nil)
   end
 
-  -- 2. Hàm chạy lệnh shell bên trong Neovim (:!cmd)
+-- 2. Chạy lệnh sạch (:!cmd) và cập nhật thẳng vào fish_history
   local function run_shell_cmd(cmd_str)
     local trimmed = vim.trim(cmd_str or "")
     if #trimmed == 0 then return end
 
+    -- Ghi trực tiếp bản ghi vào file history của Fish
+    local fish_hist = vim.fn.expand("~/.local/share/fish/fish_history")
+    if vim.fn.filereadable(fish_hist) == 1 then
+      local entry = {
+        "- cmd: " .. trimmed,
+        "  when: " .. os.time(),
+      }
+      vim.fn.writefile(entry, fish_hist, "a")
+    end
+
+    -- Bắn đúng lệnh sạch ra command-line: :!ls
     vim.schedule(function()
       local cr = vim.api.nvim_replace_termcodes("<CR>", true, false, true)
       local keys = ":!" .. trimmed .. cr
