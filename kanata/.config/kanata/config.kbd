@@ -32,7 +32,7 @@
   bks     tab     left    down    rght    spc     _       _       ins     @c_v-sw @s_v-sw @m_v-sw @a_v-sw @repa           _       _       _       _
   @ss     C-z     C-x     C-c     C-v     C-y     _       _       _       A-c     A-v     C-a     @ss                     _       _       _       _
   _       _       _       _       _       _       _       _       @m_n    _       _       _               _               _       _       _
-  _       _       @numt                     ent                   @cole   _                       _       _       _       _               _
+  _       _       @numt                     ent                   @cole   i                       _       _       _       _               _
 )
 
 (deflayer base_colemak-dh
@@ -67,7 +67,7 @@
   del     esc     home    up      end     _       _       _       _       prtsc   pgup    pgdn    @:_     @/_             _       _       _       _
   bks     tab     left    down    rght    spc     _       _       @fd     @c_v-sw @s_v-sw @m_v-sw @a_v-sw @repa           _       _       _       _
   @ss     C-z     C-x     C-c     C-v     C-y     _       _       @nvv    A-c     A-v     C-a     @ss                     _       _       _       _
-  _       _       _       _       _       _       _       _       @m_n    @fhinv  _       _               _               _       _       _
+  _       _       _       _       _       _       _       _       @m_n    @cole_  @fhinv  _               _               _       _       _
   _       _       @numt                     ent                   @colnv  _                       _       _       _       _               _
 )
 
@@ -119,7 +119,7 @@
 (deflayer colemak-dh_firefox
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   del     q       w       f       p       b       _       _       j       l       u       y       ;       /               _       _       _       _
-  @bks_   a       r       s       t       g       _       _       m       n       e       i       o       _               _       _       _       _
+  @bks_   a       r       s       t       g       _       _       m       n       e       i       o       \               _       _       _       _
   @ss     x       c       d       v       z       _       _       k       h       ,       .       @ss                     _       _       _       _
   _       _       _       _       _       _       _       _       @m_n    _       _       _               _               _       _       _
   _       _       @numt                     spc                   @colef- _                       _       _       _       _               _
@@ -720,6 +720,7 @@
 (defalias
   ralt_ (multi (layer-toggle base_colemak-dh) (on-release tap-virtualkey v_ent))
   fhinv (multi (layer-switch colemak-dh-nvim-fhint-switch) (on-release tap-virtualkey v_nvswac))
+  cole_ (layer-toggle mod_nvim_colemak-dh)
   ;; spcc (multi (macro spc) (layer-toggle colemak-dh-active))
   /_ (multi (macro /) (layer-toggle colemak-dh_search_cmd))
   :_ (multi (macro S-;) (layer-toggle colemak-dh_search_cmd))
@@ -734,7 +735,7 @@
 
 (defvirtualkeys
   v_ent ent
-  
+  v_esc esc
   v_nvswac (switch
     () (layer-switch mod_nvim) break
   )
@@ -777,8 +778,8 @@
   )
   
   switch_to_colemak-dh_nvim (switch
-    ($has-typed-letter-ralt) (multi a (layer-switch mod_nvim_colemak-dh)) break
-    () XX break
+    ($has-typed-letter-ralt) (layer-switch mod_nvim_colemak-dh) break
+    () esc break
   )
   
   switch_to_nvim (switch
@@ -858,7 +859,7 @@
   
   ss (multi lsft (layer-toggle base_colemak-dh) (on-release tap-virtualkey switch_to_function_bare))
   
-  colnv (multi (layer-toggle mod_nvim_colemak-dh_toggle) (on-release tap-virtualkey switch_to_colemak-dh_nvim))
+  colnv (multi (macro a) (layer-toggle mod_nvim_colemak-dh) (on-release tap-virtualkey switch_to_colemak-dh_nvim))
   colnv- (multi (layer-toggle mod_nvim) (on-release tap-virtualkey switch_to_nvim))
   
   cole (multi (layer-toggle base_colemak-dh) (on-release tap-virtualkey switch_to_base_colemak-dh))
