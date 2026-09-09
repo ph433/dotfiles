@@ -279,9 +279,20 @@ vim.keymap.set("n", "<C-p>", function()
   require("keyfunctions_dir").fzf.fzf_command_history()
 end, { silent = true, desc = "FZF Command History" })
 
-vim.keymap.set("n", '<S-p>', function()
-  require("keyfunctions_dir").fzf_search.fzf_search_history()
+-- 1. Keymap toàn cục thông thường
+vim.keymap.set("n", "<S-p>", function()
+  require("keyfunctions_dir").fzf_his_terminal.fzf_fish_history()
 end, { silent = true, desc = "FZF Command History" })
+
+-- 2. Đè phím riêng cho buffer Netrw
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "netrw",
+  callback = function(args)
+    vim.keymap.set("n", "<S-p>", function()
+      require("keyfunctions_dir").fzf_his_terminal.fzf_fish_history()
+    end, { buffer = args.buf, silent = true, remap = false, desc = "FZF Command History (Netrw)" })
+  end,
+})
 
 vim.keymap.set("n", '<C-Tab>', function()
   require("keyfunctions_dir").fzf_buffers.fzf_buffers()
