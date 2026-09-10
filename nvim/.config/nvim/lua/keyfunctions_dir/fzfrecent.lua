@@ -134,6 +134,7 @@ function M.fzfrecent_file()
 end
 
 -- Mở / Nhảy thư mục gần đây
+-- Mở / Nhảy thư mục gần đây
 function M.fzfrecent_dir()
   create_picker({
     log_file = LOG_DIR,
@@ -144,10 +145,13 @@ function M.fzfrecent_dir()
       if not paths or #paths == 0 then return end
       local target_dir = vim.fs.normalize(paths[1])
 
+      -- GỌI FISH GHI LOG BẤT ĐỒNG BỘ Ở ĐÂY:
+      vim.system({ "fish", "-c", string.format("log_recent_dir %s", vim.fn.shellescape(target_dir)) })
+
       -- Đổi thư mục làm việc (CWD)
       vim.cmd.cd(vim.fn.fnameescape(target_dir))
 
-      -- Mở thư mục -> Neovim tự kích hoạt Netrw Directory Listing
+      -- Mở thư mục
       vim.cmd.edit(vim.fn.fnameescape(target_dir))
     end,
   })
