@@ -2,16 +2,22 @@
 # Chỉnh khoảng cách chữ với mép cửa sổ cho thoáng
 # Độ mờ của cửa sổ (0.0 là trong suốt, 1.0 là đặc)
 opacity = 1.0
+blur = false
 title = "Alacritty"
 padding = { x = 0, y = 0 } # Chỉ giữ lại dòng này để khít màn hình
 # dynamic_padding = true
-# decorations = "None"
+decorations = "None"
+
+[colors.primary]
+background = "#000000"
+foreground = "#ffffff"
+
 [font]
 size = 9.0
-normal                = { family = "JetBrainsMono Nerd Font", style = "Regular" }
-bold                  = { family = "JetBrainsMono Nerd Font", style = "Bold" }
-italic                = { family = "JetBrainsMono Nerd Font", style = "Italic" }
-bold_italic           = { family = "JetBrainsMono Nerd Font", style = "Bold Italic" }
+normal        = { family = "JetBrainsMono Nerd Font", style = "Regular" }
+bold          = { family = "JetBrainsMono Nerd Font", style = "Bold" }
+italic        = { family = "JetBrainsMono Nerd Font", style = "Italic" }
+bold_italic   = { family = "JetBrainsMono Nerd Font", style = "Bold Italic" }
 
 
 [cursor]
@@ -27,7 +33,7 @@ style = "Block"
 key = "F11"
 action = "ToggleFullscreen"
 
-# 2. Bấm Windows + Space để bật/tắt chế độ Vi-Mode (Copy Mode)
+# 2. Bấm Ctrl + Escape để bật/tắt chế độ Vi-Mode (Copy Mode)
 [[keyboard.bindings]]
 key = "Escape"
 mods = "Control"
@@ -112,4 +118,3 @@ action = "ScrollToBottom"
 [[keyboard.bindings]]
 key = "Delete"
 chars = "\u001b[3~"
-
