@@ -321,33 +321,33 @@ vim.keymap.set('v', '<Esc>', function()
   end
 end, { desc = "Thoát Visual mode và tắt hlsearch" })
 
-vim.keymap.set('n', '<C-Tab>', function()
-  if vim.v.hlsearch == 1 then
-    local pattern = vim.fn.getreg('/')
-
-    -- Kiểm tra nếu chưa được bọc bằng Negative Lookahead @!
-    if not pattern:find('@!') then
-      -- 1. Xóa sạch tất cả các flag magic (\v, \V), boundary (\c, \<, \>) do * hoặc / tạo ra
-      local clean = pattern
-        :gsub('\\[vV]', '')
-        :gsub('\\<', '')
-        :gsub('\\>', '')
-        :gsub('^%(', '')
-        :gsub('%)', '')
-
-      -- 2. Tạo pattern Very Magic mới không bị dính gạch ngang/dưới/chữ/số phía sau
-      local exact_pattern = '\\v<(' .. clean .. ')>([a-zA-Z0-9_-])@!'
-      vim.fn.setreg('/', exact_pattern)
-    end
-
-    -- 3. Nhảy tới kết quả tiếp theo
-    pcall(vim.cmd, 'normal! n')
-  -- else
-  --   -- Nếu không có hlsearch, bấm Tab trả về chức năng mặc định
-  --   local tab_key = vim.api.nvim_replace_termcodes('<Tab>', true, false, true)
-  --   vim.api.nvim_feedkeys(tab_key, 'n', false)
-  end
-end, { desc = 'Strict exact search on Tab' })
+-- vim.keymap.set('n', '<C-Tab>', function()
+--   if vim.v.hlsearch == 1 then
+--     local pattern = vim.fn.getreg('/')
+--
+--     -- Kiểm tra nếu chưa được bọc bằng Negative Lookahead @!
+--     if not pattern:find('@!') then
+--       -- 1. Xóa sạch tất cả các flag magic (\v, \V), boundary (\c, \<, \>) do * hoặc / tạo ra
+--       local clean = pattern
+--         :gsub('\\[vV]', '')
+--         :gsub('\\<', '')
+--         :gsub('\\>', '')
+--         :gsub('^%(', '')
+--         :gsub('%)', '')
+--
+--       -- 2. Tạo pattern Very Magic mới không bị dính gạch ngang/dưới/chữ/số phía sau
+--       local exact_pattern = '\\v<(' .. clean .. ')>([a-zA-Z0-9_-])@!'
+--       vim.fn.setreg('/', exact_pattern)
+--     end
+--
+--     -- 3. Nhảy tới kết quả tiếp theo
+--     pcall(vim.cmd, 'normal! n')
+--   -- else
+--   --   -- Nếu không có hlsearch, bấm Tab trả về chức năng mặc định
+--   --   local tab_key = vim.api.nvim_replace_termcodes('<Tab>', true, false, true)
+--   --   vim.api.nvim_feedkeys(tab_key, 'n', false)
+--   end
+-- end, { desc = 'Strict exact search on Tab' })
 
 vim.keymap.set('n', '<Space>', function()
   local count = vim.v.count
@@ -368,7 +368,7 @@ vim.keymap.set('n', '<Space>', function()
 
   -- 3. Mặc định: chèn một khoảng trắng sau con trỏ
   else
-    vim.cmd('normal! a ')
+    -- vim.cmd('normal! a ')
   end
 end, { silent = true, desc = 'Count: tạo dòng mới | hlsearch: nhảy match | Mặc định: chèn space' })
 
@@ -409,148 +409,6 @@ vim.keymap.set('x', '<Tab>', function()
   -- 6. Nhảy tới vị trí tiếp theo
   pcall(vim.cmd, 'normal! n')
 end, { desc = 'Visual select exact search on Tab' })
-
-vim.keymap.set('n', '<C-CR>', function()
-    local clipboard_content = vim.fn.getreg('+')
-    if clipboard_content == "" then
-        vim.notify("Clipboard trống rỗng!", vim.log.levels.WARN)
-        return
-    end
-
-    clipboard_content = clipboard_content:gsub("\194\160", " "):gsub("\r\n", "\n"):gsub("\r", "\n")
-
-    local output_lines = {}
-
-    -- Override print
-    local old_print = print
-    print = function(...)
-        local args = {...}
-        local str_args = {}
-        for i, v in ipairs(args) do
-            str_args[i] = type(v) == "table" and vim.inspect(v) or tostring(v)
-        end
-        table.insert(output_lines, table.concat(str_args, "\t"))
-    end
-
-    local ignore_vars = {
-        ["clipboard_content"] = true,
-        ["output_lines"] = true,
-        ["old_print"] = true,
-        ["success"] = true,
-        ["run_err"] = true,
-        ["load_err"] = true,
-        ["user_func"] = true,
-        ["captured_vars"] = true,
-        ["ignore_vars"] = true,
-        ["env"] = true,
-    }
-
-    local env = setmetatable({}, { __index = _G })
-    -- Dùng dấu '=' ở đầu tên chunk để Lua giữ nguyên tên chính xác
-    local user_func, load_err = load(clipboard_content, "=ClipboardCode", "t", env)
-
-    if user_func then
-        local captured_vars = {}
-
-        debug.sethook(function(event, line)
-            -- Kiểm tra chính xác chunk nguồn
-            local info = debug.getinfo(2, "S")
-            if not info or not (info.source and info.source:match("ClipboardCode")) then
-                return
-            end
-
-            -- Lấy biến Local
-            local i = 1
-            while true do
-                local name, value = debug.getlocal(2, i)
-                if not name then break end
-
-                if not name:match("^%(") and not ignore_vars[name] and type(value) ~= "function" and type(value) ~= "userdata" then
-                    captured_vars[name] = value
-                end
-                i = i + 1
-            end
-        end, "l")
-
-        local success, run_err = pcall(user_func)
-        debug.sethook()
-
-        -- Lấy biến Global người dùng tự tạo
-        for k, v in pairs(env) do
-            if type(v) ~= "function" and type(v) ~= "userdata" and not ignore_vars[k] then
-                captured_vars["[global] " .. tostring(k)] = v
-            end
-        end
-
-        if success then
-            if next(captured_vars) then
-                if #output_lines > 0 then
-                    table.insert(output_lines, "----------------------------------------")
-                end
-                table.insert(output_lines, "🐛 BIẾN KHỞI TẠO (DEBUG):")
-
-                for var_name, var_val in pairs(captured_vars) do
-                    local formatted_val
-                    if type(var_val) == "string" then
-                        if #var_val > 80 then
-                            var_val = var_val:sub(1, 77) .. "..."
-                        end
-                        formatted_val = string.format("%q", var_val)
-                    elseif type(var_val) == "table" then
-                        formatted_val = vim.inspect(var_val, { depth = 1, newline = " ", indent = "" })
-                        if #formatted_val > 100 then
-                            formatted_val = formatted_val:sub(1, 97) .. "..."
-                        end
-                    else
-                        formatted_val = tostring(var_val)
-                    end
-
-                    local log_str = string.format("  • %s = %s", var_name, formatted_val)
-                    for line in log_str:gmatch("[^\r\n]+") do
-                        table.insert(output_lines, line)
-                    end
-                end
-            end
-        else
-            table.insert(output_lines, "❌ LỖI KHI CHẠY CODE:")
-            table.insert(output_lines, tostring(run_err))
-        end
-    else
-        table.insert(output_lines, "❌ LỖI CÚ PHÁP (SYNTAX ERROR):")
-        table.insert(output_lines, tostring(load_err))
-    end
-
-    print = old_print
-
-    if #output_lines == 0 then
-        table.insert(output_lines, "Code đã chạy thành công nhưng không tạo ra biến nào.")
-    end
-
-    -- Hiển thị Float Window
-    local buf = vim.api.nvim_create_buf(false, true)
-    vim.api.nvim_buf_set_lines(buf, 0, -1, false, output_lines)
-    vim.bo[buf].filetype = "lua"
-
-    local width = math.min(100, vim.o.columns - 4)
-    local height = math.min(#output_lines + 2, vim.o.lines - 4)
-    local row = math.floor((vim.o.lines - height) / 2)
-    local col = math.floor((vim.o.columns - width) / 2)
-
-    local win = vim.api.nvim_open_win(buf, true, {
-        relative = 'editor',
-        row = row,
-        col = col,
-        width = width,
-        height = height,
-        style = 'minimal',
-        border = 'rounded',
-        title = ' Kết quả Debug Clipboard ',
-        title_pos = 'center',
-    })
-
-    vim.keymap.set('n', 'q', ':q<CR>', { buffer = buf, silent = true })
-    vim.keymap.set('n', '<Esc>', ':q<CR>', { buffer = buf, silent = true })
-end, { desc = "Debug biến sạch từ Clipboard" })
 
 local function match_indent_and_move(direction)
   local count = vim.v.count1

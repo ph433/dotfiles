@@ -65,12 +65,13 @@ static const char unknown_str[] = "n/a";
  * wifi_perc           WiFi signal in percent          interface name (wlan0)
  */
 static const struct arg args[] = {
-    /* function         format                                      argument */
-    { cpu_perc,         "^c#FF5555^󰻠  %s%% ^d^  ",                 NULL }, /* Text màu đỏ */
-    { ram_perc,         "^c#50FA7B^  %s%% ^d^  ",                 NULL }, /* Text màu xanh lá (Dracula) */
-    { run_command,      "^c#F1FA8C^󰃠  %s%% ^d^  ",                 "brightnessctl -m | cut -d, -f4 | tr -d '%'" },
-    { run_command,      "%s ",                                     "~/.local/bin/vol.sh" },
-    { battery_perc,     "^c#FF79C6^󰁹 %s%% [",                      "BAT0" },
-    { battery_state,    "%s] ^d^  ",                               "BAT0" },
-    { datetime,         "^c#8BE9FD^  %s^d^",                      "%d/%m 󰥔 %H:%M " },
+    /* function          format                  argument */
+    { cpu_perc,          "[CPU: %s%%] ",         NULL },
+    { ram_used,          "[RAM: %s/",            NULL },
+    { ram_total,         "%s] ",                 NULL },
+    { run_command,       "[VOL: %s] ",           "wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{if ($3 == \"[MUTED]\") print \"MUTED\"; else print int($2 * 100) \"%\"}'" },
+    { wifi_perc,         "[WIFI: %s%%] ",        "wlp0s20f3" },
+    { battery_state,     "[BAT: %s ",            "BAT0" },
+    { battery_perc,      "%s%%] ",               "BAT0" },
+    { datetime,          "[%s]",                 "%d/%m/%Y %H:%M:%S" },
 };

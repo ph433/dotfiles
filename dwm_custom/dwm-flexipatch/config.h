@@ -483,7 +483,7 @@ static char tagicons[][NUMTAGS][MAX_TAGLEN] =
 static char *tagicons[][NUMTAGS] =
 #endif // NAMETAG_PATCH
 {
-	[DEFAULT_TAGS]        = { "", "", "", "󰊴", "󰓇", "", "󰭹", "", "󰲆" },
+	[DEFAULT_TAGS]        = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I" },
 	[ALTERNATIVE_TAGS]    = { "A", "B", "C", "D", "E", "F", "G", "H", "I" },
 	[ALT_TAGS_DECORATION] = { "<1>", "<2>", "<3>", "<4>", "<5>", "<6>", "<7>", "<8>", "<9>" },
 };
@@ -950,6 +950,7 @@ static const char *dmenucmd[] = {
 	NULL
 };
 static const char *termcmd[]  = { "alacritty", NULL };
+// static const char *termcmd[]  = { "st", NULL };
 static const char *firefoxcmd[]   = { "firefox", NULL };
 static const char *copyqcmd[] = { "copyq", "toggle", NULL };
 // static const char *flameshotcmd[] = { "env", "XDG_CURRENT_DESKTOP=X-Generic", "flameshot", "gui", NULL };
@@ -1247,7 +1248,7 @@ static const Key keys[] = {
 	{ Mod1Mask,                     XK_Tab,        alttabstart,            {0} },
 	#else
 	{ MODKEY,                       XK_Tab,        view,                   {0} },
-	{ ShiftMask,                    XK_Tab,        spawn,                  {.v = rofiwindowcmd } },
+	{ ShiftMask,                    XK_BackSpace,  spawn,                  {.v = rofiwindowcmd } },
 	#endif // ALT_TAB_PATCH
 	#if SHIFTTAG_PATCH
 	{ MODKEY|ShiftMask,             XK_Left,       shifttag,               { .i = -1 } }, // note keybinding conflict with focusadjacenttag tagtoleft

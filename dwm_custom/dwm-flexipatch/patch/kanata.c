@@ -51,7 +51,7 @@ update_kanata_layer(Client *c) {
     } else if (ch.res_class && strcasestr(ch.res_class, "Alacritty")) {
         set_kanata_layer("base");
     } else {
-        set_kanata_layer("base");
+        set_kanata_layer("mod_firefox");
     }
 
     if (ch.res_name)  XFree(ch.res_name);

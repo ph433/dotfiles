@@ -2,7 +2,7 @@
 # Đường dẫn đề xuất: ~/.local/bin/fzf_score_file (nhớ: chmod +x ~/.local/bin/fzf_score_file)
 
 target="$1"
-[ -e "$target" ] && exit 0
+[ -e "$target" ] || exit 0
 
 log_file="$HOME/.cache/yazi/file_recent.log"
 tmp_log=$(mktemp "${log_file}.XXXXXX")
@@ -30,15 +30,10 @@ END {
             s += 5.0
             found = 1
         } else {
-            # Giảm điểm (decay)
-            if (s <= 10.0) {
-                s -= 0.01
-            } else {
-                s = s * 0.98
-            }
+            s -= 1.0
         }
 
-        if (s < 0.01) s = 0.01
+        if (s < 0) s = 0
 
         printf "%.2f %s\n", s, p
     }

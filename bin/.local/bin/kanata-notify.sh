@@ -11,7 +11,7 @@ nc localhost 1234 | while read -l line
         end
 
         # Chỉ hiện khi sang layer mod_nvim (hoặc các layer khác base/default)
-        if test "$LAYER" != "default" -a "$LAYER" != "base"
+        if test "$LAYER" != "default" -a "$LAYER" != "base1"
             # Truyền $LAYER trực tiếp làm Summary (Tiêu đề)
             notify-send -t 0 -h string:x-dunst-stack-tag:kanata "$LAYER"
         else

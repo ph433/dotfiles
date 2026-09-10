@@ -865,7 +865,7 @@
   colnvr (multi (macro S-r) (layer-toggle mod_nvim_colemak-dh) (on-release tap-virtualkey switch_to_colemak-dh_nvim))
   colnv- (multi (layer-toggle mod_nvim) (on-release tap-virtualkey switch_to_nvim))
   
-  cole (multi (macro i) (layer-toggle base_colemak-dh) (on-release tap-virtualkey switch_to_base_colemak-dh))
+  cole (multi (macro a) (layer-toggle base_colemak-dh) (on-release tap-virtualkey switch_to_base_colemak-dh))
   cole- (multi (layer-toggle base) (on-release tap-virtualkey switch_to_base))
   
   colef (multi (layer-toggle colemak-dh_firefox) (on-release tap-virtualkey switch_to_colemak-dh_firefox))
