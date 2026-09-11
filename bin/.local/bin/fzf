@@ -1,0 +1,22 @@
+#!/bin/sh
+
+REAL_FZF="/home/phuong/.fzf/bin/fzf"
+
+# Chuyển layer sang mod_firefox khi mở fzf (bịt cả stdout và stderr)
+echo '{"ChangeLayer": {"new": "mod_firefox"}}' | nc -w 1 localhost 1234 >/dev/null 2>&1 &
+
+cleanup() {
+    # Bắn socket trả layer về base ở background (bịt cả stdout và stderr)
+    echo '{"ChangeLayer": {"new": "base"}}' | nc -w 1 localhost 1234 >/dev/null 2>&1 &
+}
+trap cleanup EXIT INT TERM
+
+# Chạy fzf gốc
+"$REAL_FZF" "$@"
+exit_code=$?
+
+# Gỡ trap trước khi tự gọi cleanup
+trap - EXIT INT TERM
+cleanup
+
+exit $exit_code
