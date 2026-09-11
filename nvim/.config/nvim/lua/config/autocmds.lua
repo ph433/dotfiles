@@ -95,12 +95,28 @@ vim.api.nvim_create_autocmd("BufLeave", {
     end
 })
 
--- Khi MỞ terminal hoặc CHUYỂN VÀO terminal (Terminal Mode / BufEnter)
+-- Danh sách bỏ qua để fzf-lua tự quản lý window/prompt
+local ignored_term_fts = {
+    ["fzf"] = true,
+    ["fzf-lua"] = true,
+}
+
+-- Khi MỞ terminal hoặc CHUYỂN VÀO terminal
 vim.api.nvim_create_autocmd({ "TermOpen", "TermEnter", "BufEnter" }, {
     group = group,
-    callback = function()
+    callback = function(args)
         if vim.bo.buftype == "terminal" then
+            local ft = vim.bo[args.buf].filetype
+            
+            -- Đổi layout Kanata
             set_layout(get_active_layer())
+
+            -- Tự vào Insert mode và tắt số dòng (chỉ cho terminal thường)
+            if not ignored_term_fts[ft] then
+                vim.opt_local.number = false
+                vim.opt_local.relativenumber = false
+                vim.cmd("startinsert")
+            end
         end
     end,
 })
