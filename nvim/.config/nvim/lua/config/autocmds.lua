@@ -2,23 +2,33 @@ local timer = nil
 
 local function set_layout(layer)
     local cmd = string.format("echo '{\"ChangeLayer\": {\"new\": \"%s\"}}' | nc -w 1 localhost 1234", layer)
-    vim.fn.jobstart({"sh", "-c", cmd}, { detach = true })
+    vim.fn.jobstart({ "sh", "-c", cmd }, { detach = true })
 end
 
--- 1. Khi VÀO Neovim HOẶC nhận lại Focus
+-- Xác định chính xác layer cần dùng dựa theo buffer hiện tại
+local function get_active_layer()
+    if vim.bo.filetype == "netrw" then
+        return "mod_firefox"
+    end
+    return "mod_nvim"
+end
+
+local group = vim.api.nvim_create_augroup("KanataLayerControl", { clear = true })
+
+-- 1. Khi VÀO Neovim HOẶC nhận lại Focus (khi đổi tag workspace quay lại)
 vim.api.nvim_create_autocmd({ "VimEnter", "FocusGained" }, {
+    group = group,
     callback = function()
-        -- Nếu đang có timer chờ từ trước -> Hủy bỏ ngay
         if timer then
             timer:stop()
             timer:close()
             timer = nil
         end
 
-        -- Tạo timer mới với uv (libuv) để có thể hủy bất cứ lúc nào
         timer = vim.loop.new_timer()
         timer:start(40, 0, vim.schedule_wrap(function()
-            set_layout("mod_nvim")
+            -- Lấy đúng layer theo buffer đang hiển thị thay vì ép cứng mod_nvim
+            set_layout(get_active_layer())
             if timer then
                 timer:close()
                 timer = nil
@@ -29,15 +39,56 @@ vim.api.nvim_create_autocmd({ "VimEnter", "FocusGained" }, {
 
 -- 2. Khi THOÁT Neovim HOẶC mất Focus
 vim.api.nvim_create_autocmd({ "VimLeave", "FocusLost" }, {
+    group = group,
     callback = function()
-        -- CRITICAL: Hủy ngay lệnh đổi active đang chờ (nếu có)
         if timer then
             timer:stop()
             timer:close()
             timer = nil
         end
-
         set_layout("base")
+    end
+})
+
+-- 3. Khi VÀO command-line (bấm :, /, ?, hoặc prompt d / % của Netrw)
+vim.api.nvim_create_autocmd("CmdlineEnter", {
+    group = group,
+    callback = function()
+        if timer then
+            timer:stop()
+            timer:close()
+            timer = nil
+        end
+        set_layout("mod_firefox")
+    end
+})
+
+-- 4. Khi THOÁT command-line (nhấn Enter sau khi nhập tên file/dir ở d, %)
+vim.api.nvim_create_autocmd("CmdlineLeave", {
+    group = group,
+    callback = function()
+        -- Kiểm tra lại: nếu vẫn đang đứng ở Netrw thì giữ nguyên mod_firefox
+        set_layout(get_active_layer())
+    end
+})
+
+-- 5. Xử lý khi mở Netrw
+vim.api.nvim_create_autocmd({ "FileType", "BufEnter" }, {
+    group = group,
+    callback = function()
+        if vim.bo.filetype == "netrw" then
+            set_layout("mod_firefox")
+        end
+    end
+})
+
+-- 6. Khi rời buffer Netrw sang file code bình thường
+vim.api.nvim_create_autocmd("BufLeave", {
+    group = group,
+    callback = function()
+        if vim.bo.filetype == "netrw" then
+            set_layout("mod_nvim")
+        end
     end
 })
 
