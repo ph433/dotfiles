@@ -313,6 +313,12 @@ vim.keymap.set('n', '<D-v>', function()
 end, { desc = 'Paste with current indent' })
 
 vim.keymap.set({'n', 'v'}, "<A-ESC>", function()
+  -- Nếu đang đứng ở giao diện thư mục Netrw: chỉ đóng Netrw để quay lại buffer trước
+  if vim.bo.filetype == "netrw" then
+    vim.cmd("bd")
+    return
+  end
+
   -- Lấy danh sách tất cả các buffer đang mở (buflisted)
   local valid_buffers = vim.tbl_filter(function(buf)
     return vim.api.nvim_buf_is_valid(buf) and vim.bo[buf].buflisted
@@ -328,3 +334,4 @@ vim.keymap.set({'n', 'v'}, "<A-ESC>", function()
 end, { desc = "Close buffer or exit if last" })
 
 vim.keymap.set('n', '<S-Tab>', '<cmd>b#<cr>', { silent = true, desc = 'Toggle alternate buffer' })
+
