@@ -7,6 +7,9 @@ end
 
 -- Xác định chính xác layer cần dùng dựa theo buffer hiện tại
 local function get_active_layer()
+    if vim.bo.buftype == "terminal" then
+        return "mod_firefox" -- hoặc layer bạn muốn dùng khi gõ trong terminal (vd: base/mod_terminal)
+    end
     if vim.bo.filetype == "netrw" then
         return "mod_firefox"
     end
@@ -90,6 +93,29 @@ vim.api.nvim_create_autocmd("BufLeave", {
             set_layout("mod_nvim")
         end
     end
+})
+
+-- Khi MỞ terminal hoặc CHUYỂN VÀO terminal (Terminal Mode / BufEnter)
+vim.api.nvim_create_autocmd({ "TermOpen", "TermEnter", "BufEnter" }, {
+    group = group,
+    callback = function()
+        if vim.bo.buftype == "terminal" then
+            set_layout(get_active_layer())
+        end
+    end,
+})
+
+-- Khi THOÁT terminal mode (bấm <C-\><C-n> hoặc sang buffer khác)
+vim.api.nvim_create_autocmd({ "TermLeave", "BufLeave" }, {
+    group = group,
+    callback = function()
+        if vim.bo.buftype == "terminal" then
+            -- Khi rời terminal trở lại buffer code bình thường
+            vim.schedule(function()
+                set_layout(get_active_layer())
+            end)
+        end
+    end,
 })
 
 -- ==========================================================================
