@@ -443,10 +443,10 @@ static const char *const autostart[] = {
 #if RENAMED_SCRATCHPADS_PATCH
 static const char *scratchpadcmd[] = {"s", "st", "-n", "spterm", NULL};
 #elif SCRATCHPADS_PATCH
-const char *spcmd1[] = {"st", "-n", "spterm", "-g", "120x34", NULL };
+const char *spcmd_nvim[] = { "alacritty", "--class", "spnvim,spnvim", NULL };
 static Sp scratchpads[] = {
    /* name          cmd  */
-   {"spterm",      spcmd1},
+   {"spnvim",      spcmd_nvim},
 };
 #endif // SCRATCHPADS_PATCH
 
@@ -570,7 +570,7 @@ static const Rule rules[] = {
     #if RENAMED_SCRATCHPADS_PATCH
     RULE(.instance = "spterm", .scratchkey = 's', .isfloating = 1)
     #elif SCRATCHPADS_PATCH
-    RULE(.instance = "spterm", .tags = SPTAG(0), .isfloating = 1)
+    RULE(.instance = "spnvim", .tags = SPTAG(0), .isfloating = 1)
     #endif // SCRATCHPADS_PATCH
 };
 
@@ -1350,6 +1350,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_grave,      togglescratch,          {.ui = 0 } },
 	{ MODKEY|ControlMask,           XK_grave,      setscratch,             {.ui = 0 } },
 	{ MODKEY|ShiftMask,             XK_grave,      removescratch,          {.ui = 0 } },
+	{ 0,                            XK_F13,        togglescratch,          {.ui = 0 } },
 	#endif // SCRATCHPADS_PATCH | RENAMED_SCRATCHPADS_PATCH
 	#if UNFLOATVISIBLE_PATCH
 	{ MODKEY|Mod4Mask,              XK_space,      unfloatvisible,         {0} },

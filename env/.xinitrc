@@ -21,6 +21,8 @@ kanata-notify.sh &
 # 3. Bật công cụ chụp màn hình Flameshot
 # flameshot &
 
+(sleep 1 && xmodmap -e "keycode 191 = F13 NoSymbol F13") &
+
 # --- Chọn Window Manager để quẩy ở đây ---
 
 exec dwm       # Nếu muốn vào dwm
