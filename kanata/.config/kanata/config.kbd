@@ -4,6 +4,7 @@
   
   ;; Các cấu hình defcfg khác của bạn (nếu có)...
   process-unmapped-keys yes
+  override-release-on-activation yes
   
 )
 
@@ -32,7 +33,7 @@
   bks     tab     left    down    rght    spc     _       _       ins     @c_v-sw @s_v-sw @m_v-sw @a_v-sw @repa           _       _       _       _
   @ss     C-z     C-x     C-c     C-v     C-y     _       _       _       A-c     A-v     C-a     @ss                     _       _       _       _
   _       _       _       _       _       _       _       _       @m_n    @cole+  _       _               _               _       _       _
-  _       _       @numt                     ent                   @cole   i                       _       _       _       _               _
+  _       _       @numt                     ent                   @cole   _                       _       _       _       _               _
 )
 
 (deflayer base_colemak-dh
@@ -1095,4 +1096,8 @@
     
   has-typed-' (and (input-history real ' 1)
                or $has-typed-letter)
+)
+
+(defoverrides
+  (lmet lsft f23) (a)
 )
