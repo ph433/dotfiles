@@ -108,9 +108,18 @@
   _       _       _                         _                     _       _                       _       _       _       _               _
 )
 
+(deflayer mod_firefox_gi
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  del     esc     home    up      end     A-ent   _       _       M-spc   prtsc   pgup    pgdn    S-;     C-f             _       _       _       _
+  @bks_   tab     left    down    rght    spc     _       _       ins     @c_v-sw @s_v-sw @m_v-sw @a_v-sw @repa           _       _       _       _
+  @ss     C-z     C-x     C-c     C-v     C-y     _       _       _       A-c     A-v     C-a     @ss                     _       _       _       _
+  _       _       _       _       _       _       _       _       @m_n    _       _       _               _               _       _       _
+  _       _       @numt                     ent                   @coleff _                       _       _       _       _               _
+)
+
 (deflayer mod_firefox
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  del     esc     home    up      end     A-ent   _       _       M-spc   prtsc   pgup    pgdn    ;       C-f             _       _       _       _
+  del     esc     home    up      end     A-ent   _       _       M-spc   prtsc   pgup    pgdn    S-;     C-f             _       _       _       _
   @bks_   tab     left    down    rght    spc     _       _       ins     @c_v-sw @s_v-sw @m_v-sw @a_v-sw @repa           _       _       _       _
   @ss     C-z     C-x     C-c     C-v     C-y     _       _       _       A-c     A-v     C-a     @ss                     _       _       _       _
   _       _       _       _       _       _       _       _       @m_n    _       _       _               _               _       _       _
@@ -870,6 +879,7 @@
   cole- (multi (layer-toggle base) (on-release tap-virtualkey switch_to_base))
   
   colef (multi (layer-toggle colemak-dh_firefox) (on-release tap-virtualkey switch_to_colemak-dh_firefox))
+  coleff (multi (macro g i) (layer-toggle colemak-dh_firefox) (on-release tap-virtualkey switch_to_colemak-dh_firefox))
   colef- (multi (layer-toggle mod_firefox) (on-release tap-virtualkey switch_to_firefox))
   
   numt (multi (layer-toggle mod_num) (on-release tap-virtualkey sign-special))
