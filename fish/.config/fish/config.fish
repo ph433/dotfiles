@@ -19,28 +19,6 @@ if status is-interactive
     end
     source ~/.cache/fish/zoxide.fish
     
-    # Thiết lập hàm vi bindings tuỳ chỉnh
-    function my_vi_bindings
-        fish_vi_key_bindings
-        # Khởi tạo mode mặc định an toàn cho Fish 4.0
-        set -g fish_bind_mode default
-
-        # Ctrl+C an toàn: xóa dòng và đưa về normal mode
-        bind -M insert \cc 'commandline -r ""; set fish_bind_mode default; commandline -f repaint'
-        bind -M default \cc 'commandline -r ""; set fish_bind_mode default; commandline -f repaint'
-
-        # Tích hợp CopyQ
-        bind -M default yy 'commandline -b | fish_clipboard_copy; commandline -f repaint'
-        bind -M default p 'commandline -i -- (copyq read 0 2>/dev/null); commandline -f repaint'
-    end
-
-    set -g fish_key_bindings my_vi_bindings
-
-    # Tự động về Normal mode sau khi chạy xong 1 lệnh (dùng postexec thay vì fish_prompt để tránh underflow)
-    function __reset_to_normal_mode --on-event fish_postexec
-        set -g fish_bind_mode default
-    end
-    
     # # 2. Atuin Cache
     # if not test -f ~/.cache/fish/atuin.fish
     #     atuin init fish > ~/.cache/fish/atuin.fish

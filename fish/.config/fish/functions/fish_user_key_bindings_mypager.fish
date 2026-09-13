@@ -2,9 +2,11 @@ function fish_user_key_bindings_mypager
     set -l mode mypager
     
     bind --mode $mode up 'history_fzf'
-    for char in (string split '' '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+    
+    for char in (string split '' '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!"#$%&\'()*+,-./:;<=>?@[\]^_`{|}~')
         bind --mode $mode $char self-insert
     end
+    
     bind --mode $mode space self-insert
     bind --mode $mode backspace backward-delete-char
     bind --mode $mode delete delete-char
