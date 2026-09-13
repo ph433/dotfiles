@@ -18,6 +18,7 @@ vim.opt.guicursor:append("i:block")
 -- fg: màu của chữ bên trong khối block đó (khi con trỏ đè lên chữ)
 vim.api.nvim_set_hl(0, "NormalCursor", { bg = "#ff0000", fg = "#ffffff" }) -- Đỏ
 vim.api.nvim_set_hl(0, "InsertCursor", { bg = "#ffffff", fg = "#000000" }) -- Trắng
+vim.opt.virtualedit = "onemore"
 -- 2. Gán highlight group tương ứng cho từng mode qua guicursor
 vim.opt.guicursor = "n-v-c:block-NormalCursor,i-ci-ve:block-InsertCursor"
 

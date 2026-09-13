@@ -862,7 +862,7 @@
   
   ss (multi lsft (layer-toggle base_colemak-dh) (on-release tap-virtualkey switch_to_function_bare))
   
-  colnv (multi (macro a) (layer-toggle mod_nvim_colemak-dh) (on-release tap-virtualkey switch_to_colemak-dh_nvim))
+  colnv (multi (macro i) (layer-toggle mod_nvim_colemak-dh) (on-release tap-virtualkey switch_to_colemak-dh_nvim))
   colnvr (multi (macro S-r) (layer-toggle mod_nvim_colemak-dh) (on-release tap-virtualkey switch_to_colemak-dh_nvim))
   colnv- (multi (layer-toggle mod_nvim) (on-release tap-virtualkey switch_to_nvim))
   
