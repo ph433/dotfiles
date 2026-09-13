@@ -1,63 +1,53 @@
 // ==UserScript==
 // @name         Kanata Browser Bridge
 // @namespace    https://github.com/ph433/kanata_bridge
-// @version      1.0.0
-// @description  Gửi trạng thái focus ô input sang Kanata qua WebSocket bridge
+// @version      1.2.0
 // @match        *://*/*
 // @run-at       document-start
-// @grant        none
+// @grant        GM_xmlhttpRequest
+// @inject-into  content
+// @connect      127.0.0.1
 // ==/UserScript==
 
 (function() {
     'use strict';
 
-    const WS_URL = 'ws://127.0.0.1:9999';
-    let ws = null;
+    const BRIDGE_URL = 'http://127.0.0.1:9999/';
     let currentMode = null;
-    let reconnectTimeout = null;
-
-    // Khởi tạo kết nối WebSocket với cơ chế retry tự động
-    function initWebSocket() {
-        if (ws && (ws.readyState === WebSocket.CONNECTING || ws.readyState === WebSocket.OPEN)) {
-            return;
-        }
-
-        ws = new WebSocket(WS_URL);
-
-        ws.onopen = () => {
-            console.log('%c[Kanata Bridge] Đã kết nối WebSocket thành công', 'color: #00ff00;');
-            // Đồng bộ trạng thái hiện tại ngay sau khi vừa kết nối xong
-            if (currentMode) {
-                ws.send(currentMode);
-            }
-        };
-
-        ws.onclose = () => {
-            // Tự động kết nối lại sau 2 giây nếu server bridge tắt hoặc restart
-            clearTimeout(reconnectTimeout);
-            reconnectTimeout = setTimeout(initWebSocket, 2000);
-        };
-
-        ws.onerror = () => {
-            if (ws) ws.close();
-        };
-    }
 
     function sendLayer(mode) {
-        if (ws && ws.readyState === WebSocket.OPEN) {
-            ws.send(mode);
-        }
+        GM_xmlhttpRequest({
+            method: 'POST',
+            url: BRIDGE_URL + mode,
+            timeout: 300,
+            onload: () => {},
+            onerror: () => {},
+            ontimeout: () => {}
+        });
     }
 
-    // Kiểm tra xem element có phải là nơi nhập văn bản hay không
     function isTextInput(el) {
         if (!el) return false;
+
+        // 1. Kiểm tra thuộc tính contenteditable (Gemini, Facebook, Docs)
+        if (el.isContentEditable || el.getAttribute('contenteditable') === 'true') return true;
+
+        // 2. Kiểm tra các thẻ chuẩn
         const tag = el.tagName ? el.tagName.toLowerCase() : '';
-        if (tag === 'textarea' || el.isContentEditable) return true;
+        if (tag === 'textarea') return true;
         if (tag === 'input') {
             const type = (el.getAttribute('type') || 'text').toLowerCase();
             return ['text', 'search', 'password', 'email', 'url', 'tel', 'number'].includes(type);
         }
+
+        // 3. Kiểm tra các Custom Element / ARIA Role của Gemini
+        const role = el.getAttribute('role');
+        if (role === 'textbox' || role === 'combobox') return true;
+        if (tag === 'rich-textarea' || el.closest('rich-textarea')) return true;
+
+        // 4. Nếu click vào thẻ con nằm bên trong một khối soạn thảo
+        if (el.closest('[contenteditable="true"]') || el.closest('[role="textbox"]')) return true;
+
         return false;
     }
 
@@ -69,18 +59,9 @@
         sendLayer(mode);
     }
 
-    // Lắng nghe sự kiện focus vào ô (click chuột, Tab phím, autofocus)
     window.addEventListener('focusin', (e) => evaluateFocus(e.target), true);
-
-    // Lắng nghe sự kiện rời khỏi ô (blur, click ra ngoài)
-    window.addEventListener('focusout', () => {
-        setTimeout(() => evaluateFocus(document.activeElement), 0);
-    }, true);
-
-    // Đề phòng trường hợp chuyển qua tab khác rồi quay lại
+    window.addEventListener('focusout', () => setTimeout(() => evaluateFocus(document.activeElement), 0), true);
     window.addEventListener('focus', () => evaluateFocus(document.activeElement));
 
-    // Khởi tạo kết nối
-    initWebSocket();
     evaluateFocus(document.activeElement);
 })();
