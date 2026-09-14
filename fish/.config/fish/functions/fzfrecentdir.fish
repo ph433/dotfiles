@@ -1,6 +1,6 @@
 function fzfrecentdir -d "Tìm thư mục dựa trên lịch sử di chuyển (Top 10)"
 
-    set -l log_file "$HOME/.cache/nvim_recent.log"
+    set -l log_file "$HOME/.cache/dir_recent.log"
     test -f "$log_file"; or return 1
     
     # 1. Lấy danh sách 10 thư mục gần nhất hợp lệ
@@ -18,12 +18,24 @@ function fzfrecentdir -d "Tìm thư mục dựa trên lịch sử di chuyển (T
         -m \
         --prompt="📁 Dir Recent (Tab chọn nhiều | Ctrl-Space xem chi tiết)> " \
         --delimiter=' │ ' \
-        --nth=2 \
+        --nth=2,.. \
         --tiebreak=index \
         --preview="command -v eza >/dev/null && eza -1 --icons --color=always {2} 2>/dev/null || ls -A --color=always {2} 2>/dev/null" \
         --preview-window="bottom:70%:hidden" \
         --expect=right,enter \
         --bind="ctrl-x:reload(fish -c '_fzfrecent_feed \"$log_file\"')" \
+	--bind='insert:reload(sh -c '\''
+            d="$1"
+            [ -z "$d" ] && d="$2"
+            d="${d%/}"
+            [ -z "$d" ] && d="/"
+            while [ "$d" != "/" ] && [ -n "$d" ]; do
+                printf "📁 │ %s\n" "$d"
+                d="${d%/*}"
+                [ -z "$d" ] && d="/"
+            done
+            printf "📁 │ /\n"
+        '\'' _ {2} {1})+change-prompt(📁 Directories> )+clear-query+first' \
         --layout=reverse \
         --height=100%)
 
@@ -52,14 +64,18 @@ function fzfrecentdir -d "Tìm thư mục dựa trên lịch sử di chuyển (T
             end
             commandline -i (string join " " $escaped_paths)" "
 
-            # Ghi log background cho tất cả các thư mục đã chọn
-            for path in $target_paths
-                fish -c "log_recent_dir '$path'" >/dev/null 2>&1 &
-            end
+            # Gom toàn bộ path vào đúng 1 tiến trình fish nền duy nhất
+            fish -c '
+                for p in $argv
+                    log_recent_dir "$p"
+                end
+            ' -- $target_paths >/dev/null 2>&1 &
 
         case enter
-            # Chỉ `cd` vào thư mục ĐẦU TIÊN trong danh sách chọn
-            cd "$target_paths[1]"
+            # cd vào thư mục đầu tiên nếu tồn tại
+            if test -d "$target_paths[1]"
+                cd "$target_paths[1]"
+            end
     end
 
     commandline -f repaint 2>/dev/null

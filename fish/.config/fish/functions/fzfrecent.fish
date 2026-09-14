@@ -18,13 +18,25 @@ function fzfrecent -d "Tìm file dựa trên lịch sử mở trong Neovim (Dash
         -m \
         --prompt="🕒 Nvim Recent (Tab để chọn nhiều | Ctrl-Space xem chi tiết)> " \
         --delimiter=' │ ' \
-        --nth=2 \
+        --nth=2,.. \
         --tiebreak=index \
         --preview="bat --color=always {2} 2>/dev/null || cat {2}" \
         --preview-window="bottom:70%:hidden" \
-        --expect=right,enter,insert \
+        --expect=right,enter \
         --bind="ctrl-x:reload(fish -c '_fzfrecent_feed \"$log_file\"')" \
         --layout=reverse \
+	--bind='insert:reload(sh -c '\''
+            raw="$1"
+            [ -z "$raw" ] && raw="$2"
+            d="${raw%/*}"
+            [ -z "$d" ] && d="/"
+            while [ "$d" != "/" ] && [ -n "$d" ]; do
+                printf "📁 │ %s\n" "$d"
+                d="${d%/*}"
+                [ -z "$d" ] && d="/"
+            done
+            printf "📁 │ /\n"
+        '\'' _ {2} {1})+change-prompt(📁 Directories> )+clear-query+first' \
         --height=100%)
 
     # 4. Xử lý phím bấm và kết quả trả về từ FZF
@@ -63,15 +75,23 @@ function fzfrecent -d "Tìm file dựa trên lịch sử mở trong Neovim (Dash
             ' -- $target_paths >/dev/null 2>&1 &
 
         case enter
-            # Mở tất cả các file đã chọn cùng lúc trong Neovim (dưới dạng buffers/tabs)
-            nvim $target_paths[1]
+            set -l target "$target_paths[1]"
+            test -z "$target"; and return
 
-        case ins insert
-            # Đi tới thư mục chứa file đầu tiên trong danh sách chọn
-            set -l dir_path (dirname -- "$target_paths[1]")
-            if test -d "$dir_path"
-                cd "$dir_path"
+            # Nếu dòng đang chọn là thư mục (màn hình Directories) -> cd vào ngay
+            if test -d "$target"
+                cd "$target"
+            # Nếu là file -> mở bằng Neovim
+            else if test -f "$target"
+                nvim "$target"
             end
+            
+        # case ins insert
+        #     # Đi tới thư mục chứa file đầu tiên trong danh sách chọn
+        #     set -l dir_path (dirname -- "$target_paths[1]")
+        #     if test -d "$dir_path"
+        #         cd "$dir_path"
+        #     end
     end   
 
     commandline -f repaint 2>/dev/null
