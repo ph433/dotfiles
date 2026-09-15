@@ -8,10 +8,10 @@ end
 -- Xác định chính xác layer cần dùng dựa theo buffer hiện tại
 local function get_active_layer()
     if vim.bo.buftype == "terminal" then
-        return "mod_firefox" -- hoặc layer bạn muốn dùng khi gõ trong terminal (vd: base/mod_terminal)
+        return "base" -- hoặc layer bạn muốn dùng khi gõ trong terminal (vd: base/mod_terminal)
     end
     if vim.bo.filetype == "netrw" then
-        return "mod_firefox"
+        return "mod_nvim_netrw"
     end
     return "mod_nvim"
 end
@@ -159,7 +159,11 @@ local function run_fish_cmd(cmd)
   vim.fn.jobstart({ "fish", "-c", cmd }, { detach = true })
 end
 
--- 1. KHI MỞ FILE (BufReadPost): Ghi log file, tính Score file, VÀ ghi log thư mục
+local home = vim.env.HOME
+local file_log = home .. "/.cache/nvim_recent.log"
+local dir_log = home .. "/.cache/dir_recent.log"
+
+-- 1. KHI MỞ FILE: Ghi log file, log thư mục và tính điểm ngầm
 vim.api.nvim_create_autocmd("BufReadPost", {
   group = augroup,
   pattern = "*",
@@ -167,20 +171,19 @@ vim.api.nvim_create_autocmd("BufReadPost", {
     local filepath = vim.api.nvim_buf_get_name(args.buf)
     if filepath ~= "" and vim.bo[args.buf].buftype == "" then
       local dirpath = vim.fs.dirname(filepath)
-      
-      local safe_file = vim.fn.shellescape(filepath)
-      local safe_dir = vim.fn.shellescape(dirpath)
 
-      -- Chạy đồng thời log file, score file và log thư mục
-      run_fish_cmd(string.format(
-        "log_recent_file %s; __fzf_score_file %s; log_recent_dir %s",
-        safe_file, safe_file, safe_dir
-      ))
+      vim.system({
+        "sh", "-c",
+        'log_add.sh "$1" "$2"; log_add.sh "$3" "$4"; fzf_score_file.sh "$2"',
+        "_",
+        file_log, filepath,
+        dir_log, dirpath
+      }, { detach = true })
     end
   end,
 })
 
--- 2. KHI ĐÓNG FILE (BufUnload): Ghi log file VÀ ghi log thư mục
+-- 2. KHI ĐÓNG FILE: Ghi log file và thư mục ngầm
 vim.api.nvim_create_autocmd("BufUnload", {
   group = augroup,
   pattern = "*",
@@ -189,14 +192,13 @@ vim.api.nvim_create_autocmd("BufUnload", {
     if filepath ~= "" and vim.bo[args.buf].buftype == "" then
       local dirpath = vim.fs.dirname(filepath)
 
-      local safe_file = vim.fn.shellescape(filepath)
-      local safe_dir = vim.fn.shellescape(dirpath)
-
-      -- Chạy log file và log thư mục khi đóng buffer
-      run_fish_cmd(string.format(
-        "log_recent_file %s; log_recent_dir %s",
-        safe_file, safe_dir
-      ))
+      vim.system({
+        "sh", "-c",
+        'log_add.sh "$1" "$2"; log_add.sh "$3" "$4"',
+        "_",
+        file_log, filepath,
+        dir_log, dirpath
+      }, { detach = true })
     end
   end,
 })

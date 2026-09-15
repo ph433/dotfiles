@@ -16,7 +16,7 @@ function __smart_key_exec --description "Gõ phím tắt thông minh cho Fish Sh
                 cd_smart_toggle
             case up
                 history_fzf
-            case end
+            case 'end'
                 __fzf_search_directory_custom
             case home
                 __fzf_find_files_custom
@@ -49,7 +49,7 @@ function __smart_key_exec --description "Gõ phím tắt thông minh cho Fish Sh
                 fzf_menu
             case up
                 history_fzf
-            case end
+            case 'end'
                 if test "$cursor_pos" -eq "$cmd_len"
                     __fzf_search_directory_custom
                 else

@@ -52,7 +52,7 @@ function __log_recent_dir --on-variable PWD
     # Đặt cờ khóa (Lock) trước khi gọi hàm xử lý
     set -g __is_logging_dir 1
 
-    log_recent_dir "$PWD"
+    log_add.sh "$HOME/.cache/dir_recent.log" "$PWD"
     # ~/dwm-flexipatch/dwm_status_update.sh &
     # Xóa cờ khóa sau khi xử lý xong
     set -e __is_logging_dir

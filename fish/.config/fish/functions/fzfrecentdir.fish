@@ -26,11 +26,11 @@ function fzfrecentdir -d "Tìm thư mục dựa trên lịch sử di chuyển (T
             commandline -i (string join " " $escaped_paths)" "
 
             # Gom log vào một background process duy nhất
-            fish -c '
-                for p in $argv
-                    log_recent_dir "$p"
-                end
-            ' -- $target_paths >/dev/null 2>&1 &
+            sh -c '
+                log_file="$1"
+                shift
+                log_add.sh "$log_file" "$@"
+            ' _ "$log_file" $target_paths >/dev/null 2>&1 &
             disown
 
         case enter

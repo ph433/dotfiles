@@ -27,12 +27,16 @@ function fzfrecent -d "Tìm file dựa trên lịch sử mở trong Neovim (Dash
             commandline -i (string join " " $escaped_paths)" "
 
             # Ghi log background một lần duy nhất
-            fish -c '
-                for p in $argv
-                    log_recent_file "$p"
-                    fzf_score_file.sh "$p"
-                end
-            ' -- $target_paths >/dev/null 2>&1 &
+            sh -c '
+                log_file="$1"
+                score_cmd="$2"
+                shift 2  # Cắt bỏ $1 và $2, danh sách $@ giờ chỉ còn đúng các path
+
+                log_add.sh "$log_file" "$@"
+                for p in "$@"; do
+                    "$score_cmd" "$p"
+                done
+            ' _ "$log_file" "fzf_score_file.sh" $target_paths >/dev/null 2>&1 &
             disown
 
         case enter
