@@ -163,42 +163,144 @@ local home = vim.env.HOME
 local file_log = home .. "/.cache/nvim_recent.log"
 local dir_log = home .. "/.cache/dir_recent.log"
 
--- 1. KHI MỞ FILE: Ghi log file, log thư mục và tính điểm ngầm
+-- -- 1. KHI MỞ FILE: Ghi log file, log thư mục và tính điểm ngầm
+-- vim.api.nvim_create_autocmd("BufReadPost", {
+--   group = augroup,
+--   pattern = "*",
+--   callback = function(args)
+--     local filepath = vim.api.nvim_buf_get_name(args.buf)
+--     if filepath ~= "" and vim.bo[args.buf].buftype == "" then
+--       local dirpath = vim.fs.dirname(filepath)
+--
+--       vim.system({
+--         "sh", "-c",
+--         'log_add.sh "$1" "$2"; log_add.sh "$3" "$4"; fzf_score_file.sh "$2"',
+--         "_",
+--         file_log, filepath,
+--         dir_log, dirpath
+--       }, { detach = true })
+--     end
+--   end,
+-- })
+--
+-- -- 2. KHI ĐÓNG FILE: Ghi log file và thư mục ngầm
+-- vim.api.nvim_create_autocmd("BufUnload", {
+--   group = augroup,
+--   pattern = "*",
+--   callback = function(args)
+--     local filepath = vim.api.nvim_buf_get_name(args.buf)
+--     if filepath ~= "" and vim.bo[args.buf].buftype == "" then
+--       local dirpath = vim.fs.dirname(filepath)
+--
+--       vim.system({
+--         "sh", "-c",
+--         'log_add.sh "$1" "$2"; log_add.sh "$3" "$4"',
+--         "_",
+--         file_log, filepath,
+--         dir_log, dirpath
+--       }, { detach = true })
+--     end
+--   end,
+-- })
+
+local function log_to_file(tag, filepath, dirpath)
+  local f = io.open("/tmp/abc", "a")
+  if f then
+    f:write(string.format("[%s]\n  File: %s\n  Dir:  %s\n", tag, filepath, dirpath))
+    f:close()
+  end
+end
+
+local last_dir = ""
+local opened_file_just_now = false
+
+-- 1. KHI MỞ FILE BÌNH THƯỜNG
 vim.api.nvim_create_autocmd("BufReadPost", {
   group = augroup,
   pattern = "*",
   callback = function(args)
     local filepath = vim.api.nvim_buf_get_name(args.buf)
-    if filepath ~= "" and vim.bo[args.buf].buftype == "" then
-      local dirpath = vim.fs.dirname(filepath)
+    if filepath == "" or vim.bo[args.buf].buftype ~= "" then
+      return
+    end
 
-      vim.system({
-        "sh", "-c",
-        'log_add.sh "$1" "$2"; log_add.sh "$3" "$4"; fzf_score_file.sh "$2"',
-        "_",
-        file_log, filepath,
-        dir_log, dirpath
-      }, { detach = true })
+    local stat = vim.uv.fs_stat(filepath)
+    if stat and stat.type == "file" then
+      opened_file_just_now = true
+      last_dir = ""
+      local dirpath = vim.fs.dirname(filepath)
+      log_to_file("BufReadPost", filepath, dirpath)
     end
   end,
 })
 
--- 2. KHI ĐÓNG FILE: Ghi log file và thư mục ngầm
+-- 2. DUYỆT THƯ MỤC NETRW
+local function check_and_log_netrw(buf)
+  if not vim.api.nvim_buf_is_valid(buf) or vim.api.nvim_get_current_buf() ~= buf then
+    return
+  end
+
+  local dir = vim.b[buf].netrw_curdir or vim.api.nvim_buf_get_name(buf)
+  if not dir or dir == "" then return end
+  dir = dir:gsub("/+$", "")
+
+  local stat = vim.uv.fs_stat(dir)
+  if stat and stat.type == "directory" then
+    if last_dir ~= dir then
+      last_dir = dir
+      log_to_file("BufOpenDir", "", dir)
+    end
+  end
+end
+
+vim.api.nvim_create_autocmd({ "FileType", "BufEnter" }, {
+  group = augroup,
+  pattern = "*",
+  callback = function(args)
+    if vim.bo[args.buf].filetype == "netrw" then
+      opened_file_just_now = false
+      vim.schedule(function()
+        check_and_log_netrw(args.buf)
+      end)
+    end
+  end,
+})
+
+-- 3. KHI THOÁT BUFFER (UNLOAD)
 vim.api.nvim_create_autocmd("BufUnload", {
   group = augroup,
   pattern = "*",
   callback = function(args)
+    local is_netrw = (vim.bo[args.buf].filetype == "netrw")
     local filepath = vim.api.nvim_buf_get_name(args.buf)
-    if filepath ~= "" and vim.bo[args.buf].buftype == "" then
-      local dirpath = vim.fs.dirname(filepath)
 
-      vim.system({
-        "sh", "-c",
-        'log_add.sh "$1" "$2"; log_add.sh "$3" "$4"',
-        "_",
-        file_log, filepath,
-        dir_log, dirpath
-      }, { detach = true })
+    -- Trường hợp A: Buffer đang thực sự là giao diện Netrw
+    if is_netrw then
+      local dir = vim.b[args.buf].netrw_curdir or filepath
+      if dir == "" then return end
+      dir = dir:gsub("/+$", "")
+
+      local stat = vim.uv.fs_stat(dir)
+      if stat and stat.type == "directory" then
+        last_dir = ""
+        vim.schedule(function()
+          if not opened_file_just_now then
+            log_to_file("BufUnload", "", dir)
+          end
+          opened_file_just_now = false
+        end)
+      end
+      return
+    end
+
+    -- Trường hợp B: Buffer là file mã nguồn / text thông thường
+    if filepath == "" or vim.bo[args.buf].buftype ~= "" then
+      return
+    end
+
+    local stat = vim.uv.fs_stat(filepath)
+    if stat and stat.type == "file" then
+      log_to_file("BufUnload", filepath, vim.fs.dirname(filepath))
     end
   end,
 })
