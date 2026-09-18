@@ -16,8 +16,23 @@ end
 -- ==========================================
 local function create_picker(cfg)
   local file_path = vim.fs.normalize(cfg.log_file)
+  local cur_buf = vim.api.nvim_buf_get_name(0)
+  local current_buf_path = ""
+  
+  if cfg.is_dir then
+    if cur_buf ~= "" then
+      current_buf_path = vim.fs.dirname(vim.fs.normalize(cur_buf))
+    end
 
-  vim.system({ "fish", "-c", string.format('_fzfrecent_feed "%s"', file_path) })
+  else
+    -- Picker file: lấy chính đường dẫn file
+    if cur_buf ~= "" then
+      current_buf_path = vim.fs.normalize(cur_buf)
+    end
+  end
+  
+
+  -- vim.system({ "fish", "-c", string.format('_fzfrecent_feed "%s"', file_path) })
   
   local function provider(fzf_cb)
     local f = io.open(file_path, "r")
@@ -38,7 +53,8 @@ local function create_picker(cfg)
           if not seen[path] then
             seen[path] = true
             count = count + 1
-            fzf_cb(fmt.format_log_entry(entry, now, cfg.ansi_color))
+            local is_current = (path == current_buf_path)
+            fzf_cb(fmt.format_log_entry(entry, now, cfg.ansi_color, is_current))
             if count >= limit then break end
           end
         end
@@ -134,10 +150,10 @@ function M.fzfrecent_file()
 end
 
 -- Mở / Nhảy thư mục gần đây
--- Mở / Nhảy thư mục gần đây
 function M.fzfrecent_dir()
   create_picker({
     log_file = LOG_DIR,
+    is_dir = true,
     prompt = "Recent Dirs> ",
     ansi_color = "\27[1;33m", -- Yellow
     cmd_cheat = "cat '" .. vim.fn.stdpath("cache") .. "/fzf_recent_cheat.txt'",
@@ -146,7 +162,7 @@ function M.fzfrecent_dir()
       local target_dir = vim.fs.normalize(paths[1])
 
       -- GỌI FISH GHI LOG BẤT ĐỒNG BỘ Ở ĐÂY:
-      vim.system({ "fish", "-c", string.format("log_recent_dir %s", vim.fn.shellescape(target_dir)) })
+      -- vim.system({ "log_add.sh", LOG_DIR, target_dir })
 
       -- Đổi thư mục làm việc (CWD)
       vim.cmd.cd(vim.fn.fnameescape(target_dir))
