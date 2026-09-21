@@ -79,12 +79,18 @@ M.fzf_command_history = function()
   )
 
   local opts = {
+    -- VÔ HIỆU HÓA SORTING & FUZZY SCORING:
+    sort = false,
+    fuzzy = false,
+  
     winopts = { height = 0.55, width = 0.8, border = "rounded" },
     prompt = "Cmd History> ",
     header = ":: <Enter> run selected | <Tab> run query | <?> help | <Ctrl-x> delete",
     
     fzf_opts = {
       ["--preview"] = cmd_cheatsheet,
+      ["--no-sort"] = "",
+      ["--tiebreak"] = "index",
       ["--preview-window"] = "down:60%:hidden:wrap",
       ["--color"] = "hl:yellow:reverse:bold,hl+:yellow:reverse:bold,pointer:#ff79c6,marker:#ff79c6,bg+:#44475a,spinner:#ff79c6",
     },
