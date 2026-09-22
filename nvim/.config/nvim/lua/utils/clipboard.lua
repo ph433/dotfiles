@@ -1,71 +1,49 @@
 local M = {}
 
-function M.paste_with_indent(reg)
-  reg = reg or '+'
-  local text = vim.fn.getreg(reg)
-  if text == '' then return end
+---Paste nội dung từ register xuống bên dưới dòng hiện tại:
+---Toàn bộ khối code sẽ bám theo target_indent, đồng thời giữ nguyên vẹn
+---tỷ lệ thụt lề tương quan giữa dòng 1 và các dòng bên dưới.
+---@param reg? string Register cần lấy nội dung (mặc định là '*')
+function M.paste_below_with_indent(reg)
+  reg = reg or "+"
 
-  -- 1. Dọn dẹp khoảng trắng rác từ trình duyệt
-  -- Đổi Non-breaking space (NBSP) thành space thường và Tab thành 4 spaces
-  text = text:gsub('[\194][\160]', ' '):gsub('\t', '    '):gsub('\r', '')
-  local lines = vim.split(text, '\n', { plain = true })
+  -- 1. Lấy indent của dòng hiện tại làm đích
+  local cur_line = vim.api.nvim_get_current_line()
+  local target_indent = cur_line:match("^%s*") or ""
 
-  -- 2. Xóa các dòng trống dư thừa ở đầu và cuối
-  while #lines > 0 and lines[1]:match('^%s*$') do table.remove(lines, 1) end
-  while #lines > 0 and lines[#lines]:match('^%s*$') do table.remove(lines, #lines) end
-  if #lines == 0 then return end
-
-  -- 3. Tìm lề chuẩn bằng cách quét các dòng trong PHẦN THÂN (bỏ qua dòng 1)
-  local min_body_indent = nil
-  for i = 2, #lines do
-    if not lines[i]:match('^%s*$') then
-      local lead = #(lines[i]:match('^(%s*)'))
-      if not min_body_indent or lead < min_body_indent then
-        min_body_indent = lead
-      end
-    end
-  end
-  
-  -- Fallback nếu copy đúng 1 dòng
-  if not min_body_indent then
-    min_body_indent = #(lines[1]:match('^(%s*)'))
+  -- 2. Lấy danh sách dòng từ register
+  local lines = vim.fn.getreg(reg, 1, true)
+  if #lines == 0 or (#lines == 1 and lines[1] == "") then
+    return
   end
 
-  local current_line = vim.api.nvim_get_current_line()
-  local base_indent = current_line:match('^(%s*)') or ''
-  local formatted_lines = {}
+  -- 3. Xác định indent cơ sở của dòng 1 làm mốc
+  local base_indent = lines[1]:match("^%s*") or ""
+  local base_len = #base_indent
 
-  -- 4. Ép lề tương đối vào cấu trúc mới
-  for i, line in ipairs(lines) do
-    if line:match('^%s*$') then
-      table.insert(formatted_lines, '')
+  -- 4. Điều chỉnh indent từng dòng theo tỷ lệ tương quan
+  local adjusted_lines = {}
+  for _, line in ipairs(lines) do
+    if not line:match("%S") then
+      -- Giữ nguyên dòng trống
+      table.insert(adjusted_lines, "")
     else
-      local cur_lead = #(line:match('^(%s*)'))
-      local content = line:match('^%s*(.*)')
-      
-      local relative = 0
-      
-      -- [CHÌA KHÓA]: Nếu dòng 1 bị hụt lề do kéo chuột thiếu, đưa nó về lề gốc 0
-      if i == 1 and cur_lead < min_body_indent then
-        relative = 0
+      local line_indent = line:match("^%s*") or ""
+      local stripped = line:sub(#line_indent + 1)
+
+      -- Nếu dòng này thụt sâu hơn dòng 1: giữ lại phần chênh lệch
+      if #line_indent >= base_len then
+        local relative_indent = line_indent:sub(base_len + 1)
+        table.insert(adjusted_lines, target_indent .. relative_indent .. stripped)
       else
-        relative = cur_lead - min_body_indent
+        -- Nếu dòng này thụt ít hơn dòng 1: bám thẳng vào target_indent
+        table.insert(adjusted_lines, target_indent .. stripped)
       end
-      
-      if relative < 0 then relative = 0 end
-      table.insert(formatted_lines, base_indent .. string.rep(' ', relative) .. content)
     end
   end
 
-  -- 5. Dán vào Neovim tại vị trí hiện tại
-  local row = vim.api.nvim_win_get_cursor(0)[1]
-  if current_line:match('^%s*$') then
-    vim.api.nvim_buf_set_lines(0, row - 1, row, false, formatted_lines)
-    vim.api.nvim_win_set_cursor(0, { row + #formatted_lines - 1, #base_indent })
-  else
-    vim.api.nvim_buf_set_lines(0, row, row, false, formatted_lines)
-    vim.api.nvim_win_set_cursor(0, { row + #formatted_lines, #base_indent })
-  end
+  -- 5. Paste xuống dưới và đặt con trỏ vào đầu khối
+  vim.api.nvim_put(adjusted_lines, "l", true, true)
 end
 
 return M

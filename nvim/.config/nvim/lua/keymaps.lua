@@ -309,7 +309,7 @@ vim.keymap.set("n", "<S-Right>", function()
 end, { desc = "FZF Recent Files", silent = true })
 
 vim.keymap.set('n', '<D-v>', function()
-  require('utils.clipboard_indent').paste_with_indent('+')
+  require('utils.clipboard_indent').paste_below_with_indent('*')
 end, { desc = 'Paste with current indent' })
 
 vim.keymap.set({'n', 'v'}, "<A-ESC>", function()
