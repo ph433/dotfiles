@@ -1,0 +1,2 @@
+sudo ln -sf ~/dotfiles/firefox/system/config-prefs.js /usr/lib/firefox/defaults/pref/config-prefs.js
+sudo ln -sf ~/dotfiles/firefox/system/config.js /usr/lib/firefox/config.js
