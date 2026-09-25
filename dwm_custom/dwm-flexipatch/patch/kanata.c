@@ -47,11 +47,11 @@ update_kanata_layer(Client *c) {
     if (ch.res_class && strstr(ch.res_class, "qutebrowser")) {
         set_kanata_layer("mod_qutebrowser");
     } else if (ch.res_class && strcasestr(ch.res_class, "firefox")) {
-        set_kanata_layer("mod_firefox");
+    
     } else if (ch.res_class && (strcasestr(ch.res_class, "Alacritty") || strcasestr(ch.res_class, "spnvim"))) {
         set_kanata_layer("base");
     } else {
-        set_kanata_layer("mod_firefox");
+        set_kanata_layer("base");
     }
 
     if (ch.res_name)  XFree(ch.res_name);

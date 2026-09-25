@@ -11,9 +11,18 @@
 .cache/
 .thumbnails/
 .local/share/Trash/
-.mozilla/
 .config/google-chrome/
 .config/microsoft-edge/
+
+# Bỏ qua toàn bộ .mozilla nhưng mở lại đường dẫn config của Firefox
+.mozilla/*
+!.mozilla/firefox/
+.mozilla/firefox/*
+!.mozilla/firefox/profiles.ini
+!.mozilla/firefox/main.default/
+.mozilla/firefox/main.default/*
+!.mozilla/firefox/main.default/user.js
+!.mozilla/firefox/main.default/chrome/
 
 # --- FILE TẠM CỦA TRÌNH SOẠN THẢO ---
 *.swp

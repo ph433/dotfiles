@@ -12,7 +12,7 @@ function mkdir -d "Tạo thư mục và lưu vào lịch sử dir_recent"
                 
                 # 🚀 GỌI ĐỒNG BỘ MODULE MỚI Ở ĐÂY:
                 # Không cần realpath hay tự gõ echo nữa, log_recent_dir tự lo hết!
-                log_recent_dir "$arg"
+                log_add.sh "$HOME/.cache/dir_recent.log" "$arg"
                 
             end
         end

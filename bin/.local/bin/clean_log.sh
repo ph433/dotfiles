@@ -1,7 +1,15 @@
 #!/bin/sh
-# Cách dùng: clean_log.sh <đường_dẫn_log_file>
+# Cách dùng: clean_log.sh <đường_dẫn_log_file> <-f|-d>
 
-log_file="${1:-$HOME/.cache/nvim_recent.log}"
+log_file="$1"
+check_flag="$2"
+
+# Bắt buộc truyền đủ 2 tham số và cờ phải là -f hoặc -d
+if [ -z "$log_file" ] || { [ "$check_flag" != "-f" ] && [ "$check_flag" != "-d" ]; }; then
+    echo "Cách dùng: $0 <log_file> <-f|-d>" >&2
+    exit 1
+fi
+
 [ -f "$log_file" ] || exit 0
 
 tmp_file="$(mktemp "${log_file}.tmp.XXXXXX")" || exit 1
@@ -14,7 +22,7 @@ tac "$log_file" 2>/dev/null | awk '{
         print $0
     }
 }' | while IFS=' ' read -r time path; do
-    if [ -e "$path" ]; then
+    if [ "$check_flag" "$path" ]; then
         printf "%s %s\n" "$time" "$path"
     fi
 done | tac > "$tmp_file"
@@ -23,7 +31,6 @@ done | tac > "$tmp_file"
 if [ -s "$tmp_file" ]; then
     mv "$tmp_file" "$log_file"
 else
-    # Nếu xóa hết file chết mà rỗng thì dọn dẹp tmp
     rm -f "$tmp_file"
     : > "$log_file"
 fi

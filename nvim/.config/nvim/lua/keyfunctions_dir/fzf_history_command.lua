@@ -89,7 +89,6 @@ M.fzf_command_history = function()
     
     fzf_opts = {
       ["--preview"] = cmd_cheatsheet,
-      ["--no-sort"] = "",
       ["--tiebreak"] = "index",
       ["--preview-window"] = "down:60%:hidden:wrap",
       ["--color"] = "hl:yellow:reverse:bold,hl+:yellow:reverse:bold,pointer:#ff79c6,marker:#ff79c6,bg+:#44475a,spinner:#ff79c6",

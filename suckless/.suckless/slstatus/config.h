@@ -69,9 +69,10 @@ static const struct arg args[] = {
     { cpu_perc,          "[CPU: %s%%] ",         NULL },
     { ram_used,          "[RAM: %s/",            NULL },
     { ram_total,         "%s] ",                 NULL },
-    { run_command,       "[VOL: %s] ",           "wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{if ($3 == \"[MUTED]\") print \"MUTED\"; else print int($2 * 100) \"%\"}'" },
+    { run_command, "[VOL: %s] ", "wpctl get-volume @DEFAULT_AUDIO_SINK@ | LC_ALL=C awk '{print int($2 * 100) \"%\"}'" },
+    { run_command,       "[BRI: %s] ",           "brightnessctl -m | awk -F, '{print $4}'" },
     { wifi_perc,         "[WIFI: %s%%] ",        "wlp0s20f3" },
     { battery_state,     "[BAT: %s ",            "BAT0" },
     { battery_perc,      "%s%%] ",               "BAT0" },
-    { datetime,          "[%s]",                 "%d/%m/%Y %H:%M:%S" },
+    { datetime,          "[%s]",                 "%a, %d/%m/%Y %H:%M:%S" },
 };

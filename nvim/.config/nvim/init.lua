@@ -19,6 +19,8 @@ vim.opt.guicursor:append("i:block")
 vim.api.nvim_set_hl(0, "NormalCursor", { bg = "#ff0000", fg = "#ffffff" }) -- Đỏ
 vim.api.nvim_set_hl(0, "InsertCursor", { bg = "#ffffff", fg = "#000000" }) -- Trắng
 vim.opt.virtualedit = "onemore"
+vim.keymap.set("n", "$", "$l", { desc = "Go past the end of line" })
+vim.keymap.set("n", "<End>", "<End>l", { desc = "Go past the end of line" })
 -- 2. Gán highlight group tương ứng cho từng mode qua guicursor
 vim.opt.guicursor = "n-v-c:block-NormalCursor,i-ci-ve:block-InsertCursor"
 

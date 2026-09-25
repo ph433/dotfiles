@@ -335,3 +335,6 @@ end, { desc = "Close buffer or exit if last" })
 
 vim.keymap.set('n', '<S-Tab>', '<cmd>b#<cr>', { silent = true, desc = 'Toggle alternate buffer' })
 
+vim.keymap.set("n", "=", function()
+  require("utils.indent_move").start_indent_map()
+end, { silent = true, desc = "Copy và cộng dồn indent sang dòng tiếp theo" })

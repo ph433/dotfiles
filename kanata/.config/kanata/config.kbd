@@ -72,6 +72,15 @@
   _       _       @numt                     ent                   @colnv  _                       _       _       _       _               _
 )
 
+(deflayer mod_nvim_netrw
+  _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
+  del     esc     home    up      end     A-ent   _       _       M-spc   prtsc   pgup    pgdn    @:_     @/_             _       _       _       _
+  bks     tab     left    down    rght    spc     _       _       ins     @c_v-sw @s_v-sw @m_v-sw @a_v-sw @repa           _       _       _       _
+  @ss     C-z     C-x     C-c     C-v     C-y     _       _       _       A-c     A-v     C-a     @ss                     _       _       _       _
+  _       _       _       _       _       _       _       _       @m_n    @cole+  _       _               _               _       _       _
+  _       _       @numt                     ent                   @cole   _                       _       _       _       _               _
+)
+
 (deflayer mod_nvim_colemak-dh
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   del     q       w       f       p       b       _       _       j       l       u       y       ;       /               _       _       _       _
@@ -112,8 +121,8 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   del     esc     home    up      end     A-ent   _       _       M-spc   prtsc   pgup    pgdn    S-;     C-f             _       _       _       _
   @bks_   tab     left    down    rght    spc     _       _       ins     @c_v-sw @s_v-sw @m_v-sw @a_v-sw @repa           _       _       _       _
-  @ss     C-z     C-x     C-c     C-v     C-y     _       _       _       A-c     A-v     C-a     @ss                     _       _       _       _
-  _       _       _       _       _       _       _       _       @m_n    _       _       _               _               _       _       _
+  @ss     C-z     C-x     C-c     @C-v    C-y     _       _       _       A-c     A-v     C-a     @ss                     _       _       _       _
+  _       _       _       _       _       _       _       _       @m_n    @cole!  _       _               _               _       _       _
   _       _       @numt                     ent                   @coleff _                       _       _       _       _               _
 )
 
@@ -122,7 +131,7 @@
   del     esc     home    up      end     A-ent   _       _       M-spc   prtsc   pgup    pgdn    S-;     C-f             _       _       _       _
   @bks_   tab     left    down    rght    spc     _       _       ins     @c_v-sw @s_v-sw @m_v-sw @a_v-sw @repa           _       _       _       _
   @ss     C-z     C-x     C-c     C-v     C-y     _       _       _       A-c     A-v     C-a     @ss                     _       _       _       _
-  _       _       _       _       _       _       _       _       @m_n    _       _       _               _               _       _       _
+  _       _       _       _       _       _       _       _       @m_n    @cole@  _       _               _               _       _       _
   _       _       @numt                     ent                   @colef  _                       _       _       _       _               _
 )
 
@@ -731,6 +740,9 @@
   ralt_ (multi (layer-toggle base_colemak-dh) (on-release tap-virtualkey v_ent))
   fhinv (multi (layer-switch colemak-dh-nvim-fhint-switch) (on-release tap-virtualkey v_nvswac))
   cole_ (layer-toggle mod_nvim_colemak-dh)
+  cole! (layer-toggle colemak-dh_firefox)
+  C-v (macro g i C-v)
+  cole@ (multi (macro esc) (layer-toggle colemak-dh_firefox)) 
   cole+ (layer-toggle base_colemak-dh)
   ;; spcc (multi (macro spc) (layer-toggle colemak-dh-active))
   /_ (multi (macro /) (layer-toggle colemak-dh_search_cmd))
