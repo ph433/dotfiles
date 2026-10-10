@@ -1,3 +1,3 @@
-function ll --wraps='eza -lah --icons --group-directories-first' --description 'Hien thi danh sach file chi tiet bang eza'
-    eza -lah --icons=always --color=always --group-directories-first $argv
+function ll --wraps='ls -lha' --description 'Hien thi danh sach file chi tiet bang ls'
+    ls -lha $argv
 end

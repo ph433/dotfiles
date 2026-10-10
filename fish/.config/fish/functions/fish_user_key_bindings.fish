@@ -26,6 +26,7 @@ function fish_user_key_bindings
     bind --mode $mode ctrl-p 'fzf_menu_git'
     bind --mode $mode shift-left 'prevd; commandline -f repaint'
     bind --mode $mode shift-right 'nextd; commandline -f repaint'
+    bind --mode $mode shift-up 'cd ..; commandline -f repaint'
     bind --mode $mode tab '__smart_pager_switch mypager'
     bind --mode $mode escape '__smart_pager_switch mypager search'
     fish_user_key_bindings_mypager

@@ -4,6 +4,7 @@ function fdf --description "Mở fzf chọn file: Enter để mở nvim, Right �
         --height=70% \
         --preview="bat --color=always {} 2>/dev/null || cat {}" \
         --preview-window="bottom:70%:hidden" \
+        --bind="?:toggle-preview" \
         --multi \
         --expect=right
 
