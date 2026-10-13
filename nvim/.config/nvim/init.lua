@@ -8,16 +8,7 @@ vim.opt.smartcase = true        -- Tự nhận diện hoa thường nếu ta gõ
 vim.opt.clipboard = "unnamedplus" -- Clipboard hệ thống
 vim.opt.termguicolors = true
 -- vim.opt.title = true
--- vim.opt.titlestring = "[NVIM_ACTIVE] %t" -- %t sẽ hiển thị tên file đang mở
-vim.opt.title = true
-vim.opt.titlelen = 0 -- Không rút ngắn độ dài tiêu đề
-vim.opt.titlestring = "%{expand('%:p')}" -- Lấy đầy đủ đường dẫn tuyệt đối
 vim.opt.guicursor:append("i:block")
--- 1. Định nghĩa màu cho 2 nhóm con trỏ:
--- bg: màu nền của block con trỏ
--- fg: màu của chữ bên trong khối block đó (khi con trỏ đè lên chữ)
-vim.api.nvim_set_hl(0, "NormalCursor", { bg = "#ff0000", fg = "#ffffff" }) -- Đỏ
-vim.api.nvim_set_hl(0, "InsertCursor", { bg = "#ffffff", fg = "#000000" }) -- Trắng
 vim.opt.virtualedit = "onemore"
 vim.keymap.set("n", "$", "$l", { desc = "Go past the end of line" })
 vim.keymap.set("n", "<End>", "<End>l", { desc = "Go past the end of line" })
@@ -77,7 +68,6 @@ end
 vim.keymap.set('n', '<S-CR>', split_and_indent_normal, { 
   desc = 'Tạo dòng mới bên dưới với indent theo vị trí con trỏ' 
 })
-
 
 vim.keymap.set('n', '<C-CR>', function()
   local row, _ = unpack(vim.api.nvim_win_get_cursor(0))
