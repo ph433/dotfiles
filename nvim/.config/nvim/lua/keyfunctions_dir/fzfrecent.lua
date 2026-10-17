@@ -44,7 +44,7 @@ local function create_picker(cfg)
         local lines = vim.split(content, "\n", { trimempty = true })
         local seen = {}
         local count = 0
-        local limit = cfg.limit or 50
+        local limit = cfg.limit or 100
         local now = os.time()
 
         for i = #lines, 1, -1 do

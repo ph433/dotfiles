@@ -8,13 +8,16 @@ vim.opt.smartcase = true        -- Tự nhận diện hoa thường nếu ta gõ
 vim.opt.clipboard = "unnamedplus" -- Clipboard hệ thống
 vim.opt.termguicolors = true
 -- vim.opt.title = true
+vim.opt.expandtab = true   -- Chuyển đổi ký tự Tab thành các khoảng trắng
+vim.opt.tabstop = 4        -- Quy định 1 ký tự Tab hiển thị bằng 4 khoảng trắng
+vim.opt.shiftwidth = 4     -- Số khoảng trắng được thụt vào khi dùng lệnh > hoặc <
+vim.opt.softtabstop = 4    -- Số khoảng trắng được thêm/xóa khi nhấn Tab/Backspace
 vim.opt.guicursor:append("i:block")
 vim.opt.virtualedit = "onemore"
 vim.keymap.set("n", "$", "$l", { desc = "Go past the end of line" })
 vim.keymap.set("n", "<End>", "<End>l", { desc = "Go past the end of line" })
 -- 2. Gán highlight group tương ứng cho từng mode qua guicursor
 vim.opt.guicursor = "n-v-c:block-NormalCursor,i-ci-ve:block-InsertCursor"
-
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.g.lazy_did_setup or vim.uv or vim.loop).fs_stat(lazypath) then

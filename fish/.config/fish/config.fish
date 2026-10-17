@@ -1,12 +1,15 @@
-fish_add_path -g $HOME/.cargo/bin $HOME/.local/bin $HOME/.fzf/bin
+fish_add_path $HOME/.cargo/bin $HOME/.local/bin $HOME/.fzf/bin
 
 if status is-interactive
-    abbr -a v nvim
+    alias v=nvim
     
     set -g fish_greeting ""
     set -gx fzf_fd_opts --type=d --hidden --follow --exclude=.git --color=always
     
-    type -q zoxide; and zoxide init fish | source
+    # Nạp LS_COLORS cho phiên tương tác
+    if type -q dircolors
+        eval (dircolors -c)
+    end
 end
 
 function __log_recent_dir --on-variable PWD

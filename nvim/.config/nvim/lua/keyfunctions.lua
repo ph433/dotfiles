@@ -376,7 +376,7 @@ vim.keymap.set('n', '<Tab>', function()
   if vim.v.hlsearch == 1 then
     return 'N'
   else
-    return 'a<Tab><Esc>'
+    return 'a<Tab><Esc><Right>'
   end
 end, { expr = true, desc = 'Jump to previous match or insert tab' })
 
