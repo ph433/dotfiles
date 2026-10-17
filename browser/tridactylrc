@@ -1,3 +1,0 @@
-bind <C-ArrowLeft> tabprev
-bind <C-ArrowRight> tabnext
-bind --mode=ex <ArrowDown> ex.next_completion
