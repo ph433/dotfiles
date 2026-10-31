@@ -8,7 +8,7 @@ function __smart_key_exec --description "Gõ phím tắt thông minh cho Fish Sh
     if test -z "$current_cmd"
         # 1. Khi dòng lệnh RỖNG:
         switch $key
-            case ctrl-a backspace delete
+            case ctrl-a backspace delete ctrl-backspace ctrl-delete
                 # Chạy pwd (hoặc target_cmd) chuẩn qua commandline execute
                 commandline -r "$target_cmd"
                 commandline -f execute
@@ -18,6 +18,8 @@ function __smart_key_exec --description "Gõ phím tắt thông minh cho Fish Sh
                 history_fzf
             case 'end'
                 __fzf_search_directory_custom
+            # case home
+            #     __fzf_find_files_custom
             case home
                 __fzf_find_files_custom
             case right
@@ -28,6 +30,8 @@ function __smart_key_exec --description "Gõ phím tắt thông minh cho Fish Sh
                 __fzf_file_recent
             case enter
                 nvim_open_recent
+            case ctrl-enter
+                nvim_open_recent_nano
             case escape
                 __fish_fzf_complete
             case insert
@@ -45,6 +49,10 @@ function __smart_key_exec --description "Gõ phím tắt thông minh cho Fish Sh
         switch $key
             case ctrl-a
                 commandline -f clear-screen
+            case ctrl-backspace
+                commandline -f backward-kill-token
+            case ctrl-delete
+                commandline -f kill-token
             case down
                 fzf_menu
             case up
@@ -88,6 +96,8 @@ function __smart_key_exec --description "Gõ phím tắt thông minh cho Fish Sh
                 commandline -i ' '
             case enter
                 commandline -f execute
+            case ctrl-enter
+                commandline -f forward-bigword
             case delete
                 commandline -f delete-char
             case backspace

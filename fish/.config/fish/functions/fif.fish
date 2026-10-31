@@ -24,5 +24,5 @@ function fif --description "Tìm kiếm nội dung realtime bằng ripgrep và f
         --delimiter : \
         --preview 'bat --color=always --highlight-line {2} {1} 2>/dev/null || cat {1}' \
         --preview-window 'up,60%,border-bottom,+{2}+3/3' \
-        --bind 'enter:become(vim +{2} {1})'
+        --bind 'enter:become(nvim +{2} {1})'
 end

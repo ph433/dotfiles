@@ -18,7 +18,10 @@ window.addEventListener(
       // Sau đó mới xử lý bất đồng bộ
       let res = await gBrowser.selectedBrowser.finder.getInitialSelection();
       let text = res?.selectedText?.trim();
-      if (!text) return;
+      if (!text) {
+        gBrowser.removeCurrentTab();
+        return;
+      }
 
       openTrustedLinkIn(
         "https://www.google.com/search?q=" + encodeURIComponent(text),

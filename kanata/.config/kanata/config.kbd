@@ -31,7 +31,7 @@
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
   del     esc     home    up      end     A-ent   _       _       M-spc   prtsc   pgup    pgdn    ;       /               _       _       _       _
   bks     tab     left    down    rght    spc     _       _       ins     @c_v-sw @s_v-sw @m_v-sw @a_v-sw @repa           _       _       _       _
-  @ss     C-z     C-x     C-c     C-v     C-y     _       _       _       A-c     A-v     C-a     @ss                     _       _       _       _
+  @ss     C-z     C-x     C-c     C-v     C-y     _       _       @nvv    A-c     A-v     C-a     @ss                     _       _       _       _
   _       _       _       _       _       _       _       _       @m_n    @cole+  _       _               _               _       _       _
   _       _       @numt                     ent                   @cole   _                       _       _       _       _               _
 )
@@ -65,10 +65,10 @@
 
 (deflayer mod_nvim
   _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _       _
-  del     esc     home    up      end     _       _       _       _       prtsc   pgup    pgdn    @:_     @/_             _       _       _       _
-  bks     tab     left    down    rght    spc     _       _       @fd     @c_v-sw @s_v-sw @m_v-sw @a_v-sw @repa           _       _       _       _
+  del     esc     home    up      end     _       _       _       _       prtsc   pgup    pgdn    @:_     @fhinv          _       _       _       _
+  bks     tab     left    down    rght    spc     _       _       @fd     @c_v-sw @s_v-sw @m_v-sw @a_v-sw @fhinvv         _       _       _       _
   @ss     C-z     C-x     C-c     C-v     C-y     _       _       @nvv    A-c     A-v     C-a     @ss                     _       _       _       _
-  _       _       _       _       _       _       _       @colnvr @m_n    @cole_  @fhinv  _               _               _       _       _
+  _       _       _       _       _       _       _       @colnvr @m_n    @cole_  @/_ent  _               _               _       _       _
   _       _       @numt                     ent                   @colnv  _                       _       _       _       _               _
 )
 
@@ -739,6 +739,7 @@
 (defalias
   ralt_ (multi (layer-toggle base_colemak-dh) (on-release tap-virtualkey v_ent))
   fhinv (multi (layer-switch colemak-dh-nvim-fhint-switch) (on-release tap-virtualkey v_nvswac))
+  fhinvv (multi (macro v) (layer-switch colemak-dh-nvim-fhint-switch) (on-release tap-virtualkey v_nvswac))
   cole_ (layer-toggle mod_nvim_colemak-dh)
   cole! (layer-toggle colemak-dh_firefox)
   C-v (macro g i C-v)
@@ -746,7 +747,8 @@
   cole+ (layer-toggle base_colemak-dh)
   ;; spcc (multi (macro spc) (layer-toggle colemak-dh-active))
   /_ (multi (macro /) (layer-toggle colemak-dh_search_cmd))
-  :_ (multi (macro S-;) (layer-toggle colemak-dh_search_cmd))
+  /_ent (multi (macro /) (layer-toggle mod_nvim_colemak-dh) (on-release tap-virtualkey v_ent))
+  :_ (multi (macro S-;) (layer-toggle colemak-dh_search_cmd) (on-release tap-virtualkey semido))
   bks_ (multi (macro bks) (layer-toggle nvim_delete))
   esca (multi (macro esc) (layer-switch app_open))
   C-/ (multi (macro g c))
@@ -760,6 +762,13 @@
 (defvirtualkeys
   v_ent ent
   v_esc esc
+  
+  
+  semido (switch
+    ($has-typed-letter-eq) (macro(esc C-p)) break
+    () XX break
+  )
+  
   v_nvswac (switch
     () (layer-switch mod_nvim) break
   )
@@ -985,6 +994,7 @@
 (defvar
 
   has-typed-letter-k (or (input-history real k 2))
+  has-typed-letter-eq (or (input-history real = 2))
   has-typed-letter-, (or (input-history real , 2))
   has-typed-letter-shift (or (input-history real caps 2)
                              (input-history real ent 2))

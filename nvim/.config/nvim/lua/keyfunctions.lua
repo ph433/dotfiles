@@ -311,6 +311,14 @@ vim.keymap.set('n', '<Esc>', function()
   end
 end, { desc = "Esc thông minh: Tắt noh hoặc chuyển sang Visual mode" })
 
+-- vim.keymap.set('i', '<Esc>', function()
+--   -- Nếu không ở cột đầu dòng, lùi về Normal rồi dịch phải 1 ký tự
+--   if vim.fn.col('.') > 1 then
+--     return '<Esc>l'
+--   end
+--   return '<Esc>'
+-- end, { expr = true, noremap = true, desc = "Thoát Insert và giữ nguyên vị trí con trỏ" })
+
 vim.keymap.set('v', '<Esc>', function()
   -- Thoát khỏi Visual mode để về Normal mode trước
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', true, false, true), 'n', false)
@@ -368,44 +376,18 @@ vim.keymap.set('n', '<Space>', function()
 
   -- 3. Mặc định: chèn một khoảng trắng sau con trỏ
   else
-    -- vim.cmd('normal! a ')
+    vim.api.nvim_put({ ' ' }, 'c', false, true)
   end
 end, { silent = true, desc = 'Count: tạo dòng mới | hlsearch: nhảy match | Mặc định: chèn space' })
 
 vim.keymap.set('n', '<Tab>', function()
+  -- 1. Nếu đang highlight tìm kiếm, nhảy về kết quả trước đó
   if vim.v.hlsearch == 1 then
     return 'N'
   else
-    return 'a<Tab><Esc><Right>'
+    return 'i<Tab><Esc><Right>'
   end
 end, { expr = true, desc = 'Jump to previous match or insert tab' })
 
-vim.keymap.set('x', '<Tab>', function()
-  -- 1. Thoát Visual mode để đưa con trỏ về Normal mode
-  local esc = vim.api.nvim_replace_termcodes('<Esc>', true, false, true)
-  vim.api.nvim_feedkeys(esc, 'x', false)
-
-  -- 2. Lấy chính xác chuỗi vừa bôi đen trong vùng Visual
-  local _, srow, scol, _ = unpack(vim.fn.getpos("'<"))
-  local _, erow, ecol, _ = unpack(vim.fn.getpos("'>"))
-  
-  local lines = vim.api.nvim_buf_get_text(0, srow - 1, scol - 1, erow - 1, ecol, {})
-  local text = table.concat(lines, '\n')
-
-  if text == '' then return end
-
-  -- 3. Escape các ký tự đặc biệt của Regex để tìm đúng chính xác chuỗi đó
-  -- local escaped_text = vim.fn.escape(text, '\\/.*$^~[]<>')
-  local escaped_text = vim.fn.escape(text, '\\/.*$^~[]<>@+?{}()|=!')
-  
-  -- 4. Tạo pattern Strict Exact Search Very Magic
-  -- local exact_pattern = '\\v([ \\t\\n()\\[\\]])@<=' .. escaped_text .. '([ \\t\\n()\\[\\]])@='
-  local exact_pattern = '\\v([ \\t\\n()\\[\\]])@<=' .. escaped_text .. '([ \\t\\n()\\[\\]])@=' .. '([()\\[\\]]+[0-9])@!'
-
-  -- 5. Cập nhật thanh ghi / và kích hoạt highlight search
-  vim.fn.setreg('/', exact_pattern)
-  vim.opt.hlsearch = true
-
-  -- 6. Nhảy tới vị trí tiếp theo
-  pcall(vim.cmd, 'normal! n')
-end, { desc = 'Visual select exact search on Tab' })
+vim.keymap.set('x', '<Tab>', '>gv', { desc = 'Indent selection' })
+vim.keymap.set('x', '<S-Tab>', '<gv', { desc = 'Unindent selection' })

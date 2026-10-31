@@ -12,28 +12,44 @@ return {
         ripgrep = {
           module = "blink-ripgrep",
           name = "Ripgrep",
-          -- Chỉ kích hoạt khi file nằm trong thư mục HRM_TruongHoangPhuong
+          -- Tăng độ ưu tiên để kết quả ripgrep nổi lên ngay khi có
+          score_offset = 3,
+          -- Cho phép kích hoạt lại ngay khi gõ từ 2 ký tự sau dấu chấm
+          min_keyword_length = 2,
+          
           enabled = function()
             local buf_name = vim.api.nvim_buf_get_name(0)
             return vim.startswith(buf_name, "/home/phuong/projects/HRM_TruongHoangPhuong")
           end,
+
           opts = {
-            prefix_min_len = 3, -- Giảm xuống 2 ký tự để test dễ ra gợi ý hơn
+            -- Giảm prefix_min_len để ripgrep tìm kiếm sớm hơn (ngay từ 2 ký tự)
+            prefix_min_len = 2,
             context_size = 5,
             max_filesize = "1M",
-            -- Chỉ truyền các cờ tùy chọn lọc file, KHÔNG truyền đường dẫn thư mục vào đây
             additional_rg_options = {
               "--type",
               "java",
             },
-            -- Ép ripgrep luôn tìm kiếm bắt đầu từ thư mục src của dự án
             project_root_marker = { "src", ".git" },
+            
+            -- Tùy chỉnh tách prefix: đảm bảo sau dấu chấm (.) ripgrep luôn lấy đúng từ đang gõ
+            get_prefix = function(context)
+              local line = context.line:sub(1, context.cursor[2])
+              return line:match("[%w_]+$") or ""
+            end,
           },
         },
       },
     },
 
     completion = {
+      -- Giảm thời gian chờ debounce để kết quả async trả về nhanh hơn
+      trigger = {
+        prefetch_on_insert = true,
+        show_on_keyword = true,
+        show_on_trigger_character = true,
+      },
       list = {
         selection = {
           preselect = true,

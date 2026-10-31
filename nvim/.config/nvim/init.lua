@@ -40,9 +40,6 @@ if vim.loader then
   vim.loader.enable()
 end
 
--- Đồng bộ phím y/p với clipboard hệ thống X11
-vim.opt.clipboard = "unnamedplus"
-
 -- Cố định provider để Neovim không phải quét hệ thống
 vim.g.clipboard = {
   name = "xclip",
@@ -71,15 +68,6 @@ end
 vim.keymap.set('n', '<S-CR>', split_and_indent_normal, { 
   desc = 'Tạo dòng mới bên dưới với indent theo vị trí con trỏ' 
 })
-
-vim.keymap.set('n', '<C-CR>', function()
-  local row, _ = unpack(vim.api.nvim_win_get_cursor(0))
-  -- Tạo dòng trống cực sạch (indent = 0)
-  vim.api.nvim_buf_set_lines(0, row, row, false, { "" })
-  -- Nhảy con trỏ xuống dòng đó
-  vim.api.nvim_win_set_cursor(0, { row + 1, 0 })
-end, { desc = 'Ctrl+Enter xuống dòng indent = 0' })
-
 
 -- Đây là danh sách các plugin nạp vào Lazy
 require("config.autocmds")

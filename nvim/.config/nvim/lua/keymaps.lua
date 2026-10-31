@@ -3,14 +3,44 @@ local keymap = vim.keymap
 -- ==========================================================================
 -- 3. PHÍM TẮT HỆ THỐNG (WINDOWS-STYLE)
 -- ==========================================================================
+
+-- VO DUNG
+
+-- Normal mode: Nhân đôi dòng hiện tại mà không đè clipboard
+vim.keymap.set('n', 'U', function()
+  local count = vim.v.count1
+  for _ = 1, count do
+    vim.cmd('t.')
+  end
+end, { desc = 'Duplicate line by count' })
+
+-- Visual mode: Nhân đôi cả khối bôi đen xuống dưới và giữ nguyên vùng chọn
+vim.keymap.set('x', 'U', ":t '> <CR>gv", { desc = 'Duplicate selection' })
+
 vim.keymap.set({'n', 'i', 'v'}, '<C-a>', '<Esc>ggVG', { desc = 'Select All' })
+vim.keymap.set('n', '<C-x>', '"+dd', { desc = 'Cut line to system clipboard' })
 vim.keymap.set('v', '<C-c>', '"+y', { desc = 'Copy selection' })
 vim.keymap.set('n', '<C-c>', '^vg_"+y', { noremap = true, silent = true })
 vim.keymap.set({'n', 'v', 'i'}, '<D-C-c>', '<cmd>%y+<cr>', { noremap = true, silent = true })
 
 -- vim.keymap.set('n', '<C-v>', '"+p', { desc = 'Paste Normal' })
+vim.keymap.set('n', 'p', 'P', { desc = 'Mô tả chức năng' })
 vim.keymap.set('v', '<C-v>', '"_c<C-r>+<Esc>', { desc = 'Paste Visual' })
-vim.keymap.set('i', '<C-v>', '<C-r>+', { desc = 'Paste Insert' })
+vim.keymap.set('n', '<C-v>', function()
+  -- Lấy nội dung từ clipboard hệ thống (register +)
+  local clipboard_content = vim.fn.getreg('+')
+  
+  -- Kiểm tra nếu nội dung có chứa ký tự xuống dòng (\n) hay không
+  if string.find(clipboard_content, '\n') then
+    -- Nếu CÓ xuống dòng: Dán TRƯỚC con trỏ
+    vim.cmd('normal! "+p')
+  else
+    -- Nếu KHÔNG CÓ xuống dòng: Dán SAU con trỏ
+    vim.cmd('normal! "+P')
+  end
+end, { noremap = true, silent = true })
+
+-- vim.keymap.set('i', '<C-v>', '<C-r>+', { desc = 'Paste Insert' })
 vim.keymap.set('n', '<C-A-v>', '^vg_"+P', { noremap = true, silent = true })
 
 -- Chế độ Normal và Insert: Nhấn Ctrl + Z để HOÀN TÁC (Undo)
@@ -72,9 +102,11 @@ vim.keymap.set('v', '<Insert>', 'c')
 -- vim.keymap.set('n', '<D-Insert>', 'ciw', { noremap = true })
 
 vim.keymap.set("n", "<A-Up>", "<cmd>m .-2<cr>==")
-vim.keymap.set("n", "<A-Down>", "<cmd>m .+1<cr>==")
-vim.keymap.set("v", "<A-Up>", ":m '<-2<cr>gv=gv")
-vim.keymap.set("v", "<A-Down>", ":m '>+1<cr>gv=gv")
+-- Thêm vào cuối file keymaps.lua:
+vim.keymap.set('n', '<A-Down>', '<cmd>m .+1<cr>', { desc = 'Move line down' })
+vim.keymap.set('n', '<A-Up>', '<cmd>m .-2<cr>', { desc = 'Move line up' })
+vim.keymap.set('x', '<A-Down>', ":m '>+1<cr>gv", { desc = 'Move selection down' })
+vim.keymap.set('x', '<A-Up>', ":m '<-2<cr>gv", { desc = 'Move selection up' })vim.keymap.set("v", "<A-Down>", ":m '>+1<cr>gv=gv")
 
 vim.keymap.set({'n', 'v'}, '[', '<cmd>w<cr>')
 vim.keymap.set({'n', 'v'}, '{', '<cmd>q!<cr>')
@@ -223,6 +255,21 @@ end, { silent = true, desc = '-CR: tạo dòng theo indent N dòng DƯỚI' })
 -- -- Map phím '/' chạy search history tự chế
 -- vim.keymap.set("n", "/", picker.search_history, { desc = "Custom Search History" })
 
+vim.keymap.set('x', '<CR>', 'r<Space>', { noremap = true, silent = true, desc = "Replace selection with space" })
+
+vim.keymap.set('n', '<C-CR>', function()
+  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+  -- Tạo khoảng trắng tương ứng với vị trí cột hiện tại của con trỏ
+  local indent = string.rep(' ', col)
+  
+  -- Chèn dòng mới phía dưới với độ thụt lề bằng vị trí con trỏ
+  vim.api.nvim_buf_set_lines(0, row, row, false, { indent })
+  
+  -- Di chuyển con trỏ xuống dòng mới, đặt tại cuối chuỗi indent (cùng cột)
+  vim.api.nvim_win_set_cursor(0, { row + 1, col })
+end, { desc = 'Ctrl+Enter xuống dòng với indent bằng vị trí con trỏ' })
+
+
 
 local function get_target_action(line, col)
   local rest_of_line = string.sub(line, col)
@@ -335,6 +382,24 @@ end, { desc = "Close buffer or exit if last" })
 
 vim.keymap.set('n', '<S-Tab>', '<cmd>b#<cr>', { silent = true, desc = 'Toggle alternate buffer' })
 
-vim.keymap.set("n", "=", function()
-  require("utils.indent_move").start_indent_map()
-end, { silent = true, desc = "Copy và cộng dồn indent sang dòng tiếp theo" })
+-- vim.keymap.set("n", "=", function()
+--   require("utils.indent_move").start_indent_map()
+-- end, { silent = true, desc = "Copy và cộng dồn indent sang dòng tiếp theo" })
+
+-- Normal mode: bấm s để comment / uncomment dòng hiện tại
+vim.keymap.set('n', 's', 'gcc', { remap = true, desc = 'Toggle comment line' })
+
+-- Visual mode: bôi đen rồi bấm s để toggle comment cả khối
+vim.keymap.set('x', 's', 'gc', { remap = true, desc = 'Toggle comment selection' })
+
+
+--fast fix
+-- Thoát Insert mode native: Giữ nguyên vị trí con trỏ nguyên tử, không giật lùi
+vim.keymap.set('i', '<Esc>', '<Esc>`^', { noremap = true, silent = true })
+
+vim.keymap.set({'i', 'n', 'v'}, '<M-V>', function()
+    -- Thoát về Normal mode sạch sẽ mà không lùi con trỏ
+    vim.cmd('stopinsert')
+    -- Bật ngay chế độ Visual Line (V)
+    vim.cmd('normal! V')
+end, { desc = "Vào Visual Line Mode ngay lập tức" })
