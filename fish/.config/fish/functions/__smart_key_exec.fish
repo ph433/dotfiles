@@ -1,6 +1,7 @@
 function __smart_key_exec --description "Gõ phím tắt thông minh cho Fish Shell"
-    set -l cursor_pos (commandline -C)
-    set -l cmd_len (string length -- (commandline))
+    # Thêm [1] để đảm bảo luôn lấy giá trị đầu tiên (số nguyên duy nhất)
+    set -l cursor_pos (commandline -C)[1]
+    set -l cmd_len (string length -- (commandline))[1]
     set -l key $argv[1]
     set -l target_cmd $argv[2]
     set -l current_cmd (commandline | string trim)
@@ -18,8 +19,6 @@ function __smart_key_exec --description "Gõ phím tắt thông minh cho Fish Sh
                 history_fzf
             case 'end'
                 __fzf_search_directory_custom
-            # case home
-            #     __fzf_find_files_custom
             case home
                 __fzf_find_files_custom
             case right
@@ -70,16 +69,17 @@ function __smart_key_exec --description "Gõ phím tắt thông minh cho Fish Sh
                     commandline -f beginning-of-line
                 end
             case right
+               # Sửa lại logic test an toàn
                if test "$cursor_pos" -eq "$cmd_len"
                    # 1. Lưu lại nội dung buffer hiện tại
                    set -l old_cmd (commandline)
+                   set -l old_len (string length -- "$old_cmd")[1]
         
                    # 2. Thử chấp nhận autosuggestion (nếu có chữ mờ)
                    commandline -f accept-autosuggestion
         
                    # 3. Kiểm tra xem sau khi bấm accept thì buffer có dài thêm ra không
-                   # Nếu độ dài không đổi -> Không có chữ mờ -> Bật fzfrecentdir
-                   if test (string length -- (commandline)) -eq (string length -- "$old_cmd")
+                   if test (string length -- (commandline))[1] -eq "$old_len"
                        fzfrecentdir
                    end
                else
