@@ -527,7 +527,7 @@ static const Rule rules[] = {
 	RULE(.wintype = WTYPE "TOOLBAR", .isfloating = 1)
 	RULE(.wintype = WTYPE "SPLASH", .isfloating = 1)
 	RULE(.class = "Gimp", .tags = 1 << 4)
-	RULE(.class = "firefox", .tags = 1 << 8, .isfullscreen = 1, .isfakefullscreen = 1)
+	RULE(.class = "firefox", .tags = 1 << 8, .isfakefullscreen = 1)
 	RULE(.class = "copyq", .isfloating = 1, .iscentered = 1)
 	#if RENAMED_SCRATCHPADS_PATCH
 	RULE(.instance = "spterm", .scratchkey = 's', .isfloating = 1)
