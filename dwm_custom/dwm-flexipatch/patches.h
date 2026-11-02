@@ -801,7 +801,7 @@
  * https://github.com/mihirlad55/dwm-ipc
  * https://dwm.suckless.org/patches/ipc/
  */
-#define IPC_PATCH 0
+#define IPC_PATCH 1
 
 /* Adds rule option for clients to avoid accidental termination by killclient for sticky windows.
  * https://dwm.suckless.org/patches/ispermanent/
@@ -1586,4 +1586,4 @@
  */
 #define MONOCLE_LAYOUT 1
 
-#define PATCH_KANATA 1
+#define PATCH_KANATA 0
