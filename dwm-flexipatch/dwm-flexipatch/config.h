@@ -438,10 +438,10 @@ static const char *const autostart[] = {
 #if RENAMED_SCRATCHPADS_PATCH
 static const char *scratchpadcmd[] = {"s", "st", "-n", "spterm", NULL};
 #elif SCRATCHPADS_PATCH
-const char *spcmd1[] = {"st", "-n", "spterm", "-g", "120x34", NULL };
+const char *spcmd_nvim[] = { "alacritty", "--class", "spnvim,spnvim", NULL };
 static Sp scratchpads[] = {
    /* name          cmd  */
-   {"spterm",      spcmd1},
+   {"spnvim",      spcmd_nvim},
 };
 #endif // SCRATCHPADS_PATCH
 
@@ -908,8 +908,18 @@ static const char *dmenucmd[] = {
 	#endif // BAR_DMENUMATCHTOP_PATCH
 	NULL
 };
-static const char *termcmd[]  = { "st", NULL };
-
+static const char *termcmd[]  = { "alacritty", NULL };
+static const char *firefoxcmd[]   = { "firefox", NULL };
+static const char *copyqcmd[] = { "copyq", "toggle", NULL };
+static const char *rofiwindowcmd[] = { "rofi", "-show", "window", NULL };
+static const char *screenshot_full[] = { "sh", "-c", "maim ~/Pictures/screenshot_$(date +\\%F_\\%T).png && xclip -selection clipboard -t image/png -i ~/Pictures/screenshot_$(date +\\%F_\\%T).png", NULL };
+static const char *screenshot_select[] = { "sh", "-c", "maim -s -u | xclip -selection clipboard -t image/png", NULL };
+static const char *screenshot_focus[] = { "/bin/sh", "-c", "maim -i $(xdotool getactivewindow) | tee ~/Pictures/$(date +%F_%T).png | xclip -selection clipboard -t image/png", NULL };
+static const char *upvol[]           = { "amixer", "set", "Master", "5%+",    NULL };
+static const char *downvol[]         = { "amixer", "set", "Master", "5%-",    NULL };
+static const char *mutevol[]         = { "amixer", "set", "Master", "toggle", NULL };
+static const char *dim_brightness[]   = { "brightnessctl", "set", "5%-",       NULL };
+static const char *raise_brightness[] = { "brightnessctl", "set", "5%+",       NULL }; 
 #if BAR_STATUSCMD_PATCH
 #if BAR_DWMBLOCKS_PATCH
 /* This defines the name of the executable that handles the bar (used for signalling purposes) */
@@ -1042,6 +1052,19 @@ ResourcePref resources[] = {
 
 static const Key keys[] = {
 	/* modifier                     key            function                argument */
+	{ Mod4Mask,                     XK_minus,      spawn,                  {.v = downvol } },
+	{ Mod4Mask|ShiftMask,           XK_equal,      spawn,                  {.v = upvol   } },
+	{ Mod4Mask,                     XK_equal,      spawn,                  {.v = mutevol } },
+	{ ControlMask,                  XK_minus,      spawn,                  {.v = dim_brightness } },
+	{ ControlMask|ShiftMask,        XK_equal,      spawn,                  {.v = raise_brightness } },
+	{ Mod4Mask,                     XK_c,          spawn,                  {.v = screenshot_focus } },
+	{ MODKEY|ShiftMask,             XK_c,          spawn,                  {.v = screenshot_full } },
+	{ MODKEY,                       XK_c,          spawn,                  {.v = screenshot_select } },
+	{ MODKEY,                       XK_BackSpace,  spawn,                  {.v = dmenucmd } },
+	{ MODKEY,                       XK_Return,     spawn,                  {.v = termcmd } },
+	{ Mod4Mask,                     XK_space,      spawn,                  {.v = firefoxcmd } },
+	{ MODKEY,                       XK_v,          spawn,                  {.v = copyqcmd } },
+	{ ShiftMask,                    XK_BackSpace,  spawn,                  {.v = rofiwindowcmd } },
 	#if KEYMODES_PATCH
 	{ MODKEY,                       XK_Escape,     setkeymode,             {.ui = COMMANDMODE} },
 	#endif // KEYMODES_PATCH
@@ -1070,10 +1093,10 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_k,          focusstack,             {.i = -1 } },
 	#endif // STACKER_PATCH
 	#if FOCUSDIR_PATCH
-	{ MODKEY,                       XK_Left,       focusdir,               {.i = 0 } }, // left
-	{ MODKEY,                       XK_Right,      focusdir,               {.i = 1 } }, // right
-	{ MODKEY,                       XK_Up,         focusdir,               {.i = 2 } }, // up
-	{ MODKEY,                       XK_Down,       focusdir,               {.i = 3 } }, // down
+	{ Mod4Mask,                       XK_Left,       focusdir,               {.i = 0 } }, // left
+	{ Mod4Mask,                       XK_Right,      focusdir,               {.i = 1 } }, // right
+	{ Mod4Mask,                       XK_Up,         focusdir,               {.i = 2 } }, // up
+	{ Mod4Mask,                       XK_Down,       focusdir,               {.i = 3 } }, // down
 	#endif // FOCUSDIR_PATCH
 	#if PLACEDIR_PATCH
 	{ MODKEY|ControlMask,           XK_Left,       placedir,               {.i = 0 } }, // left
@@ -1107,11 +1130,11 @@ static const Key keys[] = {
 	{ MODKEY|ControlMask,           XK_i,          incnstack,              {.i = +1 } },
 	{ MODKEY|ControlMask,           XK_u,          incnstack,              {.i = -1 } },
 	#endif // FLEXTILE_DELUXE_LAYOUT
-	{ MODKEY,                       XK_h,          setmfact,               {.f = -0.05} },
-	{ MODKEY,                       XK_l,          setmfact,               {.f = +0.05} },
+	{ MODKEY,                       XK_s,          setmfact,               {.f = -0.05} },
+	{ MODKEY,                       XK_f,          setmfact,               {.f = +0.05} },
 	#if CFACTS_PATCH
-	{ MODKEY|ShiftMask,             XK_h,          setcfact,               {.f = +0.25} },
-	{ MODKEY|ShiftMask,             XK_l,          setcfact,               {.f = -0.25} },
+	{ MODKEY|ShiftMask,             XK_d,          setcfact,               {.f = +0.25} },
+	{ MODKEY|ShiftMask,             XK_e,          setcfact,               {.f = -0.25} },
 	{ MODKEY|ShiftMask,             XK_o,          setcfact,               {0} },
 	#endif // CFACTS_PATCH
 	#if ASPECTRESIZE_PATCH
@@ -1147,7 +1170,7 @@ static const Key keys[] = {
 	#if INSETS_PATCH
 	{ MODKEY|ShiftMask|ControlMask, XK_a,          updateinset,            {.v = &default_inset } },
 	#endif // INSETS_PATCH
-	{ MODKEY,                       XK_Return,     zoom,                   {0} },
+	{ MODKEY,                       XK_z           zoom,                   {0} },
 	#if VANITYGAPS_PATCH
 	{ MODKEY|Mod4Mask,              XK_u,          incrgaps,               {.i = +1 } },
 	{ MODKEY|Mod4Mask|ShiftMask,    XK_u,          incrgaps,               {.i = -1 } },
@@ -1180,8 +1203,8 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask|ControlMask, XK_Right,      shifttagclients,        { .i = +1 } },
 	#endif // SHIFTTAGCLIENTS_PATCH
 	#if SHIFTVIEW_PATCH
-	{ MODKEY|ShiftMask,             XK_Tab,        shiftview,              { .i = -1 } },
-	{ MODKEY|ShiftMask,             XK_backslash,  shiftview,              { .i = +1 } },
+    { MODKEY,                       XK_Left,       shiftview,              { .i = -1 } },
+    { MODKEY,                       XK_Right,      shiftview,              { .i = +1 } },
 	#endif // SHIFTVIEW_PATCH
 	#if SHIFTVIEW_CLIENTS_PATCH
 	{ MODKEY|Mod4Mask,              XK_Tab,        shiftviewclients,       { .i = -1 } },
@@ -1201,16 +1224,16 @@ static const Key keys[] = {
 	{ MODKEY|Mod1Mask,              XK_j,          focusstack,             {.i = +2 } }, // The +/-2 allows focusstack to also focus on hidden
 	{ MODKEY|Mod1Mask,              XK_k,          focusstack,             {.i = -2 } }, // i.e. minimized clients.
 	#endif // BAR_WINTITLEACTIONS_PATCH
-	{ MODKEY|ShiftMask,             XK_c,          killclient,             {0} },
+	{ Mod4Mask,                     XK_Escape,     killclient,             {0} },
 	#if KILLUNSEL_PATCH
 	{ MODKEY|ShiftMask,             XK_x,          killunsel,              {0} },
 	#endif // KILLUNSEL_PATCH
 	#if SELFRESTART_PATCH
-	{ MODKEY|ShiftMask,             XK_r,          self_restart,           {0} },
+    { MODKEY|ShiftMask,             XK_r,          self_restart,           {0} },
 	#endif // SELFRESTART_PATCH
 	{ MODKEY|ShiftMask,             XK_q,          quit,                   {0} },
 	#if RESTARTSIG_PATCH
-	{ MODKEY|ControlMask|ShiftMask, XK_q,          quit,                   {1} },
+    { ControlMask|ShiftMask,        XK_Escape,     quit,                   {1} },
 	#endif // RESTARTSIG_PATCH
 	#if FOCUSURGENT_PATCH
 	{ MODKEY,                       XK_u,          focusurgent,            {0} },
@@ -1261,7 +1284,7 @@ static const Key keys[] = {
 	{ MODKEY|ControlMask,           XK_grave,      setscratch,             {.v = scratchpadcmd } },
 	{ MODKEY|ShiftMask,             XK_grave,      removescratch,          {.v = scratchpadcmd } },
 	#elif SCRATCHPADS_PATCH
-	{ MODKEY,                       XK_grave,      togglescratch,          {.ui = 0 } },
+    { 0,                            XK_F13,        togglescratch,          {.ui = 0 } },
 	{ MODKEY|ControlMask,           XK_grave,      setscratch,             {.ui = 0 } },
 	{ MODKEY|ShiftMask,             XK_grave,      removescratch,          {.ui = 0 } },
 	#endif // SCRATCHPADS_PATCH | RENAMED_SCRATCHPADS_PATCH
@@ -1270,7 +1293,7 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_t,          unfloatvisible,         {.v = &layouts[0]} },
 	#endif // UNFLOATVISIBLE_PATCH
 	#if TOGGLEFULLSCREEN_PATCH
-	{ MODKEY,                       XK_y,          togglefullscreen,       {0} },
+    { MODKEY,                       XK_g,          togglefullscreen,       {0} },
 	#endif // TOGGLEFULLSCREEN_PATCH
 	#if !FAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH
 	{ MODKEY|ShiftMask,             XK_y,          togglefakefullscreen,   {0} },
@@ -1438,8 +1461,8 @@ static const Key keys[] = {
 	{ MODKEY|ControlMask,           XK_numbersign, setborderpx,            {.i = 0 } },
 	#endif // SETBORDERPX_PATCH
 	#if CYCLELAYOUTS_PATCH
-	{ MODKEY|ControlMask,           XK_comma,      cyclelayout,            {.i = -1 } },
-	{ MODKEY|ControlMask,           XK_period,     cyclelayout,            {.i = +1 } },
+    { Mod4Mask|ShiftMask,           XK_Tab,        cyclelayout,            {.i = -1 } },
+    { Mod4Mask,                     XK_Tab,        cyclelayout,            {.i = +1 } },
 	#endif // CYCLELAYOUTS_PATCH
 	#if MPDCONTROL_PATCH
 	{ MODKEY,                       XK_F1,         mpdchange,              {.i = -1} },
