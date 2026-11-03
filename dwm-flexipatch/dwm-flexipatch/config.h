@@ -912,7 +912,7 @@ static const char *dmenucmd[] = {
 static const char *termcmd[]  = { "alacritty", NULL };
 static const char *firefoxcmd[]   = { "firefox", NULL };
 static const char *copyqcmd[] = { "copyq", "toggle", NULL };
-static const char *rofiwindowcmd[] = { "rofi", "-show", "window", NULL };
+static const char *dwin[] = { "dwin", NULL };
 static const char *screenshot_full[] = { "sh", "-c", "maim ~/Pictures/screenshot_$(date +\\%F_\\%T).png && xclip -selection clipboard -t image/png -i ~/Pictures/screenshot_$(date +\\%F_\\%T).png", NULL };
 static const char *screenshot_select[] = { "sh", "-c", "maim -s -u | xclip -selection clipboard -t image/png", NULL };
 static const char *screenshot_focus[] = { "/bin/sh", "-c", "maim -i $(xdotool getactivewindow) | tee ~/Pictures/$(date +%F_%T).png | xclip -selection clipboard -t image/png", NULL };
@@ -1065,7 +1065,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_Return,     spawn,                  {.v = termcmd } },
 	{ Mod4Mask,                     XK_space,      spawn,                  {.v = firefoxcmd } },
 	{ MODKEY,                       XK_v,          spawn,                  {.v = copyqcmd } },
-	{ ShiftMask,                    XK_BackSpace,  spawn,                  {.v = rofiwindowcmd } },
+	{ MODKEY|Mod4Mask,              XK_Tab,        spawn,                  {.v = dwin} },
 	#if KEYMODES_PATCH
 	{ MODKEY,                       XK_Escape,     setkeymode,             {.ui = COMMANDMODE} },
 	#endif // KEYMODES_PATCH
@@ -1106,7 +1106,7 @@ static const Key keys[] = {
 	{ MODKEY|ControlMask,           XK_Down,       placedir,               {.i = 3 } }, // down
 	#endif // PLACEDIR_PATCH
 	#if SWAPFOCUS_PATCH && PERTAG_PATCH
-	{ MODKEY,                       XK_s,          swapfocus,              {.i = -1 } },
+	{ MODKEY,                       XK_Tab,        swapfocus,              {.i = -1 } },
 	#endif // SWAPFOCUS_PATCH
 	#if SWITCHCOL_PATCH
 	{ MODKEY,                       XK_v,          switchcol,              {0} },
@@ -1125,8 +1125,8 @@ static const Key keys[] = {
 	{ MODKEY|ControlMask,           XK_j,          pushdown,               {0} },
 	{ MODKEY|ControlMask,           XK_k,          pushup,                 {0} },
 	#endif // PUSH_PATCH / PUSH_NO_MASTER_PATCH
-	{ MODKEY,                       XK_i,          incnmaster,             {.i = +1 } },
-	{ MODKEY,                       XK_d,          incnmaster,             {.i = -1 } },
+    { MODKEY,                       XK_d,          incnmaster,             {.i = +1 } },
+    { MODKEY,                       XK_e,          incnmaster,             {.i = -1 } },
 	#if FLEXTILE_DELUXE_LAYOUT
 	{ MODKEY|ControlMask,           XK_i,          incnstack,              {.i = +1 } },
 	{ MODKEY|ControlMask,           XK_u,          incnstack,              {.i = -1 } },
@@ -1134,8 +1134,8 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_s,          setmfact,               {.f = -0.05} },
 	{ MODKEY,                       XK_f,          setmfact,               {.f = +0.05} },
 	#if CFACTS_PATCH
-	{ MODKEY|ShiftMask,             XK_d,          setcfact,               {.f = +0.25} },
-	{ MODKEY|ShiftMask,             XK_e,          setcfact,               {.f = -0.25} },
+	{ MODKEY,                       XK_d,          setcfact,               {.f = +0.25} },
+	{ MODKEY,                       XK_e,          setcfact,               {.f = -0.25} },
 	{ MODKEY|ShiftMask,             XK_o,          setcfact,               {0} },
 	#endif // CFACTS_PATCH
 	#if ASPECTRESIZE_PATCH
@@ -1191,7 +1191,7 @@ static const Key keys[] = {
 	{ MODKEY|Mod4Mask|ShiftMask,    XK_0,          defaultgaps,            {0} },
 	#endif // VANITYGAPS_PATCH
 	#if ALT_TAB_PATCH
-	{ Mod1Mask,                     XK_Tab,        alttabstart,            {0} },
+	{ ShiftMask,                    XK_BackSpace,  alttabstart,            {0} },
 	#else
 	{ MODKEY,                       XK_Tab,        view,                   {0} },
 	#endif // ALT_TAB_PATCH
@@ -1248,9 +1248,9 @@ static const Key keys[] = {
 	#if XRDB_PATCH || XRESOURCES_PATCH
 	{ MODKEY|ShiftMask,             XK_F5,         xrdb,                   {.v = NULL } },
 	#endif // XRDB_PATCH | XRESOURCES_PATCH
-	{ MODKEY,                       XK_t,          setlayout,              {.v = &layouts[0]} },
-	{ MODKEY,                       XK_f,          setlayout,              {.v = &layouts[1]} },
-	{ MODKEY,                       XK_m,          setlayout,              {.v = &layouts[2]} },
+	// { MODKEY,                       XK_t,          setlayout,              {.v = &layouts[0]} },
+	// { MODKEY,                       XK_f,          setlayout,              {.v = &layouts[1]} },
+	// { MODKEY,                       XK_m,          setlayout,              {.v = &layouts[2]} },
 	#if COLUMNS_LAYOUT
 	{ MODKEY,                       XK_c,          setlayout,              {.v = &layouts[3]} },
 	#endif // COLUMNS_LAYOUT

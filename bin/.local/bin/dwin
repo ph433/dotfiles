@@ -1,0 +1,3 @@
+#!/bin/sh
+# Lấy danh sách cửa sổ, cắt bỏ ID, đưa vào dmenu, lấy kết quả focus
+wmctrl -l | awk '{$1=$2=$3=""; print $0}' | dmenu -i -l 10 -p "Windows:" | xargs -r wmctrl -a

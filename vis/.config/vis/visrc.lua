@@ -1,21 +1,27 @@
 require('vis')
 require('plugins/autopair')
-local kanata = require('plugins/kanata')
-kanata.setup()
-
 -- 1. Cấu hình toàn cục và phím tắt (Chạy 1 lần khi khởi động)
 vis.events.subscribe(vis.events.INIT, function()
 	vis:map(vis.modes.NORMAL, '<C-v>', function()
 		vis:feedkeys('"+p')
 	end, 'Paste from system clipboard')
-
+	vis:map(vis.modes.VISUAL, '<C-v>', function()
+		vis:feedkeys('"+p')
+	end, 'Paste from system clipboard')
 	vis:map(vis.modes.VISUAL, '<C-c>', function()
 		vis:feedkeys('"+y')
 	end, 'My Copy to system clipboard')
 	
+	-- Chế độ NORMAL
 	vis:map(vis.modes.NORMAL, '<Backspace>', 'X')
 	vis:map(vis.modes.NORMAL, '<Delete>', 'x')
-	
+	-- Chế độ VISUAL
+	vis:map(vis.modes.VISUAL, '<Backspace>', 'd')
+	vis:map(vis.modes.VISUAL, '<Delete>', 'x')
+	vis:map(vis.modes.NORMAL, '<Enter>', '<vis-insert-newline>', 'Insert newline')
+	vis:map(vis.modes.NORMAL, ' ', function()
+		vis:insert(' ')
+	end, 'Chèn dấu cách')
 end)
 
 -- 2. Cấu hình giao diện cửa sổ (Chạy mỗi khi mở file)

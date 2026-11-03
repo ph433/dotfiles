@@ -47,7 +47,7 @@ def determine_layer(win_class, win_title):
     if wt.startswith("nvim") or " nvim " in wt:
         return "mod_nvim"
     if "python" in wt:
-        return "mod_python"
+        return "base"
 
     # 2. KIỂM TRA CLASS
     if "firefox" in wc:

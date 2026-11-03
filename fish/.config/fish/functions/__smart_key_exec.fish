@@ -34,7 +34,7 @@ function __smart_key_exec --description "Gõ phím tắt thông minh cho Fish Sh
             case escape
                 __fish_fzf_complete
             case insert
-                __fzf_zoxide_custom
+                diff_clip
             case pageup
                 fdf
             case pagedown
