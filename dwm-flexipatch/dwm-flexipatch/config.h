@@ -913,6 +913,8 @@ static const char *termcmd[]  = { "alacritty", NULL };
 static const char *firefoxcmd[]   = { "firefox", NULL };
 static const char *copyqcmd[] = { "copyq", "toggle", NULL };
 static const char *dwin[] = { "dwin", NULL };
+static const char *gg[] = { "gg", NULL };
+static const char *GG[] = { "GG", NULL };
 static const char *screenshot_full[] = { "sh", "-c", "maim ~/Pictures/screenshot_$(date +\\%F_\\%T).png && xclip -selection clipboard -t image/png -i ~/Pictures/screenshot_$(date +\\%F_\\%T).png", NULL };
 static const char *screenshot_select[] = { "sh", "-c", "maim -s -u | xclip -selection clipboard -t image/png", NULL };
 static const char *screenshot_focus[] = { "/bin/sh", "-c", "maim -i $(xdotool getactivewindow) | tee ~/Pictures/$(date +%F_%T).png | xclip -selection clipboard -t image/png", NULL };
@@ -1065,7 +1067,9 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_Return,     spawn,                  {.v = termcmd } },
 	{ Mod4Mask,                     XK_space,      spawn,                  {.v = firefoxcmd } },
 	{ MODKEY,                       XK_v,          spawn,                  {.v = copyqcmd } },
-	{ MODKEY|Mod4Mask,              XK_Tab,        spawn,                  {.v = dwin} },
+	{ MODKEY,                       XK_a,          spawn,                  {.v = dwin} },
+	{ MODKEY|ShiftMask,             XK_g,          spawn,                  {.v = gg} },
+	{ MODKEY,                       XK_g,          spawn,                  {.v = GG} },
 	#if KEYMODES_PATCH
 	{ MODKEY,                       XK_Escape,     setkeymode,             {.ui = COMMANDMODE} },
 	#endif // KEYMODES_PATCH
@@ -1106,7 +1110,7 @@ static const Key keys[] = {
 	{ MODKEY|ControlMask,           XK_Down,       placedir,               {.i = 3 } }, // down
 	#endif // PLACEDIR_PATCH
 	#if SWAPFOCUS_PATCH && PERTAG_PATCH
-	{ MODKEY,                       XK_Tab,        swapfocus,              {.i = -1 } },
+	{ Mod4Mask,                     XK_Tab,        swapfocus,              {.i = -1 } },
 	#endif // SWAPFOCUS_PATCH
 	#if SWITCHCOL_PATCH
 	{ MODKEY,                       XK_v,          switchcol,              {0} },
@@ -1294,7 +1298,7 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_t,          unfloatvisible,         {.v = &layouts[0]} },
 	#endif // UNFLOATVISIBLE_PATCH
 	#if TOGGLEFULLSCREEN_PATCH
-    { MODKEY,                       XK_g,          togglefullscreen,       {0} },
+    { MODKEY,                       XK_r,          togglefullscreen,       {0} },
 	#endif // TOGGLEFULLSCREEN_PATCH
 	#if !FAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH
 	{ MODKEY|ShiftMask,             XK_y,          togglefakefullscreen,   {0} },
@@ -1462,8 +1466,8 @@ static const Key keys[] = {
 	{ MODKEY|ControlMask,           XK_numbersign, setborderpx,            {.i = 0 } },
 	#endif // SETBORDERPX_PATCH
 	#if CYCLELAYOUTS_PATCH
-    { Mod4Mask|ShiftMask,           XK_Tab,        cyclelayout,            {.i = -1 } },
-    { Mod4Mask,                     XK_Tab,        cyclelayout,            {.i = +1 } },
+    { Mod4Mask,                     XK_s,          cyclelayout,            {.i = -1 } },
+    { Mod4Mask,                     XK_f,          cyclelayout,            {.i = +1 } },
 	#endif // CYCLELAYOUTS_PATCH
 	#if MPDCONTROL_PATCH
 	{ MODKEY,                       XK_F1,         mpdchange,              {.i = -1} },

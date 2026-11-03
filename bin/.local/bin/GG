@@ -1,0 +1,8 @@
+#!/bin/sh
+# Lấy nội dung từ vùng đang bôi đen (Primary Selection)
+CLIP=$(xclip -selection primary -o 2>/dev/null)
+
+if [ -n "$CLIP" ]; then
+    SAFE_QUERY=$(echo "$CLIP" | sed 's/ /%20/g')
+    firefox "https://www.google.com/search?q=$SAFE_QUERY"
+fi

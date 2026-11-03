@@ -1,0 +1,17 @@
+#!/bin/sh
+# Lấy từ khóa từ dmenu
+QUERY=$(echo "" | dmenu -p "Tìm kiếm Google:")
+
+# Nếu không gõ gì (bấm Enter luôn) thì lấy từ clipboard
+if [ -z "$QUERY" ]; then
+    QUERY=$(xclip -selection clipboard -o 2>/dev/null)
+fi
+
+# Nếu có nội dung (dù gõ tay hay lấy từ clipboard) thì mới mở Firefox
+if [ -n "$QUERY" ]; then
+    # Mã hóa URL để tránh lỗi nếu có ký tự đặc biệt (dấu cách, &, +...)
+    # Dùng lệnh jq hoặc python để urlencode, hoặc dùng thư viện có sẵn.
+    # Ở đây dùng cách đơn giản nhất với sed (có thể không hoàn hảo 100% với mọi ký tự)
+    SAFE_QUERY=$(echo "$QUERY" | sed 's/ /%20/g')
+    firefox "https://www.google.com/search?q=$SAFE_QUERY"
+fi
