@@ -28,16 +28,16 @@ EnumerateSkipFirst=False
 0=Hangul_Romaja
 
 [Hotkey/PrevPage]
-0=Up
+0=Tab
 
 [Hotkey/NextPage]
-0=Down
-
-[Hotkey/PrevCandidate]
 0=Shift+Tab
 
+[Hotkey/PrevCandidate]
+0=Up
+
 [Hotkey/NextCandidate]
-0=Tab
+0=Down
 
 [Hotkey/TogglePreedit]
 0=Control+Alt+P
