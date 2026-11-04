@@ -1,17 +1,24 @@
 #!/bin/sh
-# Lấy từ khóa từ dmenu
-QUERY=$(echo "" | dmenu -p "Tìm kiếm Google:")
 
-# Nếu không gõ gì (bấm Enter luôn) thì lấy từ clipboard
+# 1. Lấy đường dẫn thư mục cache tự động (tự động cập nhật theo $DISPLAY)
+CACHE_DIR=$(clipctl cache-dir 2>/dev/null)
+if [ -z "$CACHE_DIR" ]; then
+    CACHE_DIR="/run/user/$(id -u)/clipmenu.6.phuong" # Fallback dự phòng
+fi
+
+# 2. Đọc 10 mục mới nhất từ line_cache, sắp xếp mới nhất lên đầu, cắt bỏ cột thời gian
+HISTORY=$(sort -rnk 1 "$CACHE_DIR/line_cache" 2>/dev/null | cut -d' ' -f2- | head -n 10)
+
+# 3. Mở dmenu (Bạn có thể chọn 1 trong 10 mục, HOẶC gõ một từ khóa hoàn toàn mới)
+QUERY=$(echo "$HISTORY" | dmenu -i -l 10 -p "Tìm kiếm Google:")
+
+# 4. Nếu bấm Esc (rỗng) thì thoát luôn
 if [ -z "$QUERY" ]; then
-    QUERY=$(xclip -selection clipboard -o 2>/dev/null)
+    exit 0
 fi
 
-# Nếu có nội dung (dù gõ tay hay lấy từ clipboard) thì mới mở Firefox
-if [ -n "$QUERY" ]; then
-    # Mã hóa URL để tránh lỗi nếu có ký tự đặc biệt (dấu cách, &, +...)
-    # Dùng lệnh jq hoặc python để urlencode, hoặc dùng thư viện có sẵn.
-    # Ở đây dùng cách đơn giản nhất với sed (có thể không hoàn hảo 100% với mọi ký tự)
-    SAFE_QUERY=$(echo "$QUERY" | sed 's/ /%20/g')
-    firefox "https://www.google.com/search?q=$SAFE_QUERY"
-fi
+# 5. Mã hóa URL an toàn 100% bằng jq (xử lý dấu cách, tiếng Việt, ký tự đặc biệt)
+SAFE_QUERY=$(echo -n "$QUERY" | jq -sRr @uri)
+
+# 6. Mở Firefox và tìm kiếm (chạy ngầm bằng dấu &)
+firefox "https://www.google.com/search?q=$SAFE_QUERY" &
