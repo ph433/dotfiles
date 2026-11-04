@@ -58,7 +58,7 @@ CompactInputMethodInformation=True
 # Show first input method information
 ShowFirstInputMethodInformation=True
 # Default page size
-DefaultPageSize=5
+DefaultPageSize=9
 # Override Xkb Option
 OverrideXkbOption=False
 # Custom Xkb Option
