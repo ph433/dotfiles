@@ -438,7 +438,7 @@ static const char *const autostart[] = {
 #if RENAMED_SCRATCHPADS_PATCH
 static const char *scratchpadcmd[] = {"s", "st", "-n", "spterm", NULL};
 #elif SCRATCHPADS_PATCH
-const char *spcmd_nvim[] = { "alacritty", "--class", "spnvim,spnvim", NULL };
+const char *spcmd_nvim[] = { "st", "-n", "spnvim", "-c", "spnvim", NULL };
 static Sp scratchpads[] = {
    /* name          cmd  */
    {"spnvim",      spcmd_nvim},
@@ -528,11 +528,11 @@ static const Rule rules[] = {
 	RULE(.wintype = WTYPE "SPLASH", .isfloating = 1)
 	RULE(.class = "Gimp", .tags = 1 << 4)
 	RULE(.class = "firefox", .tags = 1 << 8, .isfakefullscreen = 1)
-	RULE(.class = "copyq", .isfloating = 1, .iscentered = 1)
+	RULE(.class = "copyq", .isfloating = 1)
 	#if RENAMED_SCRATCHPADS_PATCH
 	RULE(.instance = "spterm", .scratchkey = 's', .isfloating = 1)
 	#elif SCRATCHPADS_PATCH
-	RULE(.instance = "spnvim", .tags = SPTAG(0), .isfloating = 1, .isfakefullscreen = 0)
+	RULE(.instance = "spnvim", .tags = SPTAG(0), .isfloating = 1, .floatpos = "1056X 19Y 862W 1179H")
 	#endif // SCRATCHPADS_PATCH
 };
 
@@ -1070,6 +1070,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_a,          spawn,                  {.v = dwin} },
 	{ MODKEY|ShiftMask,             XK_g,          spawn,                  {.v = gg} },
 	{ MODKEY,                       XK_g,          spawn,                  {.v = GG} },
+	{ MODKEY,                       XK_q,          floatpos,               {.v = "0X 19Y 862W 1179H"} },
 	#if KEYMODES_PATCH
 	{ MODKEY,                       XK_Escape,     setkeymode,             {.ui = COMMANDMODE} },
 	#endif // KEYMODES_PATCH

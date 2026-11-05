@@ -413,6 +413,7 @@ struct Client {
 	#if STICKY_PATCH
 	int issticky;
 	#endif // STICKY_PATCH
+	int hasfloatpos;
 	Client *next;
 	Client *snext;
 	#if SWALLOW_PATCH
@@ -916,6 +917,7 @@ applyrules(Client *c)
 	#endif // SIZEHINTS_ISFREESIZE_PATCH
 	c->isfloating = 0;
 	c->tags = 0;
+	c->hasfloatpos = 0;
 	#if RENAMED_SCRATCHPADS_PATCH
 	c->scratchkey = 0;
 	#endif // RENAMED_SCRATCHPADS_PATCH
@@ -992,6 +994,7 @@ applyrules(Client *c)
 				#if CENTER_PATCH
 				c->iscentered = 0;
 				#endif // CENTER_PATCH
+				c->hasfloatpos = 1;
 				setfloatpos(c, r->floatpos);
 			}
 			#endif // FLOATPOS_PATCH
@@ -4199,7 +4202,7 @@ showhide(Client *c)
 			c->y = c->mon->wy + (c->mon->wh / 2 - HEIGHT(c) / 2);
 		}
 		#elif SCRATCHPADS_PATCH
-		if ((c->tags & SPTAGMASK) && c->isfloating) {
+		if ((c->tags & SPTAGMASK) && c->isfloating && !c->hasfloatpos) {
 			c->x = c->mon->wx + (c->mon->ww / 2 - WIDTH(c) / 2);
 			c->y = c->mon->wy + (c->mon->wh / 2 - HEIGHT(c) / 2);
 		}
